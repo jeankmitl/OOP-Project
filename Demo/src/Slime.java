@@ -1,31 +1,43 @@
-import java.awt.Rectangle;
-import java.io.IOException;
-import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
-public class Slime extends Unit{
+public class Slime extends Unit {
 
-    private Timer ProductTimer;
+    private Timer costGenerationTimer;
 
-    public Slime(int row,int col) {
-        super(row, col, 100, 10, 1500, 100);
+    public Slime(int row, int col) {
+        super(row, col, 100, 0, 1500, 0); // Slime doesn't have attack power, health, or defense
 
         try {
-            spriteSheet = ImageIO.read(getClass().getResource("Asset\\Slime.png"));
+            spriteSheet = ImageIO.read(getClass().getResource("Asset\\Slime.png")); // Load slime image
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //Why i can't found setter & Getter Remain Mana
-        /*ProductTimer = new Timer(1500, e -> {
-            mana
+        costGenerationTimer = new Timer(5000, e -> generateCost()); // Generate cost every second
+        costGenerationTimer.start();
+    }
 
+    // Stop cost generation when the unit is removed
+    public void stopGeneratingCost() {
+        costGenerationTimer.stop();
+    }
+
+    // Method for generating cost over time
+    public void generateCost() {
+        GamePanel.remainMana += 50; // Add 5 cost every second
+        if (GamePanel.remainMana > GamePanel.MAX_MANA) {
+            GamePanel.remainMana = GamePanel.MAX_MANA; // Cap mana to maximum
+        }
+        System.out.println("Cost generated: " + GamePanel.remainMana);
     }
 
     @Override
     public Rectangle getBounds() {
         return new Rectangle(col * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_X,
                 row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
-    } */
+    }
+
 }

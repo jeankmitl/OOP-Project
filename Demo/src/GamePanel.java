@@ -21,15 +21,16 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    private int remainMana = 0;
-    private final int MAX_MANA = 1000;
+    public static int remainMana = 0;
+    public static final int MAX_MANA = 1000;
 
     private static List<Unit> units;
     private static List<Enermy> enermies;
     private static List<Bullet> bullets;
     
     private boolean draggingRecall = false;
-    private boolean draggingUnit = false;
+    private boolean draggingSkeleton = false;
+    private boolean draggingSlime = false;
     private int mouseX, mouseY;
 
     public GamePanel() {
@@ -45,9 +46,9 @@ public class GamePanel extends JPanel {
         //------------------
         
         // every 0.1 sec +1 cost
-        new Timer(100, e -> {
+        new Timer(10000, e -> {
             if (remainMana < MAX_MANA) {
-                remainMana += 1;
+                remainMana += 50;
                 repaint(); // Update UI
             }
         }).start();
@@ -59,14 +60,6 @@ public class GamePanel extends JPanel {
     
     public static List<Bullet> getBullets() {
         return bullets;
-    }
-    //add//
-    public int getRemainMana() {
-        return this.remainMana;
-    }
-
-    public void setRemainMana(int remainMana) {
-        this.remainMana = remainMana;
     }
     //add//
     public void startGame() {
@@ -219,6 +212,17 @@ public class GamePanel extends JPanel {
                 g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT,
                         GamePanel.CELL_WIDTH, null);
             }
+            else if (unit instanceof Slime) {
+                BufferedImage img = ((Slime)unit).getBufferedImage();
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // Improve Quality
+                                                                                                         // */
+                // Image img =
+                // unit.getBufferedImage().getScaledInstance(GamePanel.CELL_WIDTH,GamePanel.CELL_HEIGHT,Image.SCALE_SMOOTH);
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT,
+                        GamePanel.CELL_WIDTH, null);
+            }
         }
 
         for (Enermy enermy : enermies) {
@@ -253,11 +257,18 @@ public class GamePanel extends JPanel {
 
         g.setColor(Color.GREEN);
         g.fillRect(BAR_X + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+        g.setColor(Color.BLUE);
+        g.fillRect(BAR_X + 10, BAR_Y + 105, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.ORANGE);
         g.fillRect(BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
 
-        if (draggingUnit) {
+        if (draggingSkeleton) {
             g.setColor(Color.GREEN);
+            g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+        }
+
+        if (draggingSlime) {
+            g.setColor(Color.BLUE);
             g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         }
 
@@ -271,14 +282,21 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 &&
-                        e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 50) {                                                    // manual fix-cost
-                        draggingUnit = true;
+                        draggingSkeleton = true;
                     } else {
                         System.out.println("Not enough cost!"); // Debug
                     }
-                } else if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS &&
+                }
+                else if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 105 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                    if (remainMana >= 50) {                                                    // manual fix-cost
+                        draggingSlime = true;
+                    } else {
+                        System.out.println("Not enough cost!"); // Debug
+                    }
+                }
+                else if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS &&
                         e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;
                 }
@@ -286,7 +304,7 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (draggingUnit) {
+                if (draggingSkeleton) {
                     int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
                     int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
 
@@ -298,7 +316,21 @@ public class GamePanel extends JPanel {
                             System.out.println("***Field is occupied***");
                         }
                     }
-                } else if (draggingRecall) {
+                }
+                else if (draggingSlime) {
+                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
+                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
+
+                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                        if (isFieldAvailable(col, row)) { // Check if field is free
+                            units.add(new Slime(row, col));
+                            remainMana -= 50;                                             //manual fix-cost
+                        } else {
+                            System.out.println("***Field is occupied***");
+                        }
+                    }
+                }
+                else if (draggingRecall) {
                     int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
                     int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
                     if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
@@ -314,7 +346,8 @@ public class GamePanel extends JPanel {
                         }
                     }
                 }
-                draggingUnit = false;
+                draggingSkeleton = false;
+                draggingSlime = false;
                 draggingRecall = false;
             }
         });
@@ -328,7 +361,12 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (draggingUnit || draggingRecall) {
+                if (draggingSlime || draggingRecall) {
+                    mouseX = e.getX();
+                    mouseY = e.getY();
+                    repaint(); // Force repaint so the dragged unit updates smoothly
+                }
+                else if (draggingSkeleton || draggingRecall) {
                     mouseX = e.getX();
                     mouseY = e.getY();
                     repaint(); // Force repaint so the dragged unit updates smoothly
