@@ -1,4 +1,3 @@
-
 import java.awt.Rectangle;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -25,4 +24,5 @@ public class Bandit extends Enermy {
         return new Rectangle((int) x + GamePanel.GRID_OFFSET_X, row * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_Y,
                 GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
+
 }

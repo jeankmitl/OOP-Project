@@ -5,6 +5,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 
 public class Skeleton extends Unit {
+
     private Timer attackTimer;
 
     public Skeleton(int row, int col) {
@@ -49,4 +50,5 @@ public class Skeleton extends Unit {
         return new Rectangle(col * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_X,
                 row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
+
 }

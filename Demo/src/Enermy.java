@@ -1,7 +1,5 @@
-
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-
 
 public abstract class Enermy {
     protected double x;
@@ -16,6 +14,9 @@ public abstract class Enermy {
     protected int currentFrame = 0;
     protected int total_Frame = 4;
     protected int frame_Width = 32, frame_Hight = 32;
+
+    public abstract Rectangle getBounds();
+    public abstract void attack(Skeleton plant);
 
     public Enermy(double x, int row, int health, double speed) {
         this.x = x;
@@ -72,6 +73,4 @@ public abstract class Enermy {
         currentFrame = (currentFrame + 1) % total_Frame;
     }
 
-    public abstract Rectangle getBounds();
-    public abstract void attack(Skeleton plant);
 }

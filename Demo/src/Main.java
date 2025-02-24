@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 public class Main {
+
     public static JFrame frame;
     public static GamePanel gamePanel;
 
@@ -19,4 +20,5 @@ public class Main {
     public static void main(String[] args) {
         new Main();
     }
+
 }

@@ -8,9 +8,9 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class GamePanel extends JPanel {
+
     private Image backgroundImage;
-    
-    
+
     private static final int ROWS = 5;
     private static final int COLS = 9;
     public static final int CELL_WIDTH = 95;

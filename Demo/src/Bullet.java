@@ -1,4 +1,3 @@
-
 import java.awt.Rectangle;
 
 public class Bullet {
@@ -25,4 +24,5 @@ public class Bullet {
     public Rectangle getBounds() {
         return new Rectangle(getX(), getY(), 30, 30);
     }
+
 }

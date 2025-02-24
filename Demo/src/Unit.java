@@ -1,16 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 import java.awt.Rectangle;
 import java.util.List;
 import java.awt.image.BufferedImage;
 
-/**
- *
- * @author sarin
- */
 public abstract class Unit {
+
     protected int row, col;
     protected int health;
     protected int atk;
@@ -22,6 +15,10 @@ public abstract class Unit {
     protected int currentFrame = 0;
     protected int total_Frame = 4;
     protected int frame_Width = 32, frame_Hight = 32;
+
+    public abstract boolean isEnermyInfront(List<Enermy> enermies);
+    public abstract void attack(List<Bullet> bullets);
+    public abstract Rectangle getBounds();
 
     public Unit(int row, int col, int health, int atk, int atkSpeed, int cost) {
         this.row = row;
@@ -68,7 +65,4 @@ public abstract class Unit {
         currentFrame = (currentFrame + 1) % total_Frame;
     }
 
-    public abstract boolean isEnermyInfront(List<Enermy> enermies);
-    public abstract void attack(List<Bullet> bullets);
-    public abstract Rectangle getBounds();
 }
