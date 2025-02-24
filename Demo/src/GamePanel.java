@@ -1,11 +1,11 @@
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
+import javax.swing.*;
 
 public class GamePanel extends JPanel {
 
@@ -21,7 +21,7 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    private int remainMana;
+    private int remainMana = 0;
     private final int MAX_MANA = 1000;
 
     private static List<Unit> units;
@@ -60,9 +60,17 @@ public class GamePanel extends JPanel {
     public static List<Bullet> getBullets() {
         return bullets;
     }
+    //add//
+    public int getRemainMana() {
+        return this.remainMana;
+    }
 
+    public void setRemainMana(int remainMana) {
+        this.remainMana = remainMana;
+    }
+    //add//
     public void startGame() {
-        new Timer(1000, e -> {
+        new Timer(2000, e -> {
             Random random = new Random();
             int randomNumber = random.nextInt(5); // 0-5
             enermies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));
