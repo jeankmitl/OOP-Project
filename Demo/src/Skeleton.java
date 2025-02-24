@@ -12,7 +12,7 @@ public class Skeleton extends Unit {
         super(row, col, 100, 10, 1500, 100);
 
         try {
-            spriteSheet = ImageIO.read(getClass().getResource("Asset\\Mimic.png"));
+            spriteSheet = ImageIO.read(getClass().getResource("Asset\\Skeleton.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

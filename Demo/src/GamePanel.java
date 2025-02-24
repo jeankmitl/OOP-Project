@@ -212,7 +212,7 @@ public class GamePanel extends JPanel {
                 g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT,
                         GamePanel.CELL_WIDTH, null);
             }
-            else if (unit instanceof Slime) {
+            if (unit instanceof Slime) {
                 BufferedImage img = ((Slime)unit).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -258,7 +258,7 @@ public class GamePanel extends JPanel {
         g.setColor(Color.GREEN);
         g.fillRect(BAR_X + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.BLUE);
-        g.fillRect(BAR_X + 10, BAR_Y + 105, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+        g.fillRect(BAR_X + 105, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.ORANGE);
         g.fillRect(BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
 
@@ -285,19 +285,20 @@ public class GamePanel extends JPanel {
                 if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 50) {                                                    // manual fix-cost
                         draggingSkeleton = true;
-                    } else {
+                    }
+                    else {
                         System.out.println("Not enough cost!"); // Debug
                     }
                 }
-                else if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 105 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                else if (e.getX() >= BAR_X + 105 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 50) {                                                    // manual fix-cost
                         draggingSlime = true;
-                    } else {
+                    }
+                    else {
                         System.out.println("Not enough cost!"); // Debug
                     }
                 }
-                else if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS &&
-                        e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                else if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;
                 }
             }
@@ -361,12 +362,7 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (draggingSlime || draggingRecall) {
-                    mouseX = e.getX();
-                    mouseY = e.getY();
-                    repaint(); // Force repaint so the dragged unit updates smoothly
-                }
-                else if (draggingSkeleton || draggingRecall) {
+                if (draggingSkeleton || draggingSlime || draggingRecall) {
                     mouseX = e.getX();
                     mouseY = e.getY();
                     repaint(); // Force repaint so the dragged unit updates smoothly
