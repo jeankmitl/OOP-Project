@@ -10,7 +10,7 @@ public class Slime extends Unit {
 
     public Slime(int row, int col) {
         // Slime doesn't have attack power, health, or defense, so set them to appropriate values
-        super(row, col, 100, 0, 1500, 0); // Slime doesn't attack, no cost yet for attack
+        super(row, col, 50, 0, 0, 50); // Slime doesn't attack, no cost yet for attack
 
         try {
             // Ensure the path is correct based on where the asset is located
@@ -20,22 +20,20 @@ public class Slime extends Unit {
         }
 
         // Timer to generate cost every 5 seconds (5000 milliseconds)
-        costGenerationTimer = new Timer(5000, e -> generateCost()); 
+        costGenerationTimer = new Timer(10000, e -> generateCost()); 
         costGenerationTimer.start();
     }
 
-    // Stop cost generation when the unit is removed
     public void stopGeneratingCost() {
         costGenerationTimer.stop();
     }
 
-    // Method for generating cost over time
+    // Add 50 cost every 10 seconds
     public void generateCost() {
-        GamePanel.remainMana += 50; // Add 50 cost every 5 seconds
+        GamePanel.remainMana += 50;
         if (GamePanel.remainMana > GamePanel.MAX_MANA) {
-            GamePanel.remainMana = GamePanel.MAX_MANA; // Cap mana to maximum
+            GamePanel.remainMana = GamePanel.MAX_MANA;
         }
-        System.out.println("Cost generated: " + GamePanel.remainMana);
     }
 
     @Override

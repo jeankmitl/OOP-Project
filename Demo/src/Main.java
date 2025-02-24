@@ -6,6 +6,7 @@ public class Main {
     public static GamePanel gamePanel;
 
     public Main() {
+
         frame = new JFrame("Defense of the Dungeon");
         gamePanel = new GamePanel();
         frame.add(gamePanel);
@@ -15,6 +16,7 @@ public class Main {
         // frame.setUndecorated(true);
         frame.setResizable(false);
         frame.setVisible(true);
+
     }
 
     public static void main(String[] args) {

@@ -31,9 +31,9 @@ public class Skeleton extends Unit {
     }
 
     @Override
-    public boolean isEnermyInfront(List<Enermy> zombies) {
-        for (Enermy zombie : zombies) {
-            if (zombie.getRow() == this.getRow() && zombie.getX() > this.getX()) {
+    public boolean isEnermyInfront(List<Enermy> enermies) {
+        for (Enermy enermy : enermies) {
+            if (enermy.getRow() == this.getRow() && enermy.getX() > this.getX()) {
                 return true;
             }
         }

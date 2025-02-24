@@ -16,7 +16,7 @@ public abstract class Enermy {
     protected int frame_Width = 32, frame_Hight = 32;
 
     public abstract Rectangle getBounds();
-    public abstract void attack(Skeleton plant);
+    public abstract void attack(Unit unit);
 
     public Enermy(double x, int row, int health, double speed) {
         this.x = x;

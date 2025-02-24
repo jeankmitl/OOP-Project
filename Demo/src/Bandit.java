@@ -5,7 +5,8 @@ import javax.imageio.ImageIO;
 public class Bandit extends Enermy {
     
     public Bandit(double x, int row) {
-        super(x, row, 100, 0.75);
+
+        super(x, row, 100, 0.25);
         
         try {
             spriteSheet = ImageIO.read(getClass().getResource("Asset\\Ninja.png"));
@@ -15,8 +16,8 @@ public class Bandit extends Enermy {
     }
 
     @Override
-    public void attack(Skeleton plant) {
-        plant.takeDamage(20);
+    public void attack(Unit unit) {
+        unit.takeDamage(20);
     }
 
     @Override

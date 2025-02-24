@@ -45,15 +45,16 @@ public class GamePanel extends JPanel {
         startAnimationThread();
         //------------------
         
-        // every 0.1 sec +1 cost
-        new Timer(10000, e -> {
-            if (remainMana < MAX_MANA) {
-                remainMana += 50;
-                repaint(); // Update UI
+        // Add 50 cost every 20 seconds
+        new Timer(20000, e -> {
+            remainMana += 50;
+            if (GamePanel.remainMana > GamePanel.MAX_MANA) {
+                GamePanel.remainMana = GamePanel.MAX_MANA;
             }
+            repaint();
         }).start();
     }
-    
+
     public static List<Enermy> getEnermies() {
         return enermies;
     }
@@ -63,7 +64,7 @@ public class GamePanel extends JPanel {
     }
     //add//
     public void startGame() {
-        new Timer(2000, e -> {
+        new Timer(5000, e -> {
             Random random = new Random();
             int randomNumber = random.nextInt(5); // 0-5
             enermies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));
@@ -126,18 +127,32 @@ public class GamePanel extends JPanel {
 
             boolean stop = false;
             for (Unit unit : units) {
-                if (((Skeleton)unit).getBounds().intersects(enermy.getBounds())) { //-------------------------fix after (cast unit to unit1)
-                    stop = true;
-
-                    long currentTime = System.currentTimeMillis();
-                    if (currentTime - enermy.getLastAttackTime() >= 1000) {
-                        enermy.attack((Skeleton)unit);                               //-------------------------fix after (cast unit to unit1)
-                        System.out.println("eat!!");
-                        enermy.setLastAttackTime(currentTime);
+                if (unit instanceof Skeleton) {
+                    Skeleton skeleton = (Skeleton) unit;
+                    if (skeleton.getBounds().intersects(enermy.getBounds())) {
+                        stop = true;
+                        long currentTime = System.currentTimeMillis();
+                        if (currentTime - enermy.getLastAttackTime() >= 1000) {
+                            enermy.attack(skeleton);
+                            enermy.setLastAttackTime(currentTime);
+                        }
+                        break;
                     }
-                    break;
+                }
+                else if (unit instanceof Slime) {
+                    Slime slime = (Slime) unit;
+                    if (slime.getBounds().intersects(enermy.getBounds())) {
+                        stop = true;
+                        long currentTime = System.currentTimeMillis();
+                        if (currentTime - enermy.getLastAttackTime() >= 1000) {
+                            enermy.attack(slime);
+                            enermy.setLastAttackTime(currentTime);
+                        }
+                        break;
+                    }
                 }
             }
+            
 
             if (!stop) {
                 enermy.move();
@@ -212,7 +227,7 @@ public class GamePanel extends JPanel {
                 g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT,
                         GamePanel.CELL_WIDTH, null);
             }
-            if (unit instanceof Slime) {
+            else if (unit instanceof Slime) {
                 BufferedImage img = ((Slime)unit).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
@@ -282,26 +297,31 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                System.out.println("Mouse Pressed at: " + e.getX() + ", " + e.getY());  // Debugging mouse position
                 if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                    if (remainMana >= 50) {                                                    // manual fix-cost
+                    if (remainMana >= 100) {
                         draggingSkeleton = true;
+                        System.out.println("Dragging Skeleton");
                     }
                     else {
-                        System.out.println("Not enough cost!"); // Debug
+                        System.out.println("Not enough mana for Skeleton!");
                     }
                 }
-                else if (e.getX() >= BAR_X + 105 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                    if (remainMana >= 50) {                                                    // manual fix-cost
+                else if (e.getX() >= BAR_X + CELL_WIDTH && e.getX() <= BAR_X + CELL_WIDTH * 2 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                    if (remainMana >= 50) {
                         draggingSlime = true;
+                        System.out.println("Dragging Slime");
                     }
                     else {
-                        System.out.println("Not enough cost!"); // Debug
+                        System.out.println("Not enough mana for Slime!");
                     }
                 }
                 else if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;
+                    System.out.println("Dragging Recall");
                 }
             }
+
 
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -312,7 +332,7 @@ public class GamePanel extends JPanel {
                     if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
                         if (isFieldAvailable(col, row)) { // Check if field is free
                             units.add(new Skeleton(row, col));
-                            remainMana -= 50;                                             //manual fix-cost
+                            remainMana -= 100;                                             //manual fix-cost
                         } else {
                             System.out.println("***Field is occupied***");
                         }
@@ -335,13 +355,15 @@ public class GamePanel extends JPanel {
                     int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
                     int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
                     if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                        if (!isFieldAvailable(col, row)) { // Check if Operator is exist on the field
+                        if (!isFieldAvailable(col, row)) {
                             Iterator<Unit> unitIterator = units.iterator();
                             while (unitIterator.hasNext()) {
                                 Unit unit = unitIterator.next();
                                 if (unit.getRow() == row && unit.getCol() == col) {
-                                    ((Skeleton)unit).stopAttacking();
-                                    unitIterator.remove(); // Remove unit
+                                    if (unit instanceof Skeleton) {
+                                        ((Skeleton) unit).stopAttacking();
+                                    }
+                                    unitIterator.remove(); // Remove unit from the field
                                 }
                             }
                         }
