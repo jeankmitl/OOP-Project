@@ -34,7 +34,7 @@ public class GamePanel extends JPanel {
     private int mouseX, mouseY;
 
     public GamePanel() {
-
+        Audio.playMusic(AudioName.MUSIC_ONE);
         backgroundImage = new ImageIcon(getClass().getResource("/Asset/chinaNo1.png")).getImage();
 
         units = new ArrayList<>();

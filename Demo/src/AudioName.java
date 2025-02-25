@@ -18,4 +18,5 @@ public interface AudioName {
     String PLANT_DELETE = "delete-plant";
     String PLANT_CANT_PICK_UP = "cant-pick-up-plant";
     String BTN_SELECT = "btn-select";
+    String MUSIC_ONE = "bolt battle test";
 }
