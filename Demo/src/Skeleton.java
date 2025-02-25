@@ -20,6 +20,7 @@ public class Skeleton extends Unit {
         attackTimer = new Timer(1500, e -> {
             if (isEnermyInfront(GamePanel.getEnermies())) {
                 attack(GamePanel.getBullets());
+                Audio.play(AudioName.FIRE_TINY);
             }
         });
 

@@ -164,6 +164,7 @@ public class GamePanel extends JPanel {
 
             if (enermy.isDead()) {
                 enermyIterator.remove();
+                Audio.play(AudioName.KILL2);
             }
         }
 
@@ -176,6 +177,7 @@ public class GamePanel extends JPanel {
                 if (bullet.getBounds().intersects(enermy.getBounds())) {
                     enermy.takeDamage(10);
                     bulletIterator.remove();
+                    Audio.play(AudioName.HIT);
                     break;
                 }
             }
@@ -299,18 +301,22 @@ public class GamePanel extends JPanel {
                     if (remainMana >= 100) {
                         draggingSkeleton = true;
                         System.out.println("Dragging Skeleton");
+                        Audio.play(AudioName.PLANT_PICK_UP);
                     }
                     else {
                         System.out.println("Not enough mana for Skeleton!");
+                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     }
                 }
                 else if (e.getX() >= BAR_X + CELL_WIDTH && e.getX() <= BAR_X + CELL_WIDTH * 2 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 50) {
                         draggingSlime = true;
                         System.out.println("Dragging Slime");
+                        Audio.play(AudioName.PLANT_PICK_UP);
                     }
                     else {
                         System.out.println("Not enough mana for Slime!");
+                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     }
                 }
                 else if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
@@ -329,6 +335,7 @@ public class GamePanel extends JPanel {
                         if (isFieldAvailable(col, row)) {
                             units.add(new Skeleton(row, col));
                             remainMana -= 100;
+                            Audio.play(AudioName.PLANT_PLACE);
                         } else {
                             System.out.println("***Field is Not available***");
                         }
@@ -342,6 +349,7 @@ public class GamePanel extends JPanel {
                         if (isFieldAvailable(col, row)) {
                             units.add(new Slime(row, col));
                             remainMana -= 50;
+                            Audio.play(AudioName.PLANT_PLACE);
                         } else {
                             System.out.println("***Field is Not available***");
                         }
@@ -363,6 +371,7 @@ public class GamePanel extends JPanel {
                                         ((Slime) unit).stopGeneratingCost();
                                     }
                                     unitIterator.remove();
+                                    Audio.play(AudioName.PLANT_DELETE);
                                 }
                             }
                         }
