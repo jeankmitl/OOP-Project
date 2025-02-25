@@ -21,7 +21,7 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    public static int remainMana = 0;
+    public static int remainMana = 100;
     public static final int MAX_MANA = 1000;
 
     private static List<Unit> units;
@@ -44,8 +44,8 @@ public class GamePanel extends JPanel {
         addMouseListeners();
         startAnimationThread();
 
-        // Add 50 cost every 20 seconds
-        new Timer(20000, e -> {
+        // Add 50 cost every 15 seconds
+        new Timer(15000, e -> {
             remainMana += 50;
             if (GamePanel.remainMana > GamePanel.MAX_MANA) {
                 GamePanel.remainMana = GamePanel.MAX_MANA;
