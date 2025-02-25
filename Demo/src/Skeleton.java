@@ -43,7 +43,7 @@ public class Skeleton extends Unit {
 
     @Override
     public void attack(List<Bullet> bullets) {
-        bullets.add(new Bullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30));
+        bullets.add(new Bone(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30));
     }
 
     @Override

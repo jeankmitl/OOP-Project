@@ -21,7 +21,7 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    public static int remainMana = 100;
+    public static int remainMana = 50;
     public static final int MAX_MANA = 1000;
 
     private static List<Unit> units;
@@ -106,6 +106,17 @@ public class GamePanel extends JPanel {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                for (Bullet bullet : bullets) {
+                    bullet.update_Frame();
+                }
+                repaint();
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
         }).start();
     }
@@ -258,8 +269,16 @@ public class GamePanel extends JPanel {
         }
 
         for (Bullet bullet : bullets) {
-            g.setColor(Color.YELLOW);
-            g.fillRect(bullet.getX(), bullet.getY(), 30, 30);
+            if (bullet instanceof Bone) {
+                BufferedImage img = ((Bone) bullet).getBufferedImage();
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // Improve Quality
+                                                                                                         // */
+                // Image img =
+                // unit.getBufferedImage().getScaledInstance(GamePanel.CELL_WIDTH,GamePanel.CELL_HEIGHT,Image.SCALE_SMOOTH);
+                g.drawImage(img, bullet.getX() - 50, bullet.getY() - 20, 64, 64, null);
+            }
         }
 
         g.setColor(Color.RED);

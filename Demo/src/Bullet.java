@@ -1,17 +1,23 @@
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
-public class Bullet {
-    private int x, y;
-    private int speed = 10;
+public abstract class Bullet {
+
+    protected int x, y;
+    protected int speed = 10;
+    protected BufferedImage spriteSheet;
+    protected int currentFrame = 0;
+    protected int total_Frame = 4;
+    protected int frame_Width = 32, frame_Hight = 32;
 
     public Bullet(int x, int y) {
+
         this.x = x;
         this.y = y;
+
     }
 
-    public void move() {
-        x += speed;
-    }
+    public abstract void move();
 
     public int getX() {
         return x + GamePanel.GRID_OFFSET_X;
@@ -23,6 +29,14 @@ public class Bullet {
 
     public Rectangle getBounds() {
         return new Rectangle(getX(), getY(), 30, 30);
+    }
+
+    public BufferedImage getBufferedImage() {
+        return spriteSheet.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+    }
+
+    public void update_Frame() {
+        currentFrame = (currentFrame + 1) % total_Frame;
     }
 
 }
