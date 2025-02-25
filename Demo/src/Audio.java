@@ -4,7 +4,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class Audio {
-    private static final String AUDIO_FOLDER = "src\\audios";
+
+    private static final String AUDIO_FOLDER = "src/audios";
     public static boolean isSoundEnable = true;
     public static boolean isMusicEnable = false;
     
@@ -26,7 +27,7 @@ public class Audio {
             }
         }).start();
     }
-    
+
     public static void playMusic(String name) {
         if (!isMusicEnable) return;
         if (!name.contains(".wav")) {
@@ -47,7 +48,7 @@ public class Audio {
             }
         }).start();
     }
-    
+
     public static void main(String[] args) {
         Audio.play(AudioName.FIRE);
         Audio.play(AudioName.HIT);
@@ -55,5 +56,5 @@ public class Audio {
         Audio.play(AudioName.PLANT_DELETE);
         Audio.play(AudioName.PLANT_PLACE);
     }
-    
+
 }

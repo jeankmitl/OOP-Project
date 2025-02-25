@@ -9,14 +9,12 @@ public class Slime extends Unit {
     private Timer costGenerationTimer;
 
     public Slime(int row, int col) {
-        super(row, col, 50, 0, 0, 50); // Slime doesn't attack, no cost yet for attack
-
+        super(row, col, 50, 0, 0, 50);
         try {
-            spriteSheet = ImageIO.read(getClass().getResource("Asset\\Slime.png")); // Relative path
+            actionIdle = ImageIO.read(getClass().getResource("Asset/Slime.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         costGenerationTimer = new Timer(10000, e -> generateCost()); 
         costGenerationTimer.start();
     }
@@ -35,8 +33,7 @@ public class Slime extends Unit {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(col * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_X,
-                row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
+        return new Rectangle(col * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_X, row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
 
     @Override

@@ -2,6 +2,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public abstract class Enermy {
+
     protected double x;
     protected int row; // Position on the grid
     protected int health;
@@ -9,8 +10,7 @@ public abstract class Enermy {
     protected long lastAttackTime = 0;
     protected int ATTACK_COOLDOWN;
     
-    // animation
-    protected BufferedImage spriteSheet;
+    protected BufferedImage actionIdle, actionATK;
     protected int currentFrame = 0;
     protected int total_Frame = 4;
     protected int frame_Width = 32, frame_Hight = 32;
@@ -64,11 +64,11 @@ public abstract class Enermy {
     public int getAttackCooldown() {
         return ATTACK_COOLDOWN;
     }
-    
+
     public BufferedImage getBufferedImage() {
-        return spriteSheet.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        return  actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
     }
-    
+
     public void update_Frame() {
         currentFrame = (currentFrame + 1) % total_Frame;
     }

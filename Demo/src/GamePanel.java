@@ -21,8 +21,8 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    public static int remainMana = 50; //Test Code 500 mana
-    public static final int MAX_MANA = 1000;
+    public static int remainMana = 0;
+    public static final int MAX_MANA = 9999;
 
     private static List<Unit> units;
     private static List<Enermy> enermies;
@@ -34,8 +34,9 @@ public class GamePanel extends JPanel {
     private int mouseX, mouseY;
 
     public GamePanel() {
+
         Audio.playMusic(AudioName.MUSIC_ONE);
-        backgroundImage = new ImageIcon(getClass().getResource("/Asset/chinaNo1.png")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("Asset/chinaNo1.png")).getImage();
 
         units = new ArrayList<>();
         enermies = new ArrayList<>();
@@ -46,7 +47,7 @@ public class GamePanel extends JPanel {
 
         // Add 50 cost every 15 seconds
         new Timer(15000, e -> {
-            remainMana += 50;
+            remainMana += 25;
             if (GamePanel.remainMana > GamePanel.MAX_MANA) {
                 GamePanel.remainMana = GamePanel.MAX_MANA;
             }
@@ -63,12 +64,9 @@ public class GamePanel extends JPanel {
     }
 
     public void startGame() {
-        /*Random random = new Random();
-        int randomNumber = random.nextInt(5); // 0-5
-        enermies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));*/
         new Timer(5000, e -> {
             Random random = new Random();
-            int randomNumber = random.nextInt(5); // 0-5
+            int randomNumber = random.nextInt(5);
             enermies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));
         }).start();
 
@@ -77,15 +75,6 @@ public class GamePanel extends JPanel {
             repaint();
         }).start();
     }
-
-//    public boolean isenermyInFront(unit1 unit) {
-//        for (enermy enermy : enermies) {
-//            if (enermy.getRow() == unit.getRow() && enermy.getX() > unit.getX()) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     public void startAnimationThread() {
         new Thread(() -> {
@@ -119,7 +108,6 @@ public class GamePanel extends JPanel {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         }).start();
     }
@@ -198,16 +186,14 @@ public class GamePanel extends JPanel {
         }
 
         units.removeIf(Unit::isDead);
-//        bullets.removeIf(bullet -> bullet.getTarget().isDead());
     }
-////vvv Image System vv//// 
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
-        // draw background image
+
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
- 
+
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
         g.drawString("Mana: " + remainMana, 20, 30); // Display at top-left
@@ -218,70 +204,53 @@ public class GamePanel extends JPanel {
 
         g.setColor(Color.LIGHT_GRAY);
         for (int i = 0; i <= ROWS; i++) {
-            g.drawLine(GRID_OFFSET_X, GRID_OFFSET_Y + i * CELL_HEIGHT, GRID_OFFSET_X + COLS * CELL_WIDTH,
-                    GRID_OFFSET_Y + i * CELL_HEIGHT);
+            g.drawLine(GRID_OFFSET_X, GRID_OFFSET_Y + i * CELL_HEIGHT, GRID_OFFSET_X + COLS * CELL_WIDTH, GRID_OFFSET_Y + i * CELL_HEIGHT);
         }
         for (int i = 0; i <= COLS; i++) {
-            g.drawLine(GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y, GRID_OFFSET_X + i * CELL_WIDTH,
-                    GRID_OFFSET_Y + ROWS * CELL_HEIGHT);
+            g.drawLine(GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y, GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y + ROWS * CELL_HEIGHT);
         }
 
         for (Unit unit : units) {
-//            g.setColor(Color.GREEN);
-//            g.fillRect(unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, CELL_WIDTH, CELL_HEIGHT);
 
             if (unit instanceof Skeleton) {
                 BufferedImage img = ((Skeleton)unit).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // Improve Quality
-                                                                                                         // */
-                // Image img =
-                // unit.getBufferedImage().getScaledInstance(GamePanel.CELL_WIDTH,GamePanel.CELL_HEIGHT,Image.SCALE_SMOOTH);
-                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT,
-                        GamePanel.CELL_WIDTH, null);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
             else if (unit instanceof Slime) {
                 BufferedImage img = ((Slime)unit).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // Improve Quality
-                                                                                                         // */
-                // Image img =
-                // unit.getBufferedImage().getScaledInstance(GamePanel.CELL_WIDTH,GamePanel.CELL_HEIGHT,Image.SCALE_SMOOTH);
-                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT,
-                        GamePanel.CELL_WIDTH, null);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
+
         }
 
         for (Enermy enermy : enermies) {
-//            g.setColor(Color.RED);
-//            g.fillRect(enermy.getX() + GRID_OFFSET_X, enermy.getY() + GRID_OFFSET_Y, CELL_WIDTH, CELL_HEIGHT);
-            
+
             if (enermy instanceof Bandit) {
                 BufferedImage img = ((Bandit)enermy).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // Improve Quality
-                                                                                                         // */
-                // Image img =
-                // unit.getBufferedImage().getScaledInstance(GamePanel.CELL_WIDTH,GamePanel.CELL_HEIGHT,Image.SCALE_SMOOTH);
-                g.drawImage(img, enermy.getX() + GRID_OFFSET_X, enermy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT,
-                        GamePanel.CELL_WIDTH, null);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.drawImage(img, enermy.getX() + GRID_OFFSET_X, enermy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
+
         }
 
         for (Bullet bullet : bullets) {
+
             if (bullet instanceof Bone) {
                 BufferedImage img = ((Bone) bullet).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // Improve Quality
-                                                                                                         // */
-                // Image img =
-                // unit.getBufferedImage().getScaledInstance(GamePanel.CELL_WIDTH,GamePanel.CELL_HEIGHT,Image.SCALE_SMOOTH);
-                g.drawImage(img, bullet.getX() - 50, bullet.getY() - 20, 64, 64, null);
+                g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, 64, 64, null);
             }
+
         }
 
         g.setColor(Color.RED);
@@ -421,5 +390,7 @@ public class GamePanel extends JPanel {
                 }
             }
         });
+
     }
+
 }

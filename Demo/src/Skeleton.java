@@ -10,11 +10,12 @@ public class Skeleton extends Unit {
     private Timer attackTimer;
 
     public Skeleton(int row, int col) {
+
         super(row, col, 100, 10, 1500, 100);
 
         try {
-            spriteSheet = ImageIO.read(getClass().getResource("Asset\\Skeleton.png"));
-            spriteSheetATK = ImageIO.read(getClass().getResource("Asset\\SkeletonThrow.png"));
+            actionIdle = ImageIO.read(getClass().getResource("Asset/Skeleton.png"));
+            actionATK = ImageIO.read(getClass().getResource("Asset/SkeletonThrow.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,7 +42,8 @@ public class Skeleton extends Unit {
                 this.currentFrame = 0;
                 return true;
             }
-        }this.Status = "Idle";
+        }
+        this.Status = "idle";
         this.currentFrame = 0;
         return false;
     }
@@ -53,28 +55,26 @@ public class Skeleton extends Unit {
 
     @Override
     public Rectangle getBounds() {
-        return new Rectangle(col * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_X,
-                row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
+        return new Rectangle(col * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_X, row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
 
     @Override
     public BufferedImage getBufferedImage() {
-        if (this.Status.equals("Idle")){
-            return spriteSheet.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
-        else{
-            return spriteSheetATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        if (this.Status.equals("idle")){
+            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
+        else {
+            return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
         }
     }
 
     @Override
     public void update_Frame() {
-        if (this.Status.equals("Idle")){
+        if (this.Status.equals("idle")){
             currentFrame = (currentFrame + 1) % total_Frame_Idle;
-        }else{
-            currentFrame = (currentFrame+1)%total_Frame_ATK;
+        }
+        else {
+            currentFrame = (currentFrame + 1) % total_Frame_ATK;
         }
     }
-    
-    
-    
+
 }

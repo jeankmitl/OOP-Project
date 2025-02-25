@@ -10,14 +10,12 @@ public abstract class Unit {
     protected int atkSpeed;
     protected int cost;
     
-    // animation
-    protected BufferedImage spriteSheet,spriteSheetATK;
+    protected BufferedImage actionIdle, actionATK;
     protected int currentFrame = 0;
     protected int total_Frame_Idle = 4;
     protected int total_Frame_ATK = 8;
     protected int frame_Width = 32, frame_Hight = 32;
-    protected String Status = "Idle";
-    
+    protected String Status = "idle";
     
     public abstract boolean isEnermyInfront(List<Enermy> enermies);
     public abstract void attack(List<Bullet> bullets);
@@ -61,7 +59,7 @@ public abstract class Unit {
     }
     
     public BufferedImage getBufferedImage() {
-        return spriteSheet.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
     }
     
     public void update_Frame() {

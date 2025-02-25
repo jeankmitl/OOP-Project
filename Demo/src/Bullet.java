@@ -11,10 +11,8 @@ public abstract class Bullet {
     protected int frame_Width = 32, frame_Hight = 32;
 
     public Bullet(int x, int y) {
-
         this.x = x;
         this.y = y;
-
     }
 
     public abstract void move();
