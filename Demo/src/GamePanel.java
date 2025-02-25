@@ -34,6 +34,7 @@ public class GamePanel extends JPanel {
     private int mouseX, mouseY;
 
     public GamePanel() {
+
         backgroundImage = new ImageIcon(getClass().getResource("/Asset/chinaNo1.png")).getImage();
 
         units = new ArrayList<>();
@@ -41,10 +42,8 @@ public class GamePanel extends JPanel {
         bullets = new ArrayList<>();
         startGame();
         addMouseListeners();
-        //------------------
         startAnimationThread();
-        //------------------
-        
+
         // Add 50 cost every 20 seconds
         new Timer(20000, e -> {
             remainMana += 50;
@@ -62,7 +61,7 @@ public class GamePanel extends JPanel {
     public static List<Bullet> getBullets() {
         return bullets;
     }
-    //add//
+
     public void startGame() {
         new Timer(5000, e -> {
             Random random = new Random();
@@ -84,7 +83,7 @@ public class GamePanel extends JPanel {
 //        }
 //        return false;
 //    }
-    
+
     public void startAnimationThread() {
         new Thread(() -> {
             while (true) {
@@ -114,10 +113,10 @@ public class GamePanel extends JPanel {
     public boolean isFieldAvailable(int col, int row) {
         for (Unit unit : units) {
             if (unit.getRow() == row && unit.getCol() == col) {
-                return false; // Field is occupied
+                return false;
             }
         }
-        return true; // Field is free
+        return true;
     }
 
     public void update() {
@@ -175,8 +174,7 @@ public class GamePanel extends JPanel {
 
             for (Enermy enermy : enermies) {
                 if (bullet.getBounds().intersects(enermy.getBounds())) {
-                    enermy.takeDamage(10);                                  // manual fix-bullet-damage
-                    System.out.println(enermy.getHealth());
+                    enermy.takeDamage(10);
                     bulletIterator.remove();
                     break;
                 }
@@ -196,7 +194,7 @@ public class GamePanel extends JPanel {
  
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Cost: " + remainMana, 20, 30); // Display at top-left
+        g.drawString("Mana: " + remainMana, 20, 30); // Display at top-left
 
         // RED LINE
         g.setColor(Color.RED);
@@ -297,7 +295,6 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println("Mouse Pressed at: " + e.getX() + ", " + e.getY());  // Debugging mouse position
                 if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 100) {
                         draggingSkeleton = true;
@@ -322,7 +319,6 @@ public class GamePanel extends JPanel {
                 }
             }
 
-
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (draggingSkeleton) {
@@ -330,11 +326,11 @@ public class GamePanel extends JPanel {
                     int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
 
                     if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                        if (isFieldAvailable(col, row)) { // Check if field is free
+                        if (isFieldAvailable(col, row)) {
                             units.add(new Skeleton(row, col));
-                            remainMana -= 100;                                             //manual fix-cost
+                            remainMana -= 100;
                         } else {
-                            System.out.println("***Field is occupied***");
+                            System.out.println("***Field is Not available***");
                         }
                     }
                 }
@@ -343,11 +339,11 @@ public class GamePanel extends JPanel {
                     int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
 
                     if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                        if (isFieldAvailable(col, row)) { // Check if field is free
+                        if (isFieldAvailable(col, row)) {
                             units.add(new Slime(row, col));
-                            remainMana -= 50;                                             //manual fix-cost
+                            remainMana -= 50;
                         } else {
-                            System.out.println("***Field is occupied***");
+                            System.out.println("***Field is Not available***");
                         }
                     }
                 }
@@ -363,7 +359,10 @@ public class GamePanel extends JPanel {
                                     if (unit instanceof Skeleton) {
                                         ((Skeleton) unit).stopAttacking();
                                     }
-                                    unitIterator.remove(); // Remove unit from the field
+                                    else if (unit instanceof Slime) {
+                                        ((Slime) unit).stopGeneratingCost();
+                                    }
+                                    unitIterator.remove();
                                 }
                             }
                         }
@@ -387,7 +386,7 @@ public class GamePanel extends JPanel {
                 if (draggingSkeleton || draggingSlime || draggingRecall) {
                     mouseX = e.getX();
                     mouseY = e.getY();
-                    repaint(); // Force repaint so the dragged unit updates smoothly
+                    repaint();
                 }
             }
         });

@@ -27,7 +27,7 @@ public class Skeleton extends Unit {
     }
 
     public void stopAttacking() {
-        attackTimer.stop(); // Stop the timer so it won't attack anymore
+        attackTimer.stop();
     }
 
     @Override
