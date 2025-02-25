@@ -21,7 +21,7 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    public static int remainMana = 500; //Test Code 500 mana
+    public static int remainMana = 50; //Test Code 500 mana
     public static final int MAX_MANA = 1000;
 
     private static List<Unit> units;
