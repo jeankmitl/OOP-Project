@@ -21,7 +21,7 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    public static int remainMana = 50;
+    public static int remainMana = 500; //Test Code 500 mana
     public static final int MAX_MANA = 1000;
 
     private static List<Unit> units;
@@ -63,6 +63,9 @@ public class GamePanel extends JPanel {
     }
 
     public void startGame() {
+        /*Random random = new Random();
+        int randomNumber = random.nextInt(5); // 0-5
+        enermies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));*/
         new Timer(5000, e -> {
             Random random = new Random();
             int randomNumber = random.nextInt(5); // 0-5
@@ -197,7 +200,7 @@ public class GamePanel extends JPanel {
         units.removeIf(Unit::isDead);
 //        bullets.removeIf(bullet -> bullet.getTarget().isDead());
     }
-
+////vvv Image System vv//// 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

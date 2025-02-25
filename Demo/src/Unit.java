@@ -11,11 +11,14 @@ public abstract class Unit {
     protected int cost;
     
     // animation
-    protected BufferedImage spriteSheet;
+    protected BufferedImage spriteSheet,spriteSheetATK;
     protected int currentFrame = 0;
-    protected int total_Frame = 4;
+    protected int total_Frame_Idle = 4;
+    protected int total_Frame_ATK = 8;
     protected int frame_Width = 32, frame_Hight = 32;
-
+    protected String Status = "Idle";
+    
+    
     public abstract boolean isEnermyInfront(List<Enermy> enermies);
     public abstract void attack(List<Bullet> bullets);
     public abstract Rectangle getBounds();
@@ -62,7 +65,7 @@ public abstract class Unit {
     }
     
     public void update_Frame() {
-        currentFrame = (currentFrame + 1) % total_Frame;
+        currentFrame = (currentFrame + 1) % total_Frame_Idle;
     }
 
 }

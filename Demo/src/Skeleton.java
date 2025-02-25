@@ -1,4 +1,5 @@
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -13,6 +14,7 @@ public class Skeleton extends Unit {
 
         try {
             spriteSheet = ImageIO.read(getClass().getResource("Asset\\Skeleton.png"));
+            spriteSheetATK = ImageIO.read(getClass().getResource("Asset\\SkeletonThrow.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,9 +37,12 @@ public class Skeleton extends Unit {
     public boolean isEnermyInfront(List<Enermy> enermies) {
         for (Enermy enermy : enermies) {
             if (enermy.getRow() == this.getRow() && enermy.getX() > this.getX()) {
+                this.Status = "ATK";
+                this.currentFrame = 0;
                 return true;
             }
-        }
+        }this.Status = "Idle";
+        this.currentFrame = 0;
         return false;
     }
 
@@ -52,4 +57,24 @@ public class Skeleton extends Unit {
                 row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
 
+    @Override
+    public BufferedImage getBufferedImage() {
+        if (this.Status.equals("Idle")){
+            return spriteSheet.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
+        else{
+            return spriteSheetATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        }
+    }
+
+    @Override
+    public void update_Frame() {
+        if (this.Status.equals("Idle")){
+            currentFrame = (currentFrame + 1) % total_Frame_Idle;
+        }else{
+            currentFrame = (currentFrame+1)%total_Frame_ATK;
+        }
+    }
+    
+    
+    
 }
