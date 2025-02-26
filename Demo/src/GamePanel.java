@@ -17,20 +17,22 @@ public class GamePanel extends JPanel {
     public static final int CELL_HEIGHT = 95;
     public static final int GRID_OFFSET_X = 175; // Move grid right
     public static final int GRID_OFFSET_Y = 100; // Move grid down
-    public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT*ROWS + GRID_OFFSET_Y + 10;
+    public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT * ROWS + GRID_OFFSET_Y + 10;
     public static final int SPAWN_POINT = 1000;
 
     // mana system
-    public static int remainMana = 0;
+    public static int remainMana = 1000; // for test only
     public static final int MAX_MANA = 9999;
 
     private static List<Unit> units;
     private static List<Enemy> enemies;
     private static List<Bullet> bullets;
     
-    private boolean draggingRecall = false;
     private boolean draggingSkeleton = false;
     private boolean draggingSlime = false;
+    private boolean draggingVinewall = false;
+    private boolean draggingRecall = false;
+
     private int mouseX, mouseY;
 
     public GamePanel() {
@@ -64,10 +66,12 @@ public class GamePanel extends JPanel {
     }
 
     public void startGame() {
-        new Timer(5000, e -> {
+        new Timer(10000, e -> {
             Random random = new Random();
-            int randomNumber = random.nextInt(5);
-            enemies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));
+            int randomBandit = random.nextInt(5);
+            int randomNinja = random.nextInt(5);
+            enemies.add(new Bandit(1280-GRID_OFFSET_X, randomBandit));
+            enemies.add(new Ninja(1280-GRID_OFFSET_X, randomNinja));
         }).start();
 
         new Timer(1000 / 60, e -> {
@@ -152,6 +156,18 @@ public class GamePanel extends JPanel {
                         break;
                     }
                 }
+                else if (unit instanceof Vinewall) {
+                    Vinewall vinewall = (Vinewall) unit;
+                    if (vinewall.getBounds().intersects(enemy.getBounds())) {
+                        stop = true;
+                        long currentTime = System.currentTimeMillis();
+                        if (currentTime - enemy.getLastAttackTime() >= 1000) {
+                            enemy.attack(vinewall);
+                            enemy.setLastAttackTime(currentTime);
+                        }
+                        break;
+                    }
+                }
             }
             
 
@@ -213,14 +229,21 @@ public class GamePanel extends JPanel {
         for (Unit unit : units) {
 
             if (unit instanceof Skeleton) {
-                BufferedImage img = ((Skeleton)unit).getBufferedImage();
+                BufferedImage img = ((Skeleton) unit).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
             else if (unit instanceof Slime) {
-                BufferedImage img = ((Slime)unit).getBufferedImage();
+                BufferedImage img = ((Slime) unit).getBufferedImage();
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            }
+            else if (unit instanceof Vinewall) {
+                BufferedImage img = ((Vinewall) unit).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -232,7 +255,15 @@ public class GamePanel extends JPanel {
         for (Enemy enemy : enemies) {
 
             if (enemy instanceof Bandit) {
-                BufferedImage img = ((Bandit)enemy).getBufferedImage();
+                BufferedImage img = ((Bandit) enemy).getBufferedImage();
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            }
+
+            else if (enemy instanceof Ninja) {
+                BufferedImage img = ((Ninja) enemy).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
@@ -265,6 +296,8 @@ public class GamePanel extends JPanel {
         g.fillRect(BAR_X + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.BLUE);
         g.fillRect(BAR_X + 105, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+        g.setColor(Color.YELLOW);
+        g.fillRect(BAR_X + 200, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.ORANGE);
         g.fillRect(BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
 
@@ -278,6 +311,11 @@ public class GamePanel extends JPanel {
             g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         }
 
+        if (draggingVinewall) {
+            g.setColor(Color.YELLOW);
+            g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+        }
+
         if (draggingRecall) {
             g.setColor(Color.ORANGE);
             g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
@@ -288,7 +326,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getX() >= BAR_X + 10 && e.getX() <= BAR_X + CELL_WIDTH - 10 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                if (e.getX() >= BAR_X && e.getX() <= BAR_X + CELL_WIDTH && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 100) {
                         draggingSkeleton = true;
                         System.out.println("Dragging Skeleton");
@@ -307,6 +345,17 @@ public class GamePanel extends JPanel {
                     }
                     else {
                         System.out.println("Not enough mana for Slime!");
+                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
+                    }
+                }
+                else if (e.getX() >= BAR_X + CELL_WIDTH * 2 && e.getX() <= BAR_X + CELL_WIDTH * 3 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                    if (remainMana >= 50) {
+                        draggingVinewall = true;
+                        System.out.println("Dragging Golem");
+                        Audio.play(AudioName.PLANT_PICK_UP);
+                    }
+                    else {
+                        System.out.println("Not enough mana for Golem!");
                         Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     }
                 }
@@ -346,6 +395,20 @@ public class GamePanel extends JPanel {
                         }
                     }
                 }
+                else if (draggingVinewall) {
+                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
+                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
+
+                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                        if (isFieldAvailable(col, row)) {
+                            units.add(new Vinewall(row, col));
+                            remainMana -= 50;
+                            Audio.play(AudioName.PLANT_PLACE);
+                        } else {
+                            System.out.println("***Field is Not available***");
+                        }
+                    }
+                }
                 else if (draggingRecall) {
                     int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
                     int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
@@ -370,6 +433,7 @@ public class GamePanel extends JPanel {
                 }
                 draggingSkeleton = false;
                 draggingSlime = false;
+                draggingVinewall = false;
                 draggingRecall = false;
             }
         });
@@ -383,7 +447,7 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (draggingSkeleton || draggingSlime || draggingRecall) {
+                if (draggingSkeleton || draggingSlime || draggingVinewall || draggingRecall) {
                     mouseX = e.getX();
                     mouseY = e.getY();
                     repaint();

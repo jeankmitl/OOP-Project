@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 public class Ninja extends Enemy {
     
     public Ninja(double x, int row) {
-        super(x, row, 100, 0.25);
+        super(x, row, 80, 0.25);
         try {
             actionIdle = ImageIO.read(getClass().getResource("Asset/Ninja.png"));
         } catch (IOException e) {

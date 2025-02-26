@@ -12,6 +12,7 @@ public class Slime extends Unit {
         super(row, col, 50, 0, 0, 50);
         try {
             actionIdle = ImageIO.read(getClass().getResource("Asset/Slime.png"));
+            actionATK = ImageIO.read(getClass().getResource("Asset/SlimeGenerate.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
