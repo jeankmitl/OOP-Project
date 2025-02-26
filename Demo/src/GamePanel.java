@@ -10,6 +10,7 @@ import javax.swing.*;
 public class GamePanel extends JPanel {
 
     private Image backgroundImage;
+    private Image iconImage;
 
     private static final int ROWS = 5;
     private static final int COLS = 9;
@@ -20,8 +21,7 @@ public class GamePanel extends JPanel {
     public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT * ROWS + GRID_OFFSET_Y + 10;
     public static final int SPAWN_POINT = 1000;
 
-    // mana system
-    public static int remainMana = 1000; // for test only
+    public static int remainMana = 1000; // for test only, normal is 0
     public static final int MAX_MANA = 9999;
 
     private static List<Unit> units;
@@ -32,8 +32,6 @@ public class GamePanel extends JPanel {
     private boolean draggingSlime = false;
     private boolean draggingVinewall = false;
     private boolean draggingRecall = false;
-
-    private Image recallImage;
 
     private int mouseX, mouseY;
 
@@ -300,8 +298,8 @@ public class GamePanel extends JPanel {
         g.fillRect(BAR_X + 105, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.YELLOW);
         g.fillRect(BAR_X + 200, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        recallImage = new ImageIcon(getClass().getResource("Asset/Recall.png")).getImage();
-        g.drawImage(recallImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
+        iconImage = new ImageIcon(getClass().getResource("Asset/Recall.png")).getImage();
+        g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
 
         if (draggingSkeleton) {
             g.setColor(Color.GREEN);
@@ -319,8 +317,8 @@ public class GamePanel extends JPanel {
         }
 
         if (draggingRecall) {
-            recallImage = new ImageIcon(getClass().getResource("Asset/RecallDrag.png")).getImage();
-            g.drawImage(recallImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
+            iconImage = new ImageIcon(getClass().getResource("Asset/RecallDrag.png")).getImage();
+            g.drawImage(iconImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
         }
     }
 
