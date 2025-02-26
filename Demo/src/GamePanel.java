@@ -33,6 +33,8 @@ public class GamePanel extends JPanel {
     private boolean draggingVinewall = false;
     private boolean draggingRecall = false;
 
+    private Image recallImage;
+
     private int mouseX, mouseY;
 
     public GamePanel() {
@@ -298,8 +300,8 @@ public class GamePanel extends JPanel {
         g.fillRect(BAR_X + 105, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.YELLOW);
         g.fillRect(BAR_X + 200, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        g.setColor(Color.ORANGE);
-        g.fillRect(BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+        recallImage = new ImageIcon(getClass().getResource("Asset/Recall.png")).getImage();
+        g.drawImage(recallImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
 
         if (draggingSkeleton) {
             g.setColor(Color.GREEN);
@@ -317,8 +319,8 @@ public class GamePanel extends JPanel {
         }
 
         if (draggingRecall) {
-            g.setColor(Color.ORANGE);
-            g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+            recallImage = new ImageIcon(getClass().getResource("Asset/RecallDrag.png")).getImage();
+            g.drawImage(recallImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
         }
     }
 
