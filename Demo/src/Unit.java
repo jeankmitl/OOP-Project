@@ -17,7 +17,7 @@ public abstract class Unit {
     protected int frame_Width = 32, frame_Hight = 32;
     protected String Status = "idle";
     
-    public abstract boolean isEnermyInfront(List<Enermy> enermies);
+    public abstract boolean isEnemyInfront(List<Enemy> enermies);
     public abstract void attack(List<Bullet> bullets);
     public abstract Rectangle getBounds();
 

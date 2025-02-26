@@ -37,7 +37,7 @@ public class Slime extends Unit {
     }
 
     @Override
-    public boolean isEnermyInfront(List<Enermy> enermies) {
+    public boolean isEnemyInfront(List<Enemy> enermies) {
         return false;
     }
 

@@ -25,7 +25,7 @@ public class GamePanel extends JPanel {
     public static final int MAX_MANA = 9999;
 
     private static List<Unit> units;
-    private static List<Enermy> enermies;
+    private static List<Enemy> enemies;
     private static List<Bullet> bullets;
     
     private boolean draggingRecall = false;
@@ -39,7 +39,7 @@ public class GamePanel extends JPanel {
         backgroundImage = new ImageIcon(getClass().getResource("Asset/chinaNo1.png")).getImage();
 
         units = new ArrayList<>();
-        enermies = new ArrayList<>();
+        enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         startGame();
         addMouseListeners();
@@ -55,8 +55,8 @@ public class GamePanel extends JPanel {
         }).start();
     }
 
-    public static List<Enermy> getEnermies() {
-        return enermies;
+    public static List<Enemy> getEnemies() {
+        return enemies;
     }
     
     public static List<Bullet> getBullets() {
@@ -67,7 +67,7 @@ public class GamePanel extends JPanel {
         new Timer(5000, e -> {
             Random random = new Random();
             int randomNumber = random.nextInt(5);
-            enermies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));
+            enemies.add(new Bandit(1280-GRID_OFFSET_X, randomNumber));
         }).start();
 
         new Timer(1000 / 60, e -> {
@@ -89,8 +89,8 @@ public class GamePanel extends JPanel {
                     e.printStackTrace();
                 }
                 
-                for (Enermy enermy : enermies) {
-                    enermy.update_Frame();
+                for (Enemy enemy : enemies) {
+                    enemy.update_Frame();
                 }
                 repaint();
                 try {
@@ -122,32 +122,32 @@ public class GamePanel extends JPanel {
     }
 
     public void update() {
-        Iterator<Enermy> enermyIterator = enermies.iterator();
-        while (enermyIterator.hasNext()) {
-            Enermy enermy = enermyIterator.next();
+        Iterator<Enemy> enemyIterator = enemies.iterator();
+        while (enemyIterator.hasNext()) {
+            Enemy enemy = enemyIterator.next();
 
             boolean stop = false;
             for (Unit unit : units) {
                 if (unit instanceof Skeleton) {
                     Skeleton skeleton = (Skeleton) unit;
-                    if (skeleton.getBounds().intersects(enermy.getBounds())) {
+                    if (skeleton.getBounds().intersects(enemy.getBounds())) {
                         stop = true;
                         long currentTime = System.currentTimeMillis();
-                        if (currentTime - enermy.getLastAttackTime() >= 1000) {
-                            enermy.attack(skeleton);
-                            enermy.setLastAttackTime(currentTime);
+                        if (currentTime - enemy.getLastAttackTime() >= 1000) {
+                            enemy.attack(skeleton);
+                            enemy.setLastAttackTime(currentTime);
                         }
                         break;
                     }
                 }
                 else if (unit instanceof Slime) {
                     Slime slime = (Slime) unit;
-                    if (slime.getBounds().intersects(enermy.getBounds())) {
+                    if (slime.getBounds().intersects(enemy.getBounds())) {
                         stop = true;
                         long currentTime = System.currentTimeMillis();
-                        if (currentTime - enermy.getLastAttackTime() >= 1000) {
-                            enermy.attack(slime);
-                            enermy.setLastAttackTime(currentTime);
+                        if (currentTime - enemy.getLastAttackTime() >= 1000) {
+                            enemy.attack(slime);
+                            enemy.setLastAttackTime(currentTime);
                         }
                         break;
                     }
@@ -156,16 +156,16 @@ public class GamePanel extends JPanel {
             
 
             if (!stop) {
-                enermy.move();
+                enemy.move();
             }
 
-            if (enermy.getX() + GRID_OFFSET_X <= 50) {
+            if (enemy.getX() + GRID_OFFSET_X <= 50) {
                 System.out.println("Game Over!!! NOOB");
                 System.exit(0);
             }
 
-            if (enermy.isDead()) {
-                enermyIterator.remove();
+            if (enemy.isDead()) {
+                enemyIterator.remove();
                 Audio.play(AudioName.KILL2);
             }
         }
@@ -175,9 +175,9 @@ public class GamePanel extends JPanel {
             Bullet bullet = bulletIterator.next();
             bullet.move();
 
-            for (Enermy enermy : enermies) {
-                if (bullet.getBounds().intersects(enermy.getBounds())) {
-                    enermy.takeDamage(10);
+            for (Enemy enemy : enemies) {
+                if (bullet.getBounds().intersects(enemy.getBounds())) {
+                    enemy.takeDamage(10);
                     bulletIterator.remove();
                     Audio.play(AudioName.HIT);
                     break;
@@ -229,14 +229,14 @@ public class GamePanel extends JPanel {
 
         }
 
-        for (Enermy enermy : enermies) {
+        for (Enemy enemy : enemies) {
 
-            if (enermy instanceof Bandit) {
-                BufferedImage img = ((Bandit)enermy).getBufferedImage();
+            if (enemy instanceof Bandit) {
+                BufferedImage img = ((Bandit)enemy).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-                g.drawImage(img, enermy.getX() + GRID_OFFSET_X, enermy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+                g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
 
         }

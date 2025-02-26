@@ -5,9 +5,9 @@ import javax.sound.sampled.Clip;
 
 public class Audio {
 
-    private static final String AUDIO_FOLDER = "src/audios";
+    private static final String AUDIO_FOLDER = "src/Sound";
     public static boolean isSoundEnable = true;
-    public static boolean isMusicEnable = false;
+    public static boolean isMusicEnable = true;
     
     public static void play(String name) {
         if (!isSoundEnable) return;

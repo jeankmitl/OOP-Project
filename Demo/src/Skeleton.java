@@ -21,7 +21,7 @@ public class Skeleton extends Unit {
         }
 
         attackTimer = new Timer(1500, e -> {
-            if (isEnermyInfront(GamePanel.getEnermies())) {
+            if (isEnemyInfront(GamePanel.getEnemies())) {
                 attack(GamePanel.getBullets());
                 Audio.play(AudioName.FIRE_TINY);
             }
@@ -35,8 +35,8 @@ public class Skeleton extends Unit {
     }
 
     @Override
-    public boolean isEnermyInfront(List<Enermy> enermies) {
-        for (Enermy enermy : enermies) {
+    public boolean isEnemyInfront(List<Enemy> enermies) {
+        for (Enemy enermy : enermies) {
             if (enermy.getRow() == this.getRow() && enermy.getX() > this.getX()) {
                 this.Status = "ATK";
                 this.currentFrame = 0;

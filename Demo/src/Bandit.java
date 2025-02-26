@@ -2,12 +2,12 @@ import java.awt.Rectangle;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class Bandit extends Enermy {
+public class Bandit extends Enemy {
     
     public Bandit(double x, int row) {
         super(x, row, 100, 0.25);
         try {
-            actionIdle = ImageIO.read(getClass().getResource("Asset/Ninja.png"));
+            actionIdle = ImageIO.read(getClass().getResource("Asset/Bandit.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
