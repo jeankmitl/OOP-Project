@@ -11,7 +11,7 @@ public abstract class Enemy {
     protected int ATTACK_COOLDOWN;
     protected String Status = "idle";
     
-    protected BufferedImage actionIdle, actionATK,actionDead;
+    protected BufferedImage actionIdle, actionATK, actionDead;
     protected int currentFrame = 0;
     protected int total_Frame = 4;
     protected int frame_Width = 32, frame_Hight = 32;

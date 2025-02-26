@@ -10,7 +10,7 @@ public abstract class Unit {
     protected int atkSpeed;
     protected int cost;
     
-    protected BufferedImage actionIdle, actionATK;
+    protected BufferedImage actionIdle, actionATK, actionDeath;
     protected int currentFrame = 0;
     protected int total_Frame_Idle = 4;
     protected int total_Frame_ATK = 8;
@@ -36,6 +36,10 @@ public abstract class Unit {
     
     public void takeDamage(int damage) {
         health -= damage;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     public boolean isDead() {

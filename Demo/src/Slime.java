@@ -17,10 +17,7 @@ public class Slime extends Unit {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        costGenerationTimer = new Timer(10000, e -> {
-            generateCost();
-        }
-        );
+        costGenerationTimer = new Timer(15000, e -> {generateCost();});
         costGenerationTimer.start();
     }
 
@@ -28,7 +25,7 @@ public class Slime extends Unit {
         costGenerationTimer.stop();
     }
 
-    // Add 50 cost every 10 seconds
+    // Add 50 cost every 15 seconds
     public void generateCost() {
         this.currentFrame = 0;
         this.Status = "ATK";

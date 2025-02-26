@@ -21,7 +21,7 @@ public class Ninja extends Enemy {
         this.currentFrame = 0;
         this.Status = "ATK";
         unit.takeDamage(20);
-        new Thread(() -> {try{ //delay Time
+        new Thread(() -> {try { //delay Time
             Thread.sleep(800);
             this.currentFrame = 0;
             this.Status ="idle";
@@ -50,16 +50,6 @@ public class Ninja extends Enemy {
     @Override
     public void updateFrame() {
         super.updateFrame();
-        /*if (this.Status.equals("idle")){
-            currentFrame = (currentFrame + 1) % total_Frame;
-        }
-        else if(this.Status.equals("ATK")) {
-            currentFrame = (currentFrame + 1) % total_Frame;
-        }
-        else{
-            currentFrame = (currentFrame + 1) % total_Frame;
-        }*/
     }
-    
-    
+
 }

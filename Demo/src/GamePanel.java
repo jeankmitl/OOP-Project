@@ -70,8 +70,10 @@ public class GamePanel extends JPanel {
             Random random = new Random();
             int randomBandit = random.nextInt(5);
             int randomNinja = random.nextInt(5);
+            int randomSorcerer = random.nextInt(5);
             enemies.add(new Bandit(1280-GRID_OFFSET_X, randomBandit));
             enemies.add(new Ninja(1280-GRID_OFFSET_X, randomNinja));
+            enemies.add(new Sorcerer(1280-GRID_OFFSET_X, randomSorcerer));
         }).start();
 
         new Timer(1000 / 60, e -> {
@@ -124,6 +126,7 @@ public class GamePanel extends JPanel {
         }
         return true;
     }
+
     public void update() {
         Iterator<Enemy> enemyIterator = enemies.iterator();
         while (enemyIterator.hasNext()) {
@@ -260,9 +263,15 @@ public class GamePanel extends JPanel {
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
-
             else if (enemy instanceof Ninja) {
                 BufferedImage img = ((Ninja) enemy).getBufferedImage();
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+                g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            }
+            else if (enemy instanceof Sorcerer) {
+                BufferedImage img = ((Sorcerer) enemy).getBufferedImage();
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
