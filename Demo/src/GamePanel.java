@@ -124,7 +124,6 @@ public class GamePanel extends JPanel {
         }
         return true;
     }
-
     public void update() {
         Iterator<Enemy> enemyIterator = enemies.iterator();
         while (enemyIterator.hasNext()) {
