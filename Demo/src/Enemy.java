@@ -69,7 +69,7 @@ public abstract class Enemy {
         return  actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
     }
 
-    public void update_Frame() {
+    public void updateFrame() {
         currentFrame = (currentFrame + 1) % total_Frame;
     }
 

@@ -28,8 +28,8 @@ public class Vinewall extends Unit {
     public void attack(List<Bullet> bullets) {}
 
     @Override
-    public void update_Frame() {
-        super.update_Frame();
+    public void updateFrame() {
+        super.updateFrame();
     }
 
 }

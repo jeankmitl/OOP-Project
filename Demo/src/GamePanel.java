@@ -84,7 +84,7 @@ public class GamePanel extends JPanel {
         new Thread(() -> {
             while (true) {
                 for (Unit unit : units) {
-                    unit.update_Frame();
+                    unit.updateFrame();
                 }
                 repaint();
                 try {
@@ -94,7 +94,7 @@ public class GamePanel extends JPanel {
                 }
                 
                 for (Enemy enemy : enemies) {
-                    enemy.update_Frame();
+                    enemy.updateFrame();
                 }
                 repaint();
                 try {
@@ -104,7 +104,7 @@ public class GamePanel extends JPanel {
                 }
 
                 for (Bullet bullet : bullets) {
-                    bullet.update_Frame();
+                    bullet.updateFrame();
                 }
                 repaint();
                 try {

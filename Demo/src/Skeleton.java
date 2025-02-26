@@ -68,7 +68,7 @@ public class Skeleton extends Unit {
     }
 
     @Override
-    public void update_Frame() {
+    public void updateFrame() {
         if (this.Status.equals("idle")){
             currentFrame = (currentFrame + 1) % total_Frame_Idle;
         }
