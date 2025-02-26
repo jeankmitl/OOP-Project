@@ -34,7 +34,7 @@ public class Slime extends Unit {
             GamePanel.remainMana = GamePanel.MAX_MANA;
         }
         new Thread(() -> {try{ //delay Time
-            Thread.sleep(1000);
+            Thread.sleep(1500);
             this.currentFrame = 0;
             this.Status ="idle";
         }catch(InterruptedException e){
