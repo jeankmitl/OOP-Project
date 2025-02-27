@@ -40,6 +40,7 @@ public class Slime extends Unit {
         }catch(InterruptedException e){
             e.printStackTrace();
         }
+        GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
         }).start();
     }
 

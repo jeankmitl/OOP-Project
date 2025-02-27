@@ -27,6 +27,7 @@ public class GamePanel extends JPanel {
     private static List<Unit> units;
     private static List<Enemy> enemies;
     private static List<Bullet> bullets;
+    private static List<VFX> vfxs;
     
     private boolean draggingSkeleton = false;
     private boolean draggingSlime = false;
@@ -48,6 +49,8 @@ public class GamePanel extends JPanel {
         units = new ArrayList<>();
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
+        vfxs = new ArrayList<>();
+        
         startGame();
         addMouseListeners();
         startAnimationThread();
@@ -68,6 +71,10 @@ public class GamePanel extends JPanel {
     
     public static List<Bullet> getBullets() {
         return bullets;
+    }
+    
+    public static List<VFX> getVfxs() {
+        return vfxs;
     }
 
     public void startGame() {
@@ -131,6 +138,18 @@ public class GamePanel extends JPanel {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                
+                System.out.println(vfxs.size());
+                Iterator<VFX> vfxIter = vfxs.iterator();
+                while (vfxIter.hasNext()) {
+                    VFX vfx = vfxIter.next();
+                    if (!vfx.isFinishUpdate()) {
+                        vfx.updateFrameVFXOnce();
+                    } else {
+                        vfxIter.remove();
+                    }
+                }
+                repaint();
             }
         }).start();
     }
@@ -222,6 +241,7 @@ public class GamePanel extends JPanel {
             if (enemy.isDead()) {
                 enemyIterator.remove();
                 Audio.play(AudioName.KILL2);
+                getVfxs().add(new VFX(enemy.getX(), enemy.getY(), "dead_ghost_vfx"));
             }
         }
 
@@ -233,6 +253,7 @@ public class GamePanel extends JPanel {
             for (Enemy enemy : enemies) {
                 if (bullet.getBounds().intersects(enemy.getBounds())) {
                     enemy.takeDamage(10);
+                    getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
                     bulletIterator.remove();
                     Audio.play(AudioName.HIT);
                     break;
@@ -261,7 +282,8 @@ public class GamePanel extends JPanel {
          * - draw: Drag & Drop 🖱️
          */
         super.paintComponent(g);
-
+        
+        //g: for Smooth ex. picture
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 
         g.setColor(Color.BLACK);
@@ -280,27 +302,21 @@ public class GamePanel extends JPanel {
             g.drawLine(GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y, GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y + ROWS * CELL_HEIGHT);
         }
 
+        //g2d: for Pixel Art ex. SpriteSheet
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         for (Unit unit : units) {
-
             if (unit instanceof Skeleton) {
                 BufferedImage img = ((Skeleton) unit).getBufferedImage();
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
             else if (unit instanceof Slime) {
                 BufferedImage img = ((Slime) unit).getBufferedImage();
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
             else if (unit instanceof Vinewall) {
                 BufferedImage img = ((Vinewall) unit).getBufferedImage();
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
 
@@ -310,23 +326,14 @@ public class GamePanel extends JPanel {
 
             if (enemy instanceof Bandit) {
                 BufferedImage img = ((Bandit) enemy).getBufferedImage();
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
             else if (enemy instanceof Ninja) {
                 BufferedImage img = ((Ninja) enemy).getBufferedImage();
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
             else if (enemy instanceof Sorcerer) {
                 BufferedImage img = ((Sorcerer) enemy).getBufferedImage();
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
                 g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             }
 
@@ -336,12 +343,14 @@ public class GamePanel extends JPanel {
 
             if (bullet instanceof Bone) {
                 BufferedImage img = ((Bone) bullet).getBufferedImage();
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-                g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY); // Improve Quality
                 g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, 64, 64, null);
             }
 
+        }
+        
+        for (VFX vfx : vfxs) {
+            BufferedImage img = vfx.getBufferedImage();
+            g.drawImage(img, vfx.getX(), vfx.getY(), GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT, null);
         }
 
         g.setColor(Color.RED);
@@ -403,6 +412,7 @@ public class GamePanel extends JPanel {
                         draggingSkeleton = true;
                         System.out.println("Dragging Skeleton");
                         Audio.play(AudioName.PLANT_PICK_UP);
+                        
                     }
                     else {
                         System.out.println("Not enough mana for Skeleton!");
@@ -448,7 +458,9 @@ public class GamePanel extends JPanel {
                             units.add(new Skeleton(row, col));
                             remainMana -= 100;
                             Audio.play(AudioName.PLANT_PLACE);
+                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
                         } else {
+                            getVfxs().add(new VFX(mouseX - GRID_OFFSET_X - CELL_WIDTH / 2, mouseY - GRID_OFFSET_Y - CELL_HEIGHT / 2, "cross_NOT_vfx"));
                             System.out.println("***Field is Not available***");
                         }
                     }
@@ -462,6 +474,7 @@ public class GamePanel extends JPanel {
                             units.add(new Slime(row, col));
                             remainMana -= 50;
                             Audio.play(AudioName.PLANT_PLACE);
+                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
                         } else {
                             System.out.println("***Field is Not available***");
                         }
@@ -497,6 +510,7 @@ public class GamePanel extends JPanel {
                                         ((Slime) unit).stopGeneratingCost();
                                     }
                                     unitIterator.remove();
+                                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
                                     Audio.play(AudioName.PLANT_DELETE);
                                 }
                             }
