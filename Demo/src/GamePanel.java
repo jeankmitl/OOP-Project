@@ -8,7 +8,7 @@ import java.util.Random;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
-
+    
     private Image backgroundImage;
     private Image iconImage;
 
@@ -36,7 +36,12 @@ public class GamePanel extends JPanel {
     private int mouseX, mouseY;
 
     public GamePanel() {
-
+        /**
+         * Constructor.
+         * - play: music 🎵, 
+         * - set: BG image 🎨
+         * - start: Game Loop 🔁
+         */
         Audio.playMusic(AudioName.MUSIC_ONE);
         backgroundImage = new ImageIcon(getClass().getResource("Asset/chinaNo1.png")).getImage();
 
@@ -66,6 +71,13 @@ public class GamePanel extends JPanel {
     }
 
     public void startGame() {
+        /**
+         * Start Game.
+         * - every 10s
+         *    - spawn: enemies ➕
+         * - every 60fps
+         *    - update: Game Logic 🔁
+         */
         new Timer(10000, e -> {
             Random random = new Random();
             int randomBandit = random.nextInt(5);
@@ -83,6 +95,11 @@ public class GamePanel extends JPanel {
     }
 
     public void startAnimationThread() {
+        /**
+         * Start Animation Thread.
+         * - update: Frame ️🖼️
+         *    - of units, enemies, bullets
+         */
         new Thread(() -> {
             while (true) {
                 for (Unit unit : units) {
@@ -119,6 +136,13 @@ public class GamePanel extends JPanel {
     }
 
     public boolean isFieldAvailable(int col, int row) {
+        /**
+         * Is Field Available?
+         * - true: if you can place units
+         * 
+         * mostly use.
+         * - mouseReleased()
+         */
         for (Unit unit : units) {
             if (unit.getRow() == row && unit.getCol() == col) {
                 return false;
@@ -128,6 +152,19 @@ public class GamePanel extends JPanel {
     }
 
     public void update() {
+        /**
+         * Update.
+         * - enemies
+         *    - attack: if INTERSECTS units ⚔️
+         *    - move: if NOT attack ️▶️
+         *    - GAME OVER: if enemies reach 🏴
+         *    - remove: if isDead() 💀
+         * - bullets
+         *    - move
+         *    - damage: if INTERSECTS enemies & 
+         * - units
+         *    - remove: if isDead() 💀
+         */
         Iterator<Enemy> enemyIterator = enemies.iterator();
         while (enemyIterator.hasNext()) {
             Enemy enemy = enemyIterator.next();
@@ -208,6 +245,21 @@ public class GamePanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
+        /**
+         * Paint Component
+         * - draw: BG
+         * - draw: Text
+         *    * Mana
+         * - draw: Line
+         *    * RED LINE
+         *    * Grid #
+         *    * Bar (units)
+         * - draw: Characters
+         *    * all units
+         *    * all enemies
+         *    * all bullets
+         * - draw: Drag & Drop
+         */
         super.paintComponent(g);
 
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
@@ -331,6 +383,18 @@ public class GamePanel extends JPanel {
     }
 
     public void addMouseListeners() {
+        /**
+         * Add Mouse Listeners.
+         * mouse
+         * - pressed
+         *    - drag: units if Mana enough
+         * - released
+         *    - place: units if isFieldAvailable()
+         *    - remove: units if use Recall
+         * mouse motion
+         * - moved: get mouse x, y
+         * - dragged: get mouse x, y if dragging
+         */
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
