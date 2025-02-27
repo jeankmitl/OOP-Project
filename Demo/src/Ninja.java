@@ -52,4 +52,21 @@ public class Ninja extends Enemy {
         super.updateFrame();
     }
 
+    /*@Override
+    public boolean isDead() {
+        if(this.health <= 0){
+            this.currentFrame = 0;
+            this.Status = "dead";
+            System.out.println("uwu");
+            new Thread(()-> {try{ //delay
+                Thread.sleep(3000);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }}).start();
+            return true;}
+        else{return false;}
+        //return super.isDead();
+    }*/
+    
+    
 }

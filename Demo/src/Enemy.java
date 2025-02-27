@@ -73,5 +73,6 @@ public abstract class Enemy {
     public void updateFrame() {
         currentFrame = (currentFrame + 1) % total_Frame;
     }
-
+    
+    public void ability(){}
 }
