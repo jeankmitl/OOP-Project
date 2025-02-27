@@ -247,18 +247,18 @@ public class GamePanel extends JPanel {
     public void paintComponent(Graphics g) {
         /**
          * Paint Component
-         * - draw: BG
-         * - draw: Text
+         * - draw: BG 🖼️
+         * - draw: Text 💬
          *    * Mana
-         * - draw: Line
+         * - draw: Line 🔗
          *    * RED LINE
          *    * Grid #
          *    * Bar (units)
-         * - draw: Characters
+         * - draw: Characters 👨
          *    * all units
          *    * all enemies
          *    * all bullets
-         * - draw: Drag & Drop
+         * - draw: Drag & Drop 🖱️
          */
         super.paintComponent(g);
 
