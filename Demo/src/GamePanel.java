@@ -9,6 +9,9 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel {
     
+    //TURN OFF IF NOT DEBUG: set mana, faster spawn, etc...
+    private final boolean DEBUG_MODE = true;
+    
     private Image backgroundImage;
     private Image iconImage;
 
@@ -71,8 +74,14 @@ public class GamePanel extends JPanel {
                 repaint();
             }else{wight = 0;}
         }).start();
+        
+        if (DEBUG_MODE) runDebugMode();
     }
 
+    private void runDebugMode() {
+        remainMana = 200;
+    }
+    
     public static List<Enemy> getEnemies() {
         return enemies;
     }
@@ -93,6 +102,16 @@ public class GamePanel extends JPanel {
          * - every 60fps
          *    - update: Game Logic 🔁
          */
+        if (DEBUG_MODE) {
+            Random random = new Random();
+            int randomBandit = random.nextInt(5);
+            int randomNinja = random.nextInt(5);
+            int randomSorcerer = random.nextInt(5);
+            enemies.add(new Bandit(1280-GRID_OFFSET_X, randomBandit));
+            enemies.add(new Ninja(1280-GRID_OFFSET_X, randomNinja));
+            enemies.add(new Sorcerer(1280-GRID_OFFSET_X, randomSorcerer));
+        }
+        
         new Timer(10000, e -> {
             Random random = new Random();
             int randomBandit = random.nextInt(5);
@@ -147,7 +166,6 @@ public class GamePanel extends JPanel {
                     e.printStackTrace();
                 }
                 
-                System.out.println(vfxs.size());
                 Iterator<VFX> vfxIter = vfxs.iterator();
                 while (vfxIter.hasNext()) {
                     VFX vfx = vfxIter.next();
