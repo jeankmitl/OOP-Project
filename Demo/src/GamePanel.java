@@ -21,9 +21,10 @@ public class GamePanel extends JPanel {
     public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT * ROWS + GRID_OFFSET_Y + 10;
     public static final int SPAWN_POINT = 1000;
 
-    public static int remainMana = 1000; // for test only, normal is 0
+    public static int remainMana = 0; // for test only, normal is 0
     public static final int MAX_MANA = 9999;
-
+    public int wight = 0; //test mana
+    
     private static List<Unit> units;
     private static List<Enemy> enemies;
     private static List<Bullet> bullets;
@@ -59,6 +60,13 @@ public class GamePanel extends JPanel {
                 GamePanel.remainMana = GamePanel.MAX_MANA;
             }
             repaint();
+        }).start();
+        
+        new Timer(124, e->{ // delay nid noy bacause i can't input 123.5
+            if(wight< 116){
+                wight += 1;
+                repaint();
+            }else{wight = 0;}
         }).start();
     }
 
@@ -263,11 +271,7 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
 
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-
-        g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.BOLD, 20));
-        g.drawString("Mana: " + remainMana, 20, 30); // Display at top-left
-
+        
         // RED LINE
         g.setColor(Color.RED);
         g.drawLine(50, 0, 50, 850);
@@ -343,7 +347,6 @@ public class GamePanel extends JPanel {
             }
 
         }
-
         g.setColor(Color.RED);
         for (int i = 0; i <= 1; i++) {
             g.drawLine(BAR_X, BAR_Y + i * CELL_HEIGHT, BAR_X + COLS * CELL_WIDTH, BAR_Y + i * CELL_HEIGHT);
@@ -360,7 +363,18 @@ public class GamePanel extends JPanel {
         g.fillRect(BAR_X + 200, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         iconImage = new ImageIcon(getClass().getResource("Asset/Recall.png")).getImage();
         g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
-
+        ///
+        g.setColor(new Color(0, 0, 0, 150));
+        g.fillRect(BAR_X + 740, BAR_Y - 50, 116, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+        g.drawString("" + remainMana, BAR_X + 800, BAR_Y - 20); // Display at top-left
+        g.setColor(new Color(162, 252, 255, 255));
+        iconImage = new ImageIcon(getClass().getResource("Asset/Mana_icon.png")).getImage();
+        g.drawImage(iconImage, BAR_X+730, BAR_Y-63,70,70, null);
+        g.fillRect(BAR_X + 740, BAR_Y - 5, wight, 5);
+        ///show mana system
+           ///AddCha vvvv ///
         if (draggingSkeleton) {
             g.setColor(Color.GREEN);
             g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
