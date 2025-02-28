@@ -1,3 +1,5 @@
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.*;
 
 public class Main {
@@ -11,6 +13,7 @@ public class Main {
         frame.add(gamePanel);
         frame.setSize(1280, 720);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.addWindowListener(new GameWindowListener());
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
@@ -20,4 +23,12 @@ public class Main {
         new Main();
     }
 
+    public class GameWindowListener extends WindowAdapter {
+        @Override
+        public void windowClosing(WindowEvent e) {
+            Audio.shutDownMusic();
+        }
+        
+    }
+    
 }

@@ -79,7 +79,7 @@ public class GamePanel extends JPanel {
     }
 
     private void runDebugMode() {
-        remainMana = 200;
+        remainMana = 500;
     }
     
     public static List<Enemy> getEnemies() {
@@ -132,7 +132,7 @@ public class GamePanel extends JPanel {
         /**
          * Start Animation Thread.
          * - update: Frame ️🖼️
-         *    - of units, enemies, bullets
+         *    - of units, enemies, bullets, vfxs
          */
         new Thread(() -> {
             while (true) {
@@ -370,10 +370,10 @@ public class GamePanel extends JPanel {
 
         }
         
-        for (VFX vfx : vfxs) {
+        vfxs.forEach((vfx) -> {
             BufferedImage img = vfx.getBufferedImage();
             g.drawImage(img, vfx.getX(), vfx.getY(), GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT, null);
-        }
+        });
 
         g.setColor(Color.RED);
         for (int i = 0; i <= 1; i++) {
