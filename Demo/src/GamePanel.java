@@ -14,7 +14,8 @@ public class GamePanel extends JPanel {
     
     private Image backgroundImage;
     private Image iconImage;
-
+    
+    // <editor-fold defaultstate="collapsed" desc="All static final variables">
     private static final int ROWS = 5;
     private static final int COLS = 9;
     public static final int CELL_WIDTH = 95;
@@ -23,6 +24,7 @@ public class GamePanel extends JPanel {
     public static final int GRID_OFFSET_Y = 100; // Move grid down
     public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT * ROWS + GRID_OFFSET_Y + 10;
     public static final int SPAWN_POINT = 1000;
+    // </editor-fold>
 
     public static int remainMana = 0; // for test only, normal is 0
     public static final int MAX_MANA = 9999;
@@ -39,10 +41,18 @@ public class GamePanel extends JPanel {
     private boolean draggingRecall = false;
 
     private int mouseX, mouseY;
-
+    private boolean endGame = false;
+    
+    private OTimer manaRecoverTimer15 = new OTimer(15);
+    private OTimer spawnEnemiesTimer10 = new OTimer(10);
+    private OTimer animSpriteTimer2 = new OTimer(0.15);
+    private OTimer delayNidNoyTimer1 = new OTimer(0.1235);
+    
+    
+    //same as: public awake()
     public GamePanel() {
         /**
-         * Constructor.
+         * Awake. = for create Object w/ 'new'
          * - play: music 🎵, 
          * - set: BG image 🎨
          * - start: Game Loop 🔁
@@ -57,54 +67,55 @@ public class GamePanel extends JPanel {
         bullets = new ArrayList<>();
         vfxs = new ArrayList<>();
         
-        startGame();
+        startGameLoop(); // Always call on last GamePanel
+    }
+    
+    // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop & Late Update">
+    private void startGameLoop() {
+        GameLoop gameLoop = new GameLoop();
+//        GameLoop.addListener((d) -> System.out.println("Frame Update!"));
+        GameLoop.setLateListener((d) -> lateUpdate());
+        gameLoop.start();
+        
+        final double SPF = 1.0 / 60.0;
+        new DTimer(SPF, e -> {
+            fixedUpdate(SPF);
+        }).start();
+        
+        start();
+    }
+    
+    // after run All Timer
+    private void lateUpdate() {
+        revalidate();
+        repaint();
+    }
+    // </editor-fold>
+    
+    //run after setup GameLoop
+    private void start() {
+        if (DEBUG_MODE) runDebugMode();
         addMouseListeners();
-        startAnimationThread();
-
+        
+        new DWait(3, e -> {
+            System.out.println("Enemies is coming!");
+        }).start();
+        
+    }
+    
+    // SPF = 0.016666666666666666 (99% 60fps)
+    private void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
-        new Timer(15000, e -> {
+        if (manaRecoverTimer15.tick(deltaTime)) {
             remainMana += 25;
             if (GamePanel.remainMana > GamePanel.MAX_MANA) {
                 GamePanel.remainMana = GamePanel.MAX_MANA;
             }
-            repaint();
-        }).start();
+        }
         
-        new Timer(124, e->{ // delay nid noy bacause i can't input 123.5
-            if(wight< 116){
-                wight += 1;
-                repaint();
-            }else{wight = 0;}
-        }).start();
-        
-        if (DEBUG_MODE) runDebugMode();
-    }
-
-    private void runDebugMode() {
-        remainMana = 500;
-    }
-    
-    public static List<Enemy> getEnemies() {
-        return enemies;
-    }
-    
-    public static List<Bullet> getBullets() {
-        return bullets;
-    }
-    
-    public static List<VFX> getVfxs() {
-        return vfxs;
-    }
-
-    public void startGame() {
-        /**
-         * Start Game.
-         * - every 10s
-         *    - spawn: enemies ➕
-         * - every 60fps
-         *    - update: Game Logic 🔁
-         */
-        if (DEBUG_MODE) {
+        // spawn: enemies every 10s ➕
+        if (spawnEnemiesTimer10.tick(deltaTime)) {
+            System.out.println("synchronize?");
             Random random = new Random();
             int randomBandit = random.nextInt(5);
             int randomNinja = random.nextInt(5);
@@ -114,74 +125,23 @@ public class GamePanel extends JPanel {
             enemies.add(new Sorcerer(1280-GRID_OFFSET_X, randomSorcerer));
         }
         
-        new Timer(10000, e -> {
-            Random random = new Random();
-            int randomBandit = random.nextInt(5);
-            int randomNinja = random.nextInt(5);
-            int randomSorcerer = random.nextInt(5);
-            enemies.add(new Bandit(1280-GRID_OFFSET_X, randomBandit));
-            enemies.add(new Ninja(1280-GRID_OFFSET_X, randomNinja));
-            enemies.add(new Sorcerer(1280-GRID_OFFSET_X, randomSorcerer));
-        }).start();
-
-        new Timer(1000 / 60, e -> {
-            update();
-            repaint();
-        }).start();
-    }
-
-    public void startAnimationThread() {
-        /**
-         * Start Animation Thread.
-         * - update: Frame ️🖼️
-         *    - of units, enemies, bullets, vfxs
-         */
-        new Thread(() -> {
-            while (true) {
-                for (Unit unit : units) {
-                    unit.updateFrame();
-                }
-                repaint();
-                try {
-                    Thread.sleep(75);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                
-                for (Enemy enemy : enemies) {
-                    enemy.updateFrame();
-                }
-                repaint();
-                try {
-                    Thread.sleep(90);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                for (Bullet bullet : bullets) {
-                    bullet.updateFrame();
-                }
-                repaint();
-                try {
-                    Thread.sleep(25);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                
-                Iterator<VFX> vfxIter = vfxs.iterator();
-                while (vfxIter.hasNext()) {
-                    VFX vfx = vfxIter.next();
-                    if (!vfx.isFinishUpdate()) {
-                        vfx.updateFrameVFXOnce();
-                    } else {
-                        vfxIter.remove();
-                    }
-                }
-                repaint();
+        // update: animation every 2s
+        if (animSpriteTimer2.tick(deltaTime)) {
+            updateAnimation();
+        }
+        
+        if (delayNidNoyTimer1.tick(deltaTime)) {
+            if(wight< 116){
+                wight += 1;
+            } else{
+                wight = 0;
             }
-        }).start();
+        }
+        
+        updateLogic();
     }
-
+    
+    // <editor-fold defaultstate="collapsed" desc="All Reuse method">
     public boolean isFieldAvailable(int col, int row) {
         /**
          * Is Field Available?
@@ -197,8 +157,50 @@ public class GamePanel extends JPanel {
         }
         return true;
     }
-
-    public void update() {
+    
+    private void runDebugMode() {
+        remainMana = 500;
+    }
+    
+    public static List<Enemy> getEnemies() {
+        return enemies;
+    }
+    
+    public static List<Bullet> getBullets() {
+        return bullets;
+    }
+    
+    public static List<VFX> getVfxs() {
+        return vfxs;
+    }
+    // </editor-fold>
+    
+    public void updateAnimation() {
+        /**
+         * - update: Frame ️🖼️
+         *    - of units, enemies, bullets, vfxs
+         */
+        for (Unit unit : units) {
+            unit.updateFrame();
+        }
+        for (Enemy enemy : enemies) {
+            enemy.updateFrame();
+        }
+        for (Bullet bullet : bullets) {
+            bullet.updateFrame();
+        }
+        Iterator<VFX> vfxIter = vfxs.iterator();
+        while (vfxIter.hasNext()) {
+            VFX vfx = vfxIter.next();
+            if (!vfx.isFinishUpdate()) {
+                vfx.updateFrameVFXOnce();
+            } else {
+                vfxIter.remove();
+            }
+        }
+    }
+    
+    public void updateLogic() {
         /**
          * Update.
          * - enemies
@@ -347,7 +349,6 @@ public class GamePanel extends JPanel {
         }
 
         for (Enemy enemy : enemies) {
-
             if (enemy instanceof Bandit) {
                 BufferedImage img = ((Bandit) enemy).getBufferedImage();
                 g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
@@ -364,12 +365,10 @@ public class GamePanel extends JPanel {
         }
 
         for (Bullet bullet : bullets) {
-
             if (bullet instanceof Bone) {
                 BufferedImage img = ((Bone) bullet).getBufferedImage();
                 g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, 64, 64, null);
             }
-
         }
         
         vfxs.forEach((vfx) -> {
@@ -423,6 +422,11 @@ public class GamePanel extends JPanel {
         if (draggingRecall) {
             iconImage = new ImageIcon(getClass().getResource("Asset/RecallDrag.png")).getImage();
             g.drawImage(iconImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
+        }
+        
+        if (DEBUG_MODE) {
+            g.setColor(Color.WHITE);
+            g.drawString("FPS: " + GameLoop.getFps(), 10, 20);
         }
     }
 
@@ -571,11 +575,12 @@ public class GamePanel extends JPanel {
                 if (draggingSkeleton || draggingSlime || draggingVinewall || draggingRecall) {
                     mouseX = e.getX();
                     mouseY = e.getY();
-                    repaint();
                 }
             }
         });
 
     }
 
+    
+    
 }

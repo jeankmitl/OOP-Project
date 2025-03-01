@@ -21,13 +21,9 @@ public class Ninja extends Enemy {
         this.currentFrame = 0;
         this.Status = "ATK";
         unit.takeDamage(20);
-        new Thread(() -> {try { //delay Time
-            Thread.sleep(800);
+        new DWait(0.8, (e) -> {
             this.currentFrame = 0;
             this.Status ="idle";
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
         }).start();
     }
     

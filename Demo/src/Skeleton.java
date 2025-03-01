@@ -7,7 +7,7 @@ import javax.swing.*;
 
 public class Skeleton extends Unit {
 
-    private Timer attackTimer;
+    private DTimer attackTimer;
 
     public Skeleton(int row, int col) {
 
@@ -20,7 +20,7 @@ public class Skeleton extends Unit {
             e.printStackTrace();
         }
 
-        attackTimer = new Timer(1500, e -> {
+        attackTimer = new DTimer(1.5, e -> {
             if (isEnemyInfront(GamePanel.getEnemies())) {
                 attack(GamePanel.getBullets());
                 Audio.play(AudioName.FIRE_TINY);
