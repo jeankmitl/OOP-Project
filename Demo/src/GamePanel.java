@@ -47,6 +47,7 @@ public class GamePanel extends JPanel {
          * - set: BG image 🎨
          * - start: Game Loop 🔁
          */
+        System.out.println("Now implementing Mono_Thread!");
         Audio.playMusic(AudioName.MUSIC_ONE);
         backgroundImage = new ImageIcon(getClass().getResource("Asset/Stage1.png")).getImage();
         //backgroundImage = new ImageIcon(getClass().getResource("Asset/chinaNo1.png")).getImage();
