@@ -48,7 +48,8 @@ public class GamePanel extends JPanel {
          * - start: Game Loop 🔁
          */
         Audio.playMusic(AudioName.MUSIC_ONE);
-        backgroundImage = new ImageIcon(getClass().getResource("Asset/chinaNo1.png")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("Asset/Stage1.png")).getImage();
+        //backgroundImage = new ImageIcon(getClass().getResource("Asset/chinaNo1.png")).getImage();
 
         units = new ArrayList<>();
         enemies = new ArrayList<>();
