@@ -41,7 +41,6 @@ public class GamePanel extends JPanel {
     private boolean draggingRecall = false;
 
     private int mouseX, mouseY;
-    private boolean endGame = false;
     
     private OTimer manaRecoverTimer15 = new OTimer(15);
     private OTimer spawnEnemiesTimer10 = new OTimer(10);
