@@ -26,6 +26,7 @@ public class GamePanel extends JPanel {
     public static final int SPAWN_POINT = 1000;
     // </editor-fold>
 
+    public final int OTHER_THREAD;
     public static int remainMana = 0; // for test only, normal is 0
     public static final int MAX_MANA = 9999;
     public int wight = 0; //test mana
@@ -47,6 +48,7 @@ public class GamePanel extends JPanel {
     private OTimer animSpriteTimer2 = new OTimer(0.15);
     private OTimer delayNidNoyTimer1 = new OTimer(0.1235);
     
+    private OWait enemiesIsComingWait3 = new OWait(3);
     
     //same as: public awake()
     public GamePanel() {
@@ -58,6 +60,8 @@ public class GamePanel extends JPanel {
          */
         System.out.println("Now implementing Mono_Thread!");
         Audio.playMusic(AudioName.MUSIC_ONE);
+
+        OTHER_THREAD = Thread.activeCount();
         backgroundImage = new ImageIcon(getClass().getResource("Asset/Stage1.png")).getImage();
         //backgroundImage = new ImageIcon(getClass().getResource("Asset/chinaNo1.png")).getImage();
 
@@ -114,7 +118,6 @@ public class GamePanel extends JPanel {
         
         // spawn: enemies every 10s ➕
         if (spawnEnemiesTimer10.tick(deltaTime)) {
-            System.out.println("synchronize?");
             Random random = new Random();
             int randomBandit = random.nextInt(5);
             int randomNinja = random.nextInt(5);
@@ -127,6 +130,12 @@ public class GamePanel extends JPanel {
         // update: animation every 2s
         if (animSpriteTimer2.tick(deltaTime)) {
             updateAnimation();
+            // int countThread = 0;
+//            System.out.println("---START THREAD---");
+//            for (Thread t : Thread.getAllStackTraces().keySet()) {
+//                System.out.println(++countThread + ". Thread: " + t.getName() + " | State: " + t.getState());
+//            }
+//            System.out.println("---END: " + countThread + "---");
         }
         
         if (delayNidNoyTimer1.tick(deltaTime)) {
@@ -137,6 +146,12 @@ public class GamePanel extends JPanel {
             }
         }
         
+        if (enemiesIsComingWait3.tick(deltaTime)) {
+            System.out.println("Show Text: Ready. Set. Go!");
+//            enemiesIsComingWait3.reset();  // like OTimer but use OTimer better
+        }
+        
+ 
         updateLogic();
     }
     
@@ -426,6 +441,7 @@ public class GamePanel extends JPanel {
         if (DEBUG_MODE) {
             g.setColor(Color.WHITE);
             g.drawString("FPS: " + GameLoop.getFps(), 10, 20);
+            g.drawString("Thread: " + (Thread.activeCount() - OTHER_THREAD) + " else: " + OTHER_THREAD , 10, 45);
         }
     }
 
@@ -448,7 +464,7 @@ public class GamePanel extends JPanel {
                 if (e.getX() >= BAR_X && e.getX() <= BAR_X + CELL_WIDTH && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 100) {
                         draggingSkeleton = true;
-                        System.out.println("Dragging Skeleton");
+//                        System.out.println("Dragging Skeleton");
                         Audio.play(AudioName.PLANT_PICK_UP);
                         
                     }
@@ -460,7 +476,7 @@ public class GamePanel extends JPanel {
                 else if (e.getX() >= BAR_X + CELL_WIDTH && e.getX() <= BAR_X + CELL_WIDTH * 2 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 50) {
                         draggingSlime = true;
-                        System.out.println("Dragging Slime");
+//                        System.out.println("Dragging Slime");
                         Audio.play(AudioName.PLANT_PICK_UP);
                     }
                     else {
@@ -471,7 +487,7 @@ public class GamePanel extends JPanel {
                 else if (e.getX() >= BAR_X + CELL_WIDTH * 2 && e.getX() <= BAR_X + CELL_WIDTH * 3 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     if (remainMana >= 50) {
                         draggingVinewall = true;
-                        System.out.println("Dragging Golem");
+//                        System.out.println("Dragging Golem");
                         Audio.play(AudioName.PLANT_PICK_UP);
                     }
                     else {

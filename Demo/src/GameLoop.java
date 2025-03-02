@@ -12,7 +12,6 @@ public class GameLoop extends Thread {
     private static int fps = 0;
     private boolean stopLoop = false;
     private double deltaTime = 0;
-    private double totalDeltaTime = 0;
 
     @Override
     public void run() {
@@ -24,7 +23,6 @@ public class GameLoop extends Thread {
             long now = System.nanoTime();
             deltaTime = (now - lastTime) / 1_000_000_000.0;
             lastTime = now;
-            totalDeltaTime += deltaTime;
             notifyListeners(deltaTime);
             notifyLateListener(deltaTime);
             
@@ -95,11 +93,5 @@ public class GameLoop extends Thread {
     public double getDeltaTime() {
         return deltaTime;
     }
-
-    public double getTotalDeltaTime() {
-        return totalDeltaTime;
-    }
-
-
     
 }
