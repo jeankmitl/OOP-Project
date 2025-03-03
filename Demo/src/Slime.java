@@ -3,11 +3,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 public class Slime extends Unit {
 
-    private Timer costGenerationTimer;
+    private DTimer costGenerationTimer;
 
     public Slime(int row, int col) {
         super(row, col, 50, 0, 0, 50);
@@ -17,7 +16,7 @@ public class Slime extends Unit {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        costGenerationTimer = new Timer(15000, e -> {generateCost();});
+        costGenerationTimer = new DTimer(15, e -> {generateCost();});
         costGenerationTimer.start();
     }
 
@@ -33,14 +32,10 @@ public class Slime extends Unit {
         if (GamePanel.remainMana > GamePanel.MAX_MANA) {
             GamePanel.remainMana = GamePanel.MAX_MANA;
         }
-        new Thread(() -> {try{ //delay Time
-            Thread.sleep(1500);
+        new DWait(1.5, (e) -> {
             this.currentFrame = 0;
             this.Status ="idle";
-        }catch(InterruptedException e){
-            e.printStackTrace();
-        }
-        GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
+            GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
         }).start();
     }
 

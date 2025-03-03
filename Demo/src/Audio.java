@@ -4,11 +4,12 @@ import java.util.concurrent.Executors;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
 
 public class Audio {
 
     private static final String AUDIO_FOLDER = "src/Sound";
-    private static final ExecutorService soundPool = Executors.newFixedThreadPool(4);
+    private static final ExecutorService soundPool = Executors.newFixedThreadPool(3);
     public static boolean isSoundEnable = true;
     public static boolean isMusicEnable = false;
     
@@ -17,12 +18,19 @@ public class Audio {
         if (!name.contains(".wav")) {
             name += ".wav";
         }
-        File file = new File(AUDIO_FOLDER, name);
-        soundPool.execute(() -> {
-            try (AudioInputStream sound = AudioSystem.getAudioInputStream(file);) {
+        
+        String nname = name;
+        soundPool.submit(() -> {
+            File file = new File(AUDIO_FOLDER, nname);
+            try (AudioInputStream sound = AudioSystem.getAudioInputStream(file)) {
                 Clip clip = AudioSystem.getClip();
                 clip.open(sound);
                 clip.start();
+                clip.addLineListener(event -> {
+                    if (event.getType() == LineEvent.Type.STOP) {
+                        clip.close(); // Close to reduce Thread
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -40,6 +48,12 @@ public class Audio {
                 Clip clip = AudioSystem.getClip();
                 clip.open(sound);
                 clip.start();
+                clip.loop(Clip.LOOP_CONTINUOUSLY);
+                clip.addLineListener(event -> {
+                    if (event.getType() == LineEvent.Type.STOP) {
+                        clip.close();
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -49,5 +63,4 @@ public class Audio {
     public static void shutDownMusic() {
         soundPool.shutdown();
     }
-
 }

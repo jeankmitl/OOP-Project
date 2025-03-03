@@ -3,11 +3,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 public class Mimic extends Unit{
     
-    private Timer crunchSpeed;
+    private DTimer crunchSpeed;
     
     public Mimic(int row, int col) {
         super(row, col, 100, 10, 1500, 100);
@@ -19,7 +18,7 @@ public class Mimic extends Unit{
             e.printStackTrace();
         }
         
-        crunchSpeed = new Timer(1000,e->{
+        crunchSpeed = new DTimer(1,e->{
             if(isEnemyInfront(GamePanel.getEnemies())){
                 attack(GamePanel.getBullets());
                 Audio.play(AudioName.FIRE_TINY);
