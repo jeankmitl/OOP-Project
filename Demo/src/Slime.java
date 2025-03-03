@@ -17,7 +17,13 @@ public class Slime extends Unit {
             e.printStackTrace();
         }
         super.setTotal_Frame_Idle(5);
-        costGenerationTimer = new DTimer(15, e -> {generateCost();});
+        costGenerationTimer = new DTimer(15, e -> {
+            if (isDead()) {
+                costGenerationTimer.stop();
+                return;
+            }
+            generateCost();
+        });
         animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
         costGenerationTimer.start();
         animationTimer.start();

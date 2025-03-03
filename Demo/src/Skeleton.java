@@ -21,6 +21,10 @@ public class Skeleton extends Unit {
 
         attackTimer = new DTimer(1.5, e -> {
             if (isEnemyInfront(GamePanel.getEnemies())) {
+                if (isDead()) {
+                    attackTimer.stop();
+                    return;
+                }
                 attack(GamePanel.getBullets());
                 Audio.play(AudioName.FIRE_TINY);
             }

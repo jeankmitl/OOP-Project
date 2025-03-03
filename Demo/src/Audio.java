@@ -20,21 +20,25 @@ public class Audio {
         }
         
         String nname = name;
-        soundPool.submit(() -> {
-            File file = new File(AUDIO_FOLDER, nname);
-            try (AudioInputStream sound = AudioSystem.getAudioInputStream(file)) {
-                Clip clip = AudioSystem.getClip();
-                clip.open(sound);
-                clip.start();
-                clip.addLineListener(event -> {
-                    if (event.getType() == LineEvent.Type.STOP) {
-                        clip.close(); // Close to reduce Thread
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            soundPool.execute(() -> {
+                File file = new File(AUDIO_FOLDER, nname);
+                try (AudioInputStream sound = AudioSystem.getAudioInputStream(file)) {
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(sound);
+                    clip.start();
+                    clip.addLineListener(event -> {
+                        if (event.getType() == LineEvent.Type.STOP) {
+                            clip.close(); // Close to reduce Thread
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (Exception e) {
+            //Ignore because after shutdown Game
+        }
     }
 
     public static void playMusic(String name) {

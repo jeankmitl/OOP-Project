@@ -39,6 +39,10 @@ public abstract class Unit {
         health -= damage;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
+    
     public int getHealth() {
         return health;
     }

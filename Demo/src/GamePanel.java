@@ -2,9 +2,12 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
@@ -35,6 +38,10 @@ public class GamePanel extends JPanel {
     private static List<Enemy> enemies;
     private static List<Bullet> bullets;
     private static List<VFX> vfxs;
+    
+    private final Random random = new Random();
+    private static Set<Class<?>>unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
+        Skeleton.class, Slime.class, Vinewall.class, Candles6.class));
     
     private boolean draggingSkeleton = false;
     private boolean draggingSlime = false;
@@ -73,7 +80,7 @@ public class GamePanel extends JPanel {
         startGameLoop(); // Always call on last GamePanel
     }
     
-    // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop & Late Update">
+    // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
     private void startGameLoop() {
         GameLoop gameLoop = new GameLoop();
 //        GameLoop.addListener((d) -> System.out.println("Frame Update!"));
@@ -93,6 +100,17 @@ public class GamePanel extends JPanel {
         revalidate();
         repaint();
     }
+    
+    private void runDebugMode() {
+        remainMana = 500;
+        
+        int randomBandit = random.nextInt(5);
+        int randomNinja = random.nextInt(5);
+        int randomSorcerer = random.nextInt(5);
+        enemies.add(new Bandit(1280-GRID_OFFSET_X, randomBandit));
+        enemies.add(new Ninja(1280-GRID_OFFSET_X, randomNinja));
+        enemies.add(new Sorcerer(1280-GRID_OFFSET_X, randomSorcerer));
+    }
     // </editor-fold>
     
     //run after setup GameLoop
@@ -104,7 +122,12 @@ public class GamePanel extends JPanel {
             System.out.println("Enemies is coming!");
         }).start();
         
+        for (int i=0; i<ROWS; i++) {
+            units.add(new Candles6(i, -1));
+        }
+        
     }
+   
     
     // SPF = 0.016666666666666666 (99% 60fps)
     private void fixedUpdate(double deltaTime) {
@@ -118,7 +141,6 @@ public class GamePanel extends JPanel {
         
         // spawn: enemies every 10s ➕
         if (spawnEnemiesTimer10.tick(deltaTime)) {
-            Random random = new Random();
             int randomBandit = random.nextInt(5);
             int randomNinja = random.nextInt(5);
             int randomSorcerer = random.nextInt(5);
@@ -130,12 +152,6 @@ public class GamePanel extends JPanel {
         // update: animation every 2s
         if (animSpriteTimer2.tick(deltaTime)) {
             updateAnimation();
-            // int countThread = 0;
-//            System.out.println("---START THREAD---");
-//            for (Thread t : Thread.getAllStackTraces().keySet()) {
-//                System.out.println(++countThread + ". Thread: " + t.getName() + " | State: " + t.getState());
-//            }
-//            System.out.println("---END: " + countThread + "---");
         }
         
         if (delayNidNoyTimer1.tick(deltaTime)) {
@@ -172,9 +188,6 @@ public class GamePanel extends JPanel {
         return true;
     }
     
-    private void runDebugMode() {
-        remainMana = 500;
-    }
     
     public static List<Enemy> getEnemies() {
         return enemies;
@@ -234,42 +247,17 @@ public class GamePanel extends JPanel {
 
             boolean stop = false;
             for (Unit unit : units) {
-                if (unit instanceof Skeleton) {
-                    Skeleton skeleton = (Skeleton) unit;
-                    if (skeleton.getBounds().intersects(enemy.getBounds())) {
+                if (unitDefaultBehaviorClasses.contains(unit.getClass())) {
+                    if (unit.getBounds().intersects(enemy.getBounds())) {
                         stop = true;
                         long currentTime = System.currentTimeMillis();
                         if (currentTime - enemy.getLastAttackTime() >= 1000) {
-                            enemy.attack(skeleton);
+                            enemy.attack(unit);
                             enemy.setLastAttackTime(currentTime);
                         }
                         break;
                     }
-                }
-                else if (unit instanceof Slime) {
-                    Slime slime = (Slime) unit;
-                    if (slime.getBounds().intersects(enemy.getBounds())) {
-                        stop = true;
-                        long currentTime = System.currentTimeMillis();
-                        if (currentTime - enemy.getLastAttackTime() >= 1000) {
-                            enemy.attack(slime);
-                            enemy.setLastAttackTime(currentTime);
-                        }
-                        break;
-                    }
-                }
-                else if (unit instanceof Vinewall) {
-                    Vinewall vinewall = (Vinewall) unit;
-                    if (vinewall.getBounds().intersects(enemy.getBounds())) {
-                        stop = true;
-                        long currentTime = System.currentTimeMillis();
-                        if (currentTime - enemy.getLastAttackTime() >= 1000) {
-                            enemy.attack(vinewall);
-                            enemy.setLastAttackTime(currentTime);
-                        }
-                        break;
-                    }
-                }
+                }      
             }
             
 
@@ -294,14 +282,29 @@ public class GamePanel extends JPanel {
             Bullet bullet = bulletIterator.next();
             bullet.move();
 
-            for (Enemy enemy : enemies) {
-                if (bullet.getBounds().intersects(enemy.getBounds())) {
-                    enemy.takeDamage(10);
-                    getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
-                    bulletIterator.remove();
-                    Audio.play(AudioName.HIT);
-                    break;
+            if (bullet instanceof Bone) {
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        enemy.takeDamage(10);
+                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
+                        bulletIterator.remove();
+                        Audio.play(AudioName.HIT);
+                        break;
+                    }
                 }
+            } else if (bullet instanceof BeamCleanRow) {
+                BeamCleanRow bcr = (BeamCleanRow)bullet;
+                int cleanRow = bcr.getRow();
+                Audio.play(AudioName.BEAM_CLEAN_ROW);
+                bulletIterator.remove();
+                for (Enemy enemy : enemies) {
+                    if (enemy.getRow() == cleanRow) {
+                        enemy.takeDamage(999);
+                    }
+                }
+                VFX vfx = new VFX(0, bcr.getRow() * CELL_HEIGHT, "beam");
+                vfx.setWidth(1280);
+                getVfxs().add(vfx);
             }
         }
 
@@ -347,35 +350,13 @@ public class GamePanel extends JPanel {
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         for (Unit unit : units) {
-            if (unit instanceof Skeleton) {
-                BufferedImage img = ((Skeleton) unit).getBufferedImage();
-                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            }
-            else if (unit instanceof Slime) {
-                BufferedImage img = ((Slime) unit).getBufferedImage();
-                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            }
-            else if (unit instanceof Vinewall) {
-                BufferedImage img = ((Vinewall) unit).getBufferedImage();
-                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            }
-
+            BufferedImage img = unit.getBufferedImage();
+            g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
         }
 
         for (Enemy enemy : enemies) {
-            if (enemy instanceof Bandit) {
-                BufferedImage img = ((Bandit) enemy).getBufferedImage();
-                g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            }
-            else if (enemy instanceof Ninja) {
-                BufferedImage img = ((Ninja) enemy).getBufferedImage();
-                g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            }
-            else if (enemy instanceof Sorcerer) {
-                BufferedImage img = ((Sorcerer) enemy).getBufferedImage();
-                g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            }
-
+            BufferedImage img = enemy.getBufferedImage();
+            g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
         }
 
         for (Bullet bullet : bullets) {
@@ -387,7 +368,7 @@ public class GamePanel extends JPanel {
         
         vfxs.forEach((vfx) -> {
             BufferedImage img = vfx.getBufferedImage();
-            g.drawImage(img, vfx.getX(), vfx.getY(), GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT, null);
+            g.drawImage(img, vfx.getX(), vfx.getY(), vfx.getWidth(), vfx.getHeight(), null);
         });
 
         g.setColor(Color.RED);
@@ -509,6 +490,7 @@ public class GamePanel extends JPanel {
 
                     if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
                         if (isFieldAvailable(col, row)) {
+                            System.out.println(row + "x" + col);
                             units.add(new Skeleton(row, col));
                             remainMana -= 100;
                             Audio.play(AudioName.PLANT_PLACE);
