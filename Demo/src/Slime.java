@@ -7,19 +7,22 @@ import javax.imageio.ImageIO;
 public class Slime extends Unit {
 
     private DTimer costGenerationTimer;
-
+    
     public Slime(int row, int col) {
         super(row, col, 50, 0, 0, 50);
         try {
-            actionIdle = ImageIO.read(getClass().getResource("Asset/Slime.png"));
+            actionIdle = ImageIO.read(getClass().getResource("Asset/Slime_re.png"));
             actionATK = ImageIO.read(getClass().getResource("Asset/SlimeGenerate.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        super.setTotal_Frame_Idle(5);
         costGenerationTimer = new DTimer(15, e -> {generateCost();});
+        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
         costGenerationTimer.start();
+        animationTimer.start();
     }
-
+    
     public void stopGeneratingCost() {
         costGenerationTimer.stop();
     }
@@ -62,9 +65,9 @@ public class Slime extends Unit {
     }
     
     @Override
-    public void updateFrame() {
+    public void updateFrame(double x) {
         if (this.Status.equals("idle")){
-            currentFrame = (currentFrame + 1) % total_Frame_Idle;
+                currentFrame = (currentFrame + 1) % total_Frame_Idle;
         }
         else {
             currentFrame = (currentFrame + 1) % total_Frame_ATK;

@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 public class Skeleton extends Unit {
 
     private DTimer attackTimer;
-
+    
     public Skeleton(int row, int col) {
 
         super(row, col, 100, 10, 1500, 100);
@@ -27,6 +27,8 @@ public class Skeleton extends Unit {
         });
 
         attackTimer.start();
+        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
+        animationTimer.start();
     }
 
     public void stopAttacking() {
@@ -66,10 +68,19 @@ public class Skeleton extends Unit {
         }
     }
 
-    @Override
+    /*@Override
     public void updateFrame() {
         if (this.Status.equals("idle")){
             currentFrame = (currentFrame + 1) % total_Frame_Idle;
+        }
+        else {
+            currentFrame = (currentFrame + 1) % total_Frame_ATK;
+        }
+    }*/
+    @Override
+    public void updateFrame(double x) {
+        if (this.Status.equals("idle")){
+                currentFrame = (currentFrame + 1) % total_Frame_Idle;
         }
         else {
             currentFrame = (currentFrame + 1) % total_Frame_ATK;

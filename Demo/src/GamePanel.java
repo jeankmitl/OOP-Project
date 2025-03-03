@@ -194,9 +194,9 @@ public class GamePanel extends JPanel {
          * - update: Frame ️🖼️
          *    - of units, enemies, bullets, vfxs
          */
-        for (Unit unit : units) {
+        /*for (Unit unit : units) {
             unit.updateFrame();
-        }
+        }*/
         for (Enemy enemy : enemies) {
             enemy.updateFrame();
         }

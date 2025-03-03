@@ -10,12 +10,13 @@ public abstract class Unit {
     protected int atkSpeed;
     protected int cost;
     
-    protected BufferedImage actionIdle, actionATK, actionDeath;
+    protected BufferedImage actionIdle, actionATK, actiondead;
     protected int currentFrame = 0;
     protected int total_Frame_Idle = 4;
     protected int total_Frame_ATK = 8;
     protected int frame_Width = 32, frame_Hight = 32;
     protected String Status = "idle";
+    protected DTimer animationTimer;
     
     public abstract boolean isEnemyInfront(List<Enemy> enermies);
     public abstract void attack(List<Bullet> bullets);
@@ -69,5 +70,24 @@ public abstract class Unit {
     public void updateFrame() {
         currentFrame = (currentFrame + 1) % total_Frame_Idle;
     }
+    
+    public void updateFrame(double Dtime){}
+    
+    public int getTotal_Frame_Idle() {
+        return total_Frame_Idle;
+    }
 
+    public void setTotal_Frame_Idle(int total_Frame_Idle) {
+        this.total_Frame_Idle = total_Frame_Idle;
+    }
+
+    public int getTotal_Frame_ATK() {
+        return total_Frame_ATK;
+    }
+
+    public void setTotal_Frame_ATK(int total_Frame_ATK) {
+        this.total_Frame_ATK = total_Frame_ATK;
+    }
+    
+    
 }

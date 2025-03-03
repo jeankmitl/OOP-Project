@@ -12,10 +12,13 @@ public class Vinewall extends Unit {
         super(row, col, 4000, 0, 0, 50);
         try {
             actionIdle = ImageIO.read(getClass().getResource("Asset/Vinewall.png"));
-            actionATK = ImageIO.read(getClass().getResource("Asset/VinewallCracker.png"));
+            actionATK = ImageIO.read(getClass().getResource("Asset/VinewallCrack.png"));
+            actiondead = ImageIO.read(getClass().getResource("Asset/VinewallCracker.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
+        animationTimer.start();
     }
 
     @Override
@@ -30,26 +33,34 @@ public class Vinewall extends Unit {
 
     @Override
     public void attack(List<Bullet> bullets) {}
-
+    
+    public void check_health(){
+        if(this.health > 2667){
+            this.Status = "idle";
+        }else if(this.health > 1333 && this.health <= 2667){
+            this.Status = "ATK";
+        }else{
+            this.Status = "dead";
+        }
+    }
+    
     @Override
     public BufferedImage getBufferedImage() {
-        if (this.getHealth() <= 1333) {
+        if (this.Status.equals("idle")){
+            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        }
+        else if(this.Status.equals("ATK")){
             return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
         }
-        else if (this.getHealth() <= 2667) {
-            if (!stageChange) {
-                try {
-                    actionIdle = ImageIO.read(getClass().getResource("Asset/VinewallCrack.png"));
-                    stageChange = true;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        else{
+            return actiondead.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
         }
-        else {
-            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
-        }
+    }
+    
+        @Override
+    public void updateFrame(double x) {
+        this.check_health();
+        currentFrame = (currentFrame + 1) % total_Frame_Idle;
     }
 
 }
