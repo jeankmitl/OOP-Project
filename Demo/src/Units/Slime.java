@@ -69,21 +69,12 @@ public class Slime extends Unit {
 
     @Override
     public BufferedImage getBufferedImage() {
-        if (this.Status.equals("idle")){
-            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
-        else {
-            return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
-        }
+        return super.getBufferedImage();
     }
     
     @Override
     public void updateFrame(double x) {
-        if (this.Status.equals("idle")){
-                currentFrame = (currentFrame + 1) % total_Frame_Idle;
-        }
-        else {
-            currentFrame = (currentFrame + 1) % total_Frame_ATK;
-        }
+        super.updateFrame();
     }
 
 }

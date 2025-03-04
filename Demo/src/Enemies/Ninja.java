@@ -6,8 +6,7 @@ import Units.Unit;
 import DSystem.DWait;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+
 
 public class Ninja extends Enemy {
     
@@ -36,35 +35,14 @@ public class Ninja extends Enemy {
 
     @Override
     public BufferedImage getBufferedImage() {
-        if (this.Status.equals("idle")){
-            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
-        else if(this.Status.equals("ATK")){
-            return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
-        }else{
-            return actionDead.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
-        }
+        return super.getBufferedImage();
     }
 
     @Override
-    public void updateFrame() {
-        super.updateFrame();
+    public void updateFrame(double x) {
+        super.updateFrame(x);
     }
 
-    /*@Override
-    public boolean isDead() {
-        if(this.health <= 0){
-            this.currentFrame = 0;
-            this.Status = "dead";
-            System.out.println("uwu");
-            new Thread(()-> {try{ //delay
-                Thread.sleep(3000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }}).start();
-            return true;}
-        else{return false;}
-        //return super.isDead();
-    }*/
     
     
 }

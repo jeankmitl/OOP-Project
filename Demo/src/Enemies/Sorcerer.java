@@ -4,6 +4,7 @@ import Asset.ImgManager;
 import Main.GamePanel;
 import Units.Unit;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class Sorcerer extends Enemy {
     
@@ -21,5 +22,14 @@ public class Sorcerer extends Enemy {
     public Rectangle getBounds() {
         return new Rectangle((int) x + GamePanel.GRID_OFFSET_X, row * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
-
+    
+    @Override
+    public BufferedImage getBufferedImage() {
+        return super.getBufferedImage();
+    }
+    
+    @Override
+    public void updateFrame(double x) {
+        super.updateFrame(x);
+    }
 }
