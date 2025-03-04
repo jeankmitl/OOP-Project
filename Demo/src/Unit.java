@@ -67,15 +67,26 @@ public abstract class Unit {
         return col;
     }
     
-    public BufferedImage getBufferedImage() {
-        return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+    public BufferedImage getBufferedImage() { // 2 Sprite Sheet
+        if (this.Status.equals("idle")){
+            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
+        else {
+            return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        }
     }
     
     public void updateFrame() {
         currentFrame = (currentFrame + 1) % total_Frame_Idle;
     }
     
-    public void updateFrame(double Dtime){}
+    public void updateFrame(double Dtime){ // 2 Sprite Sheet
+        if (this.Status.equals("idle")){
+                currentFrame = (currentFrame + 1) % total_Frame_Idle;
+        }
+        else {
+            currentFrame = (currentFrame + 1) % total_Frame_ATK;
+        }
+    }
     
     public int getTotal_Frame_Idle() {
         return total_Frame_Idle;

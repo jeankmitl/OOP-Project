@@ -209,10 +209,10 @@ public class GamePanel extends JPanel {
          */
         /*for (Unit unit : units) {
             unit.updateFrame();
-        }*/
+        }
         for (Enemy enemy : enemies) {
             enemy.updateFrame();
-        }
+        }*/
         for (Bullet bullet : bullets) {
             bullet.updateFrame();
         }
