@@ -18,6 +18,8 @@ public class Skeleton extends Unit {
 
     private DTimer attackTimer;
     
+    public Skeleton(){}
+    
     public Skeleton(int row, int col) {
         super(row, col, 100, 10, 1500, 100, 5, UnitRole.ATTACKER);
         
@@ -92,5 +94,5 @@ public class Skeleton extends Unit {
     public void updateFrame(double x) {
         super.updateFrame(x);
     }
-
+    
 }

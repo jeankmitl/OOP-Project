@@ -15,7 +15,7 @@ public abstract class Unit {
     protected int atk;
     protected int atkSpeed;
     protected int cost;
-    protected double cooldown;
+    protected static double cooldown;
     protected char role;
     
     protected int row, col;
@@ -26,12 +26,15 @@ public abstract class Unit {
     protected int total_Frame_ATK = 8;
     protected int frame_Width = 32, frame_Hight = 32;
     protected String Status = "idle";
+    protected String Stage = "not_cooldown";
     protected DTimer animationTimer;
     
     public abstract boolean isEnemyInfront(List<Enemy> enermies);
     public abstract void attack(List<Bullet> bullets);
     public abstract Rectangle getBounds();
 
+    public Unit() {}
+    
     public Unit(int row, int col, int health, int atk, int atkSpeed, int cost, double cooldown, char role) {
         this.row = row;
         this.col = col;
@@ -39,8 +42,16 @@ public abstract class Unit {
         this.atk = atk;
         this.atkSpeed = atkSpeed;
         this.cost = cost;
-        this.cooldown = cooldown;
+        Unit.cooldown = cooldown;
         this.role = role;
+    }
+
+    public String getStage() {
+        return Stage;
+    }
+
+    public void setStage(String Stage) {
+        this.Stage = Stage;
     }
     
     public Unit getPlant() {
@@ -115,6 +126,23 @@ public abstract class Unit {
     public void setTotal_Frame_ATK(int total_Frame_ATK) {
         this.total_Frame_ATK = total_Frame_ATK;
     }
+
+    public static double getCooldown() {
+        return cooldown;
+    }
+
+    public static void setCooldown(double cooldown) {
+        Unit.cooldown = cooldown;
+    }
+
+    public char getRole() {
+        return role;
+    }
+
+    public void setRole(char role) {
+        this.role = role;
+    }
+    
     
     
 }

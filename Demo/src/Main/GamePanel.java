@@ -74,7 +74,16 @@ public class GamePanel extends JPanel {
     private boolean draggingSlime = false;
     private boolean draggingVinewall = false;
     private boolean draggingRecall = false;
-
+    ///cd System///
+    private boolean cd_Skeleton = false;
+    private boolean cd_slime = false;
+    /*private boolean cd_Skeleton = false;
+    private boolean cd_Skeleton = false;
+    private boolean cd_Skeleton = false;*/
+    ///cd Animation///
+    private double cd_time_Skeleton = 0;
+    private double anglecolone = 0;
+    ///////
     private int mouseX, mouseY;
     
     private OTimer manaRecoverTimer15 = new OTimer(15);
@@ -426,6 +435,13 @@ public class GamePanel extends JPanel {
         g.drawImage(iconImage, BAR_X+730, BAR_Y-63,70,70, null);
         g.fillRect(BAR_X + 740, BAR_Y - 5, wight, 5);
         ///show mana system
+        if (cd_Skeleton){ 
+            Graphics2D ggd = (Graphics2D) g;
+            ggd.setStroke(new BasicStroke(4));
+            ggd.setColor(Color.WHITE);
+            ggd.drawArc(BAR_X + 20, BAR_Y + 20, 50, 50, 90, (int) anglecolone);//(int) angle);
+        }
+        ////^^^ BETA CD System ^^^/////
            ///AddCha vvvv ///
         if (draggingSkeleton) {
             g.setColor(Color.GREEN);
@@ -454,6 +470,36 @@ public class GamePanel extends JPanel {
         }
     }
     
+    public void Global_cd(String name){
+        if(this.DEBUG_MODE == !false){ // << On/Off Cd System just add !
+            if (name == "Skeleton"){
+                this.cd_Skeleton = true;
+                    DTimer temp = new DTimer(0.1, e->{
+                        if(anglecolone < 360){
+                            anglecolone += 7; // aprrox 7 pix/0.1 sec
+                        }else{
+                            anglecolone = 0;
+                        }
+                    });
+                    temp.start();
+                    new DWait(Skeleton.getCooldown(), e -> {
+                        this.cd_Skeleton = false;
+                        System.out.println("Reflesh Cd");
+                        temp.stop();
+                        anglecolone = 0;
+                    }).start();
+            }
+            }else if(name == "Slime"){
+                this.cd_slime = true;
+                    new DWait(Slime.getCooldown(), e -> {
+                        this.cd_slime = false;
+                        System.out.println("Reflesh Cd");
+                }).start();
+            }
+        else{}
+    }
+    
+    
     public void addMouseListeners() {
         /**
          * Add Mouse Listeners.
@@ -471,11 +517,13 @@ public class GamePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getX() >= BAR_X && e.getX() <= BAR_X + CELL_WIDTH && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                    if (remainMana >= 100) {
+                    if (remainMana >= 100 && !cd_Skeleton) {
                         draggingSkeleton = true;
 //                        System.out.println("Dragging Skeleton");
-                        Audio.play(AudioName.PLANT_PICK_UP);
-                        
+                        Audio.play(AudioName.PLANT_PICK_UP);   
+                    }else if(remainMana >= 100 && cd_Skeleton){
+                        System.out.println("Skeleton are cooldown!");
+                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     }
                     else {
                         System.out.println("Not enough mana for Skeleton!");
@@ -520,6 +568,7 @@ public class GamePanel extends JPanel {
                         if (isFieldAvailable(col, row)) {
                             units.add(new Skeleton(row, col));
                             remainMana -= 100;
+                            Global_cd("Skeleton");
                             Audio.play(AudioName.PLANT_PLACE);
                             getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
                         } else {
@@ -584,6 +633,7 @@ public class GamePanel extends JPanel {
                 draggingSlime = false;
                 draggingVinewall = false;
                 draggingRecall = false;
+                
             }
         });
 
