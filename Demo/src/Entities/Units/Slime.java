@@ -74,7 +74,7 @@ public class Slime extends Unit {
     
     @Override
     public void updateFrame(double x) {
-        super.updateFrame();
+        super.updateFrame(x);
     }
 
 }

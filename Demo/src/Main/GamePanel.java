@@ -176,11 +176,11 @@ public class GamePanel extends JPanel {
         }
         
         // update: animation every 2s
-        if (animSpriteTimer2.tick(deltaTime)) {
+        if (animSpriteTimer2.tick(deltaTime)) { 
             updateAnimation();
         }
         
-        if (delayNidNoyTimer1.tick(deltaTime)) {
+        if (delayNidNoyTimer1.tick(deltaTime)) { // <-- fix time that
             if(wight< 116){
                 wight += 1;
             } else{

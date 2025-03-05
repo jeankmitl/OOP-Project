@@ -20,7 +20,13 @@ public class Skeleton extends Unit {
     
     public Skeleton(int row, int col) {
         super(row, col, 100, 10, 1500, 100, 5, UnitRole.ATTACKER);
-
+        
+        /*try{
+            actionIdle = ImageIO.read(getClass().getResource("/Asset/Img/SpriteSheets/Skeleton.png"));
+            actionATK = ImageIO.read(getClass().getResource("/Asset/Img/SpriteSheets/SkeletonThrow.png"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }*/
         actionIdle = ImgManager.loadSprite("Skeleton");
         actionATK = ImgManager.loadSprite("SkeletonThrow");
 
@@ -36,7 +42,7 @@ public class Skeleton extends Unit {
         });
 
         attackTimer.start();
-        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
+        animationTimer = new DTimer(0.25, e -> updateFrame(0.25)); //change
         animationTimer.start();
     }
 
@@ -84,7 +90,7 @@ public class Skeleton extends Unit {
     }*/
     @Override
     public void updateFrame(double x) {
-        super.updateFrame();
+        super.updateFrame(x);
     }
 
 }
