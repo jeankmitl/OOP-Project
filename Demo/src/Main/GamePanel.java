@@ -1,17 +1,17 @@
 package Main;
 
-import Enemies.Bandit;
-import Enemies.Enemy;
-import Enemies.Ninja;
-import Enemies.Sorcerer;
-import Units.Candles6;
-import Bullets.BeamCleanRow;
-import Bullets.Bullet;
-import Bullets.Bone;
-import Units.Skeleton;
-import Units.Slime;
-import Units.Unit;
-import Units.Vinewall;
+import Entities.Enemies.Bandit;
+import Entities.Enemies.Enemy;
+import Entities.Enemies.Ninja;
+import Entities.Enemies.Sorcerer;
+import Entities.Units.Candles6;
+import Entities.Bullets.BeamCleanRow;
+import Entities.Bullets.Bullet;
+import Entities.Bullets.Bone;
+import Entities.Units.Skeleton;
+import Entities.Units.Slime;
+import Entities.Units.Unit;
+import Entities.Units.Vinewall;
 import Asset.VFX;
 import DSystem.DWait;
 import Asset.Audio;
@@ -63,8 +63,12 @@ public class GamePanel extends JPanel {
     private static List<VFX> vfxs;
     
     private final Random random = new Random();
-    private static Set<Class<?>>unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
+    private static Set<Class<?>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
         Skeleton.class, Slime.class, Vinewall.class, Candles6.class));
+    
+    private static List<Class<?>> selectionList = new ArrayList<>(Arrays.asList(
+          Skeleton.class, Slime.class, Vinewall.class
+    ));
     
     private boolean draggingSkeleton = false;
     private boolean draggingSlime = false;
@@ -393,12 +397,14 @@ public class GamePanel extends JPanel {
             g.drawImage(img, vfx.getX(), vfx.getY(), vfx.getWidth(), vfx.getHeight(), null);
         });
 
-        g.setColor(Color.RED);
-        for (int i = 0; i <= 1; i++) {
-            g.drawLine(BAR_X, BAR_Y + i * CELL_HEIGHT, BAR_X + COLS * CELL_WIDTH, BAR_Y + i * CELL_HEIGHT);
-        }
-        for (int i = 0; i <= COLS; i++) {
-            g.drawLine(BAR_X + i * CELL_WIDTH, BAR_Y, BAR_X + i * CELL_WIDTH, BAR_Y + CELL_HEIGHT);
+        g.setColor(Color.BLUE);
+//        for (int i = 0; i <= 1; i++) {
+////            g.drawLine(BAR_X, BAR_Y + i * CELL_HEIGHT, BAR_X + COLS * CELL_WIDTH, BAR_Y + i * CELL_HEIGHT);
+//        }
+        for (int i = 0; i < COLS; i++) {
+            iconImage = ImgManager.loadIcon("frame_operator");
+            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+//            g.drawLine(BAR_X + i * CELL_WIDTH, BAR_Y, BAR_X + i * CELL_WIDTH, BAR_Y + CELL_HEIGHT);
         }
 
         g.setColor(Color.GREEN);
@@ -447,7 +453,7 @@ public class GamePanel extends JPanel {
             g.drawString("Thread: " + (Thread.activeCount() - OTHER_THREAD) + " else: " + OTHER_THREAD , 10, 45);
         }
     }
-
+    
     public void addMouseListeners() {
         /**
          * Add Mouse Listeners.
