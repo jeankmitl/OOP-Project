@@ -4,43 +4,27 @@
  */
 package Entities.Units;
 
+import Entities.EntityStats;
+
 /**
  *
  * @author anawi
  */
-public class UnitStats {
+public class UnitStats extends EntityStats {
     private UnitSpriteSheets unitSp;
-    private int health;
-    private int atk;
-    private int atkSpeed;
     private int cost;
     private double cooldown;
-    private char role;
+    private int role;
     
-    public UnitStats(UnitSpriteSheets unitSp, int health, int atk, int atkSpeed, int cost, double cooldown, char role) {
+    public UnitStats(UnitSpriteSheets unitSp, int health, int atk, double atkSpeed, int cost, double cooldown, int role) {
+        super(health, atk, atkSpeed, role);
         this.unitSp = unitSp;
-        this.health = health;
-        this.atk = atk;
-        this.atkSpeed = atkSpeed;
         this.cost = cost;
         this.cooldown = cooldown;
-        this.role = role;
     }
 
     public UnitSpriteSheets getUnitSp() {
         return unitSp;
-    }
-    
-    public int getHealth() {
-        return health;
-    }
-
-    public int getAtk() {
-        return atk;
-    }
-
-    public int getAtkSpeed() {
-        return atkSpeed;
     }
 
     public int getCost() {
@@ -49,9 +33,5 @@ public class UnitStats {
 
     public double getCooldown() {
         return cooldown;
-    }
-
-    public char getRole() {
-        return role;
     }
 }

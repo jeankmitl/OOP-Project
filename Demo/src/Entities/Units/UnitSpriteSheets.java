@@ -11,13 +11,7 @@ import java.awt.image.BufferedImage;
  *
  * @author anawi
  */
-public class UnitSpriteSheets {
-    private String idle;
-    private String atk;
-    private String dead;
-    private BufferedImage actionIdle;
-    private BufferedImage actionAtk;
-    private BufferedImage actionDead;
+public class UnitSpriteSheets extends Entities.EntitySpriteSheets {
     private BufferedImage profileImg;
     private BufferedImage allStatsIcons;
     private final int WH = 23;
@@ -27,40 +21,11 @@ public class UnitSpriteSheets {
     }
 
     public UnitSpriteSheets(String idle, String atk, String dead) {
-        this.idle = idle;
-        this.atk = atk;
-        this.dead = dead;
-        this.actionIdle = ImgManager.loadSprite(idle);
-        this.actionAtk = ImgManager.loadSprite(atk);
+        super(idle, atk, dead);
         this.allStatsIcons = ImgManager.loadSprite("all_stats_icons");
-        this.profileImg = actionIdle.getSubimage(0, 0, 32, 32);
-        if (dead != null) this.actionDead = ImgManager.loadSprite(dead);
+        this.profileImg = getActionIdle().getSubimage(0, 0, 32, 32);
     }
-
-    public String getIdle() {
-        return idle;
-    }
-
-    public String getAtk() {
-        return atk;
-    }
-
-    public String getDead() {
-        return dead;
-    }
-
-    public BufferedImage getActionIdle() {
-        return actionIdle;
-    }
-
-    public BufferedImage getActionAtk() {
-        return actionAtk;
-    }
-
-    public BufferedImage getActionDead() {
-        return actionDead;
-    }
-
+    
     public BufferedImage getProfileImg() {
         return profileImg;
     }
@@ -69,6 +34,4 @@ public class UnitSpriteSheets {
         BufferedImage statsIcon = allStatsIcons.getSubimage(i * WH, 0, WH, WH);
         return statsIcon;
     }
-    
-    
 }

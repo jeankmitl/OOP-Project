@@ -11,7 +11,7 @@ import Entities.Bullets.Bone;
 import Entities.Units.Skeleton;
 import Entities.Units.Slime;
 import Entities.Units.Unit;
-import Entities.Units.Vinewall;
+import Entities.Units.StoneCrab;
 import Asset.VFX;
 import DSystem.DWait;
 import Asset.Audio;
@@ -62,8 +62,7 @@ public class GamePanel extends JPanel {
     
     
     private final Random random = new Random();
-    private static final Set<Class<? extends Unit>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
-        Skeleton.class, Slime.class, Vinewall.class, Candles6.class));
+    private static final Set<Class<? extends Unit>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(Skeleton.class, Slime.class, StoneCrab.class, Candles6.class));
     
     private final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
 
@@ -148,9 +147,10 @@ public class GamePanel extends JPanel {
         }
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
-        unitTypes.add(new UnitType(Vinewall.class));
-        unitTypes.add(new UnitType(Candles6.class));
-        
+        unitTypes.add(new UnitType(StoneCrab.class));
+        if (DEBUG_MODE) {
+            unitTypes.add(new UnitType(Candles6.class));
+        }
     }
    
     
@@ -438,7 +438,7 @@ public class GamePanel extends JPanel {
                 g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
             }
             g.drawImage(unit.getProfileImg(), BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
-            g.drawImage(unit.getRoleIconImg(k), BAR_X + CELL_WIDTH * k, BAR_Y, 30, 30, this);
+            g.drawImage(unit.getRoleIconImg(k), (BAR_X + CELL_WIDTH * k) + (CELL_WIDTH - 35), BAR_Y, 30, 30, this);
             g.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
             g.setColor(new Color(162, 252, 255, 255));
             g.drawString(unit.getManaCost() + "", BAR_X + 5 + CELL_WIDTH * k, BAR_Y + CELL_HEIGHT - 5);

@@ -9,11 +9,11 @@ package Entities.Units;
  * @author anawi
  */
 public interface UnitConfig {
-    char GUARD = 0;
-    char DEFENDER = 1;
-    char EXPLOTION = 2;
-    char COST_GEN = 3;
-    char ATTACKER = 4;
+    int GUARD = 0;
+    int DEFENDER = 1;
+    int EXPLOTION = 2;
+    int COST_GEN = 3;
+    int ATTACKER = 4;
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -26,12 +26,12 @@ public interface UnitConfig {
     
     
     // All Unit stats 💡
-    UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 100, 10, 1500, 100, 5, UnitConfig.ATTACKER);
-    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 50, 0, 0, 50, 5, UnitConfig.COST_GEN);
-    UnitStats VINEWALL_STATS = new UnitStats(VINEWAL_SPRITE, 4000, 0, 0, 50, 30, UnitConfig.DEFENDER);
+    UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 100, 10, 1.5, 100, 5, ATTACKER);
+    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 50, 0, 0, 50, 5, COST_GEN);
+    UnitStats VINEWALL_STATS = new UnitStats(VINEWAL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER);
     ///BETA///
-    UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 100, 999, 50, 250, 20, UnitConfig.GUARD);
+    UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 100, 999, 60, 250, 20, GUARD);
     //UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSTION_SPRITE, 50, 999, 50, 50, 30, UnitConfig.EXPLOTION);
     // Too OP
-    UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 10000, 0, 0, 200, 1000, UnitConfig.EXPLOTION);
+    UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 10000, 0, 0, 200, 1000, EXPLOTION);
 }

@@ -18,7 +18,7 @@ public class Skeleton extends Unit {
     public Skeleton(int row, int col) {
         super(row, col, getUNIT_STATS());
 
-        attackTimer = new DTimer(1.5, e -> {
+        attackTimer = new DTimer(getUNIT_STATS().getAtkSpeed(), e -> {
             if (isEnemyInfront(GamePanel.getEnemies())) {
                 if (isDead()) {
                     attackTimer.stop();

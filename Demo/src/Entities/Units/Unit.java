@@ -10,13 +10,13 @@ import java.awt.image.BufferedImage;
 
 public abstract class Unit {
 
-    //Status
+    //Stats
     protected int health;
     protected int atk;
-    protected int atkSpeed;
+    protected double atkSpeed;
     protected int cost;
     protected double cooldown;
-    protected char role;
+    protected int role;
     
     protected int row, col;
     
@@ -47,12 +47,6 @@ public abstract class Unit {
         this.actionIdle = unitStats.getUnitSp().getActionIdle();
         this.actionATK = unitStats.getUnitSp().getActionAtk();
         this.actiondead = unitStats.getUnitSp().getActionDead();
-    }
-
-    
-    
-    public Unit getPlant() {
-        return this;
     }
     
     public void takeDamage(int damage) {

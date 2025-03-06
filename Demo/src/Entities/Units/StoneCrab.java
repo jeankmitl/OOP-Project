@@ -7,9 +7,9 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Vinewall extends Unit {
+public class StoneCrab extends Unit {
     
-    public Vinewall(int row, int col) {
+    public StoneCrab(int row, int col) {
         super(row, col, getUNIT_STATS());
 
         animationTimer = new DTimer(0.25, e -> updateFrame(0.25));

@@ -8,10 +8,14 @@ import DSystem.DTimer;
 
 public abstract class Enemy {
 
+    //Stats
+    protected int health;
+    protected int atk;
+    protected double atkSpeed;
+    protected double speed;
+    
     protected double x;
     protected int row; // Position on the grid
-    protected int health;
-    protected double speed;
     protected long lastAttackTime = 0;
     protected int ATTACK_COOLDOWN;
     protected String Status = "idle";
@@ -31,6 +35,13 @@ public abstract class Enemy {
         this.health = health;
         this.speed = speed;
     }
+    
+    public Enemy(double x, int row, EnemyStats enemyStats) {
+        this.x = x;
+        this.row = row;
+        this.health = enemyStats.getHealth();
+    }
+    
 
     public int getHealth() {
         return this.health;
