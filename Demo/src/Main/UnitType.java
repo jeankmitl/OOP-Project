@@ -38,6 +38,10 @@ public class UnitType {
         }
     }
 
+    public void startCooldown() {
+        coolDownElapsed = unitStats.getCooldown();
+    }
+
     public boolean isDragging() {
         return dragging;
     }

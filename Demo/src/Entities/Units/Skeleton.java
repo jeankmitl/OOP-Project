@@ -7,19 +7,18 @@ import Entities.Bullets.Bullet;
 import Asset.Audio;
 import DSystem.DTimer;
 import Asset.AudioName;
-import Asset.ImgManager;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
-import javax.imageio.ImageIO;
 
 public class Skeleton extends Unit {
 
     private DTimer attackTimer;
     
+    public Skeleton(){}
+    
     public Skeleton(int row, int col) {
-    super(row, col, getUNIT_STATS());
+        super(row, col, getUNIT_STATS());
 
         attackTimer = new DTimer(1.5, e -> {
             if (isEnemyInfront(GamePanel.getEnemies())) {
@@ -33,7 +32,7 @@ public class Skeleton extends Unit {
         });
 
         attackTimer.start();
-        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
+        animationTimer = new DTimer(0.25, e -> updateFrame(0.25)); //change
         animationTimer.start();
     }
 
@@ -70,18 +69,9 @@ public class Skeleton extends Unit {
         return super.getBufferedImage();
     }
 
-    /*@Override
-    public void updateFrame() {
-        if (this.Status.equals("idle")){
-            currentFrame = (currentFrame + 1) % total_Frame_Idle;
-        }
-        else {
-            currentFrame = (currentFrame + 1) % total_Frame_ATK;
-        }
-    }*/
     @Override
     public void updateFrame(double x) {
-        super.updateFrame();
+        super.updateFrame(x);
     }
 
     public static UnitStats getUNIT_STATS() {

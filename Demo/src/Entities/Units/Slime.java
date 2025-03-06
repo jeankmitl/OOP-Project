@@ -1,6 +1,5 @@
 package Entities.Units;
 
-import Asset.ImgManager;
 import Main.GamePanel;
 import Entities.Enemies.Enemy;
 import Entities.Bullets.Bullet;
@@ -9,9 +8,7 @@ import DSystem.DWait;
 import DSystem.DTimer;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
-import javax.imageio.ImageIO;
 
 public class Slime extends Unit {
 
@@ -76,7 +73,7 @@ public class Slime extends Unit {
     
     @Override
     public void updateFrame(double x) {
-        super.updateFrame();
+        super.updateFrame(x);
     }
 
     public static UnitStats getUNIT_STATS() {

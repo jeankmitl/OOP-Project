@@ -15,7 +15,7 @@ public abstract class Unit {
     protected int atk;
     protected int atkSpeed;
     protected int cost;
-    protected double cooldown;
+    protected static double cooldown;
     protected char role;
     
     protected int row, col;
@@ -26,6 +26,7 @@ public abstract class Unit {
     protected int total_Frame_ATK = 8;
     protected int frame_Width = 32, frame_Hight = 32;
     protected String Status = "idle";
+    protected static boolean cd_Unit = false;
     protected DTimer animationTimer;
     
     public static final UnitStats UNIT_STATS = null;
@@ -48,6 +49,15 @@ public abstract class Unit {
         this.actionATK = unitStatus.getUnitSp().getActionAtk();
         this.actiondead = unitStatus.getUnitSp().getActionDead();
     }
+
+    public static boolean getCd_Unit() {
+        return cd_Unit;
+    }
+
+    public static void setCd_Unit(boolean cd_Unit) {
+        Unit.cd_Unit = cd_Unit;
+    }
+    
     
     public Unit getPlant() {
         return this;
