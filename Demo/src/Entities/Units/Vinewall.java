@@ -1,20 +1,13 @@
 package Entities.Units;
-
-import Asset.ImgManager;
 import Main.GamePanel;
 import Entities.Enemies.Enemy;
 import Entities.Bullets.Bullet;
 import DSystem.DTimer;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.List;
-import javax.imageio.ImageIO;
 
 public class Vinewall extends Unit {
-
-    private boolean stageChange = false;
-
     
     public Vinewall(int row, int col) {
         super(row, col, getUNIT_STATS());

@@ -15,7 +15,7 @@ public abstract class Unit {
     protected int atk;
     protected int atkSpeed;
     protected int cost;
-    protected static double cooldown;
+    protected double cooldown;
     protected char role;
     
     protected int row, col;
@@ -26,7 +26,6 @@ public abstract class Unit {
     protected int total_Frame_ATK = 8;
     protected int frame_Width = 32, frame_Hight = 32;
     protected String Status = "idle";
-    protected static boolean cd_Unit = false;
     protected DTimer animationTimer;
     
     public static final UnitStats UNIT_STATS = null;
@@ -35,28 +34,21 @@ public abstract class Unit {
     public abstract void attack(List<Bullet> bullets);
     public abstract Rectangle getBounds();
     
-    public Unit(int row, int col, UnitStats unitStatus) {
+    public Unit(int row, int col, UnitStats unitStats) {
         this.row = row;
         this.col = col;
-        this.health = unitStatus.getHealth();
-        this.atk = unitStatus.getAtk();
-        this.atkSpeed = unitStatus.getAtkSpeed();
-        this.cost = unitStatus.getCost();
-        this.cooldown = unitStatus.getCooldown();
-        this.role = unitStatus.getRole();
+        this.health = unitStats.getHealth();
+        this.atk = unitStats.getAtk();
+        this.atkSpeed = unitStats.getAtkSpeed();
+        this.cost = unitStats.getCost();
+        this.cooldown = unitStats.getCooldown();
+        this.role = unitStats.getRole();
         
-        this.actionIdle = unitStatus.getUnitSp().getActionIdle();
-        this.actionATK = unitStatus.getUnitSp().getActionAtk();
-        this.actiondead = unitStatus.getUnitSp().getActionDead();
+        this.actionIdle = unitStats.getUnitSp().getActionIdle();
+        this.actionATK = unitStats.getUnitSp().getActionAtk();
+        this.actiondead = unitStats.getUnitSp().getActionDead();
     }
 
-    public static boolean getCd_Unit() {
-        return cd_Unit;
-    }
-
-    public static void setCd_Unit(boolean cd_Unit) {
-        Unit.cd_Unit = cd_Unit;
-    }
     
     
     public Unit getPlant() {

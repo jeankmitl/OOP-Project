@@ -15,8 +15,6 @@ public class Skeleton extends Unit {
 
     private DTimer attackTimer;
     
-    public Skeleton(){}
-    
     public Skeleton(int row, int col) {
         super(row, col, getUNIT_STATS());
 

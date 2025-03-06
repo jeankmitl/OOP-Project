@@ -3,8 +3,6 @@ package Asset;
 import Main.GamePanel;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class VFX {
     private int x, y;

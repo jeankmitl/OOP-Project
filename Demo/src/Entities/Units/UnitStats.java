@@ -4,8 +4,6 @@
  */
 package Entities.Units;
 
-import java.awt.image.BufferedImage;
-
 /**
  *
  * @author anawi

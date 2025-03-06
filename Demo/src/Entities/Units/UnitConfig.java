@@ -30,5 +30,5 @@ public interface UnitConfig {
     UnitStats VINEWALL_STATS = new UnitStats(VINEWAL_SPRITE, 4000, 0, 0, 50, 30, UnitConfig.DEFENDER);
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 50, 999, 50, 500, 500, UnitConfig.GUARD);
     // Too OP
-    UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 10000, 0, 0, 200, 0, UnitConfig.EXPLOTION);
+    UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 10000, 0, 0, 200, 1000, UnitConfig.EXPLOTION);
 }

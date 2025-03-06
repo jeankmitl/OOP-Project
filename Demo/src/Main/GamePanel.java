@@ -19,7 +19,6 @@ import DSystem.*;
 import Asset.AudioName;
 import Asset.ImgManager;
 import Entities.UnitFactory;
-import Entities.Units.UnitStats;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -30,8 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
@@ -49,7 +46,7 @@ public class GamePanel extends JPanel {
     public static final int CELL_HEIGHT = 95;
     public static final int GRID_OFFSET_X = 175; // Move grid right
     public static final int GRID_OFFSET_Y = 100; // Move grid down
-    public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT * ROWS + GRID_OFFSET_Y + 10;
+    public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT * ROWS + GRID_OFFSET_Y + 11;
     public static final int SPAWN_POINT = 1000;
     // </editor-fold>
 
@@ -71,13 +68,7 @@ public class GamePanel extends JPanel {
     private final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
 
     
-    private boolean draggingSkeleton = false;
-    private boolean draggingSlime = false;
-    private boolean draggingVinewall = false;
     private boolean draggingRecall = false;
-    ///cd System///
-    private double[] cd_animation = {0,0,0,0,0,0,0,0};
-    ///////
     private int mouseX, mouseY;
     
     private OTimer manaRecoverTimer15 = new OTimer(15);
@@ -201,6 +192,7 @@ public class GamePanel extends JPanel {
 //            enemiesIsComingWait3.reset();  // like OTimer but use OTimer better
         }
         
+        updateCooldown(deltaTime);
         updateLogic();
     }
     
@@ -257,6 +249,12 @@ public class GamePanel extends JPanel {
             } else {
                 vfxIter.remove();
             }
+        }
+    }
+    
+    public void updateCooldown(double deltaTime) {
+        for (UnitType unit: unitTypes) {
+            unit.coolDownTick(deltaTime);
         }
     }
     
@@ -404,8 +402,6 @@ public class GamePanel extends JPanel {
             g.drawImage(img, vfx.getX(), vfx.getY(), vfx.getWidth(), vfx.getHeight(), null);
         });
 
-
-
         ///
         g.setColor(new Color(0, 0, 0, 150));
         g.fillRect(BAR_X + 740, BAR_Y - 50, 116, 50);
@@ -417,27 +413,13 @@ public class GamePanel extends JPanel {
         g.drawImage(iconImage, BAR_X+730, BAR_Y-63,70,70, null);
         g.fillRect(BAR_X + 740, BAR_Y - 5, wight, 5);
         ///show mana system
-        if (Skeleton.getCd_Unit()){ 
-            Graphics2D ggd = (Graphics2D) g;
-            ggd.setStroke(new BasicStroke(4));
-            ggd.setColor(Color.WHITE);
-            ggd.drawArc(BAR_X + 20, BAR_Y + 20, 50, 50, 90, (int) cd_animation[0]);//slot 1
-        }
-        ////^^^ BETA CD System ^^^/////
-           ///AddCha vvvv ///
-        if (draggingSkeleton) {
-            g.setColor(Color.GREEN);
-            g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        }
-
-        
         
         // frame operator
         for (int i = 0; i < COLS; i++) {
             iconImage = ImgManager.loadIcon("frame_op1");
-            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
             iconImage = ImgManager.loadIcon("frame_operator");
-            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
         }
         iconImage = ImgManager.loadIcon("Recall");
         g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
@@ -446,60 +428,36 @@ public class GamePanel extends JPanel {
             iconImage = ImgManager.loadIcon("RecallDrag");
             g.drawImage(iconImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
         }
+        // all Unit operator
         int k = 0;
         for (UnitType unit : unitTypes) {
-            g.drawImage(unit.getProfileImg(), BAR_X + CELL_WIDTH * k, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+            g.drawImage(unit.getProfileImg(), BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
             if (unit.isDragging()) {
                 iconImage = ImgManager.loadIcon("frame_op2");
-                g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+                g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
                 iconImage = ImgManager.loadIcon("frame_operator");
-                g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+                g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
                 
                 g.setColor(Color.WHITE);
                 g.drawImage(unit.getProfileImg(), mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT, null);
             }
+            if (!unit.isNoCoolDown()) {
+                iconImage = ImgManager.loadIcon("blackLowOpacityBG");
+                g.setColor(Color.WHITE);
+                g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
+                g.drawString((int)unit.getCoolDownElapsed() + 1 + "", BAR_X + 5 + CELL_WIDTH * k, BAR_Y + 20);
+                g2d.setStroke(new BasicStroke(4));
+                g2d.drawArc(BAR_X + 20 + CELL_WIDTH * k, BAR_Y + 20, 50, 50, 90, (int)((unit.getCoolDownElapsed()/unit.getCooldown())*360));
+            }
             k++;
         }
-        
-
-        
         
         if (DEBUG_MODE) {
             g.setColor(Color.WHITE);
             g.drawString("FPS: " + GameLoop.getFps(), 10, 20);
             g.drawString("Thread: " + (Thread.activeCount() - OTHER_THREAD) + " else: " + OTHER_THREAD , 10, 45);
         }
-    }
-    
-    public void Global_cd(String name){
-        if(this.DEBUG_MODE == !false){ // << On/Off Cd System just add !
-            if (name == "Skeleton"){
-                Skeleton.setCd_Unit(true);
-                    DTimer temp = new DTimer(0.1, e->{
-                        if(cd_animation[0] < 360){
-                            cd_animation[0] += 7; // aprrox 7 pix/0.1 sec
-                        }else{
-                            cd_animation[0] = 0;
-                        }
-                    });
-                    temp.start();
-                    new DWait(Skeleton.getCooldown(), e -> {
-                        Skeleton.setCd_Unit(false);
-                        System.out.println("Reflesh Cd");
-                        temp.stop();
-                        cd_animation[0] = 0;
-                    }).start();
-            }
-            }else if(name == "Slime"){
-                Slime.setCd_Unit(true);
-                    new DWait(Slime.getCooldown(), e -> {
-                        Slime.setCd_Unit(false);
-                        System.out.println("Reflesh Cd");
-                }).start();
-            }
-        else{}
-    }
-    
+    } 
     
     public void addMouseListeners() {
         /**
@@ -530,17 +488,17 @@ public class GamePanel extends JPanel {
                     
                     if (e.getX() >= unitX && e.getX() <= unitX + CELL_WIDTH 
                             && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                        if (remainMana >= unit.getManaCost()) {
-                            else if(remainMana >= 100 && Skeleton.getCd_Unit()){
-                                System.out.println("Skeleton are cooldown!");
+                        if (unit.isNoCoolDown()){
+                            if (remainMana >= unit.getManaCost()) {
+                                unit.setDragging(true);
+                                Audio.play(AudioName.PLANT_PICK_UP);
+                                System.out.println("Dragging: " + unit.getClassName() + "!");
+                            } else {
+                                System.out.println("Not enough mana for " + unit.getClassName() + "!");
                                 Audio.play(AudioName.PLANT_CANT_PICK_UP);
                             }
-                            unit.setDragging(true);
-                            Audio.play(AudioName.PLANT_PICK_UP);
-                            System.out.println("Dragging: " + unit.getClassName() + "!");
                         } else {
-                            System.out.println("Not enough mana for " + unit.getClassName() + "!");
-                            Audio.play(AudioName.PLANT_CANT_PICK_UP);
+                            System.out.println(unit.getClassName() + " is cooldown!");
                         }
                         break;
                     }
@@ -559,18 +517,18 @@ public class GamePanel extends JPanel {
                 }
                 for (UnitType unit: unitTypes) {
                     if (unit.isDragging()) {
-                        placeUnit(unit.unitClass, row, col, unit.getManaCost());
+                        placeUnit(unit, row, col);
                         unit.setDragging(false);
                     }
                 }
             }
 
-            private void placeUnit(Class<? extends Unit> unitClass, int row, int col, int manaCost) {
+            private void placeUnit(UnitType unit, int row, int col) {
                 if (col >= 0 && col < COLS && row >= 0 && row < ROWS && isFieldAvailable(col, row)) {
-                    Unit unit = UnitFactory.createUnit(unitClass, row, col);
-                    units.add(unit);
-                    remainMana -= manaCost;
-                    Global_cd("Skeleton");
+                    Unit unitIns = UnitFactory.createUnit(unit.unitClass, row, col);
+                    units.add(unitIns);
+                    remainMana -= unit.getManaCost();
+                    unit.startCooldown();
                     Audio.play(AudioName.PLANT_PLACE);
                     getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
                 } else {

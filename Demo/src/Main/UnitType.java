@@ -14,7 +14,6 @@ import java.awt.image.BufferedImage;
  */
 public class UnitType {
     Class<? extends Unit> unitClass;
-    private int manaCost;
     private boolean dragging = false;
     private double coolDownElapsed = 0;
     private UnitStats unitStats;
@@ -29,7 +28,7 @@ public class UnitType {
     }
 
     public String getClassName() {
-        return unitClass.getClass().getSimpleName();
+        return unitClass.getSimpleName();
     }
 
     public void coolDownTick(double deltaTime) {
@@ -41,6 +40,15 @@ public class UnitType {
     public void startCooldown() {
         coolDownElapsed = unitStats.getCooldown();
     }
+    
+    public double getCooldown() {
+        return unitStats.getCooldown();
+    }
+    
+    public boolean isNoCoolDown() {
+        return coolDownElapsed <= 0;
+    }
+    
 
     public boolean isDragging() {
         return dragging;
@@ -52,6 +60,10 @@ public class UnitType {
     
     public int getManaCost() {
         return unitStats.getCost();
+    }
+
+    public double getCoolDownElapsed() {
+        return coolDownElapsed;
     }
     
     public BufferedImage getProfileImg() {
