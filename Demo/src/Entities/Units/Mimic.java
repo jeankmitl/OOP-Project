@@ -13,7 +13,8 @@ import java.util.List;
 
 public class Mimic extends Unit{
     
-    private DTimer crunchSpeed;
+    private DTimer crunchSpeed; // cd time when eat again
+    private boolean crunch_avalible = true;//check when eat enermy
     
     public Mimic(int row, int col) {
         super(row, col, getUNIT_STATS());
