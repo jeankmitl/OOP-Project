@@ -26,7 +26,7 @@ public abstract class Unit {
     protected int total_Frame_ATK = 8;
     protected int frame_Width = 32, frame_Hight = 32;
     protected String Status = "idle";
-    protected String Stage = "not_cooldown";
+    protected static boolean cd_Unit = false;
     protected DTimer animationTimer;
     
     public abstract boolean isEnemyInfront(List<Enemy> enermies);
@@ -46,13 +46,14 @@ public abstract class Unit {
         this.role = role;
     }
 
-    public String getStage() {
-        return Stage;
+    public static boolean getCd_Unit() {
+        return cd_Unit;
     }
 
-    public void setStage(String Stage) {
-        this.Stage = Stage;
+    public static void setCd_Unit(boolean cd_Unit) {
+        Unit.cd_Unit = cd_Unit;
     }
+    
     
     public Unit getPlant() {
         return this;

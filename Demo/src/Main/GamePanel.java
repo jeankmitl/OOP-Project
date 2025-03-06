@@ -75,14 +75,7 @@ public class GamePanel extends JPanel {
     private boolean draggingVinewall = false;
     private boolean draggingRecall = false;
     ///cd System///
-    private boolean cd_Skeleton = false;
-    private boolean cd_slime = false;
-    /*private boolean cd_Skeleton = false;
-    private boolean cd_Skeleton = false;
-    private boolean cd_Skeleton = false;*/
-    ///cd Animation///
-    private double cd_time_Skeleton = 0;
-    private double anglecolone = 0;
+    private double[] cd_animation = {0,0,0,0,0,0,0,0};
     ///////
     private int mouseX, mouseY;
     
@@ -415,7 +408,7 @@ public class GamePanel extends JPanel {
             g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
 //            g.drawLine(BAR_X + i * CELL_WIDTH, BAR_Y, BAR_X + i * CELL_WIDTH, BAR_Y + CELL_HEIGHT);
         }
-
+        ///Character Zone///
         g.setColor(Color.GREEN);
         g.fillRect(BAR_X + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
         g.setColor(Color.BLUE);
@@ -435,11 +428,11 @@ public class GamePanel extends JPanel {
         g.drawImage(iconImage, BAR_X+730, BAR_Y-63,70,70, null);
         g.fillRect(BAR_X + 740, BAR_Y - 5, wight, 5);
         ///show mana system
-        if (cd_Skeleton){ 
+        if (Skeleton.getCd_Unit()){ 
             Graphics2D ggd = (Graphics2D) g;
             ggd.setStroke(new BasicStroke(4));
             ggd.setColor(Color.WHITE);
-            ggd.drawArc(BAR_X + 20, BAR_Y + 20, 50, 50, 90, (int) anglecolone);//(int) angle);
+            ggd.drawArc(BAR_X + 20, BAR_Y + 20, 50, 50, 90, (int) cd_animation[0]);//slot 1
         }
         ////^^^ BETA CD System ^^^/////
            ///AddCha vvvv ///
@@ -473,26 +466,26 @@ public class GamePanel extends JPanel {
     public void Global_cd(String name){
         if(this.DEBUG_MODE == !false){ // << On/Off Cd System just add !
             if (name == "Skeleton"){
-                this.cd_Skeleton = true;
+                Skeleton.setCd_Unit(true);
                     DTimer temp = new DTimer(0.1, e->{
-                        if(anglecolone < 360){
-                            anglecolone += 7; // aprrox 7 pix/0.1 sec
+                        if(cd_animation[0] < 360){
+                            cd_animation[0] += 7; // aprrox 7 pix/0.1 sec
                         }else{
-                            anglecolone = 0;
+                            cd_animation[0] = 0;
                         }
                     });
                     temp.start();
                     new DWait(Skeleton.getCooldown(), e -> {
-                        this.cd_Skeleton = false;
+                        Skeleton.setCd_Unit(false);
                         System.out.println("Reflesh Cd");
                         temp.stop();
-                        anglecolone = 0;
+                        cd_animation[0] = 0;
                     }).start();
             }
             }else if(name == "Slime"){
-                this.cd_slime = true;
+                Slime.setCd_Unit(true);
                     new DWait(Slime.getCooldown(), e -> {
-                        this.cd_slime = false;
+                        Slime.setCd_Unit(false);
                         System.out.println("Reflesh Cd");
                 }).start();
             }
@@ -516,12 +509,12 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getX() >= BAR_X && e.getX() <= BAR_X + CELL_WIDTH && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                    if (remainMana >= 100 && !cd_Skeleton) {
+                if (e.getX() >= BAR_X && e.getX() <= BAR_X + CELL_WIDTH && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) { //slot 1
+                    if (remainMana >= 100 && !Skeleton.getCd_Unit()) {
                         draggingSkeleton = true;
 //                        System.out.println("Dragging Skeleton");
                         Audio.play(AudioName.PLANT_PICK_UP);   
-                    }else if(remainMana >= 100 && cd_Skeleton){
+                    }else if(remainMana >= 100 && Skeleton.getCd_Unit()){
                         System.out.println("Skeleton are cooldown!");
                         Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     }
@@ -530,7 +523,7 @@ public class GamePanel extends JPanel {
                         Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     }
                 }
-                else if (e.getX() >= BAR_X + CELL_WIDTH && e.getX() <= BAR_X + CELL_WIDTH * 2 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                else if (e.getX() >= BAR_X + CELL_WIDTH && e.getX() <= BAR_X + CELL_WIDTH * 2 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {//slot 2
                     if (remainMana >= 50) {
                         draggingSlime = true;
 //                        System.out.println("Dragging Slime");
@@ -541,7 +534,7 @@ public class GamePanel extends JPanel {
                         Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     }
                 }
-                else if (e.getX() >= BAR_X + CELL_WIDTH * 2 && e.getX() <= BAR_X + CELL_WIDTH * 3 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                else if (e.getX() >= BAR_X + CELL_WIDTH * 2 && e.getX() <= BAR_X + CELL_WIDTH * 3 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {//slot 3
                     if (remainMana >= 50) {
                         draggingVinewall = true;
 //                        System.out.println("Dragging Golem");
@@ -563,7 +556,7 @@ public class GamePanel extends JPanel {
                 if (draggingSkeleton) {
                     int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
                     int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
-
+                    
                     if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
                         if (isFieldAvailable(col, row)) {
                             units.add(new Skeleton(row, col));
