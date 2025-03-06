@@ -431,19 +431,24 @@ public class GamePanel extends JPanel {
         // all Unit operator
         int k = 0;
         for (UnitType unit : unitTypes) {
-            g.drawImage(unit.getProfileImg(), BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
             if (unit.isDragging()) {
                 iconImage = ImgManager.loadIcon("frame_op2");
                 g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
                 iconImage = ImgManager.loadIcon("frame_operator");
                 g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
-                
+            }
+            g.drawImage(unit.getProfileImg(), BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
+            g.drawImage(unit.getRoleIconImg(k), BAR_X + CELL_WIDTH * k, BAR_Y, 30, 30, this);
+            g.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+            g.setColor(new Color(162, 252, 255, 255));
+            g.drawString(unit.getManaCost() + "", BAR_X + 5 + CELL_WIDTH * k, BAR_Y + CELL_HEIGHT - 5);
+            if (unit.isDragging()) {
                 g.setColor(Color.WHITE);
                 g.drawImage(unit.getProfileImg(), mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT, null);
             }
             if (!unit.isNoCoolDown()) {
-                iconImage = ImgManager.loadIcon("blackLowOpacityBG");
                 g.setColor(Color.WHITE);
+                iconImage = ImgManager.loadIcon("blackLowOpacityBG");
                 g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
                 g.drawString((int)unit.getCoolDownElapsed() + 1 + "", BAR_X + 5 + CELL_WIDTH * k, BAR_Y + 20);
                 g2d.setStroke(new BasicStroke(4));

@@ -9,11 +9,11 @@ package Entities.Units;
  * @author anawi
  */
 public interface UnitConfig {
-    char ATTACKER = 'A';
-    char COST_GEN = 'C';
-    char DEFENDER = 'D';
-    char EXPLOTION = 'E';
-    char GUARD = 'G';
+    char GUARD = 0;
+    char DEFENDER = 1;
+    char EXPLOTION = 2;
+    char COST_GEN = 3;
+    char ATTACKER = 4;
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");

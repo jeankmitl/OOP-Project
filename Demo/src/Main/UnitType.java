@@ -69,4 +69,8 @@ public class UnitType {
     public BufferedImage getProfileImg() {
         return unitStats.getUnitSp().getProfileImg();
     }
+    
+    public BufferedImage getRoleIconImg(int i) {
+        return unitStats.getUnitSp().getStatsIcon(unitStats.getRole());
+    }
 }

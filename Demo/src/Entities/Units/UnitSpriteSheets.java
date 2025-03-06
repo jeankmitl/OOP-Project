@@ -19,6 +19,8 @@ public class UnitSpriteSheets {
     private BufferedImage actionAtk;
     private BufferedImage actionDead;
     private BufferedImage profileImg;
+    private BufferedImage allStatsIcons;
+    private final int WH = 23;
 
     public UnitSpriteSheets(String idle, String atk) {
         this(idle, atk, null);
@@ -30,6 +32,7 @@ public class UnitSpriteSheets {
         this.dead = dead;
         this.actionIdle = ImgManager.loadSprite(idle);
         this.actionAtk = ImgManager.loadSprite(atk);
+        this.allStatsIcons = ImgManager.loadSprite("all_stats_icons");
         this.profileImg = actionIdle.getSubimage(0, 0, 32, 32);
         if (dead != null) this.actionDead = ImgManager.loadSprite(dead);
     }
@@ -61,4 +64,11 @@ public class UnitSpriteSheets {
     public BufferedImage getProfileImg() {
         return profileImg;
     }
+
+    public BufferedImage getStatsIcon(int i) {
+        BufferedImage statsIcon = allStatsIcons.getSubimage(i * WH, 0, WH, WH);
+        return statsIcon;
+    }
+    
+    
 }
