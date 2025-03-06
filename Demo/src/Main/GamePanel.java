@@ -15,12 +15,11 @@ import Entities.Units.Vinewall;
 import Asset.VFX;
 import DSystem.DWait;
 import Asset.Audio;
-import DSystem.DTimer;
-import DSystem.GameLoop;
+import DSystem.*;
 import Asset.AudioName;
 import Asset.ImgManager;
-import DSystem.OWait;
-import DSystem.OTimer;
+import Entities.UnitFactory;
+import Entities.Units.UnitStats;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -31,6 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class GamePanel extends JPanel {
@@ -62,13 +63,13 @@ public class GamePanel extends JPanel {
     private static List<Bullet> bullets;
     private static List<VFX> vfxs;
     
+    
     private final Random random = new Random();
-    private static Set<Class<?>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
+    private static final Set<Class<? extends Unit>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
         Skeleton.class, Slime.class, Vinewall.class, Candles6.class));
     
-    private static List<Class<?>> selectionList = new ArrayList<>(Arrays.asList(
-          Skeleton.class, Slime.class, Vinewall.class
-    ));
+    private final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
+
     
     private boolean draggingSkeleton = false;
     private boolean draggingSlime = false;
@@ -83,6 +84,7 @@ public class GamePanel extends JPanel {
     private OTimer delayNidNoyTimer1 = new OTimer(0.1235);
     
     private OWait enemiesIsComingWait3 = new OWait(3);
+    
     
     //same as: public awake()
     public GamePanel() {
@@ -151,6 +153,10 @@ public class GamePanel extends JPanel {
         for (int i=0; i<ROWS; i++) {
             units.add(new Candles6(i, -1));
         }
+        unitTypes.add(new UnitType(Skeleton.class));
+        unitTypes.add(new UnitType(Slime.class));
+        unitTypes.add(new UnitType(Vinewall.class));
+        unitTypes.add(new UnitType(Candles6.class));
         
     }
    
@@ -193,7 +199,6 @@ public class GamePanel extends JPanel {
 //            enemiesIsComingWait3.reset();  // like OTimer but use OTimer better
         }
         
- 
         updateLogic();
     }
     
@@ -328,7 +333,7 @@ public class GamePanel extends JPanel {
                         enemy.takeDamage(999);
                     }
                 }
-                VFX vfx = new VFX(0, bcr.getRow() * CELL_HEIGHT, "beam");
+                VFX vfx = new VFX((bcr.getCol() + 1) * CELL_WIDTH, bcr.getRow() * CELL_HEIGHT, "Beam2");
                 vfx.setWidth(1280);
                 getVfxs().add(vfx);
             }
@@ -397,24 +402,8 @@ public class GamePanel extends JPanel {
             g.drawImage(img, vfx.getX(), vfx.getY(), vfx.getWidth(), vfx.getHeight(), null);
         });
 
-        g.setColor(Color.BLUE);
-//        for (int i = 0; i <= 1; i++) {
-////            g.drawLine(BAR_X, BAR_Y + i * CELL_HEIGHT, BAR_X + COLS * CELL_WIDTH, BAR_Y + i * CELL_HEIGHT);
-//        }
-        for (int i = 0; i < COLS; i++) {
-            iconImage = ImgManager.loadIcon("frame_operator");
-            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
-//            g.drawLine(BAR_X + i * CELL_WIDTH, BAR_Y, BAR_X + i * CELL_WIDTH, BAR_Y + CELL_HEIGHT);
-        }
 
-        g.setColor(Color.GREEN);
-        g.fillRect(BAR_X + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        g.setColor(Color.BLUE);
-        g.fillRect(BAR_X + 105, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        g.setColor(Color.YELLOW);
-        g.fillRect(BAR_X + 200, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        iconImage = ImgManager.loadIcon("Recall");
-        g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
+
         ///
         g.setColor(new Color(0, 0, 0, 150));
         g.fillRect(BAR_X + 740, BAR_Y - 50, 116, 50);
@@ -425,27 +414,40 @@ public class GamePanel extends JPanel {
         iconImage = ImgManager.loadIcon("Mana_icon");
         g.drawImage(iconImage, BAR_X+730, BAR_Y-63,70,70, null);
         g.fillRect(BAR_X + 740, BAR_Y - 5, wight, 5);
-        ///show mana system
-           ///AddCha vvvv ///
-        if (draggingSkeleton) {
-            g.setColor(Color.GREEN);
-            g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        }
 
-        if (draggingSlime) {
-            g.setColor(Color.BLUE);
-            g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
+        
+        
+        // frame operator
+        for (int i = 0; i < COLS; i++) {
+            iconImage = ImgManager.loadIcon("frame_op1");
+            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+            iconImage = ImgManager.loadIcon("frame_operator");
+            g.drawImage(iconImage, BAR_X + CELL_WIDTH * i, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
         }
-
-        if (draggingVinewall) {
-            g.setColor(Color.YELLOW);
-            g.fillRect(mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20);
-        }
-
+        iconImage = ImgManager.loadIcon("Recall");
+        g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
+        
         if (draggingRecall) {
             iconImage = ImgManager.loadIcon("RecallDrag");
             g.drawImage(iconImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
         }
+        int k = 0;
+        for (UnitType unit : unitTypes) {
+            g.drawImage(unit.getProfileImg(), BAR_X + CELL_WIDTH * k, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+            if (unit.isDragging()) {
+                iconImage = ImgManager.loadIcon("frame_op2");
+                g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+                iconImage = ImgManager.loadIcon("frame_operator");
+                g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y + 1, CELL_WIDTH, CELL_HEIGHT, this);
+                
+                g.setColor(Color.WHITE);
+                g.drawImage(unit.getProfileImg(), mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT, null);
+            }
+            k++;
+        }
+        
+
+        
         
         if (DEBUG_MODE) {
             g.setColor(Color.WHITE);
@@ -470,121 +472,150 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (e.getX() >= BAR_X && e.getX() <= BAR_X + CELL_WIDTH && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                    if (remainMana >= 100) {
-                        draggingSkeleton = true;
-//                        System.out.println("Dragging Skeleton");
-                        Audio.play(AudioName.PLANT_PICK_UP);
-                        
-                    }
-                    else {
-                        System.out.println("Not enough mana for Skeleton!");
-                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
-                    }
-                }
-                else if (e.getX() >= BAR_X + CELL_WIDTH && e.getX() <= BAR_X + CELL_WIDTH * 2 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                    if (remainMana >= 50) {
-                        draggingSlime = true;
-//                        System.out.println("Dragging Slime");
-                        Audio.play(AudioName.PLANT_PICK_UP);
-                    }
-                    else {
-                        System.out.println("Not enough mana for Slime!");
-                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
-                    }
-                }
-                else if (e.getX() >= BAR_X + CELL_WIDTH * 2 && e.getX() <= BAR_X + CELL_WIDTH * 3 && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                    if (remainMana >= 50) {
-                        draggingVinewall = true;
-//                        System.out.println("Dragging Golem");
-                        Audio.play(AudioName.PLANT_PICK_UP);
-                    }
-                    else {
-                        System.out.println("Not enough mana for Golem!");
-                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
-                    }
-                }
-                else if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS 
+                        && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;
+                    Audio.play(AudioName.PLANT_PICK_UP);
                     System.out.println("Dragging Recall");
+                    return;
+                } 
+                for (int i = 0; i< unitTypes.size(); i++) {
+                    UnitType unit = unitTypes.get(i);
+                    int unitX = BAR_X + CELL_WIDTH * i;
+                    
+                    if (e.getX() >= unitX && e.getX() <= unitX + CELL_WIDTH 
+                            && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
+                        if (remainMana >= unit.getManaCost()) {
+                            unit.setDragging(true);
+                            Audio.play(AudioName.PLANT_PICK_UP);
+                            System.out.println("Dragging: " + unit.getClassName() + "!");
+                        } else {
+                            System.out.println("Not enough mana for " + unit.getClassName() + "!");
+                            Audio.play(AudioName.PLANT_CANT_PICK_UP);
+                        }
+                        break;
+                    }
                 }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (draggingSkeleton) {
-                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
-                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
-
-                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                        if (isFieldAvailable(col, row)) {
-                            units.add(new Skeleton(row, col));
-                            remainMana -= 100;
-                            Audio.play(AudioName.PLANT_PLACE);
-                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
-                        } else {
-                            getVfxs().add(new VFX(mouseX - GRID_OFFSET_X - CELL_WIDTH / 2, mouseY - GRID_OFFSET_Y - CELL_HEIGHT / 2, "cross_NOT_vfx"));
-                            System.out.println("***Field is Not available***");
-                        }
+                int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
+                int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
+                
+                if (draggingRecall) {
+                    recallUnit(col, row);
+                    draggingRecall = false;
+                    return;
+                }
+                for (UnitType unit: unitTypes) {
+                    if (unit.isDragging()) {
+                        placeUnit(unit.unitClass, row, col, unit.getManaCost());
+                        unit.setDragging(false);
                     }
                 }
-                else if (draggingSlime) {
-                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
-                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
-
-                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                        if (isFieldAvailable(col, row)) {
-                            units.add(new Slime(row, col));
-                            remainMana -= 50;
-                            Audio.play(AudioName.PLANT_PLACE);
-                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
-                        } else {
-                            System.out.println("***Field is Not available***");
-                        }
-                    }
-                }
-                else if (draggingVinewall) {
-                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
-                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
-
-                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                        if (isFieldAvailable(col, row)) {
-                            units.add(new Vinewall(row, col));
-                            remainMana -= 50;
-                            Audio.play(AudioName.PLANT_PLACE);
-                        } else {
-                            System.out.println("***Field is Not available***");
-                        }
-                    }
-                }
-                else if (draggingRecall) {
-                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
-                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
-                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                        if (!isFieldAvailable(col, row)) {
-                            Iterator<Unit> unitIterator = units.iterator();
-                            while (unitIterator.hasNext()) {
-                                Unit unit = unitIterator.next();
-                                if (unit.getRow() == row && unit.getCol() == col) {
-                                    if (unit instanceof Skeleton) {
-                                        ((Skeleton) unit).stopAttacking();
-                                    }
-                                    else if (unit instanceof Slime) {
-                                        ((Slime) unit).stopGeneratingCost();
-                                    }
-                                    unitIterator.remove();
-                                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
-                                    Audio.play(AudioName.PLANT_DELETE);
-                                }
-                            }
-                        }
-                    }
-                }
-                draggingSkeleton = false;
-                draggingSlime = false;
-                draggingVinewall = false;
-                draggingRecall = false;
+//                if (draggingSkeleton) {
+//                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
+//                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
+//
+//                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+//                        if (isFieldAvailable(col, row)) {
+//                            units.add(new Skeleton(row, col));
+//                            remainMana -= 100;
+//                            Audio.play(AudioName.PLANT_PLACE);
+//                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
+//                        } else {
+//                            getVfxs().add(new VFX(mouseX - GRID_OFFSET_X - CELL_WIDTH / 2, mouseY - GRID_OFFSET_Y - CELL_HEIGHT / 2, "cross_NOT_vfx"));
+//                            System.out.println("***Field is Not available***");
+//                        }
+//                    }
+//                }
+//                else if (draggingSlime) {
+//                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
+//                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
+//
+//                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+//                        if (isFieldAvailable(col, row)) {
+//                            units.add(new Slime(row, col));
+//                            remainMana -= 50;
+//                            Audio.play(AudioName.PLANT_PLACE);
+//                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
+//                        } else {
+//                            System.out.println("***Field is Not available***");
+//                        }
+//                    }
+//                }
+//                else if (draggingVinewall) {
+//                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
+//                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
+//
+//                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+//                        if (isFieldAvailable(col, row)) {
+//                            units.add(new Vinewall(row, col));
+//                            remainMana -= 50;
+//                            Audio.play(AudioName.PLANT_PLACE);
+//                        } else {
+//                            System.out.println("***Field is Not available***");
+//                        }
+//                    }
+//                }
+//                else if (draggingRecall) {
+//                    int col = (e.getX() - GRID_OFFSET_X) / CELL_WIDTH;
+//                    int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
+//                    if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+//                        if (!isFieldAvailable(col, row)) {
+//                            Iterator<Unit> unitIterator = units.iterator();
+//                            while (unitIterator.hasNext()) {
+//                                Unit unit = unitIterator.next();
+//                                if (unit.getRow() == row && unit.getCol() == col) {
+//                                    if (unit instanceof Skeleton) {
+//                                        ((Skeleton) unit).stopAttacking();
+//                                    }
+//                                    else if (unit instanceof Slime) {
+//                                        ((Slime) unit).stopGeneratingCost();
+//                                    }
+//                                    unitIterator.remove();
+//                                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
+//                                    Audio.play(AudioName.PLANT_DELETE);
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                draggingSkeleton = false;
+//                draggingSlime = false;
+//                draggingVinewall = false;
+//                draggingRecall = false;
             }
+
+            private void placeUnit(Class<? extends Unit> unitClass, int row, int col, int manaCost) {
+                if (col >= 0 && col < COLS && row >= 0 && row < ROWS && isFieldAvailable(col, row)) {
+                    Unit unit = UnitFactory.createUnit(unitClass, row, col);
+                    units.add(unit);
+                    remainMana -= manaCost;
+                    Audio.play(AudioName.PLANT_PLACE);
+                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
+                } else {
+//                    System.out.println("***Field is Not available***");
+                }
+            }
+            
+            private void recallUnit(int col, int row) {
+                if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
+                    Iterator<Unit> unitIterator = units.iterator();
+                    while (unitIterator.hasNext()) {
+                        Unit unit = unitIterator.next();
+                        if (unit.getRow() == row && unit.getCol() == col) {
+                            if (unit instanceof Skeleton) ((Skeleton) unit).stopAttacking();
+                            if (unit instanceof Slime) ((Slime) unit).stopGeneratingCost();
+                            unitIterator.remove();
+                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
+                            Audio.play(AudioName.PLANT_DELETE);
+                        }
+                    }
+                }
+            }
+
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
@@ -596,15 +627,19 @@ public class GamePanel extends JPanel {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (draggingSkeleton || draggingSlime || draggingVinewall || draggingRecall) {
+                if (draggingRecall) {
                     mouseX = e.getX();
                     mouseY = e.getY();
+                } else {
+                    for (UnitType unit : unitTypes) {
+                        if (unit.isDragging()) {
+                            mouseX = e.getX();
+                            mouseY = e.getY();
+                        }
+                    }
                 }
             }
         });
 
     }
-
-    
-    
 }

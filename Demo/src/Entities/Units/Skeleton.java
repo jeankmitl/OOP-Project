@@ -19,10 +19,7 @@ public class Skeleton extends Unit {
     private DTimer attackTimer;
     
     public Skeleton(int row, int col) {
-        super(row, col, 100, 10, 1500, 100, 5, UnitRole.ATTACKER);
-
-        actionIdle = ImgManager.loadSprite("Skeleton");
-        actionATK = ImgManager.loadSprite("SkeletonThrow");
+    super(row, col, getUNIT_STATS());
 
         attackTimer = new DTimer(1.5, e -> {
             if (isEnemyInfront(GamePanel.getEnemies())) {
@@ -85,6 +82,10 @@ public class Skeleton extends Unit {
     @Override
     public void updateFrame(double x) {
         super.updateFrame();
+    }
+
+    public static UnitStats getUNIT_STATS() {
+        return UnitConfig.SKELETON_STATS;
     }
 
 }

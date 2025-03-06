@@ -18,14 +18,7 @@ public class Mimic extends Unit{
     private DTimer crunchSpeed;
     
     public Mimic(int row, int col) {
-        super(row, col, 100, 10, 1500, 100, 6, UnitRole.ATTACKER);
-        
-        try {
-            actionIdle = ImageIO.read(getClass().getResource("Asset/Mimic.png"));
-            //actionATK = ImageIO.read(getClass().getResource("Asset/SkeletonThrow.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(row, col, getUNIT_STATS());
         
         crunchSpeed = new DTimer(1,e->{
             if(isEnemyInfront(GamePanel.getEnemies())){
@@ -79,6 +72,9 @@ public class Mimic extends Unit{
             currentFrame = (currentFrame + 1) % total_Frame_ATK;
         }*/
     }
-    
+
+    public static UnitStats getUNIT_STATS() {
+        return UnitConfig.MIMIC_STATS;
+    }
     
 }

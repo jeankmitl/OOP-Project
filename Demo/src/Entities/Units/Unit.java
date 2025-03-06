@@ -28,19 +28,25 @@ public abstract class Unit {
     protected String Status = "idle";
     protected DTimer animationTimer;
     
+    public static final UnitStats UNIT_STATS = null;
+    
     public abstract boolean isEnemyInfront(List<Enemy> enermies);
     public abstract void attack(List<Bullet> bullets);
     public abstract Rectangle getBounds();
-
-    public Unit(int row, int col, int health, int atk, int atkSpeed, int cost, double cooldown, char role) {
+    
+    public Unit(int row, int col, UnitStats unitStatus) {
         this.row = row;
         this.col = col;
-        this.health = health;
-        this.atk = atk;
-        this.atkSpeed = atkSpeed;
-        this.cost = cost;
-        this.cooldown = cooldown;
-        this.role = role;
+        this.health = unitStatus.getHealth();
+        this.atk = unitStatus.getAtk();
+        this.atkSpeed = unitStatus.getAtkSpeed();
+        this.cost = unitStatus.getCost();
+        this.cooldown = unitStatus.getCooldown();
+        this.role = unitStatus.getRole();
+        
+        this.actionIdle = unitStatus.getUnitSp().getActionIdle();
+        this.actionATK = unitStatus.getUnitSp().getActionAtk();
+        this.actiondead = unitStatus.getUnitSp().getActionDead();
     }
     
     public Unit getPlant() {
@@ -79,6 +85,7 @@ public abstract class Unit {
         return col;
     }
     
+    
     public BufferedImage getBufferedImage() { // 2 Sprite Sheet
         if (this.Status.equals("idle")){
             return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
@@ -86,6 +93,11 @@ public abstract class Unit {
             return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
         }
     }
+    
+//    public static BufferedImage getUnitIcon() {
+//        
+//        return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+//    }
     
     public void updateFrame() {
         currentFrame = (currentFrame + 1) % total_Frame_Idle;
@@ -115,6 +127,8 @@ public abstract class Unit {
     public void setTotal_Frame_ATK(int total_Frame_ATK) {
         this.total_Frame_ATK = total_Frame_ATK;
     }
-    
-    
+
+    public static UnitStats getUNIT_STATS() throws NoSuchMethodException {
+        throw new NoSuchMethodException("Make sure to return their unit STATS");
+    }
 }

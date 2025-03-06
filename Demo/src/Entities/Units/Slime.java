@@ -18,10 +18,12 @@ public class Slime extends Unit {
     private DTimer costGenerationTimer;
     
     public Slime(int row, int col) {
-        super(row, col, 50, 0, 0, 50, 5, UnitRole.COST_GEN);
-        actionIdle = ImgManager.loadSprite("Slime_re");
-        actionATK = ImgManager.loadSprite("SlimeGenerate");
+        super(row, col, getUNIT_STATS());
 
+        
+        
+        
+        
         super.setTotal_Frame_Idle(5);
         costGenerationTimer = new DTimer(15, e -> {
             if (isDead()) {
@@ -77,4 +79,9 @@ public class Slime extends Unit {
         super.updateFrame();
     }
 
+    public static UnitStats getUNIT_STATS() {
+        return UnitConfig.SLIME_STATS;
+    }
+    
+    
 }

@@ -15,11 +15,9 @@ public class Vinewall extends Unit {
 
     private boolean stageChange = false;
 
+    
     public Vinewall(int row, int col) {
-        super(row, col, 4000, 0, 0, 50, 30, UnitRole.DEFENDER);
-        actionIdle = ImgManager.loadSprite("Vinewall");
-        actionATK = ImgManager.loadSprite("VinewallCrack");
-        actiondead = ImgManager.loadSprite("VinewallCracker");
+        super(row, col, getUNIT_STATS());
 
         animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
         animationTimer.start();
@@ -67,4 +65,8 @@ public class Vinewall extends Unit {
         currentFrame = (currentFrame + 1) % total_Frame_Idle;
     }
 
+    public static UnitStats getUNIT_STATS() {
+        return UnitConfig.VINEWALL_STATS;
+    }
+    
 }

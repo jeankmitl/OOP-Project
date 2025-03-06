@@ -25,15 +25,14 @@ import javax.imageio.ImageIO;
  * @author anawi
  */
 public class Candles6 extends Unit {
-    private static final int FAKE_IMMU = 1000000;
+    private final int FAKE_IMMU;
     private boolean isActivating = false;
     
     public Candles6(int row, int col) {
-        super(row, col, FAKE_IMMU, 0, 0, 9999999, 60, UnitRole.ATTACKER);
-        actionIdle = ImgManager.loadSprite("Candles6");
-        actionATK = ImgManager.loadSprite("Candles6_activate");
+        super(row, col, getUNIT_STATS());
+        FAKE_IMMU = getHealth();
         
-        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
+        animationTimer = new DTimer(0.2, e -> updateFrame(0.25));
         animationTimer.start();
     }
 
@@ -49,7 +48,7 @@ public class Candles6 extends Unit {
 
     @Override
     public void attack(List<Bullet> bullets) {
-        bullets.add(new BeamCleanRow(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, row));
+        bullets.add(new BeamCleanRow(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, row, col));
     }
     
     public void check_health() {
@@ -73,12 +72,13 @@ public class Candles6 extends Unit {
     public void updateFrame(double x) {
         check_health();
         if (isActivating){
-            currentFrame = (currentFrame + 1) % total_Frame_ATK;
             if (currentFrame == total_Frame_ATK - 1) {
                 attack(GamePanel.getBullets());
                 System.out.println("Kaboom");
                 animationTimer.stop();
                 setHealth(0);
+            } else {
+                currentFrame = (currentFrame + 1) % total_Frame_ATK;
             }
         }
         else {
@@ -86,4 +86,7 @@ public class Candles6 extends Unit {
         }
     }
     
+    public static UnitStats getUNIT_STATS() {
+        return UnitConfig.CANDLES6_STATS;
+    }
 }
