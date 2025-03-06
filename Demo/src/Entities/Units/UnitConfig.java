@@ -20,6 +20,7 @@ public interface UnitConfig {
     UnitSpriteSheets SLIME_SPRITE = new UnitSpriteSheets("Slime_re", "SlimeGenerate");
     UnitSpriteSheets VINEWAL_SPRITE = new UnitSpriteSheets("kaniwall", "kaniwall_crack", "kaniwall_cracker");
     UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic", "Mimic");
+    //UnitSpriteSheets EXPLOSTION_SPRITE = new UnitSpriteSheets();
     UnitSpriteSheets CANDLES6_SPRITE = new UnitSpriteSheets("Candles6", "Candles6_activate2");
     
     
@@ -28,7 +29,9 @@ public interface UnitConfig {
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 100, 10, 1500, 100, 5, UnitConfig.ATTACKER);
     UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 50, 0, 0, 50, 5, UnitConfig.COST_GEN);
     UnitStats VINEWALL_STATS = new UnitStats(VINEWAL_SPRITE, 4000, 0, 0, 50, 30, UnitConfig.DEFENDER);
-    UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 50, 999, 50, 500, 500, UnitConfig.GUARD);
+    ///BETA///
+    UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 100, 999, 50, 250, 20, UnitConfig.GUARD);
+    //UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSTION_SPRITE, 50, 999, 50, 50, 30, UnitConfig.EXPLOTION);
     // Too OP
     UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 10000, 0, 0, 200, 1000, UnitConfig.EXPLOTION);
 }

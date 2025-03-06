@@ -15,7 +15,7 @@ public class Ninja extends Enemy {
         super(x, row, 80, 0.25);
         actionIdle = ImgManager.loadSprite("Ninja");
         actionATK = ImgManager.loadSprite("NinjaATK");
-        actionDead = ImgManager.loadSprite("NinjaDie");
+        //actionDead = ImgManager.loadSprite("NinjaDie");
         animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
         animationTimer.start();
     }
