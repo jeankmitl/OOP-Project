@@ -10,15 +10,14 @@ import java.awt.image.BufferedImage;
 public class Sorcerer extends Enemy {
     
     public Sorcerer(double x, int row) {
-        super(x, row, 80, 0.25);
-        actionIdle = ImgManager.loadSprite("Sorcerer");
+        super(x, row, getENEMY_STATS());
         animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
         animationTimer.start();
     }
 
     @Override
     public void attack(Unit unit) {
-        unit.takeDamage(40);
+        super.attack(unit);
     }
 
     @Override
@@ -34,5 +33,9 @@ public class Sorcerer extends Enemy {
     @Override
     public void updateFrame(double x) {
         super.updateFrame(x);
+    }
+
+    public static EnemyStats getENEMY_STATS() {
+        return EnemyConfig.SORCERER_STATS;
     }
 }

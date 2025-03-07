@@ -3,60 +3,51 @@ package Entities.Enemies;
 import Main.GamePanel;
 import Entities.Units.Unit;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import DSystem.DTimer;
+import DSystem.DWait;
+import Entities.Entity;
+import java.awt.image.BufferedImage;
 
-public abstract class Enemy {
+public abstract class Enemy extends Entity {
 
-    //Stats
-    protected int health;
-    protected int atk;
-    protected double atkSpeed;
+    // Stats
     protected double speed;
+    
+    // Animation
+    protected int total_Frame = 4;
     
     protected double x;
     protected int row; // Position on the grid
     protected long lastAttackTime = 0;
     protected int ATTACK_COOLDOWN;
-    protected String Status = "idle";
     protected DTimer animationTimer;
     
-    protected BufferedImage actionIdle, actionATK, actionDead;
-    protected int currentFrame = 0;
-    protected int total_Frame = 4;
-    protected int frame_Width = 32, frame_Hight = 32;
-
-    public abstract Rectangle getBounds();
-    public abstract void attack(Unit unit);
-
-    public Enemy(double x, int row, int health, double speed) {
-        this.x = x;
-        this.row = row;
-        this.health = health;
-        this.speed = speed;
-    }
+    public final EnemyStats ENEMY_STATS = null;
     
+
     public Enemy(double x, int row, EnemyStats enemyStats) {
+        super(enemyStats);
         this.x = x;
         this.row = row;
-        this.health = enemyStats.getHealth();
+        this.speed = enemyStats.getWalkSpeed();
+    }
+   
+    public Rectangle getBounds() {
+        return new Rectangle((int) x + GamePanel.GRID_OFFSET_X, row * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
     
-
-    public int getHealth() {
-        return this.health;
-    }
-
+    public void attack(Unit unit) {
+        this.currentFrame = 0;
+        setStatus("ATK");
+        unit.takeDamage(atk);
+        new DWait(0.8, (e) -> {
+            this.currentFrame = 0;
+            setStatus("idle");
+        }).start();
+    } 
+    
     public void move() {
         x -= speed;
-    }
-
-    public void takeDamage(int damage) {
-        health -= damage;
-    }
-
-    public boolean isDead() {
-        return health <= 0;
     }
 
     public int getX() {
@@ -82,27 +73,12 @@ public abstract class Enemy {
     public int getAttackCooldown() {
         return ATTACK_COOLDOWN;
     }
-
-    public BufferedImage getBufferedImage() { //2 Sprite Sheet
-        if (this.Status.equals("idle")){
-            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
-        else {
-            return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
-        }
-    }
-
-    public void updateFrame() {
-        currentFrame = (currentFrame + 1) % total_Frame;
-    }
-    
-    public void updateFrame(double Dtime){ //2 Sprite Sheet
-        if (this.Status.equals("idle")){
-                currentFrame = (currentFrame + 1) % total_Frame;
-        }
-        else {
-            currentFrame = (currentFrame + 1) % total_Frame;
-        }
-    }
     
     public void ability(){}
+    
+    public static EnemyStats getENEMY_STATS() throws NoSuchMethodException {
+        System.out.println("no implements");
+        throw new NoSuchMethodException("Make sure to return their unit STATS");
+    }
+    
 }

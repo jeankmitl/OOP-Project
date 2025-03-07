@@ -1,24 +1,19 @@
 package Main;
 
-import Entities.Enemies.Bandit;
-import Entities.Enemies.Enemy;
-import Entities.Enemies.Ninja;
-import Entities.Enemies.Sorcerer;
-import Entities.Units.Candles6;
+import Entities.Enemies.*;
+import Entities.Units.*;
 import Entities.Bullets.BeamCleanRow;
 import Entities.Bullets.Bullet;
 import Entities.Bullets.Bone;
-import Entities.Units.Skeleton;
-import Entities.Units.Slime;
-import Entities.Units.Unit;
-import Entities.Units.StoneCrab;
 import Asset.VFX;
 import DSystem.DWait;
 import Asset.Audio;
 import DSystem.*;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Entities.Enemies.LittleRedHood;
 import Entities.UnitFactory;
+import Entities.Units.Explosion;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -51,7 +46,7 @@ public class GamePanel extends JPanel {
     // </editor-fold>
 
     public final int OTHER_THREAD;
-    public static int remainMana = 0; // for test only, normal is 0
+    public static int remainMana = 50;
     public static final int MAX_MANA = 9999;
     public int wight = 0; //test mana
     
@@ -62,7 +57,8 @@ public class GamePanel extends JPanel {
     
     
     private final Random random = new Random();
-    private static final Set<Class<? extends Unit>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(Skeleton.class, Slime.class, StoneCrab.class, Candles6.class));
+    private static final Set<Class<? extends Unit>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
+            Skeleton.class, Slime.class, Kaniwall.class, Candles6.class));
     
     private final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
 
@@ -123,13 +119,7 @@ public class GamePanel extends JPanel {
     
     private void runDebugMode() {
         remainMana = 500;
-        
-        int randomBandit = random.nextInt(5);
-        int randomNinja = random.nextInt(5);
-        int randomSorcerer = random.nextInt(5);
-        enemies.add(new Bandit(1280-GRID_OFFSET_X, randomBandit));
-        enemies.add(new Ninja(1280-GRID_OFFSET_X, randomNinja));
-        enemies.add(new Sorcerer(1280-GRID_OFFSET_X, randomSorcerer));
+        summonEnemies();
     }
     // </editor-fold>
     
@@ -147,7 +137,7 @@ public class GamePanel extends JPanel {
         }
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
-        unitTypes.add(new UnitType(StoneCrab.class));
+        unitTypes.add(new UnitType(Kaniwall.class));
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
         }
@@ -166,12 +156,7 @@ public class GamePanel extends JPanel {
         
         // spawn: enemies every 10s ➕
         if (spawnEnemiesTimer10.tick(deltaTime)) {
-            int randomBandit = random.nextInt(5);
-            int randomNinja = random.nextInt(5);
-            int randomSorcerer = random.nextInt(5);
-            enemies.add(new Bandit(1280-GRID_OFFSET_X, randomBandit));
-            enemies.add(new Ninja(1280-GRID_OFFSET_X, randomNinja));
-            enemies.add(new Sorcerer(1280-GRID_OFFSET_X, randomSorcerer));
+            summonEnemies();
         }
         
         // update: animation every 2s
@@ -213,6 +198,16 @@ public class GamePanel extends JPanel {
         return true;
     }
     
+    private void summonEnemies() {
+        int randomBandit = random.nextInt(5);
+        int randomNinja = random.nextInt(5);
+        int randomSorcerer = random.nextInt(5);
+        int randomLRH = random.nextInt(5);
+        enemies.add(new Bandit(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomBandit));
+        enemies.add(new Ninja(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomNinja));
+        enemies.add(new Sorcerer(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomSorcerer));
+        enemies.add(new LittleRedHood(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomLRH));
+    }
     
     public static List<Enemy> getEnemies() {
         return enemies;
@@ -380,27 +375,44 @@ public class GamePanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        for (Unit unit : units) {
+        g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+        g.setColor(Color.white);
+        
+        for (int i=0; i<units.size(); i++) {
+            Unit unit = units.get(i);
             BufferedImage img = unit.getBufferedImage();
             g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            if (mouseX >= unit.getX() + GRID_OFFSET_X && mouseX <= unit.getX() + GRID_OFFSET_X + CELL_WIDTH
+                    && mouseY >= unit.getY() + GRID_OFFSET_Y && mouseY <= unit.getY() + GRID_OFFSET_Y + CELL_HEIGHT) {
+                g.drawString(unit.getHealth() + "", unit.getX() + GRID_OFFSET_X + CELL_WIDTH / 2, unit.getY() + GRID_OFFSET_Y);
+            }
         }
 
-        for (Enemy enemy : enemies) {
+        for (int i=0; i<enemies.size(); i++) {
+            Enemy enemy = enemies.get(i);
             BufferedImage img = enemy.getBufferedImage();
             g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            if (mouseX >= enemy.getX() + GRID_OFFSET_X && mouseX <= enemy.getX() + GRID_OFFSET_X + CELL_WIDTH
+                    && mouseY >= enemy.getY() + GRID_OFFSET_Y && mouseY <= enemy.getY() + GRID_OFFSET_Y + CELL_HEIGHT) {
+                g.drawString(enemy.getHealth() + "", enemy.getX() + GRID_OFFSET_X + CELL_WIDTH / 2, enemy.getY() + GRID_OFFSET_Y);
+            }
         }
 
-        for (Bullet bullet : bullets) {
+        
+        for (int i=0; i<bullets.size(); i++) {
+            Bullet bullet = bullets.get(i);
             if (bullet instanceof Bone) {
                 BufferedImage img = ((Bone) bullet).getBufferedImage();
                 g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, 64, 64, null);
             }
         }
         
-        vfxs.forEach((vfx) -> {
+        for (int i=0; i<vfxs.size(); i++) {
+            VFX vfx = vfxs.get(i);
             BufferedImage img = vfx.getBufferedImage();
             g.drawImage(img, vfx.getX(), vfx.getY(), vfx.getWidth(), vfx.getHeight(), null);
-        });
+        }
+
 
         ///
         g.setColor(new Color(0, 0, 0, 150));
@@ -564,6 +576,7 @@ public class GamePanel extends JPanel {
             public void mouseMoved(MouseEvent e) {
                 mouseX = e.getX();
                 mouseY = e.getY();
+//                System.out.println(mouseX + "x" + mouseY);
             }
 
             @Override

@@ -16,7 +16,7 @@ public class EnemyStats extends EntityStats {
     private int role;
 
     public EnemyStats(EnemySpriteSheets enemySp, int health, int atk, double atkSpeed, double walkSpeed, int role) {
-        super(health, atk, atkSpeed, role);
+        super(enemySp, health, atk, atkSpeed, role);
         this.enemySp = enemySp;
         this.walkSpeed = walkSpeed;
     }

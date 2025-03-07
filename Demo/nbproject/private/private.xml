@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2">
         <file>
             <url>src/Entities/Units/Skeleton.java</url>
             <bookmark id="1">
@@ -9,8 +9,20 @@
                 <key/>
             </bookmark>
         </file>
+        <file>
+            <url>src/Entities/Enemies/Bandit.java</url>
+            <bookmark id="2">
+                <name/>
+                <line>28</line>
+                <key/>
+            </bookmark>
+        </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Entities/Units/UnitConfig.java</file>
+            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Main/GamePanel.java</file>
+            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Entities/Enemies/EnemyConfig.java</file>
+        </group>
     </open-files>
 </project-private>

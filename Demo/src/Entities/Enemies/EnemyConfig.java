@@ -14,7 +14,7 @@ public interface EnemyConfig {
     
     // All sprite sheet ️🎥
     EnemySpriteSheets NINJA_SPRITE = new EnemySpriteSheets("Ninja", "NinjaATK");
-    EnemySpriteSheets BANDIT_SPRITE = new EnemySpriteSheets("Bandit", null);
+    EnemySpriteSheets BANDIT_SPRITE = new EnemySpriteSheets("Bandit", "Bandit");
     EnemySpriteSheets SORCERER_SPRITE = new EnemySpriteSheets("Sorcerer", "SorcererATK");
     EnemySpriteSheets LITTLE_RED_HOOD_SPRITE = new EnemySpriteSheets("little_Red_Hood_Idle", "little_Red_Hood_ATK");
     
@@ -22,5 +22,5 @@ public interface EnemyConfig {
     EnemyStats NINJA_STATS = new EnemyStats(NINJA_SPRITE, 80, 20, 1, 0.25, NORMAL);
     EnemyStats BANDIT_STATS = new EnemyStats(BANDIT_SPRITE, 100, 20, 1, 0.25, LONG_RANGE);
     EnemyStats SORCERER_STATS = new EnemyStats(SORCERER_SPRITE, 80, 40, 1, 0.25, NORMAL);
-    EnemyStats LITTLE_RED_HOOD_STATS = new EnemyStats(LITTLE_RED_HOOD_SPRITE, 70, 20, 0.5, NORMAL, NORMAL);
+    EnemyStats LITTLE_RED_HOOD_STATS = new EnemyStats(LITTLE_RED_HOOD_SPRITE, 50, 10, 0.5, 0.3, NORMAL);
 }

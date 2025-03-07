@@ -6,8 +6,8 @@ package Entities.Enemies;
 
 /**
  *
- * @author USER
+ * @author anawi
  */
-public class Little_Red_Hood {
+public class Support {
     
 }

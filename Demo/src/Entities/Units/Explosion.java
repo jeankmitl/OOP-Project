@@ -16,15 +16,16 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Explosion {
+public class Explosion extends Candles6 {
     
     private DWait reload_spell; //call when place to set stage to ready to explosion 1 time use
     private DTimer explosion; // call when enermy hit
 
     public Explosion(int row, int col) {
-        //super(row, col, getUNIT_STATS());
+        super(row, col);
     }
 
-    
-    
+    public static UnitStats getUNIT_STATS() {
+        return UnitConfig.EXPLOSION_STATS;
+    }
 }

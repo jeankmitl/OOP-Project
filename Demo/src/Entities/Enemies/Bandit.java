@@ -10,30 +10,22 @@ import java.awt.image.BufferedImage;
 public class Bandit extends Enemy {
 
     public Bandit(double x, int row) {
-        super(x, row, 100, 0.25);
-        actionIdle = ImgManager.loadSprite("Bandit");
+        super(x, row, getENEMY_STATS());
         animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
         animationTimer.start();
     }
 
     @Override
     public void attack(Unit unit) {
-        unit.takeDamage(20);
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return new Rectangle((int) x + GamePanel.GRID_OFFSET_X, row * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_Y,
-                GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
-    }
-
-    @Override
-    public BufferedImage getBufferedImage() {
-        return super.getBufferedImage();
+        super.attack(unit);
     }
 
     @Override
     public void updateFrame(double x) {
         super.updateFrame(x);
+    }
+
+    public static EnemyStats getENEMY_STATS() {
+        return EnemyConfig.BANDIT_STATS;
     }
 }

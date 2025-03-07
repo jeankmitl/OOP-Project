@@ -4,65 +4,31 @@ import Main.GamePanel;
 import Entities.Enemies.Enemy;
 import Entities.Bullets.Bullet;
 import DSystem.DTimer;
+import Entities.Entity;
 import java.awt.Rectangle;
 import java.util.List;
 import java.awt.image.BufferedImage;
 
-public abstract class Unit {
+public abstract class Unit extends Entity {
 
     //Stats
-    protected int health;
-    protected int atk;
-    protected double atkSpeed;
     protected int cost;
     protected double cooldown;
-    protected int role;
     
     protected int row, col;
     
-    protected BufferedImage actionIdle, actionATK, actiondead;
-    protected int currentFrame = 0;
-    protected int total_Frame_Idle = 4;
-    protected int total_Frame_ATK = 8;
-    protected int frame_Width = 32, frame_Hight = 32;
-    protected String Status = "idle";
     protected DTimer animationTimer;
     
-    public static final UnitStats UNIT_STATS = null;
+    public final UnitStats UNIT_STATS = null;
     
-    public abstract boolean isEnemyInfront(List<Enemy> enermies);
     public abstract void attack(List<Bullet> bullets);
-    public abstract Rectangle getBounds();
     
     public Unit(int row, int col, UnitStats unitStats) {
+        super(unitStats);
         this.row = row;
         this.col = col;
-        this.health = unitStats.getHealth();
-        this.atk = unitStats.getAtk();
-        this.atkSpeed = unitStats.getAtkSpeed();
         this.cost = unitStats.getCost();
         this.cooldown = unitStats.getCooldown();
-        this.role = unitStats.getRole();
-        
-        this.actionIdle = unitStats.getUnitSp().getActionIdle();
-        this.actionATK = unitStats.getUnitSp().getActionAtk();
-        this.actiondead = unitStats.getUnitSp().getActionDead();
-    }
-    
-    public void takeDamage(int damage) {
-        health -= damage;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-    
-    public int getHealth() {
-        return health;
-    }
-
-    public boolean isDead() {
-        return health <= 0;
     }
 
     public int getX() {
@@ -81,47 +47,12 @@ public abstract class Unit {
         return col;
     }
     
-    
-    public BufferedImage getBufferedImage() { // 2 Sprite Sheet
-        if (this.Status.equals("idle")){
-            return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
-        else {
-            return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
-        }
+    public Rectangle getBounds() {
+        return new Rectangle(col * GamePanel.CELL_WIDTH + GamePanel.GRID_OFFSET_X, row * GamePanel.CELL_HEIGHT + GamePanel.GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT);
     }
     
-//    public static BufferedImage getUnitIcon() {
-//        
-//        return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
-//    }
-    
-    public void updateFrame() {
-        currentFrame = (currentFrame + 1) % total_Frame_Idle;
-    }
-    
-    public void updateFrame(double Dtime){ // 2 Sprite Sheet
-        if (this.Status.equals("idle")){
-                currentFrame = (currentFrame + 1) % total_Frame_Idle;
-        }
-        else {
-            currentFrame = (currentFrame + 1) % total_Frame_ATK;
-        }
-    }
-    
-    public int getTotal_Frame_Idle() {
-        return total_Frame_Idle;
-    }
-
-    public void setTotal_Frame_Idle(int total_Frame_Idle) {
-        this.total_Frame_Idle = total_Frame_Idle;
-    }
-
-    public int getTotal_Frame_ATK() {
-        return total_Frame_ATK;
-    }
-
-    public void setTotal_Frame_ATK(int total_Frame_ATK) {
-        this.total_Frame_ATK = total_Frame_ATK;
+    public boolean isEnemyInfront(List<Enemy> enermies) {
+        return false;
     }
 
     public static UnitStats getUNIT_STATS() throws NoSuchMethodException {

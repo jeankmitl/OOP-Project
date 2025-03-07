@@ -42,13 +42,12 @@ public class Skeleton extends Unit {
     public boolean isEnemyInfront(List<Enemy> enermies) {
         for (Enemy enermy : enermies) {
             if (enermy.getRow() == this.getRow() && enermy.getX() > this.getX()) {
-                this.Status = "ATK";
-                this.currentFrame = 0;
+                setStatus(ATK_STATUS);
                 return true;
             }
         }
-        this.Status = "idle";
-        this.currentFrame = 0;
+        System.out.println("sf");
+        setStatus(IDLE_STATUS);
         return false;
     }
 
