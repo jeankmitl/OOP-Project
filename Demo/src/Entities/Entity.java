@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 public abstract class Entity {
     //Status
     protected int health;
-    protected int atk;
+    static protected int atk;
     protected double atkSpeed;
     protected int role;
     
@@ -32,7 +32,7 @@ public abstract class Entity {
 
     public Entity(EntityStats entityStats) {
         this.health = entityStats.getHealth();
-        this.atk = entityStats.getAtk();
+        Entity.atk = entityStats.getAtk();
         this.atkSpeed = entityStats.getAtkSpeed();
         this.role = entityStats.getRole();
         
@@ -89,6 +89,14 @@ public abstract class Entity {
         } else {
             currentFrame = (currentFrame + 1) % total_Frame_ATK;
         }
+    }
+
+    public static int getAtk() {
+        return atk;
+    }
+
+    public static void setAtk(int atk) {
+        Entity.atk = atk;
     }
     
     public int getTotal_Frame_Idle() {

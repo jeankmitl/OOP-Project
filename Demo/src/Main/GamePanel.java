@@ -11,6 +11,7 @@ import Asset.Audio;
 import DSystem.*;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Entities.Bullets.Beta_bullet;
 import Entities.Enemies.LittleRedHood;
 import Entities.UnitFactory;
 import Entities.Units.Explosion;
@@ -58,7 +59,7 @@ public class GamePanel extends JPanel {
     
     private final Random random = new Random();
     private static final Set<Class<? extends Unit>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
-            Skeleton.class, Slime.class, Kaniwall.class, Candles6.class));
+            Skeleton.class, Slime.class, Kaniwall.class, Candles6.class,Mimic.class));
     
     private final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
 
@@ -138,6 +139,7 @@ public class GamePanel extends JPanel {
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
+        unitTypes.add(new UnitType(Mimic.class)); //BETA unit
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
         }
@@ -311,7 +313,7 @@ public class GamePanel extends JPanel {
             if (bullet instanceof Bone) {
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
-                        enemy.takeDamage(10);
+                        enemy.takeDamage(Skeleton.getAtk());
                         getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
                         bulletIterator.remove();
                         Audio.play(AudioName.HIT);
@@ -325,12 +327,22 @@ public class GamePanel extends JPanel {
                 bulletIterator.remove();
                 for (Enemy enemy : enemies) {
                     if (enemy.getRow() == cleanRow) {
-                        enemy.takeDamage(999);
+                        enemy.takeDamage(Candles6.getAtk());
                     }
                 }
                 VFX vfx = new VFX((bcr.getCol() + 1) * CELL_WIDTH, bcr.getRow() * CELL_HEIGHT, "Beam2");
                 vfx.setWidth(1280);
                 getVfxs().add(vfx);
+            } else if(bullet instanceof Beta_bullet){ //Mimic Beta test
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        enemy.takeDamage(Mimic.getAtk());
+                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
+                        bulletIterator.remove();
+                        Audio.play(AudioName.HIT);
+                        break;
+                    }
+                }
             }
         }
 
