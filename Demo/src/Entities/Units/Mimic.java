@@ -3,12 +3,12 @@ package Entities.Units;
 import Main.GamePanel;
 import Entities.Enemies.Enemy;
 import Entities.Bullets.Bullet;
-import Entities.Bullets.Bone;
+//import Entities.Bullets.Bone;
 import Asset.Audio;
 import DSystem.DTimer;
 import Asset.AudioName;
 import DSystem.DWait;
-import DSystem.OWait;
+//import DSystem.OWait;
 import Entities.Bullets.Beta_bullet;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -37,7 +37,7 @@ public class Mimic extends Unit{
         attackTimer.start();
     }
     ///BETA/// tester //I think i goona rework sprite
-    public void chewing(){
+    public void cd_stage(){
         //setStatus("CHEWING"); //<- IDK
         crunchSpeed = new DWait(15,e->{
             crunch_avalible = true;
@@ -55,7 +55,7 @@ public class Mimic extends Unit{
             if (enermy.getRow() == this.getRow() && enermy.getX() < this.getX()+200 && crunch_avalible) {
                 setStatus(ATK_STATUS);
                 crunch_avalible = false;
-                chewing();
+                cd_stage();
                 return true;
             }
         }

@@ -19,10 +19,11 @@ public interface UnitConfig {
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
     UnitSpriteSheets SLIME_SPRITE = new UnitSpriteSheets("Slime_re", "SlimeGenerate");
     UnitSpriteSheets VINEWAL_SPRITE = new UnitSpriteSheets("kaniwall", "kaniwall_crack", "kaniwall_cracker");
-    UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic", "Mimic");
+    UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic", "Mimic"); //BETA
     UnitSpriteSheets CANDLES6_SPRITE = new UnitSpriteSheets("Candles6", "Candles6_activate2");
-    UnitSpriteSheets EXPLOSION_SPRITE = new UnitSpriteSheets("Explosion", "Explosion_atk");
+    UnitSpriteSheets EXPLOSION_SPRITE = new UnitSpriteSheets("Explosion", "Explosion_atk"); //BETA
     UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("Golem_idle", "Golem_idle");
+    UnitSpriteSheets CANNON_SPRITE = new UnitSpriteSheets("", "");
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 100, 20, 1.5, 100, 5, ATTACKER);
@@ -30,6 +31,7 @@ public interface UnitConfig {
     UnitStats VINEWALL_STATS = new UnitStats(VINEWAL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER);
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 50, 0, 0, 200, 60, COST_GEN);
     ///BETA///
+    UnitStats CANNON_STATS = new UnitStats(CANNON_SPRITE,200,500,60,250,20,ATTACKER);
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 100, 999, 60, 250, 20, GUARD);
     UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 75, 999, 50, 50, 30, UnitConfig.EXPLOTION);
     // Too OP
