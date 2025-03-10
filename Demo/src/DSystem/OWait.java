@@ -37,5 +37,8 @@ public class OWait {
     public void reset() {
         stop = false;
     }
-    
+
+    public double getElapsedTime() {
+        return elapsedTime;
+    }
 }

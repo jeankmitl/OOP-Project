@@ -4,6 +4,10 @@
  */
 package Entities;
 
+import DSystem.DTimer;
+import DSystem.OTimer;
+import DSystem.OWait;
+import Main.GamePanel;
 import java.awt.image.BufferedImage;
 
 /**
@@ -12,10 +16,15 @@ import java.awt.image.BufferedImage;
  */
 public abstract class Entity {
     //Status
+    protected final int maxHealth;
     protected int health;
     protected int atk;
     protected double atkSpeed;
     protected int role;
+    
+//    OWait attackWait  = new OWait(atkSpeed);
+//    protected boolean isReadyAttack = true;
+//    protected boolean isAlwaysAttack = false;
     
     //Animation
     protected int frame_Width = 32, frame_Hight = 32;
@@ -31,10 +40,11 @@ public abstract class Entity {
     public static final String DEAD_STATUS = "dead";
 
     public Entity(EntityStats entityStats) {
-        this.health = entityStats.getHealth();
-        this.atk = entityStats.getAtk();
-        this.atkSpeed = entityStats.getAtkSpeed();
-        this.role = entityStats.getRole();
+        maxHealth = entityStats.getHealth();
+        health = maxHealth;
+        atk = entityStats.getAtk();
+        atkSpeed = entityStats.getAtkSpeed();
+        role = entityStats.getRole();
         
         actionIdle = entityStats.getEntitySp().getActionIdle();
         actionATK = entityStats.getEntitySp().getActionAtk();
@@ -49,6 +59,10 @@ public abstract class Entity {
     public void takeDamage(int damage) {
         health -= damage;
     }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
     
     public int getHealth() {
         return health;
@@ -58,6 +72,38 @@ public abstract class Entity {
         this.health = health;
     }
 
+    public int getAtk() {
+        return atk;
+    }
+    
+    public void setAtk(int atk) {
+        this.atk = atk;
+    }
+
+//    public void runAtk() {
+//        if (isReadyAttack) {
+//            isReadyAttack = false;
+//            attackWait.reset();
+//            attack();
+//        }
+//    }
+//    
+//    public void attack() {
+//        
+//    }
+    
+    public double getAtkSpeed() {
+        return atkSpeed;
+    }
+
+    public void setAtkSpeed(double atkSpeed) {
+        this.atkSpeed = atkSpeed;
+    }
+    
+    public void setRole(int role) {
+        this.role = role;
+    }
+
     public boolean isDead() {
         return health <= 0;
     }
@@ -65,9 +111,18 @@ public abstract class Entity {
     public String getStatus() {
         return status;
     }
+    
+    public abstract int getX();
+    public abstract int getY();
 
     public void setStatus(String status) {
-        currentFrame = 0;
+        setStatus(status, true);
+    }
+    
+    public void setStatus(String status, boolean isReframe) {
+        if (isReframe) {
+            currentFrame = 0;
+        }
         this.status = status;
     }
     
@@ -80,15 +135,21 @@ public abstract class Entity {
     }
     
     public void updateFrame() {
-        currentFrame = (currentFrame + 1) % total_Frame_Idle;
+        if (status.equals("idle")){
+                    currentFrame = (currentFrame + 1) % total_Frame_Idle;
+            } else {
+                currentFrame = (currentFrame + 1) % total_Frame_ATK;
+        }
     }
     
-    public void updateFrame(double Dtime){ // 2 Sprite Sheet
-        if (status.equals("idle")){
-                currentFrame = (currentFrame + 1) % total_Frame_Idle;
-        } else {
-            currentFrame = (currentFrame + 1) % total_Frame_ATK;
-        }
+    public void updateFrame(double manualUpdateDelay){ // 2 Sprite Sheet
+//        new DTimer(manualUpdateDelay, e -> {
+            if (status.equals("idle")){
+                    currentFrame = (currentFrame + 1) % total_Frame_Idle;
+            } else {
+                currentFrame = (currentFrame + 1) % total_Frame_ATK;
+            }
+//        }).start();
     }
     
     public int getTotal_Frame_Idle() {
@@ -114,4 +175,5 @@ public abstract class Entity {
     public int getFrame_Hight() {
         return frame_Hight;
     }
+    
 }

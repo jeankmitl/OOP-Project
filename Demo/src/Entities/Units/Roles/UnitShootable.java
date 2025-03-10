@@ -11,6 +11,6 @@ import java.util.List;
  *
  * @author anawi
  */
-public interface Shootable {
+public interface UnitShootable {
     public void attack(List<Bullet> bullets);
 }

@@ -31,10 +31,12 @@ public abstract class Unit extends Entity {
         this.cooldown = unitStats.getCooldown();
     }
 
+    @Override
     public int getX() {
         return col * GamePanel.CELL_WIDTH;
     }
 
+    @Override
     public int getY() {
         return row * GamePanel.CELL_HEIGHT;
     }

@@ -1,30 +1,24 @@
 package Main;
 
-import Entities.Enemies.*;
-import Entities.Units.*;
-import Entities.Bullets.BeamCleanRow;
-import Entities.Bullets.Bullet;
-import Entities.Bullets.Bone;
-import Asset.VFX;
-import DSystem.DWait;
-import Asset.Audio;
-import DSystem.*;
-import Asset.AudioName;
-import Asset.ImgManager;
-import Entities.Enemies.LittleRedHood;
-import Entities.UnitFactory;
-import Entities.Units.Explosion;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
+import Entities.*;
+import Entities.Enemies.*;
+import Entities.Units.*;
+import Entities.Bullets.*;
+import DSystem.*;
+import Entities.Units.Roles.*;
+
+import Asset.VFX;
+import Asset.Audio;
+import Asset.AudioName;
+import Asset.ImgManager;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
-import javax.swing.*;
 
 public class GamePanel extends JPanel {
     
@@ -43,6 +37,8 @@ public class GamePanel extends JPanel {
     public static final int GRID_OFFSET_Y = 100; // Move grid down
     public static final int BAR_X = GRID_OFFSET_X, BAR_Y = CELL_HEIGHT * ROWS + GRID_OFFSET_Y + 11;
     public static final int SPAWN_POINT = 1000;
+    public static final String COMIC_SANS = "Comic Sans MS";
+    public static final double SPF = 1.0 / 60.0;
     // </editor-fold>
 
     public final int OTHER_THREAD;
@@ -57,9 +53,6 @@ public class GamePanel extends JPanel {
     
     
     private final Random random = new Random();
-    private static final Set<Class<? extends Unit>> unitDefaultBehaviorClasses = new HashSet<>(Arrays.asList(
-            Skeleton.class, Slime.class, Kaniwall.class, Candles6.class));
-    
     private final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
 
     
@@ -103,7 +96,6 @@ public class GamePanel extends JPanel {
         GameLoop.setLateListener((d) -> lateUpdate());
         gameLoop.start();
         
-        final double SPF = 1.0 / 60.0;
         new DTimer(SPF, e -> {
             fixedUpdate(SPF);
         }).start();
@@ -178,7 +170,7 @@ public class GamePanel extends JPanel {
         }
         
         updateCooldown(deltaTime);
-        updateLogic();
+        updateLogic(deltaTime);
     }
     
     // <editor-fold defaultstate="collapsed" desc="All Reuse method">
@@ -253,7 +245,7 @@ public class GamePanel extends JPanel {
         }
     }
     
-    public void updateLogic() {
+    public void updateLogic(double deltaTime) {
         /**
          * Update.
          * - enemies
@@ -273,17 +265,31 @@ public class GamePanel extends JPanel {
 
             boolean stop = false;
             for (Unit unit : units) {
-                if (unitDefaultBehaviorClasses.contains(unit.getClass())) {
-                    if (unit.getBounds().intersects(enemy.getBounds())) {
+                if (unit.getBounds().intersects(enemy.getBounds())) {
+                    if (unit instanceof UnitInvisible) {
+                        ((UnitInvisible)unit).insersectEnemy(enemy);
+                    } else {
                         stop = true;
                         long currentTime = System.currentTimeMillis();
                         if (currentTime - enemy.getLastAttackTime() >= 1000) {
+                            System.out.println("ATTAKC!");
                             enemy.attack(unit);
+                            if (unit.isDead()) {
+                                Audio.play(AudioName.KILL2);
+                                getVfxs().add(new VFX(unit.getX(), unit.getY(), "dead_ghost_vfx"));
+                            }
+                            if (unit instanceof UnitReflectable) {
+                                ((UnitReflectable)unit).reflectDamage(enemy);
+                            }
                             enemy.setLastAttackTime(currentTime);
                         }
-                        break;
                     }
-                }      
+                    break;
+                }
+//                unit.getAtkSpeed();
+//                if (unit instanceof UnitGeneratable) {
+//                    ((UnitGeneratable)unit).generateByAtkSpeed();
+//                }
             }
             
 
@@ -336,6 +342,25 @@ public class GamePanel extends JPanel {
 
         units.removeIf(Unit::isDead);
     }
+    
+    private void paintHealthBar(Graphics g, Entity et) {
+        if (et.getHealth() >= 9000) return;
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.setFont(new Font(COMIC_SANS, Font.BOLD, 15));
+        int barHeight = 15;
+        int x = et.getX() + GRID_OFFSET_X;
+        int y = et.getY() + GRID_OFFSET_Y;
+        g.setColor(Color.darkGray);
+        g.fillRect(x, y, CELL_WIDTH, barHeight);
+        g.setColor(new Color(0x80CBC4));
+        if (et instanceof Enemy) {
+            g.setColor(new Color(0xB03052));
+        }
+        g.fillRect(x, y, (int)(((double)et.getHealth()/et.getMaxHealth())*CELL_WIDTH), barHeight);
+        g.setColor(Color.white);
+        g.drawString(et.getHealth() + "", 
+                x + ((CELL_WIDTH - metrics.stringWidth(et.getHealth() + ""))/2), y + barHeight - 2);
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -375,26 +400,31 @@ public class GamePanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         g.setColor(Color.white);
+        g.setFont(new Font(COMIC_SANS, Font.BOLD, 20));
+        
+        // Units & hover to see Health
+        final int RENDER_X = GRID_OFFSET_X + CELL_WIDTH;
+        final int RENDER_Y = GRID_OFFSET_Y + CELL_HEIGHT;
         
         for (int i=0; i<units.size(); i++) {
             Unit unit = units.get(i);
             BufferedImage img = unit.getBufferedImage();
             g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            if (mouseX >= unit.getX() + GRID_OFFSET_X && mouseX <= unit.getX() + GRID_OFFSET_X + CELL_WIDTH
-                    && mouseY >= unit.getY() + GRID_OFFSET_Y && mouseY <= unit.getY() + GRID_OFFSET_Y + CELL_HEIGHT) {
-                g.drawString(unit.getHealth() + "", unit.getX() + GRID_OFFSET_X + CELL_WIDTH / 2, unit.getY() + GRID_OFFSET_Y);
+            if (mouseX >= unit.getX() + GRID_OFFSET_X && mouseX <= unit.getX() + RENDER_X
+                    && mouseY >= unit.getY() + GRID_OFFSET_Y && mouseY <= unit.getY() + RENDER_Y) {
+                paintHealthBar(g, unit);
             }
         }
 
+        // Enemies & hover to see Health
         for (int i=0; i<enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
             BufferedImage img = enemy.getBufferedImage();
             g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
-            if (mouseX >= enemy.getX() + GRID_OFFSET_X && mouseX <= enemy.getX() + GRID_OFFSET_X + CELL_WIDTH
-                    && mouseY >= enemy.getY() + GRID_OFFSET_Y && mouseY <= enemy.getY() + GRID_OFFSET_Y + CELL_HEIGHT) {
-                g.drawString(enemy.getHealth() + "", enemy.getX() + GRID_OFFSET_X + CELL_WIDTH / 2, enemy.getY() + GRID_OFFSET_Y);
+            if (mouseX >= enemy.getX() + GRID_OFFSET_X && mouseX <= enemy.getX() + RENDER_X
+                    && mouseY >= enemy.getY() + GRID_OFFSET_Y && mouseY <= enemy.getY() + RENDER_Y) {
+                paintHealthBar(g, enemy);
             }
         }
 
@@ -559,8 +589,6 @@ public class GamePanel extends JPanel {
                     while (unitIterator.hasNext()) {
                         Unit unit = unitIterator.next();
                         if (unit.getRow() == row && unit.getCol() == col) {
-                            if (unit instanceof Skeleton) ((Skeleton) unit).stopAttacking();
-                            if (unit instanceof Slime) ((Slime) unit).stopGeneratingCost();
                             unitIterator.remove();
                             getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
                             Audio.play(AudioName.PLANT_DELETE);

@@ -4,10 +4,13 @@
  */
 package Entities.Units.Roles;
 
+import Entities.Enemies.Enemy;
+
 /**
  *
  * @author anawi
  */
-public interface Defendable {
-    
+public interface UnitReflectable {
+    //call everytimes when Enemy attack
+    public void reflectDamage(Enemy enemy);
 }

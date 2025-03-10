@@ -3,6 +3,8 @@ import Main.GamePanel;
 import Entities.Enemies.Enemy;
 import Entities.Bullets.Bullet;
 import DSystem.DTimer;
+import Entities.Units.Roles.UnitInvisible;
+import Entities.Units.Roles.UnitReflectable;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -21,11 +23,11 @@ public class Kaniwall extends Unit {
     
     public void check_health(){
         if(this.health > 2667){
-            setStatus(IDLE_STATUS);
+            setStatus(IDLE_STATUS, false);
         }else if(this.health > 1333 && this.health <= 2667){
-            setStatus(ATK_STATUS);
+            setStatus(ATK_STATUS, false);
         }else{
-            setStatus(DEAD_STATUS);
+            setStatus(DEAD_STATUS, false);
         }
     }
     
@@ -45,11 +47,10 @@ public class Kaniwall extends Unit {
     @Override
     public void updateFrame(double x) {
         this.check_health();
-        currentFrame = (currentFrame + 1) % total_Frame_Idle;
+        super.updateFrame();
     }
 
     public static UnitStats getUNIT_STATS() {
-        return UnitConfig.VINEWALL_STATS;
+        return UnitConfig.KANIWALL_STATS;
     }
-    
 }

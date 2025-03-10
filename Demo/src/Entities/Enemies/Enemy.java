@@ -50,16 +50,26 @@ public abstract class Enemy extends Entity {
         x -= speed;
     }
 
+    @Override
     public int getX() {
         return (int) x;
     }
 
+    @Override
     public int getY() {
         return row * GamePanel.CELL_HEIGHT;
     }
 
     public int getRow() {
         return row;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     public void setLastAttackTime(long time) {

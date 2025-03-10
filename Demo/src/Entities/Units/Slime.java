@@ -16,8 +16,6 @@ public class Slime extends Unit {
     
     public Slime(int row, int col) {
         super(row, col, getUNIT_STATS());
-
-        super.setTotal_Frame_Idle(5);
         costGenerationTimer = new DTimer(15, e -> {
             if (isDead()) {
                 costGenerationTimer.stop();

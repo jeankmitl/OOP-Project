@@ -8,6 +8,6 @@ package Entities.Units.Roles;
  *
  * @author anawi
  */
-public interface Generatable {
+public interface GuardRole {
     
 }
