@@ -45,10 +45,24 @@ public class MainMenu extends JFrame {
                 if (start.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
                     System.out.println("Choose the stage you want");
-                    dispose();
-                    StageSelector stageSelector = new StageSelector();
-                    revalidate();
-                    repaint();
+
+                    LoadingScreen loadingScreen = new LoadingScreen();
+                    SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            Thread.sleep(1500);
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            System.out.println("Finished loading.");
+                            loadingScreen.dispose();
+                            dispose();
+                            new StageSelector();
+                        }
+                    };
+                    worker.execute();
                 } else if (dict.contains(e.getPoint())) {
                     Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     System.out.println("This feature hasn't been finished");

@@ -10,7 +10,8 @@ import javax.swing.*;
 public class StageSelector extends JFrame {
     private Rectangle st1, st2, st3, st4, st5, st6, st7, st8, st9, st10;
     private Image frame;
-    
+    private boolean isButtonHovered = false;
+  
     public StageSelector() {
         setTitle("Select stage");
         setSize(1280, 720);
@@ -41,15 +42,29 @@ public class StageSelector extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (st1.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
-                    getContentPane().removeAll();
-                    getContentPane().add(new GamePanel());
-                    System.out.println("Stage 1 selected!");
-                    setTitle("Stage 1");
-                    revalidate();
-                    repaint();
+                    LoadingScreen loadingScreen = new LoadingScreen();
+                    SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            Thread.sleep(1500);
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            System.out.println("Finished loading.");
+                            loadingScreen.dispose();
+                            getContentPane().removeAll();
+                            getContentPane().add(new GamePanel());
+                            System.out.println("Stage 1 selected!");
+                            setTitle("Stage 1");
+                        }
+                    };
+                    worker.execute();
                 }
                 if (st2.contains(e.getPoint())||st3.contains(e.getPoint())||st4.contains(e.getPoint())||st5.contains(e.getPoint())||
                         st6.contains(e.getPoint())||st7.contains(e.getPoint())||st8.contains(e.getPoint())||st9.contains(e.getPoint())||st10.contains(e.getPoint())){
+                    Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     System.out.println("Stage not yet finish.");
                 }
             }
@@ -70,8 +85,13 @@ public class StageSelector extends JFrame {
                     st10.contains(e.getPoint())) 
                 {
                     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    if (!isButtonHovered) {
+                        isButtonHovered = true;
+                        Audio.play(AudioName.BUTTON_HOVER);
+                    }
                 } else {
                     setCursor(Cursor.getDefaultCursor());
+                    isButtonHovered = false;
                 }
             }
         });
