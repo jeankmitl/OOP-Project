@@ -151,14 +151,6 @@ public abstract class Entity {
             }
 //        }).start();
     }
-
-    public static int getAtk() {
-        return atk;
-    }
-
-    public static void setAtk(int atk) {
-        Entity.atk = atk;
-    }
     
     public int getTotal_Frame_Idle() {
         return total_Frame_Idle;

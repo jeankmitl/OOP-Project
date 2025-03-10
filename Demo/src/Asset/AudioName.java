@@ -14,4 +14,6 @@ public interface AudioName {
     String MUSIC_ONE = "bolt battle test";
     String BEAM_CLEAN_ROW = "beam_clean_row";
     String CANDLE_ACTIVATE = "candle_activate";
+    String BUTTON_CLICK = "click_btn";
+    String BUTTON_HOVER = "hover_btn";
 }

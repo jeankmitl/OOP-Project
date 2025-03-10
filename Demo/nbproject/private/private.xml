@@ -20,11 +20,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Entities/Units/Unit.java</file>
-            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Entities/Entity.java</file>
-            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Entities/Enemies/Enemy.java</file>
+            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Asset/AudioName.java</file>
             <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Main/GamePanel.java</file>
-            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Entities/Units/Slime.java</file>
+            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Main/StageSelector.java</file>
+            <file>file:/D:/Users%20D/Code%20Stuffs/NetBeansProjects/OOP-Project/Demo/src/Main/MainMenu.java</file>
         </group>
     </open-files>
 </project-private>

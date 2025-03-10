@@ -59,7 +59,6 @@ public class Mimic extends Unit{
                 return true;
             }
         }
-        System.out.println("sf");
         setStatus(IDLE_STATUS);
         return false;
     }

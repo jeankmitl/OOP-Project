@@ -46,7 +46,6 @@ public class Skeleton extends Unit {
                 return true;
             }
         }
-        System.out.println("sf");
         setStatus(IDLE_STATUS);
         return false;
     }

@@ -1,5 +1,7 @@
 package Main;
 
+import Asset.Audio;
+import Asset.AudioName;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +13,7 @@ import java.io.IOException;
 public class MainMenu extends JFrame {
     private Rectangle start, dict, config, exit, menuBar, logo;
     private Image menu, title, background;
+    private boolean isButtonHovered = false;
 
     public MainMenu() {
         setTitle("Defense of the Dungeon");
@@ -40,16 +43,20 @@ public class MainMenu extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (start.contains(e.getPoint())) {
+                    Audio.play(AudioName.BUTTON_CLICK);
                     System.out.println("Choose the stage you want");
                     dispose();
                     StageSelector stageSelector = new StageSelector();
                     revalidate();
                     repaint();
                 } else if (dict.contains(e.getPoint())) {
+                    Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     System.out.println("This feature hasn't been finished");
                 } else if (config.contains(e.getPoint())) {
+                    Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     System.out.println("This feature hasn't been finished");
                 } else if (exit.contains(e.getPoint())) {
+                    Audio.play(AudioName.BUTTON_CLICK);
                     System.out.println("Bye Bye");
                     System.exit(0);
                 }
@@ -64,8 +71,13 @@ public class MainMenu extends JFrame {
                     config.contains(e.getPoint()) ||
                     exit.contains(e.getPoint())) {
                     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                    if (!isButtonHovered) {
+                        isButtonHovered = true;
+                        Audio.play(AudioName.BUTTON_HOVER);
+                    }
                 } else {
                     setCursor(Cursor.getDefaultCursor());
+                    isButtonHovered = false;
                 }
             }
         });

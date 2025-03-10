@@ -1,7 +1,5 @@
 package Main;
 
-<<<<<<< HEAD
-=======
 import Entities.Enemies.*;
 import Entities.Units.*;
 import Entities.Bullets.BeamCleanRow;
@@ -16,8 +14,6 @@ import Asset.ImgManager;
 import Entities.Bullets.Beta_bullet;
 import Entities.Enemies.LittleRedHood;
 import Entities.UnitFactory;
-import Entities.Units.Explosion;
->>>>>>> 2bc65a4882627863c98a33acb288e917868068ef
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -290,7 +286,6 @@ public class GamePanel extends JPanel {
                         stop = true;
                         long currentTime = System.currentTimeMillis();
                         if (currentTime - enemy.getLastAttackTime() >= 1000) {
-                            System.out.println("ATTAKC!");
                             enemy.attack(unit);
                             if (unit.isDead()) {
                                 Audio.play(AudioName.KILL2);
@@ -335,7 +330,7 @@ public class GamePanel extends JPanel {
             if (bullet instanceof Bone) {
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
-                        enemy.takeDamage(Skeleton.getAtk());
+                        enemy.takeDamage(Skeleton.getUNIT_STATS().getAtk());
                         getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
                         bulletIterator.remove();
                         Audio.play(AudioName.HIT);
@@ -349,7 +344,7 @@ public class GamePanel extends JPanel {
                 bulletIterator.remove();
                 for (Enemy enemy : enemies) {
                     if (enemy.getRow() == cleanRow) {
-                        enemy.takeDamage(Candles6.getAtk());
+                        enemy.takeDamage(Candles6.getUNIT_STATS().getAtk());
                     }
                 }
                 VFX vfx = new VFX((bcr.getCol() + 1) * CELL_WIDTH, bcr.getRow() * CELL_HEIGHT, "Beam2");
@@ -358,7 +353,7 @@ public class GamePanel extends JPanel {
             } else if(bullet instanceof Beta_bullet){ //Mimic Beta test
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
-                        enemy.takeDamage(Mimic.getAtk());
+                        enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
                         getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
                         bulletIterator.remove();
                         Audio.play(AudioName.HIT);

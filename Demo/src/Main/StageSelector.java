@@ -1,4 +1,6 @@
 package Main;
+import Asset.Audio;
+import Asset.AudioName;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -38,6 +40,7 @@ public class StageSelector extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (st1.contains(e.getPoint())) {
+                    Audio.play(AudioName.BUTTON_CLICK);
                     getContentPane().removeAll();
                     getContentPane().add(new GamePanel());
                     System.out.println("Stage 1 selected!");
