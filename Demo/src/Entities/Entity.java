@@ -18,7 +18,7 @@ public abstract class Entity {
     //Status
     protected final int maxHealth;
     protected int health;
-    protected int atk;
+    static protected int atk;
     protected double atkSpeed;
     protected int role;
     
@@ -150,6 +150,14 @@ public abstract class Entity {
                 currentFrame = (currentFrame + 1) % total_Frame_ATK;
             }
 //        }).start();
+    }
+
+    public static int getAtk() {
+        return atk;
+    }
+
+    public static void setAtk(int atk) {
+        Entity.atk = atk;
     }
     
     public int getTotal_Frame_Idle() {
