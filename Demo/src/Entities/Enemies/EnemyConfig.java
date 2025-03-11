@@ -19,8 +19,8 @@ public interface EnemyConfig {
     EnemySpriteSheets LITTLE_RED_HOOD_SPRITE = new EnemySpriteSheets("little_Red_Hood_Idle", "little_Red_Hood_ATK");
     
     // All Unit stats 💡
-    EnemyStats NINJA_STATS = new EnemyStats(NINJA_SPRITE, 80, 20, 1, 0.25, NORMAL);
-    EnemyStats BANDIT_STATS = new EnemyStats(BANDIT_SPRITE, 100, 20, 1, 0.25, LONG_RANGE);
-    EnemyStats SORCERER_STATS = new EnemyStats(SORCERER_SPRITE, 80, 40, 1, 0.25, NORMAL);
-    EnemyStats LITTLE_RED_HOOD_STATS = new EnemyStats(LITTLE_RED_HOOD_SPRITE, 50, 10, 0.5, 0.3, NORMAL);
+    EnemyStats NINJA_STATS = new EnemyStats(NINJA_SPRITE, 335, 100, 1, 0.11, NORMAL);
+    EnemyStats BANDIT_STATS = new EnemyStats(BANDIT_SPRITE, 181, 100, 1, 0.11, LONG_RANGE);
+    EnemyStats SORCERER_STATS = new EnemyStats(SORCERER_SPRITE, 181, 100, 1, 0.11, NORMAL);
+    EnemyStats LITTLE_RED_HOOD_STATS = new EnemyStats(LITTLE_RED_HOOD_SPRITE, 181, 150, 1, 0.11, NORMAL);
 }

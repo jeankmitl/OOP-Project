@@ -27,13 +27,13 @@ public interface UnitConfig {
     UnitSpriteSheets BIGBALL_SPRITE = new UnitSpriteSheets("bigball_idle", "bigball_shoot");
     
     // All Unit stats 💡
-    UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 100, 20, 1.5, 100, 5, ATTACKER);
-    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 50, 0, 5, 50, 5, COST_GEN);
+    UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER);
+    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 0, 25, 50, 7, COST_GEN);
     UnitStats KANIWALL_STATS = new UnitStats(KANIWALL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER);
     ///BETA///
     UnitStats CANNON_STATS = new UnitStats(CANNON_SPRITE,200,500,60,250,20,ATTACKER);
-    UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 100, 999, 60, 250, 20, GUARD);
-    UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 75, 999, 50, 50, 30, UnitConfig.EXPLOTION);
+    UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 999, 42, 150, 7, GUARD);
+    UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 300, 1800, 50, 50, 30, UnitConfig.EXPLOTION);
     //TEST ONLY//
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 50, 0, 5, 200, 60, COST_GEN);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 100, 10, 0.5, 150, 5, ATTACKER);
