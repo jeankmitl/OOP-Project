@@ -6,34 +6,24 @@ import Entities.Bullets.Bullet;
 import Asset.VFX;
 import DSystem.DWait;
 import DSystem.DTimer;
+import Entities.Units.Roles.UnitGeneratable;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Slime extends Unit {
+public class Slime extends Unit implements UnitGeneratable {
 
-    private DTimer costGenerationTimer;
-    
     public Slime(int row, int col) {
         super(row, col, getUNIT_STATS());
-        costGenerationTimer = new DTimer(15, e -> {
-            if (isDead()) {
-                costGenerationTimer.stop();
-                return;
-            }
-            generateCost();
-        });
-        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
-        costGenerationTimer.start();
-        animationTimer.start();
-    }
-    
-    public void stopGeneratingCost() {
-        costGenerationTimer.stop();
     }
 
+    public static UnitStats getUNIT_STATS() {
+        return UnitConfig.SLIME_STATS;
+    }
+    
     // Add 50 cost every 15 seconds
-    public void generateCost() {
+    @Override
+    public void generateByAtkSpeed() {
         setStatus(ATK_STATUS);
         GamePanel.remainMana += 50;
         if (GamePanel.remainMana > GamePanel.MAX_MANA) {
@@ -44,13 +34,7 @@ public class Slime extends Unit {
             GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
         }).start();
     }
-
+    
     @Override
     public void attack(List<Bullet> bullets) {}
-
-    public static UnitStats getUNIT_STATS() {
-        return UnitConfig.SLIME_STATS;
-    }
-    
-    
 }

@@ -12,20 +12,48 @@ import Asset.Audio;
 import DSystem.DTimer;
 import Asset.AudioName;
 import DSystem.DWait;
+import DSystem.OWait;
+import Entities.Bullets.BeamCleanRow;
+import Entities.Bullets.ExplosionBullet;
+import Entities.Units.Roles.UnitInvisible;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Explosion extends Candles6 {
+public class Explosion extends Unit implements UnitInvisible {
     
-    private DWait reload_spell; //call when place to set stage to ready to explosion 1 time use
-    private DTimer explosion; // call when enermy hit
+    private OWait waitBeforeActivate;
+    private boolean isActivating = false; 
 
     public Explosion(int row, int col) {
-        super(row, col);
+        super(row, col, getUNIT_STATS());
+        waitBeforeActivate = new OWait(1);
     }
 
     public static UnitStats getUNIT_STATS() {
         return UnitConfig.EXPLOSION_STATS;
     }
+    
+    @Override
+    public void attack(List<Bullet> bullets) {
+        System.out.println("attack");
+        bullets.add(new ExplosionBullet(col * GamePanel.CELL_WIDTH, row * GamePanel.CELL_HEIGHT + 30, row, col));
+    }
+
+    @Override
+    public void insersectEnemy(Enemy enemy) {
+        if (enemy.getX() > getX() - 10 && enemy.getX() + frame_Width < getX() + frame_Width + 10) {
+            if (waitBeforeActivate.tick(atkSpeed) && !isActivating) {
+                System.out.println("ACTIVATE!!!!!");
+                Audio.play(AudioName.CANDLE_ACTIVATE);
+                setStatus("ATK");
+                new DWait(1.5, e -> {
+                    attack(GamePanel.getBullets());
+                    setHealth(0);
+                }).start();
+            }
+        }
+    }
+
+    
 }

@@ -16,7 +16,7 @@ public class BeamCleanRow extends Bullet {
     private int col;
     
     public BeamCleanRow(int x, int y, int row, int col) {
-        super(x, y);
+        super(x, y, 0);
         this.row = row;
         this.col = col;
     }

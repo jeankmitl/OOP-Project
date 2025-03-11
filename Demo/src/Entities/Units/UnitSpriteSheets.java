@@ -16,6 +16,10 @@ public class UnitSpriteSheets extends Entities.EntitySpriteSheets {
     private BufferedImage allStatsIcons;
     private final int WH = 23;
 
+    public UnitSpriteSheets() {
+        super();
+    }
+    
     public UnitSpriteSheets(String idle, String atk) {
         this(idle, atk, null);
     }

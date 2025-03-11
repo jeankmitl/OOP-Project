@@ -67,17 +67,19 @@ public class GamePanel extends JPanel {
     
     
     private final Random random = new Random();
-    private final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
+    private static final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
     
     private boolean draggingRecall = false;
     private int mouseX, mouseY;
     
-    private OTimer manaRecoverTimer15 = new OTimer(15);
-    private OTimer spawnEnemiesTimer10 = new OTimer(10);
-    private OTimer animSpriteTimer2 = new OTimer(0.15);
-    private OTimer delayNidNoyTimer1 = new OTimer(0.1235);
+    private final OTimer manaRecoverTimer15 = new OTimer(15);
+    private final OTimer spawnEnemiesTimer10 = new OTimer(10);
+    private final OTimer delayNidNoyTimer1 = new OTimer(0.1235);
     
-    private OWait enemiesIsComingWait3 = new OWait(3);
+    private final OTimer slowAnimTimer = new OTimer(0.15);
+    private final OTimer mediumAnimTimer = new OTimer(0.25);
+    
+    private final OWait enemiesIsComingWait3 = new OWait(3);
     
     
     //same as: public awake()
@@ -88,11 +90,10 @@ public class GamePanel extends JPanel {
          * - set: BG image 🎨
          * - start: Game Loop 🔁
          */
-        System.out.println("Now implementing File Manager!");
         Audio.playMusic(AudioName.MUSIC_ONE);
 
         OTHER_THREAD = Thread.activeCount();
-        backgroundImage = ImgManager.loadBG("Stage1");
+        backgroundImage = ImgManager.loadBG("bg_dark_greek");
 
         units = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -144,6 +145,9 @@ public class GamePanel extends JPanel {
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
         unitTypes.add(new UnitType(Mimic.class)); //BETA unit
+        unitTypes.add(new UnitType(BigBall.class));
+        unitTypes.add(new UnitType(GolemSupport.class));
+        unitTypes.add(new UnitType(Explosion.class));
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
         }
@@ -166,9 +170,7 @@ public class GamePanel extends JPanel {
         }
         
         // update: animation every 2s
-        if (animSpriteTimer2.tick(deltaTime)) { 
-            updateAnimation();
-        }
+        updateAnimation(deltaTime);
         
         if (delayNidNoyTimer1.tick(deltaTime)) { // <-- fix time that
             if(wight< 116){
@@ -226,29 +228,37 @@ public class GamePanel extends JPanel {
     public static List<VFX> getVfxs() {
         return vfxs;
     }
+
+    public static List<UnitType> getUnitTypes() {
+        return unitTypes;
+    }
     // </editor-fold>
     
-    public void updateAnimation() {
+    public void updateAnimation(double deltaTime) {
         /**
          * - update: Frame ️🖼️
          *    - of units, enemies, bullets, vfxs
          */
-        /*for (Unit unit : units) {
-            unit.updateFrame();
+        if (mediumAnimTimer.tick(deltaTime)) {
+            for (Unit unit : units) {
+                unit.updateFrame();
+            }
+            for (Enemy enemy : enemies) {
+                enemy.updateFrame();
+            }
         }
-        for (Enemy enemy : enemies) {
-            enemy.updateFrame();
-        }*/
-        for (Bullet bullet : bullets) {
-            bullet.updateFrame();
-        }
-        Iterator<VFX> vfxIter = vfxs.iterator();
-        while (vfxIter.hasNext()) {
-            VFX vfx = vfxIter.next();
-            if (!vfx.isFinishUpdate()) {
-                vfx.updateFrameVFXOnce();
-            } else {
-                vfxIter.remove();
+        if (slowAnimTimer.tick(deltaTime)) {
+            for (Bullet bullet : bullets) {
+                bullet.updateFrame();
+            }
+            Iterator<VFX> vfxIter = vfxs.iterator();
+            while (vfxIter.hasNext()) {
+                VFX vfx = vfxIter.next();
+                if (!vfx.isFinishUpdate()) {
+                    vfx.updateFrameVFXOnce();
+                } else {
+                    vfxIter.remove();
+                }
             }
         }
     }
@@ -327,17 +337,7 @@ public class GamePanel extends JPanel {
             Bullet bullet = bulletIterator.next();
             bullet.move();
 
-            if (bullet instanceof Bone) {
-                for (Enemy enemy : enemies) {
-                    if (bullet.getBounds().intersects(enemy.getBounds())) {
-                        enemy.takeDamage(Skeleton.getUNIT_STATS().getAtk());
-                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
-                        bulletIterator.remove();
-                        Audio.play(AudioName.HIT);
-                        break;
-                    }
-                }
-            } else if (bullet instanceof BeamCleanRow) {
+            if (bullet instanceof BeamCleanRow) {
                 BeamCleanRow bcr = (BeamCleanRow)bullet;
                 int cleanRow = bcr.getRow();
                 Audio.play(AudioName.BEAM_CLEAN_ROW);
@@ -350,7 +350,22 @@ public class GamePanel extends JPanel {
                 VFX vfx = new VFX((bcr.getCol() + 1) * CELL_WIDTH, bcr.getRow() * CELL_HEIGHT, "Beam2");
                 vfx.setWidth(1280);
                 getVfxs().add(vfx);
-            } else if(bullet instanceof Beta_bullet){ //Mimic Beta test
+            } else if (bullet instanceof ExplosionBullet) {
+                ExplosionBullet exp = (ExplosionBullet)bullet;
+                int cleanRow = exp.getRow();
+                Audio.play(AudioName.BEAM_CLEAN_ROW);
+                bulletIterator.remove();
+                for (Enemy enemy : enemies) {
+                        System.out.println(enemy.getX());
+                        System.out.println((exp.getCol() * CELL_WIDTH < enemy.getX()) + " / " + ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX()));
+                    if (enemy.getRow() == cleanRow && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
+                        System.out.println("hit");
+                        enemy.takeDamage(Candles6.getUNIT_STATS().getAtk());
+                    }
+                }
+                VFX vfx = new VFX(exp.getCol() * CELL_WIDTH, exp.getRow() * CELL_HEIGHT, "Beam2");
+                getVfxs().add(vfx);
+            } else if (bullet instanceof Beta_bullet) { //Mimic Beta test
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
                         enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
@@ -360,6 +375,16 @@ public class GamePanel extends JPanel {
                         break;
                     }
                 }
+            } else {
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        enemy.takeDamage(bullet.getAtk());
+                        getVfxs().add(bullet.getHitVfx());
+                        bulletIterator.remove();
+                        Audio.play(AudioName.HIT);
+                        break;
+                    }
+                }  
             }
         }
 
@@ -454,8 +479,8 @@ public class GamePanel extends JPanel {
         
         for (int i=0; i<bullets.size(); i++) {
             Bullet bullet = bullets.get(i);
-            if (bullet instanceof Bone) {
-                BufferedImage img = ((Bone) bullet).getBufferedImage();
+            BufferedImage img = bullet.getBufferedImage();
+            if (img != null) {
                 g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, 64, 64, null);
             }
         }
@@ -562,7 +587,7 @@ public class GamePanel extends JPanel {
                             if (remainMana >= unit.getManaCost()) {
                                 unit.setDragging(true);
                                 Audio.play(AudioName.PLANT_PICK_UP);
-                                System.out.println("Dragging: " + unit.getClassName() + "!");
+//                                System.out.println("Dragging: " + unit.getClassName() + "!");
                             } else {
                                 System.out.println("Not enough mana for " + unit.getClassName() + "!");
                                 Audio.play(AudioName.PLANT_CANT_PICK_UP);
@@ -647,4 +672,11 @@ public class GamePanel extends JPanel {
         });
 
     }
+    
+//    private class GameKeyboardListener extends KeyAdapter {
+//        @Override
+//        public void keyReleased(KeyEvent e) {
+//            super.keyReleased(e); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+//        }
+//    }
 }

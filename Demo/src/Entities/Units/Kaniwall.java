@@ -13,9 +13,6 @@ public class Kaniwall extends Unit {
     
     public Kaniwall(int row, int col) {
         super(row, col, getUNIT_STATS());
-
-        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
-        animationTimer.start();
     }
 
     @Override
@@ -45,7 +42,7 @@ public class Kaniwall extends Unit {
     }
     
     @Override
-    public void updateFrame(double x) {
+    public void updateFrame() {
         this.check_health();
         super.updateFrame();
     }

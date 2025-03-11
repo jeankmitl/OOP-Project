@@ -15,13 +15,6 @@ public class LittleRedHood extends Enemy {
     
     public LittleRedHood(double x, int row) {
         super(x, row, getENEMY_STATS());
-        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
-        animationTimer.start();
-    }
-
-    @Override
-    public void attack(Unit unit) {
-        super.attack(unit);
     }
 
     public static EnemyStats getENEMY_STATS() {

@@ -4,8 +4,15 @@
  */
 package Entities.Units;
 
+import Asset.VFX;
+import DSystem.DWait;
 import Entities.Bullets.Bullet;
 import Entities.Enemies.Enemy;
+import static Entities.Entity.ATK_STATUS;
+import static Entities.Entity.IDLE_STATUS;
+import Entities.Units.Roles.UnitGeneratable;
+import Main.GamePanel;
+import Main.UnitType;
 import java.awt.Rectangle;
 import java.util.List;
 
@@ -13,7 +20,7 @@ import java.util.List;
  *
  * @author anawi
  */
-public class GolemSupport extends Unit {
+public class GolemSupport extends Unit implements UnitGeneratable {
     public GolemSupport(int row, int col) {
         super(row, col, getUNIT_STATS());
     }
@@ -23,15 +30,14 @@ public class GolemSupport extends Unit {
     }
 
     @Override
-    public boolean isEnemyInfront(List<Enemy> enermies) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void attack(List<Bullet> bullets) {}
-
-    @Override
-    public Rectangle getBounds() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void generateByAtkSpeed() {
+        setStatus(ATK_STATUS);
+        for (UnitType unitType: GamePanel.getUnitTypes()) {
+            unitType.setCoolDownElapsed(unitType.getCoolDownElapsed() - 10);
+        }
+        new DWait(1.5, (e) -> {
+            setStatus(IDLE_STATUS);
+            GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
+        }).start();
     }
 }

@@ -7,6 +7,10 @@ package Entities;
 import DSystem.DTimer;
 import DSystem.OTimer;
 import DSystem.OWait;
+import Entities.Units.Roles.UnitGeneratable;
+import Entities.Units.Roles.UnitShootable;
+import Entities.Units.Skeleton;
+import Entities.Units.Slime;
 import Main.GamePanel;
 import java.awt.image.BufferedImage;
 
@@ -18,13 +22,12 @@ public abstract class Entity {
     //Status
     protected final int maxHealth;
     protected int health;
-    static protected int atk;
+    protected int atk;
     protected double atkSpeed;
     protected int role;
     
-//    OWait attackWait  = new OWait(atkSpeed);
-//    protected boolean isReadyAttack = true;
-//    protected boolean isAlwaysAttack = false;
+    protected OWait attackWait;
+    protected boolean isFirstAttack = true;
     
     //Animation
     protected int frame_Width = 32, frame_Hight = 32;
@@ -52,8 +55,8 @@ public abstract class Entity {
         
         total_Frame_Idle = actionIdle.getWidth() / frame_Width;
         total_Frame_ATK = actionATK.getWidth() / frame_Width;
-//        System.out.println(total_Frame_Idle);
-//        System.out.println(total_Frame_ATK);
+        
+        attackWait = new OWait(atkSpeed);
     }
     
     public void takeDamage(int damage) {
@@ -79,18 +82,6 @@ public abstract class Entity {
     public void setAtk(int atk) {
         this.atk = atk;
     }
-
-//    public void runAtk() {
-//        if (isReadyAttack) {
-//            isReadyAttack = false;
-//            attackWait.reset();
-//            attack();
-//        }
-//    }
-//    
-//    public void attack() {
-//        
-//    }
     
     public double getAtkSpeed() {
         return atkSpeed;
@@ -105,6 +96,11 @@ public abstract class Entity {
     }
 
     public boolean isDead() {
+        if (attackWait.isStop()) {
+            attackSystem();
+        } else {
+            attackWait.tick(GamePanel.SPF);
+        }
         return health <= 0;
     }
 
@@ -128,27 +124,33 @@ public abstract class Entity {
     
     public BufferedImage getBufferedImage() { //2 Sprite Sheet
         if (status.equals("idle")){
+            if (currentFrame * frame_Width > actionIdle.getWidth()) {
+                currentFrame = 0;
+            }
             return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
         else {
+            if (currentFrame * frame_Width > actionATK.getWidth()) {
+                currentFrame = 0;
+            }
             return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
         }
     }
     
     public void updateFrame() {
         if (status.equals("idle")){
-                    currentFrame = (currentFrame + 1) % total_Frame_Idle;
-            } else {
-                currentFrame = (currentFrame + 1) % total_Frame_ATK;
+            currentFrame = (currentFrame + 1) % total_Frame_Idle;
+        } else {
+            currentFrame = (currentFrame + 1) % total_Frame_ATK;
         }
     }
     
     public void updateFrame(double manualUpdateDelay){ // 2 Sprite Sheet
 //        new DTimer(manualUpdateDelay, e -> {
-            if (status.equals("idle")){
-                    currentFrame = (currentFrame + 1) % total_Frame_Idle;
-            } else {
-                currentFrame = (currentFrame + 1) % total_Frame_ATK;
-            }
+//            if (status.equals("idle")){
+//                    currentFrame = (currentFrame + 1) % total_Frame_Idle;
+//            } else {
+//                currentFrame = (currentFrame + 1) % total_Frame_ATK;
+//            }
 //        }).start();
     }
     
@@ -174,6 +176,10 @@ public abstract class Entity {
 
     public int getFrame_Hight() {
         return frame_Hight;
+    }
+    
+    public void attackSystem() {
+   
     }
     
 }

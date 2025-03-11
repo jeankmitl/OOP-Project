@@ -28,9 +28,6 @@ public class Candles6 extends Unit {
     public Candles6(int row, int col) {
         super(row, col, getUNIT_STATS());
         FAKE_IMMU = getHealth();
-        
-        animationTimer = new DTimer(0.2, e -> updateFrame(0.25));
-        animationTimer.start();
     }
 
     @Override
@@ -66,13 +63,12 @@ public class Candles6 extends Unit {
     }
 
     @Override
-    public void updateFrame(double x) {
+    public void updateFrame() {
         check_health();
         if (isActivating){
             if (currentFrame == total_Frame_ATK - 1) {
                 attack(GamePanel.getBullets());
                 System.out.println("Kaboom");
-                animationTimer.stop();
                 setHealth(0);
             } else {
                 currentFrame = (currentFrame + 1) % total_Frame_ATK;

@@ -62,6 +62,10 @@ public class UnitType {
         return unitStats.getCost();
     }
 
+    public void setCoolDownElapsed(double coolDownElapsed) {
+        this.coolDownElapsed = coolDownElapsed;
+    }
+    
     public double getCoolDownElapsed() {
         return coolDownElapsed;
     }

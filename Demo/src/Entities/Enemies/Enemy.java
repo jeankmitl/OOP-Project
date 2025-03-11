@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 public abstract class Enemy extends Entity {
 
     // Stats
+    protected final double defaultSpeed;
     protected double speed;
     
     // Animation
@@ -29,7 +30,8 @@ public abstract class Enemy extends Entity {
         super(enemyStats);
         this.x = x;
         this.row = row;
-        this.speed = enemyStats.getWalkSpeed();
+        this.defaultSpeed = enemyStats.getWalkSpeed();
+        this.speed = defaultSpeed;
     }
    
     public Rectangle getBounds() {
@@ -90,5 +92,7 @@ public abstract class Enemy extends Entity {
         System.out.println("no implements");
         throw new NoSuchMethodException("Make sure to return their unit STATS");
     }
+    
+    
     
 }

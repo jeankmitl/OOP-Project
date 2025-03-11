@@ -11,18 +11,6 @@ public class Bandit extends Enemy {
 
     public Bandit(double x, int row) {
         super(x, row, getENEMY_STATS());
-        animationTimer = new DTimer(0.25, e -> updateFrame(0.25));
-        animationTimer.start();
-    }
-
-    @Override
-    public void attack(Unit unit) {
-        super.attack(unit);
-    }
-
-    @Override
-    public void updateFrame(double x) {
-        super.updateFrame(x);
     }
 
     public static EnemyStats getENEMY_STATS() {

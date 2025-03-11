@@ -18,13 +18,17 @@ public class EntitySpriteSheets {
     private BufferedImage actionIdle;
     private BufferedImage actionAtk;
     private BufferedImage actionDead;
-     
+
+    public EntitySpriteSheets() {
+        this(null, null, null);
+    }
+        
     public EntitySpriteSheets(String idle, String atk, String dead) {
         this.idle = idle;
         this.atk = atk;
         this.dead = dead;
-        this.actionIdle = ImgManager.loadSprite(idle);
-        this.actionAtk = ImgManager.loadSprite(atk);
+        this.actionIdle = ImgManager.loadSprite(idle != null ? idle : "needIdle");
+        this.actionAtk = ImgManager.loadSprite(atk != null ? atk : "needAtk");
         if (dead != null) this.actionDead = ImgManager.loadSprite(dead);
     }
     

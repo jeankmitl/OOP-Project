@@ -5,6 +5,7 @@ import Entities.Enemies.Enemy;
 import Entities.Bullets.Bullet;
 import DSystem.DTimer;
 import Entities.Entity;
+import Entities.Units.Roles.*;
 import java.awt.Rectangle;
 import java.util.List;
 import java.awt.image.BufferedImage;
@@ -14,14 +15,13 @@ public abstract class Unit extends Entity {
     //Stats
     protected int cost;
     protected double cooldown;
-    
     protected int row, col;
-    
-    protected DTimer animationTimer;
     
     public final UnitStats UNIT_STATS = null;
     
-    public abstract void attack(List<Bullet> bullets);
+    public void attack(List<Bullet> bullets) {
+    
+    }
     
     public Unit(int row, int col, UnitStats unitStats) {
         super(unitStats);
@@ -54,10 +54,44 @@ public abstract class Unit extends Entity {
     }
     
     public boolean isEnemyInfront(List<Enemy> enermies) {
+        for (Enemy enermy : enermies) {
+            if (enermy.getRow() == this.getRow() && enermy.getX() > this.getX()) {
+                setStatus(ATK_STATUS);
+                return true;
+            }
+        }
+        setStatus(IDLE_STATUS, false);
         return false;
     }
 
     public static UnitStats getUNIT_STATS() throws NoSuchMethodException {
         throw new NoSuchMethodException("Make sure to return their unit STATS");
     }
+
+    @Override
+    public void attackSystem() {
+        if (this instanceof UnitGeneratable) {
+            ((UnitGeneratable)this).generateByAtkSpeed();
+            attackWait.reset();
+        } else if (this instanceof UnitShootable) {
+            if (this instanceof UnitChargeShootable) {
+                if (isEnemyInfront(GamePanel.getEnemies())) {
+                    if (!isFirstAttack) {
+                        ((UnitShootable)this).shoot(GamePanel.getBullets());
+                    }
+                    isFirstAttack = false;
+                    attackWait.reset();
+                } else {
+                    isFirstAttack = true;
+                }
+            } else {
+                if (isEnemyInfront(GamePanel.getEnemies())) {
+                    ((UnitShootable)this).shoot(GamePanel.getBullets());
+                    attackWait.reset();
+                }
+            }
+        }
+    }
+    
+   
 }

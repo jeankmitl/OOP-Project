@@ -13,7 +13,7 @@ import Asset.ImgManager;
 public class Beta_bullet extends Bullet{
 
     public Beta_bullet (int x ,int y) {
-        super(x, y);
+        super(x, y, 0);
         spriteSheet = ImgManager.loadSprite("BetaBullet");
     }
 
