@@ -5,6 +5,7 @@ import Entities.Units.Unit;
 import java.awt.Rectangle;
 import DSystem.DTimer;
 import DSystem.DWait;
+import DSystem.OTimer;
 import Entities.Entity;
 import java.awt.image.BufferedImage;
 
@@ -24,7 +25,9 @@ public abstract class Enemy extends Entity {
     protected DTimer animationTimer;
     
     public final EnemyStats ENEMY_STATS = null;
-    
+    protected boolean debuff_Chills = false; // Slow When Trigger
+    protected boolean debuff_Stun = false; // Stun When Trigger
+    protected boolean buff_rage = false; // Stun When Trigger
 
     public Enemy(double x, int row, EnemyStats enemyStats) {
         super(enemyStats);
@@ -87,6 +90,35 @@ public abstract class Enemy extends Entity {
     }
     
     public void ability(){}
+    
+    public void debuff_chill(){
+        if (!debuff_Chills){
+            System.out.println("Freeze");
+            this.debuff_Chills = true;
+            this.setSpeed(this.getSpeed()*0.25); //0.5 cheat
+            DWait debuff = new DWait(5, e->{ // 10 sec cheat
+                this.debuff_Chills = false;
+                this.setSpeed(this.getSpeed()*4);
+                System.out.println("Defrost");
+            });
+            debuff.start();
+        }
+    }
+    
+    public void debuff_stun(){
+        if (!debuff_Stun){
+            System.out.println("Stunned");
+            this.debuff_Stun = true;
+            double temp = this.getSpeed();
+            this.setSpeed(this.getSpeed()*0); //0.5 cheat
+            DWait debuff = new DWait(5, e->{ // 10 sec cheat
+                this.debuff_Stun = false;
+                this.setSpeed(temp);
+                System.out.println("No longer Stunned");
+            });
+            debuff.start();
+        }
+    }
     
     public static EnemyStats getENEMY_STATS() throws NoSuchMethodException {
         System.out.println("no implements");

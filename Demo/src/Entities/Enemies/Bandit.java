@@ -15,5 +15,5 @@ public class Bandit extends Enemy {
 
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.BANDIT_STATS;
-    }
+    }  
 }
