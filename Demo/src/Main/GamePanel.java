@@ -381,6 +381,7 @@ public class GamePanel extends JPanel {
             } else {
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
+//                        enemy.debuff_stun();
                         enemy.takeDamage(bullet.getAtk());
                         getVfxs().add(bullet.getHitVfx());
                         bulletIterator.remove();

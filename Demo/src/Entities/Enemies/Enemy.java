@@ -8,6 +8,7 @@ import DSystem.DWait;
 import DSystem.OTimer;
 import Entities.Entity;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public abstract class Enemy extends Entity {
 
@@ -106,18 +107,21 @@ public abstract class Enemy extends Entity {
     }
     
     public void debuff_stun(){
-        if (!debuff_Stun){
-            System.out.println("Stunned");
-            this.debuff_Stun = true;
-            double temp = this.getSpeed();
-            this.setSpeed(this.getSpeed()*0); //0.5 cheat
-            DWait debuff = new DWait(5, e->{ // 10 sec cheat
-                this.debuff_Stun = false;
-                this.setSpeed(temp);
+        Random RNG = new Random();
+        int RNGChange = RNG.nextInt(5); //1-4 25% Change
+        if (RNGChange == 2){
+            if (!debuff_Stun){
+                System.out.println("Stunned");
+                this.debuff_Stun = true;
+                double temp = this.getSpeed();
+                this.setSpeed(this.getSpeed()*0); //0.5 cheat
+                DWait debuff = new DWait(5, e->{ // 10 sec cheat
+                    this.debuff_Stun = false;
+                    this.setSpeed(temp);
                 System.out.println("No longer Stunned");
             });
             debuff.start();
-        }
+        }}
     }
     
     public static EnemyStats getENEMY_STATS() throws NoSuchMethodException {
