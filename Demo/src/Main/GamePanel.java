@@ -293,6 +293,9 @@ public class GamePanel extends JPanel {
                     if (unit instanceof UnitInvisible) {
                         ((UnitInvisible)unit).insersectEnemy(enemy);
                     } else {
+                        if (enemy instanceof Ninja) {
+                            ((Ninja)enemy).ability();
+                        }
                         stop = true;
                         long currentTime = System.currentTimeMillis();
                         if (currentTime - enemy.getLastAttackTime() >= 1000) {
