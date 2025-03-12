@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 
 
 public class Ninja extends Enemy {
+
+    public boolean dashable = true;
     
     public Ninja(double x, int row) {
         super(x, row, getENEMY_STATS());
@@ -17,5 +19,13 @@ public class Ninja extends Enemy {
     
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.NINJA_STATS;
+    }
+
+    @Override
+    public void ability() {
+        if (dashable) {
+            this.x -= 189;
+            dashable = false;
+        }
     }
 }
