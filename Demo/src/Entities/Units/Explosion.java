@@ -27,7 +27,7 @@ public class Explosion extends Unit implements UnitInvisible {
 
     public Explosion(int row, int col) {
         super(row, col, getUNIT_STATS());
-        waitBeforeActivate = new OWait(1);
+        waitBeforeActivate = new OWait(0.1);
     }
 
     public static UnitStats getUNIT_STATS() {
@@ -47,7 +47,7 @@ public class Explosion extends Unit implements UnitInvisible {
                 System.out.println("ACTIVATE!!!!!");
                 Audio.play(AudioName.CANDLE_ACTIVATE);
                 setStatus("ATK");
-                new DWait(1.5, e -> {
+                new DWait(1, e -> {
                     attack(GamePanel.getBullets());
                     setHealth(0);
                 }).start();
