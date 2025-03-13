@@ -148,8 +148,9 @@ public class GamePanel extends JPanel {
         unitTypes.add(new UnitType(Mimic.class)); //BETA unit
         unitTypes.add(new UnitType(BigBall.class));
 //        unitTypes.add(new UnitType(GolemSupport.class));
-        unitTypes.add(new UnitType(Explosion.class));
-        unitTypes.add(new UnitType(Explosive_turtle.class));
+//        unitTypes.add(new UnitType(Explosion.class));
+//        unitTypes.add(new UnitType(Explosive_turtle.class));
+        unitTypes.add(new UnitType(Nike.class));
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
         }
@@ -571,7 +572,11 @@ public class GamePanel extends JPanel {
                     }
                 }
                 g.setColor(Color.WHITE);
-                g.drawImage(unit.getProfileImg(), mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT, null);
+                if (unit.getClassUse().equals(Nike.class)) {
+                    g.drawImage(unit.getProfileImg(), mouseX - (CELL_WIDTH * 10) / 2, mouseY - (CELL_HEIGHT * 10) / 2, CELL_WIDTH * 10, CELL_HEIGHT * 10, null);
+                } else {
+                    g.drawImage(unit.getProfileImg(), mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT, null);
+                }
             }
             if (!unit.isNoCoolDown()) {
                 g.setColor(Color.WHITE);
@@ -661,6 +666,9 @@ public class GamePanel extends JPanel {
                     units.add(unitIns);
                     remainMana -= unit.getManaCost();
                     unit.startCooldown();
+                    if (unitIns instanceof UnitTriggerable) {
+                        ((UnitTriggerable)unitIns).triggerWhenPlace();
+                    }
                     Audio.play(AudioName.PLANT_PLACE);
                     getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
                     getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));

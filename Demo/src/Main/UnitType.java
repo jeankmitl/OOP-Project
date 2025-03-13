@@ -30,6 +30,10 @@ public class UnitType {
     public String getClassName() {
         return unitClass.getSimpleName();
     }
+    
+    public Class getClassUse() {
+        return unitClass;
+    }
 
     public void coolDownTick(double deltaTime) {
         if (coolDownElapsed > 0) {
