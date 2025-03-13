@@ -61,12 +61,12 @@ public class GamePanel extends JPanel {
     public int wight = 0; //test mana
     
     private static List<Unit> units;
-    private static List<Enemy> enemies;
+    protected static List<Enemy> enemies;
     private static List<Bullet> bullets;
     private static List<VFX> vfxs;
     
     
-    private final Random random = new Random();
+    protected final Random random = new Random();
     private static final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
     
     private boolean draggingRecall = false;
@@ -107,6 +107,7 @@ public class GamePanel extends JPanel {
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
         addKeyListener(new GameKeyboardListener());
         startGameLoop(); // Always call on last GamePanel
+        //summonEnemies(); // spawn Enermy in this insted 
     }
     
     // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
@@ -126,7 +127,7 @@ public class GamePanel extends JPanel {
     
     private void runDebugMode() {
         remainMana = 500;
-        summonEnemies();
+        summonEnemies(); //<<--- Off this bebore play stage 1
     }
     // </editor-fold>
     
@@ -168,8 +169,8 @@ public class GamePanel extends JPanel {
         }
         
         // spawn: enemies every 10s ➕
-        if (spawnEnemiesTimer10.tick(deltaTime)) {
-            summonEnemies();
+       if (spawnEnemiesTimer10.tick(deltaTime)) { // <<--- Off this bebore play stage 1
+           summonEnemies();
         }
         
         // update: animation every 2s
@@ -187,7 +188,6 @@ public class GamePanel extends JPanel {
             System.out.println("Show Text: Ready. Set. Go!");
 //            enemiesIsComingWait3.reset();  // like OTimer but use OTimer better
         }
-        
         updateCooldown(deltaTime);
         updateLogic(deltaTime);
     }
@@ -209,7 +209,7 @@ public class GamePanel extends JPanel {
         return true;
     }
     
-    private void summonEnemies() {
+    public void summonEnemies() {
         int randomBandit = random.nextInt(5);
         int randomNinja = random.nextInt(5);
         int randomSorcerer = random.nextInt(5);

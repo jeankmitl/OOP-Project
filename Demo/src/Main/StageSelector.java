@@ -11,7 +11,8 @@ public class StageSelector extends JFrame {
     private Rectangle st1, st2, st3, st4, st5, st6, st7, st8, st9, st10;
     private Image frame;
     private boolean isButtonHovered = false;
-  
+    private String Current_Stage = "";
+    
     public StageSelector() {
         setTitle("Select stage");
         setSize(1280, 720);
@@ -42,7 +43,9 @@ public class StageSelector extends JFrame {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (st1.contains(e.getPoint())) {
+                if (st1.contains(e.getPoint())){Current_Stage = "Beta";}
+                if (st2.contains(e.getPoint())){Current_Stage = "St1";}
+                if (st1.contains(e.getPoint())||st2.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
                     LoadingScreen loadingScreen = new LoadingScreen();
                     SwingWorker<Void, Void> worker = new SwingWorker<>() {
@@ -56,17 +59,37 @@ public class StageSelector extends JFrame {
                         protected void done() {
                             System.out.println("Finished loading.");
                             loadingScreen.dispose();
-                            GamePanel gamePanel = new GamePanel();
-                            getContentPane().removeAll();
-                            getContentPane().add(gamePanel);
-                            addKeyListener(gamePanel.new GameKeyboardListener());
-                            System.out.println("Stage 1 selected!");
-                            setTitle("Stage 1");
+                            if(Current_Stage == "Beta"){
+                                GamePanel gamePanel = new GamePanel();
+                                getContentPane().removeAll();
+                                getContentPane().add(gamePanel);
+                                addKeyListener(gamePanel.new GameKeyboardListener());
+                                System.out.println("Stage Beta selected!");
+                                setTitle("Stage Beta");
+                            }else if(Current_Stage == "St1"){
+                                stage_Tutorial tu = new stage_Tutorial();
+                                getContentPane().removeAll();
+                                getContentPane().add(tu);
+                                addKeyListener(tu.new GameKeyboardListener());
+                                System.out.println("Stage 1 selected!");
+                                setTitle("Stage 1");
+                            }
+                            
+//                            stage_Tutorial tu = new stage_Tutorial();
+////                            GamePanel gamePanel = new GamePanel();
+//                            getContentPane().removeAll();
+//                            getContentPane().add(tu);
+////                            getContentPane().add(gamePanel);
+//                            addKeyListener(tu.new GameKeyboardListener());
+////                            addKeyListener(gamePanel.new GameKeyboardListener());
+//                            System.out.println("Stage 1 selected!");
+//                            setTitle("Stage 1");
                         }
                     };
                     worker.execute();
                 }
-                if (st2.contains(e.getPoint())||st3.contains(e.getPoint())||st4.contains(e.getPoint())||st5.contains(e.getPoint())||
+                
+                if (st3.contains(e.getPoint())||st4.contains(e.getPoint())||st5.contains(e.getPoint())||
                         st6.contains(e.getPoint())||st7.contains(e.getPoint())||st8.contains(e.getPoint())||st9.contains(e.getPoint())||st10.contains(e.getPoint())){
                     Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     System.out.println("Stage not yet finish.");
