@@ -72,6 +72,10 @@ public class GamePanel extends JPanel {
     private boolean draggingRecall = false;
     private int mouseX, mouseY;
     
+    private int hoverPlaceX, hoverPlaceY;
+    
+    private final DTimer gameTimer;
+    
     private final OTimer manaRecoverTimer15 = new OTimer(15);
     private final OTimer spawnEnemiesTimer10 = new OTimer(10);
     private final OTimer delayNidNoyTimer1 = new OTimer(0.1235);
@@ -100,20 +104,17 @@ public class GamePanel extends JPanel {
         bullets = new ArrayList<>();
         vfxs = new ArrayList<>();
         
+        gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
+        addKeyListener(new GameKeyboardListener());
         startGameLoop(); // Always call on last GamePanel
     }
     
     // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
     private void startGameLoop() {
         GameLoop gameLoop = new GameLoop();
-//        GameLoop.addListener((d) -> System.out.println("Frame Update!"));
         GameLoop.setLateListener((d) -> lateUpdate());
         gameLoop.start();
-        
-        new DTimer(SPF, e -> {
-            fixedUpdate(SPF);
-        }).start();
-        
+        gameTimer.start();
         start();
     }
     
@@ -146,8 +147,9 @@ public class GamePanel extends JPanel {
         unitTypes.add(new UnitType(Kaniwall.class));
         unitTypes.add(new UnitType(Mimic.class)); //BETA unit
         unitTypes.add(new UnitType(BigBall.class));
-        unitTypes.add(new UnitType(GolemSupport.class));
+//        unitTypes.add(new UnitType(GolemSupport.class));
         unitTypes.add(new UnitType(Explosion.class));
+        unitTypes.add(new UnitType(Explosive_turtle.class));
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
         }
@@ -363,10 +365,13 @@ public class GamePanel extends JPanel {
                         System.out.println((exp.getCol() * CELL_WIDTH < enemy.getX()) + " / " + ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX()));
                     if (enemy.getRow() == cleanRow && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
                         System.out.println("hit");
-                        enemy.takeDamage(Candles6.getUNIT_STATS().getAtk());
+                        enemy.takeDamage(exp.getAtk());
                     }
                 }
-                VFX vfx = new VFX(exp.getCol() * CELL_WIDTH, exp.getRow() * CELL_HEIGHT, "Beam2");
+                VFX vfx = new VFX(exp.getCol() * CELL_WIDTH - 30, exp.getRow() * CELL_HEIGHT - 20, "explosion_vfx");
+                vfx.setWidth(CELL_WIDTH + 60);
+                vfx.setHeight(CELL_HEIGHT + 20);
+                GamePanel.getVfxs().add(vfx);
                 getVfxs().add(vfx);
             } else if (bullet instanceof Beta_bullet) { //Mimic Beta test
                 for (Enemy enemy : enemies) {
@@ -519,6 +524,19 @@ public class GamePanel extends JPanel {
         g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
         
         if (draggingRecall) {
+            int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
+            int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
+            int gridX = col * CELL_WIDTH + GRID_OFFSET_X;
+            int gridY = row * CELL_HEIGHT + GRID_OFFSET_Y;
+            hoverPlaceX = (int)(hoverPlaceX + 0.3 * (gridX - hoverPlaceX));
+            hoverPlaceY = (int)(hoverPlaceY + 0.3 * (gridY - hoverPlaceY));
+            if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                if (!isFieldAvailable(col, row)) {
+                    iconImage = ImgManager.loadIcon("recall_place_hover");
+                    g.drawImage(iconImage, hoverPlaceX,  hoverPlaceY, CELL_WIDTH, CELL_HEIGHT, this);
+                }
+            }
+            
             iconImage = ImgManager.loadIcon("RecallDrag");
             g.drawImage(iconImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
         }
@@ -537,6 +555,21 @@ public class GamePanel extends JPanel {
             g.setColor(new Color(162, 252, 255, 255));
             g.drawString(unit.getManaCost() + "", BAR_X + 5 + CELL_WIDTH * k, BAR_Y + CELL_HEIGHT - 5);
             if (unit.isDragging()) {
+                int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
+                int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
+                int gridX = col * CELL_WIDTH + GRID_OFFSET_X;
+                int gridY = row * CELL_HEIGHT + GRID_OFFSET_Y;
+                hoverPlaceX = (int)(hoverPlaceX + 0.3 * (gridX - hoverPlaceX));
+                hoverPlaceY = (int)(hoverPlaceY + 0.3 * (gridY - hoverPlaceY));
+                if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                    if (isFieldAvailable(col, row)) {
+                        iconImage = ImgManager.loadIcon("green_place_hover");
+                        g.drawImage(iconImage, hoverPlaceX,  hoverPlaceY, CELL_WIDTH, CELL_HEIGHT, this);
+                    } else {
+                        iconImage = ImgManager.loadIcon("red_place_hover");
+                        g.drawImage(iconImage, hoverPlaceX, hoverPlaceY, CELL_WIDTH, CELL_HEIGHT, this);
+                    }
+                }
                 g.setColor(Color.WHITE);
                 g.drawImage(unit.getProfileImg(), mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT, null);
             }
@@ -629,8 +662,10 @@ public class GamePanel extends JPanel {
                     remainMana -= unit.getManaCost();
                     unit.startCooldown();
                     Audio.play(AudioName.PLANT_PLACE);
+                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
                     getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
                 } else {
+                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
 //                    System.out.println("***Field is Not available***");
                 }
             }
@@ -677,10 +712,32 @@ public class GamePanel extends JPanel {
 
     }
     
-//    private class GameKeyboardListener extends KeyAdapter {
-//        @Override
-//        public void keyReleased(KeyEvent e) {
-//            super.keyReleased(e); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-//        }
-//    }
+    public class GameKeyboardListener extends KeyAdapter {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_RIGHT:
+                    gameTimer.setDoubleSpeed(true);
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    if (gameTimer.isRunning()) {
+                        gameTimer.stop();
+                    } else {
+                        gameTimer.start();
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_RIGHT:
+                    gameTimer.setDoubleSpeed(false);
+                    break;
+            }
+        }
+        
+        
+    }
 }

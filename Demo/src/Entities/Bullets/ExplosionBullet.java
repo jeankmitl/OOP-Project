@@ -12,8 +12,8 @@ public class ExplosionBullet extends Bullet {
     private int row;
     private int col;
     
-    public ExplosionBullet(int x, int y, int row, int col) {
-        super(x, y, 0);
+    public ExplosionBullet(int x, int y, int atk, int row, int col) {
+        super(x, y, atk);
         this.row = row;
         this.col = col;
     }

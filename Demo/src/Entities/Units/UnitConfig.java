@@ -25,6 +25,7 @@ public interface UnitConfig {
     UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("Golem_idle", null);
     UnitSpriteSheets CANNON_SPRITE = new UnitSpriteSheets("Explosion", "Explosion_atk");
     UnitSpriteSheets BIGBALL_SPRITE = new UnitSpriteSheets("bigball_idle", "bigball_shoot");
+    UnitSpriteSheets EXPLOSIVE_TURTLE_SPRITE = new UnitSpriteSheets("explosive_tutle_idle", "explosive_tutle_atk");
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER);
@@ -37,6 +38,7 @@ public interface UnitConfig {
     //TEST ONLY//
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 5, 200, 50, COST_GEN);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 100, 10, 400, 7, ATTACKER);
+    UnitStats EXPLOSIVE_TURTLE_STATS = new UnitStats(EXPLOSIVE_TURTLE_SPRITE, 1, 500, 0, 50, 5, EXPLOTION);
     // Too OP
     UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 9999, 1800, 0, 125, 50, EXPLOTION);
 }

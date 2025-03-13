@@ -5,6 +5,8 @@ import Asset.AudioName;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -95,6 +97,25 @@ public class MainMenu extends JFrame {
                 }
             }
         });
+        
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                System.out.println(e.getKeyChar());
+                switch (e.getKeyChar()) {
+                    case 'p':
+                        dispose();
+                        StageSelector stage = new StageSelector();
+                        GamePanel gamePanel = new GamePanel();
+                        stage.getContentPane().removeAll();
+                        stage.getContentPane().add(gamePanel);
+                        stage.addKeyListener(gamePanel.new GameKeyboardListener());
+                        break;
+                }
+            }
+            
+        });
+        
     }
 
     @Override

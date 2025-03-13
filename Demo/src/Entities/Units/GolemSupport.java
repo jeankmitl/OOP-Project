@@ -37,7 +37,7 @@ public class GolemSupport extends Unit implements UnitGeneratable {
         }
         new DWait(1.5, (e) -> {
             setStatus(IDLE_STATUS);
-            GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
+            GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "dec_cooldown_vfx"));
         }).start();
     }
 }

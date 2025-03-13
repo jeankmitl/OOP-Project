@@ -4,34 +4,33 @@
  */
 package Entities.Units;
 
-import Main.GamePanel;
-import Entities.Enemies.Enemy;
-import Entities.Bullets.Bone;
-import Entities.Bullets.Bullet;
 import Asset.Audio;
-import DSystem.DTimer;
 import Asset.AudioName;
 import DSystem.DWait;
 import DSystem.OWait;
-import Entities.Bullets.BeamCleanRow;
+import Entities.Bullets.Bullet;
 import Entities.Bullets.ExplosionBullet;
+import Entities.Enemies.Enemy;
+import static Entities.Units.Explosion.getUNIT_STATS;
 import Entities.Units.Roles.UnitInvisible;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
+import Main.GamePanel;
 import java.util.List;
 
-public class Explosion extends Unit implements UnitInvisible {
-    
+/**
+ *
+ * @author anawi
+ */
+public class Explosive_turtle extends Unit implements UnitInvisible {
     private OWait waitBeforeActivate;
     private boolean isActivating = false; 
 
-    public Explosion(int row, int col) {
+    public Explosive_turtle(int row, int col) {
         super(row, col, getUNIT_STATS());
-        waitBeforeActivate = new OWait(0.1);
+        waitBeforeActivate = new OWait(0);
     }
 
     public static UnitStats getUNIT_STATS() {
-        return UnitConfig.EXPLOSION_STATS;
+        return UnitConfig.EXPLOSIVE_TURTLE_STATS;
     }
     
     @Override
@@ -42,18 +41,14 @@ public class Explosion extends Unit implements UnitInvisible {
 
     @Override
     public void insersectEnemy(Enemy enemy) {
-        if (enemy.getX() > getX() - 10 && enemy.getX() + frame_Width < getX() + frame_Width + 10) {
+        if (enemy.getX() > getX() - 10 && enemy.getX() + frame_Width < getX() + frame_Width + GamePanel.CELL_WIDTH) {
             if (waitBeforeActivate.tick(atkSpeed) && !isActivating) {
-                System.out.println("ACTIVATE!!!!!");
-                Audio.play(AudioName.CANDLE_ACTIVATE);
                 setStatus("ATK");
-                new DWait(1, e -> {
+                new DWait(2, e -> {
                     attack(GamePanel.getBullets());
                     setHealth(0);
                 }).start();
             }
         }
     }
-
-    
 }

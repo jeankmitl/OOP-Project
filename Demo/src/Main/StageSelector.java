@@ -16,7 +16,9 @@ public class StageSelector extends JFrame {
         setTitle("Select stage");
         setSize(1280, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setLocationRelativeTo(null);
+        requestFocus();
 
         st1 = new Rectangle(150, 250, 150, 150);
         st2 = new Rectangle(350, 250, 150, 150);
@@ -54,8 +56,10 @@ public class StageSelector extends JFrame {
                         protected void done() {
                             System.out.println("Finished loading.");
                             loadingScreen.dispose();
+                            GamePanel gamePanel = new GamePanel();
                             getContentPane().removeAll();
-                            getContentPane().add(new GamePanel());
+                            getContentPane().add(gamePanel);
+                            addKeyListener(gamePanel.new GameKeyboardListener());
                             System.out.println("Stage 1 selected!");
                             setTitle("Stage 1");
                         }
