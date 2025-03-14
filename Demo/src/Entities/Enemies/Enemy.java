@@ -8,7 +8,9 @@ import DSystem.DWait;
 import DSystem.OTimer;
 import Entities.Entity;
 import java.awt.image.BufferedImage;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class Enemy extends Entity {
 
@@ -29,7 +31,7 @@ public abstract class Enemy extends Entity {
     protected boolean debuff_Chills = false; // Slow When Trigger
     protected boolean debuff_Stun = false; // Stun When Trigger
     protected boolean buff_rage = false; // Stun When Trigger
-
+    
     public Enemy(double x, int row, EnemyStats enemyStats) {
         super(enemyStats);
         this.x = x;

@@ -97,7 +97,7 @@ public class GamePanel extends JPanel {
         Audio.playMusic(AudioName.MUSIC_ONE);
 
         OTHER_THREAD = Thread.activeCount();
-        backgroundImage = ImgManager.loadBG("bg_dark_greek");
+        backgroundImage = ImgManager.loadBG("bg_test.png");
 
         units = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -152,6 +152,8 @@ public class GamePanel extends JPanel {
 //        unitTypes.add(new UnitType(Explosion.class));
 //        unitTypes.add(new UnitType(Explosive_turtle.class));
         unitTypes.add(new UnitType(Nike.class));
+        unitTypes.add(new UnitType(SemiAutoBot.class));
+        
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
         }
@@ -214,10 +216,14 @@ public class GamePanel extends JPanel {
         int randomNinja = random.nextInt(5);
         int randomSorcerer = random.nextInt(5);
         int randomLRH = random.nextInt(5);
+        int randomRC = random.nextInt(5);
+        int randomRMNW = random.nextInt(5);
         enemies.add(new Bandit(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomBandit));
         enemies.add(new Ninja(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomNinja));
         enemies.add(new Sorcerer(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomSorcerer));
         enemies.add(new LittleRedHood(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomLRH));
+//        enemies.add(new RCBomber(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomRC));
+        enemies.add(new RobotMonoWheel(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomRMNW));
     }
     
     public static List<Enemy> getEnemies() {
@@ -315,10 +321,6 @@ public class GamePanel extends JPanel {
                     }
                     break;
                 }
-//                unit.getAtkSpeed();
-//                if (unit instanceof UnitGeneratable) {
-//                    ((UnitGeneratable)unit).generateByAtkSpeed();
-//                }
             }
             
 

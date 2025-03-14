@@ -3,13 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Entities.Bullets;
+
 /**
  *
  * @author anawi
  */
-public class PistolBullet extends Bullet {
-    public PistolBullet(int x, int y, int atk) {
-        super(x, y, atk, "gold_bullet");
+public class SemiAutoBullet extends Bullet {
+    public SemiAutoBullet(int x, int y, int atk) {
+        super(x, y, atk, "mini_lazer_bullet");
         speed = 20;
     }
 

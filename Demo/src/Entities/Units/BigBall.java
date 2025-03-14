@@ -6,6 +6,7 @@ package Entities.Units;
 
 import Asset.Audio;
 import Asset.AudioName;
+import DSystem.DWait;
 import Entities.Bullets.Bone;
 import Entities.Bullets.Bullet;
 import Entities.Bullets.PistolBullet;
@@ -30,5 +31,6 @@ public class BigBall extends Unit implements UnitShootable {
     public void shoot(List<Bullet> bullets) {
         Audio.play(AudioName.FIRE_TINY);
         bullets.add(new PistolBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
+        new DWait(1, e -> setStatus("idle")).start();
     }
 }
