@@ -15,5 +15,10 @@ public class Bandit extends Enemy {
 
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.BANDIT_STATS;
-    }  
+    }
+
+    @Override
+    public Enemy createNew(int x, int y) {
+        return new Bandit(x, y);
+    }
 }

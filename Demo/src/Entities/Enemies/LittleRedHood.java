@@ -20,4 +20,9 @@ public class LittleRedHood extends Enemy {
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.LITTLE_RED_HOOD_STATS;
     }
+    
+    @Override
+    public Enemy createNew(int x, int y) {
+        return new LittleRedHood(x, y);
+    }
 }
