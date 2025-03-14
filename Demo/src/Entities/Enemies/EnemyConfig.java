@@ -13,7 +13,7 @@ public interface EnemyConfig {
     int LONG_RANGE = 1;
     
     // All sprite sheet ️🎥
-    EnemySpriteSheets NINJA_SPRITE = new EnemySpriteSheets("Ninja", "NinjaATK");
+    EnemySpriteSheets NINJA_SPRITE = new EnemySpriteSheets("ninja-walk", "ninja-att");
     EnemySpriteSheets BANDIT_SPRITE = new EnemySpriteSheets("Bandit", "Bandit");
     EnemySpriteSheets SORCERER_SPRITE = new EnemySpriteSheets("Sorcerer", "SorcererATK");
     EnemySpriteSheets LITTLE_RED_HOOD_SPRITE = new EnemySpriteSheets("little_Red_Hood_Idle", "little_Red_Hood_ATK");
