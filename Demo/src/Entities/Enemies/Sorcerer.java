@@ -16,4 +16,9 @@ public class Sorcerer extends Enemy {
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.SORCERER_STATS;
     }
+    
+    @Override
+    public Enemy createNew(int x, int y) {
+        return new Sorcerer(x, y);
+    }
 }

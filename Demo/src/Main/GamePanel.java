@@ -107,7 +107,7 @@ public class GamePanel extends JPanel {
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
         addKeyListener(new GameKeyboardListener());
         startGameLoop(); // Always call on last GamePanel
-        //summonEnemies(); // spawn Enermy in this insted 
+        summonEnemies(); // spawn Enermy in this insted 
     }
     
     // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
@@ -127,7 +127,7 @@ public class GamePanel extends JPanel {
     
     private void runDebugMode() {
         remainMana = 500;
-        summonEnemies(); //<<--- Off this bebore play stage 1
+//        summonEnemies(); //<<--- Off this bebore play stage 1
     }
     // </editor-fold>
     
@@ -172,7 +172,7 @@ public class GamePanel extends JPanel {
         
         // spawn: enemies every 10s ➕
        if (spawnEnemiesTimer10.tick(deltaTime)) { // <<--- Off this bebore play stage 1
-           summonEnemies();
+//           summonEnemies();
         }
         
         // update: animation every 2s
@@ -211,20 +211,25 @@ public class GamePanel extends JPanel {
         return true;
     }
     
-    public void summonEnemies() {
-        int randomBandit = random.nextInt(5);
-        int randomNinja = random.nextInt(5);
-        int randomSorcerer = random.nextInt(5);
-        int randomLRH = random.nextInt(5);
-        int randomRC = random.nextInt(5);
-        int randomRMNW = random.nextInt(5);
-        enemies.add(new Bandit(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomBandit));
-        enemies.add(new Ninja(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomNinja));
-        enemies.add(new Sorcerer(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomSorcerer));
-        enemies.add(new LittleRedHood(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomLRH));
-//        enemies.add(new RCBomber(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomRC));
-        enemies.add(new RobotMonoWheel(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomRMNW));
+    public void Spawn_Enemy(Enemy enemy){
+        this.Spawn_Enemy(enemy, 1, 1);
     }
+    
+    public void Spawn_Enemy(Enemy enemy,int num){
+        this.Spawn_Enemy(enemy, num, 10);
+    }
+    public void Spawn_Enemy(Enemy enemy,int num,int delay){
+        Random random = new Random();
+        for (int i=0;i<num;i++){
+            new DWait(i*delay, e->{
+               int randomBandit = random.nextInt(5);
+                    enemies.add(enemy.createNew(1280 - GRID_OFFSET_X + random.nextInt(10) * 10, randomBandit));
+                    System.out.println("Spawn Sucess");
+                }).start();
+           }
+    }
+    
+    public void summonEnemies(){}
     
     public static List<Enemy> getEnemies() {
         return enemies;

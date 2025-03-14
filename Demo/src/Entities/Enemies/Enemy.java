@@ -131,6 +131,8 @@ public abstract class Enemy extends Entity {
         throw new NoSuchMethodException("Make sure to return their unit STATS");
     }
     
+    public abstract Enemy createNew(int x, int y);
+    
     
     
 }

@@ -60,7 +60,7 @@ public class StageSelector extends JFrame {
                             System.out.println("Finished loading.");
                             loadingScreen.dispose();
                             if(Current_Stage == "Beta"){
-                                GamePanel gamePanel = new GamePanel();
+                                GamePanel gamePanel = new stage_beta();
                                 getContentPane().removeAll();
                                 getContentPane().add(gamePanel);
                                 addKeyListener(gamePanel.new GameKeyboardListener());

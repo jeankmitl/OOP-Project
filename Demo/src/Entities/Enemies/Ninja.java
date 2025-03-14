@@ -28,4 +28,9 @@ public class Ninja extends Enemy {
             dashable = false;
         }
     }
+    
+    @Override
+    public Enemy createNew(int x, int y) {
+        return new Ninja(x, y);
+    }
 }
