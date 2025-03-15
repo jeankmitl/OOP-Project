@@ -22,9 +22,8 @@ public class stage_beta extends GamePanel{
             super.Spawn_Enemy(new Ninja(0, 0),99);
             super.Spawn_Enemy(new LittleRedHood(0, 0),99);
             super.Spawn_Enemy(new Sorcerer(0, 0),99);
-//            Spawn_Enemy(new Bandit(0, 0),99);
-//            Spawn_Enemy(new Bandit(0, 0),99);
-//            Spawn_Enemy(new Bandit(0, 0),99);
+            super.Spawn_Enemy(new RCBomber(0, 0),99);
+            super.Spawn_Enemy(new RobotMonoWheel(0, 0),99);
         });
         start.start();
     }

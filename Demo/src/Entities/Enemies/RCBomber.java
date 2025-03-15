@@ -40,5 +40,10 @@ public class RCBomber extends Enemy {
             }
         }).start();
     }
+
+    @Override
+    public Enemy createNew(int x, int y) {
+        return new RCBomber(x, y);
+    }
     
 }
