@@ -34,7 +34,6 @@ public class Explosion extends Unit implements UnitInvisible {
         return UnitConfig.EXPLOSION_STATS;
     }
     
-    @Override
     public void attack(List<Bullet> bullets) {
         System.out.println("attack");
         bullets.add(new ExplosionBullet(col * GamePanel.CELL_WIDTH, row * GamePanel.CELL_HEIGHT + 30, atk, row, col));

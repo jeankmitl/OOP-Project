@@ -74,16 +74,6 @@ public class StageSelector extends JFrame {
                                 System.out.println("Stage 1 selected!");
                                 setTitle("Stage 1");
                             }
-                            
-//                            stage_Tutorial tu = new stage_Tutorial();
-////                            GamePanel gamePanel = new GamePanel();
-//                            getContentPane().removeAll();
-//                            getContentPane().add(tu);
-////                            getContentPane().add(gamePanel);
-//                            addKeyListener(tu.new GameKeyboardListener());
-////                            addKeyListener(gamePanel.new GameKeyboardListener());
-//                            System.out.println("Stage 1 selected!");
-//                            setTitle("Stage 1");
                         }
                     };
                     worker.execute();

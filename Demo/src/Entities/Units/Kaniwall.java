@@ -14,9 +14,6 @@ public class Kaniwall extends Unit {
     public Kaniwall(int row, int col) {
         super(row, col, getUNIT_STATS());
     }
-
-    @Override
-    public void attack(List<Bullet> bullets) {}
     
     public void check_health(){
         if(this.health > 2667){

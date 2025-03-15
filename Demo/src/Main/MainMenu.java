@@ -106,7 +106,7 @@ public class MainMenu extends JFrame {
                     case 'p':
                         dispose();
                         StageSelector stage = new StageSelector();
-                        GamePanel gamePanel = new GamePanel();
+                        GamePanel gamePanel = new stage_beta();
                         stage.getContentPane().removeAll();
                         stage.getContentPane().add(gamePanel);
                         stage.addKeyListener(gamePanel.new GameKeyboardListener());

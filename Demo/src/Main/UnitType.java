@@ -5,6 +5,7 @@
 package Main;
 
 import Entities.Units.Unit;
+import Entities.Units.UnitSpriteSheets;
 import Entities.Units.UnitStats;
 import java.awt.image.BufferedImage;
 
@@ -65,6 +66,26 @@ public class UnitType {
     public int getManaCost() {
         return unitStats.getCost();
     }
+    
+    public int getHealth() {
+        return unitStats.getHealth();
+    }
+    
+    public int getAtk() {
+        return unitStats.getAtk();
+    }
+    
+    public double getAtkSpeed() {
+        return unitStats.getAtkSpeed();
+    }
+    
+    public int getRole() {
+        return unitStats.getRole();
+    }
+    
+    public String getRoleName() {
+        return unitStats.getRoleName();
+    }
 
     public void setCoolDownElapsed(double coolDownElapsed) {
         this.coolDownElapsed = coolDownElapsed;
@@ -74,11 +95,19 @@ public class UnitType {
         return coolDownElapsed;
     }
     
+    public UnitSpriteSheets getUnitSp() {
+        return unitStats.getUnitSp();
+    }
+    
     public BufferedImage getProfileImg() {
         return unitStats.getUnitSp().getProfileImg();
     }
     
-    public BufferedImage getRoleIconImg(int i) {
+    public BufferedImage getRoleIconImg() {
         return unitStats.getUnitSp().getStatsIcon(unitStats.getRole());
+    }
+    
+    public BufferedImage getRoleIconImg(int i) {
+        return unitStats.getUnitSp().getStatsIcon(i);
     }
 }

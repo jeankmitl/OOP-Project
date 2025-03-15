@@ -6,6 +6,7 @@ package Entities.Units;
 import Asset.Audio;
 import Asset.VFX;
 import Entities.Enemies.Enemy;
+import Entities.Units.Roles.UnitIgnoreFieldAvailable;
 import Entities.Units.Roles.UnitTriggerable;
 import static Entities.Units.Skeleton.getUNIT_STATS;
 import Main.GamePanel;
@@ -14,7 +15,7 @@ import Main.GamePanel;
  *
  * @author anawi
  */
-public class Nike extends Unit implements UnitTriggerable {
+public class Nike extends Unit implements UnitTriggerable, UnitIgnoreFieldAvailable {
     public Nike(int row, int col) {
         super(row, col, getUNIT_STATS());
     }
@@ -36,5 +37,9 @@ public class Nike extends Unit implements UnitTriggerable {
         Audio.play("kill1");
         Audio.play("kill2");
         setHealth(0);
+    }
+
+    @Override
+    public void getUnitFromField(Unit unit) {
     }
 }

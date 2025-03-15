@@ -40,7 +40,6 @@ public class Candles6 extends Unit {
         return false;
     }
 
-    @Override
     public void attack(List<Bullet> bullets) {
         bullets.add(new BeamCleanRow(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, row, col));
     }

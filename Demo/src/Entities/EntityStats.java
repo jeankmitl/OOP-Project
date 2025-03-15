@@ -4,6 +4,8 @@
  */
 package Entities;
 
+import Entities.Units.UnitConfig;
+
 /**
  *
  * @author anawi
@@ -41,5 +43,17 @@ public class EntityStats {
 
     public int getRole() {
         return role;
+    }
+    
+    public String getRoleName() {
+        String name = "";
+        switch (role) {
+            case UnitConfig.ATTACKER -> name = "Attacker";
+            case UnitConfig.COST_GEN -> name = "Cost Gen";
+            case UnitConfig.DEFENDER -> name = "Defender";
+            case UnitConfig.EXPLOTION -> name = "Explotion";
+            case UnitConfig.GUARD -> name = "Guard";
+        }
+        return name;
     }
 }

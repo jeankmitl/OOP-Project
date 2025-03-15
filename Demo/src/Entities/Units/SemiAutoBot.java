@@ -6,6 +6,7 @@ package Entities.Units;
 
 import Asset.Audio;
 import Asset.AudioName;
+import DSystem.DRepeat;
 import DSystem.DWait;
 import Entities.Bullets.Bullet;
 import Entities.Bullets.PistolBullet;
@@ -29,19 +30,27 @@ public class SemiAutoBot extends Unit implements UnitShootable {
     
     @Override
     public void shoot(List<Bullet> bullets) {
-        Audio.play(AudioName.FIRE_TINY);
-        bullets.add(new SemiAutoBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
-        new DWait(0.25, e -> {
+        new DRepeat(0.25, 3, true, e -> {
             setStatus("ATK");
             Audio.play(AudioName.FIRE_TINY);
             bullets.add(new SemiAutoBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
-            new DWait(0.25, ee -> {
-                setStatus("ATK");
-                Audio.play(AudioName.FIRE_TINY);
-                bullets.add(new SemiAutoBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
-                new DWait(0.25, eee -> setStatus("idle")).start();
-            }).start();
+        }, e -> {
+            new DWait(0.5, eee -> setStatus("idle")).start();
         }).start();
+        
+//        Audio.play(AudioName.FIRE_TINY);
+//        bullets.add(new SemiAutoBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
+//        new DWait(0.25, e -> {
+//            setStatus("ATK");
+//            Audio.play(AudioName.FIRE_TINY);
+//            bullets.add(new SemiAutoBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
+//            new DWait(0.25, ee -> {
+//                setStatus("ATK");
+//                Audio.play(AudioName.FIRE_TINY);
+//                bullets.add(new SemiAutoBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
+//                new DWait(0.25, eee -> setStatus("idle")).start();
+//            }).start();
+//        }).start();
         
     }
 }

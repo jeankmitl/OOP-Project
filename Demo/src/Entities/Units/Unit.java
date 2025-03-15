@@ -19,10 +19,6 @@ public abstract class Unit extends Entity {
     
     public final UnitStats UNIT_STATS = null;
     
-    public void attack(List<Bullet> bullets) {
-    
-    }
-    
     public Unit(int row, int col, UnitStats unitStats) {
         super(unitStats);
         this.row = row;

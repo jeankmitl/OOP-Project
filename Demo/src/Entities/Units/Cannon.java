@@ -49,9 +49,7 @@ public class Cannon extends Skeleton{
         reload_speed.start();
     }
 
-    @Override
     public void attack(List<Bullet> bullets) { // wait for bullet
-        super.attack(bullets); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
 
     @Override

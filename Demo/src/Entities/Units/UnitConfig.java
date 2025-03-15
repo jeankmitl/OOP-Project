@@ -28,6 +28,7 @@ public interface UnitConfig {
     UnitSpriteSheets EXPLOSIVE_TURTLE_SPRITE = new UnitSpriteSheets("explosive_tutle_idle", "explosive_tutle_atk");
     UnitSpriteSheets NIKE_SPRITE = new UnitSpriteSheets("nike", "nike");
     UnitSpriteSheets SEMI_AUTO_BOT_SPRITE = new UnitSpriteSheets("mini_lazer_idle", "mini_lazer_atk");
+    UnitSpriteSheets GIVEAWAY_SLIME_SPRITE = new UnitSpriteSheets("Slime_re", "SlimeGenerate");
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER);
@@ -37,6 +38,7 @@ public interface UnitConfig {
     UnitStats CANNON_STATS = new UnitStats(CANNON_SPRITE,300,500,60,250,20,ATTACKER);
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 999, 42, 150, 7, GUARD);
     UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 300, 1800, 50, 50, 30, UnitConfig.EXPLOTION);
+    UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 20, 0.5, 50, 60, COST_GEN);
     //TEST ONLY//
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 5, 200, 50, COST_GEN);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 100, 10, 400, 7, ATTACKER);

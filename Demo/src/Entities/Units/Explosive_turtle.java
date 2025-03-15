@@ -33,7 +33,6 @@ public class Explosive_turtle extends Unit implements UnitInvisible {
         return UnitConfig.EXPLOSIVE_TURTLE_STATS;
     }
     
-    @Override
     public void attack(List<Bullet> bullets) {
         System.out.println("attack");
         bullets.add(new ExplosionBullet(col * GamePanel.CELL_WIDTH, row * GamePanel.CELL_HEIGHT + 30, atk, row, col));

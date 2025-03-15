@@ -25,4 +25,12 @@ public class OTimer {
         }
         return false;
     }
+
+    public double getDelay() {
+        return delay;
+    }
+
+    public double getElapsedTime() {
+        return elapsedTime;
+    }
 }

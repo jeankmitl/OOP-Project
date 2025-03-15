@@ -56,9 +56,9 @@ public class GamePanel extends JPanel {
     // </editor-fold>
 
     public final int OTHER_THREAD;
-    public static int remainMana = 50;
+    private static int remainMana = 50;
     public static final int MAX_MANA = 9999;
-    public int wight = 0; //test mana
+    public int manaRegenPct = 0; //test mana
     
     private static List<Unit> units;
     protected static List<Enemy> enemies;
@@ -76,7 +76,7 @@ public class GamePanel extends JPanel {
     
     private final DTimer gameTimer;
     
-    private final OTimer manaRecoverTimer15 = new OTimer(15);
+    private final OTimer manaRecoverTimer10 = new OTimer(5);
     private final OTimer spawnEnemiesTimer10 = new OTimer(10);
     private final OTimer delayNidNoyTimer1 = new OTimer(0.1235);
     
@@ -84,6 +84,8 @@ public class GamePanel extends JPanel {
     private final OTimer mediumAnimTimer = new OTimer(0.25);
     
     private final OWait enemiesIsComingWait3 = new OWait(3);
+    
+    private boolean isAnyUnitDragging = false;
     
     
     //same as: public awake()
@@ -97,7 +99,7 @@ public class GamePanel extends JPanel {
         Audio.playMusic(AudioName.MUSIC_ONE);
 
         OTHER_THREAD = Thread.activeCount();
-        backgroundImage = ImgManager.loadBG("bg_test.png");
+        backgroundImage = ImgManager.loadBG("bg_test");
 
         units = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -152,7 +154,8 @@ public class GamePanel extends JPanel {
 //        unitTypes.add(new UnitType(Explosion.class));
 //        unitTypes.add(new UnitType(Explosive_turtle.class));
         unitTypes.add(new UnitType(Nike.class));
-        unitTypes.add(new UnitType(SemiAutoBot.class));
+//        unitTypes.add(new UnitType(SemiAutoBot.class));
+        unitTypes.add(new UnitType(GiveawaySlime.class));
         
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
@@ -163,12 +166,10 @@ public class GamePanel extends JPanel {
     // SPF = 0.016666666666666666 (99% 60fps)
     private void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
-        if (manaRecoverTimer15.tick(deltaTime)) {
-            remainMana += 25;
-            if (GamePanel.remainMana > GamePanel.MAX_MANA) {
-                GamePanel.remainMana = GamePanel.MAX_MANA;
-            }
+        if (manaRecoverTimer10.tick(deltaTime)) {
+            increaeMana(10);
         }
+        manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
         
         // spawn: enemies every 10s ➕
        if (spawnEnemiesTimer10.tick(deltaTime)) { // <<--- Off this bebore play stage 1
@@ -177,14 +178,6 @@ public class GamePanel extends JPanel {
         
         // update: animation every 2s
         updateAnimation(deltaTime);
-        
-        if (delayNidNoyTimer1.tick(deltaTime)) { // <-- fix time that
-            if(wight< 116){
-                wight += 1;
-            } else{
-                wight = 0;
-            }
-        }
         
         if (enemiesIsComingWait3.tick(deltaTime)) {
             System.out.println("Show Text: Ready. Set. Go!");
@@ -196,19 +189,47 @@ public class GamePanel extends JPanel {
     
     // <editor-fold defaultstate="collapsed" desc="All Reuse method">
     public boolean isFieldAvailable(int col, int row) {
-        /**
-         * Is Field Available?
-         * - true: if you can place units
-         * 
-         * mostly use.
-         * - mouseReleased()
-         */
         for (Unit unit : units) {
             if (unit.getRow() == row && unit.getCol() == col) {
                 return false;
             }
         }
         return true;
+    }
+    
+    public boolean isFieldExtraAvailable(UnitType unit, int row, int col) {
+        if (UnitExtraFieldAvailable.class.isAssignableFrom(unit.unitClass)) {
+            return getUnitCountFromField(col, row) < 2;
+        } else if (UnitIgnoreFieldAvailable.class.isAssignableFrom(unit.unitClass)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public Unit getUnitFromField(int col, int row) {
+        for (Unit unit : units) {
+            if (unit.getRow() == row && unit.getCol() == col) {
+                return unit;
+            }
+        }
+        return null;
+    }
+    
+    public int getUnitCountFromField(int col, int row) {
+        int i = 0;
+        for (Unit unit : units) {
+            if (unit.getRow() == row && unit.getCol() == col) {
+                i++;
+            }
+        }
+        return i;
+    }
+    
+    public static void increaeMana(int mana) {
+        remainMana += mana;
+        if (remainMana > MAX_MANA) {
+            remainMana = MAX_MANA;
+        }
     }
     
     public void Spawn_Enemy(Enemy enemy){
@@ -426,6 +447,29 @@ public class GamePanel extends JPanel {
         g.drawString(et.getHealth() + "", 
                 x + ((CELL_WIDTH - metrics.stringWidth(et.getHealth() + ""))/2), y + barHeight - 2);
     }
+    
+    private void paintSmallHealthBar(Graphics g, Entity et) {
+        if (et.getHealth() >= 9000) return;
+        if (et.getHealth() != et.getMaxHealth()) {
+            int x = et.getX() + GRID_OFFSET_X;
+            int y = et.getY() + GRID_OFFSET_Y;
+            int barHeight = 5;
+            g.setColor(Color.darkGray);
+            g.fillRect(x, y, CELL_WIDTH, barHeight);
+            g.setColor(new Color(0x80CBC4));
+            if (et instanceof Enemy) {
+                g.setColor(new Color(0xB03052));
+            }
+            g.fillRect(x, y, (int)(((double)et.getHealth()/et.getMaxHealth())*CELL_WIDTH), barHeight);
+        }
+    }
+    
+    private void runDynamicHover(int row, int col, double leap) {
+        int gridX = col * CELL_WIDTH + GRID_OFFSET_X;
+        int gridY = row * CELL_HEIGHT + GRID_OFFSET_Y;
+        hoverPlaceX = (int)(hoverPlaceX + leap * (gridX - hoverPlaceX));
+        hoverPlaceY = (int)(hoverPlaceY + leap * (gridY - hoverPlaceY));
+    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -453,6 +497,7 @@ public class GamePanel extends JPanel {
         g.setColor(Color.RED);
         g.drawLine(50, 0, 50, 850);
 
+        //GRID
         g.setColor(Color.LIGHT_GRAY);
         for (int i = 0; i <= ROWS; i++) {
             g.drawLine(GRID_OFFSET_X, GRID_OFFSET_Y + i * CELL_HEIGHT, GRID_OFFSET_X + COLS * CELL_WIDTH, GRID_OFFSET_Y + i * CELL_HEIGHT);
@@ -479,6 +524,8 @@ public class GamePanel extends JPanel {
             if (mouseX >= unit.getX() + GRID_OFFSET_X && mouseX <= unit.getX() + RENDER_X
                     && mouseY >= unit.getY() + GRID_OFFSET_Y && mouseY <= unit.getY() + RENDER_Y) {
                 paintHealthBar(g, unit);
+            } else {
+                paintSmallHealthBar(g, unit);
             }
         }
 
@@ -490,6 +537,8 @@ public class GamePanel extends JPanel {
             if (mouseX >= enemy.getX() + GRID_OFFSET_X && mouseX <= enemy.getX() + RENDER_X
                     && mouseY >= enemy.getY() + GRID_OFFSET_Y && mouseY <= enemy.getY() + RENDER_Y) {
                 paintHealthBar(g, enemy);
+            } else {
+                paintSmallHealthBar(g, enemy);
             }
         }
 
@@ -518,7 +567,7 @@ public class GamePanel extends JPanel {
         g.setColor(new Color(162, 252, 255, 255));
         iconImage = ImgManager.loadIcon("Mana_icon");
         g.drawImage(iconImage, BAR_X+730, BAR_Y-63,70,70, null);
-        g.fillRect(BAR_X + 740, BAR_Y - 5, wight, 5);
+        g.fillRect(BAR_X + 740, BAR_Y - 5, (int)(manaRegenPct * (116.0 / 100.0)), 5);
         ///show mana system
         
         // frame operator
@@ -531,22 +580,20 @@ public class GamePanel extends JPanel {
         iconImage = ImgManager.loadIcon("Recall");
         g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
         
+        int countDragging = 0;
+        int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
+        int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
         if (draggingRecall) {
-            int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
-            int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
-            int gridX = col * CELL_WIDTH + GRID_OFFSET_X;
-            int gridY = row * CELL_HEIGHT + GRID_OFFSET_Y;
-            hoverPlaceX = (int)(hoverPlaceX + 0.3 * (gridX - hoverPlaceX));
-            hoverPlaceY = (int)(hoverPlaceY + 0.3 * (gridY - hoverPlaceY));
+            runDynamicHover(row, col, 0.3);
             if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
                 if (!isFieldAvailable(col, row)) {
                     iconImage = ImgManager.loadIcon("recall_place_hover");
                     g.drawImage(iconImage, hoverPlaceX,  hoverPlaceY, CELL_WIDTH, CELL_HEIGHT, this);
                 }
             }
-            
             iconImage = ImgManager.loadIcon("RecallDrag");
             g.drawImage(iconImage, mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH - 20, CELL_HEIGHT - 20, null);
+            countDragging++;
         }
         // all Unit operator
         int k = 0;
@@ -558,19 +605,19 @@ public class GamePanel extends JPanel {
                 g.drawImage(iconImage, BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
             }
             g.drawImage(unit.getProfileImg(), BAR_X + CELL_WIDTH * k, BAR_Y, CELL_WIDTH, CELL_HEIGHT, this);
-            g.drawImage(unit.getRoleIconImg(k), (BAR_X + CELL_WIDTH * k) + (CELL_WIDTH - 35), BAR_Y, 30, 30, this);
+            g.drawImage(unit.getRoleIconImg(), (BAR_X + CELL_WIDTH * k) + (CELL_WIDTH - 35), BAR_Y, 30, 30, this);
             g.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
-            g.setColor(new Color(162, 252, 255, 255));
+            
+            if (remainMana >= unit.getManaCost()) {
+                g.setColor(new Color(162, 252, 255)); //blue
+            } else {
+                g.setColor(new Color(255, 110, 120)); //red
+            }
             g.drawString(unit.getManaCost() + "", BAR_X + 5 + CELL_WIDTH * k, BAR_Y + CELL_HEIGHT - 5);
             if (unit.isDragging()) {
-                int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
-                int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
-                int gridX = col * CELL_WIDTH + GRID_OFFSET_X;
-                int gridY = row * CELL_HEIGHT + GRID_OFFSET_Y;
-                hoverPlaceX = (int)(hoverPlaceX + 0.3 * (gridX - hoverPlaceX));
-                hoverPlaceY = (int)(hoverPlaceY + 0.3 * (gridY - hoverPlaceY));
+                runDynamicHover(row, col, 0.3);
                 if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                    if (isFieldAvailable(col, row)) {
+                    if (isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) {
                         iconImage = ImgManager.loadIcon("green_place_hover");
                         g.drawImage(iconImage, hoverPlaceX,  hoverPlaceY, CELL_WIDTH, CELL_HEIGHT, this);
                     } else {
@@ -584,6 +631,7 @@ public class GamePanel extends JPanel {
                 } else {
                     g.drawImage(unit.getProfileImg(), mouseX - CELL_WIDTH / 2, mouseY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT, null);
                 }
+                countDragging++;
             }
             if (!unit.isNoCoolDown()) {
                 g.setColor(Color.WHITE);
@@ -595,13 +643,63 @@ public class GamePanel extends JPanel {
             }
             k++;
         }
+        isAnyUnitDragging = countDragging > 0;
+        
+        // about information for unit_operator
+        if (!isAnyUnitDragging) {
+            g.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
+            FontMetrics metrics = getFontMetrics(g.getFont());
+            if (mouseX >= BAR_X + CELL_WIDTH * (COLS - 1) && mouseX <= BAR_X + CELL_WIDTH * COLS 
+                            && mouseY >= BAR_Y + 10 && mouseY <= BAR_Y + CELL_HEIGHT - 10) {
+                g.setColor(new Color(0, 0, 0, 100));
+                String msg = "Recall: teleport unit back to their operator (remove)";
+                g.fillRect(BAR_X + (((COLS * CELL_WIDTH) / 2) - metrics.stringWidth(msg) /2) - 5, BAR_Y - metrics.getHeight(), metrics.stringWidth(msg) + 10, metrics.getHeight());
+                g.setColor(Color.WHITE);
+                g.drawString(msg, BAR_X + (((COLS * CELL_WIDTH) / 2) - metrics.stringWidth(msg) /2), BAR_Y - 5);
+                
+                runDynamicHover(row, col, 0.5);
+                iconImage = ImgManager.loadIcon("white_place_hover");
+                g.drawImage(iconImage, hoverPlaceX,  hoverPlaceY + 13, CELL_WIDTH, CELL_HEIGHT , this);
+            } else {
+                for (int i = 0; i< unitTypes.size(); i++) {
+                    UnitType unit = unitTypes.get(i);
+                    int unitX = BAR_X + CELL_WIDTH * i;
+                    if (mouseX >= unitX && mouseX <= unitX + CELL_WIDTH 
+                            && mouseY >= BAR_Y + 10 && mouseY <= BAR_Y + CELL_HEIGHT - 10) {
+                        g.setColor(new Color(0, 0, 0, 100));
+                        String msg = "";
+                        if (unit.getRole() == UnitConfig.COST_GEN) {
+                            msg = unit.getClassName() + "  -  " + unit.getHealth() + " hp | " + unit.getAtkSpeed()+ " secs/gen";
+                        } else if (unit.getRole() == UnitConfig.DEFENDER) {
+                            msg = unit.getClassName() + "  -  " + unit.getHealth() + " hp";
+                        } else {
+                            msg = unit.getClassName() + "  -  " + unit.getHealth() + " hp | " + unit.getAtk() + " atk";
+                        }
+                        g.fillRect(BAR_X + (((COLS * CELL_WIDTH) / 2) - metrics.stringWidth(msg) /2) - 5, BAR_Y - metrics.getHeight(), metrics.stringWidth(msg) + 10, metrics.getHeight());
+                        g.setColor(Color.WHITE);
+                        g.drawString(msg, BAR_X + (((COLS * CELL_WIDTH) / 2) - metrics.stringWidth(msg) /2), BAR_Y - 5);
+                        runDynamicHover(row, col, 0.5);
+                        if (!unit.isNoCoolDown()) {
+                            iconImage = ImgManager.loadIcon("white_less_place_hover");
+                        } else if (remainMana < unit.getManaCost()) {
+                            iconImage = ImgManager.loadIcon("red_not_enough_place_hover");
+                        } else {
+                            iconImage = ImgManager.loadIcon("white_place_hover");
+                        }
+                        g.drawImage(iconImage, hoverPlaceX,  hoverPlaceY + 13, CELL_WIDTH, CELL_HEIGHT , this);
+                    }
+                }
+            }
+        }
+        
         
         if (DEBUG_MODE) {
+            g.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
             g.setColor(Color.WHITE);
             g.drawString("FPS: " + GameLoop.getFps(), 10, 20);
             g.drawString("Thread: " + (Thread.activeCount() - OTHER_THREAD) + " else: " + OTHER_THREAD , 10, 45);
         }
-    } 
+    }
     
     public void addMouseListeners() {
         /**
@@ -668,20 +766,26 @@ public class GamePanel extends JPanel {
             }
 
             private void placeUnit(UnitType unit, int row, int col) {
-                if (col >= 0 && col < COLS && row >= 0 && row < ROWS && isFieldAvailable(col, row)) {
-                    Unit unitIns = UnitFactory.createUnit(unit.unitClass, row, col);
-                    units.add(unitIns);
-                    remainMana -= unit.getManaCost();
-                    unit.startCooldown();
-                    if (unitIns instanceof UnitTriggerable) {
-                        ((UnitTriggerable)unitIns).triggerWhenPlace();
+                if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                    
+                    if (isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) {
+                        Unit unitIns = UnitFactory.createUnit(unit.unitClass, row, col);
+                        units.add(unitIns);
+                        remainMana -= unit.getManaCost();
+                        unit.startCooldown();
+                        if (unitIns instanceof UnitTriggerable) {
+                            ((UnitTriggerable)unitIns).triggerWhenPlace();
+                        }
+                        if (unitIns instanceof UnitIgnoreFieldAvailable) {
+                            ((UnitIgnoreFieldAvailable)unitIns).getUnitFromField(getUnitFromField(col, row));
+                        }
+                        Audio.play(AudioName.PLANT_PLACE);
+                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
+                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
+                    } else {
+                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
+//                      System.out.println("***Field is Not available***");
                     }
-                    Audio.play(AudioName.PLANT_PLACE);
-                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
-                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
-                } else {
-                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
-//                    System.out.println("***Field is Not available***");
                 }
             }
             
