@@ -2,8 +2,6 @@ package Main;
 
 import Asset.Audio;
 import Asset.AudioName;
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -11,6 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 public class MainMenu extends JFrame {
     private Rectangle start, dict, config, exit, menuBar, logo;
@@ -32,8 +32,8 @@ public class MainMenu extends JFrame {
         try {
             setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
             menu = ImageIO.read(getClass().getResource("/Asset/Img/Icons/MenuBar.PNG"));
-            title = ImageIO.read(getClass().getResource("/Asset/Img/Icons/title.png"));
-            background = ImageIO.read(getClass().getResource("/Asset/Img/Background/chinaNo1.png"));
+            title = ImageIO.read(getClass().getResource("/Asset/Img/Icons/defense_of_the_dungeon_no_s.png"));
+            background = ImageIO.read(getClass().getResource("/Asset/Img/Background/defense_of_dungeon_wallpaper.png"));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Wrong image path.");
