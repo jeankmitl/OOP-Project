@@ -20,6 +20,7 @@ public class MainMenu extends JFrame {
     public MainMenu() {
         setTitle("Defense of the Dungeon");
         setSize(1280, 720);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
