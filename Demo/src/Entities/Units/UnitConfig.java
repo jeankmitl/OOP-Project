@@ -29,6 +29,11 @@ public interface UnitConfig {
     UnitSpriteSheets NIKE_SPRITE = new UnitSpriteSheets("nike", "nike");
     UnitSpriteSheets SEMI_AUTO_BOT_SPRITE = new UnitSpriteSheets("mini_lazer_idle", "mini_lazer_atk");
     UnitSpriteSheets GIVEAWAY_SLIME_SPRITE = new UnitSpriteSheets("Slime_re", "SlimeGenerate");
+    UnitSpriteSheets BLOCK_FIELD_SPRITE = new UnitSpriteSheets();
+    UnitSpriteSheets MIPYA_SPRITE = new UnitSpriteSheets("mipya_idle", "mipya_atkpng");
+    UnitSpriteSheets SNAKE_SPRITE = new UnitSpriteSheets("snake_idle", "snake_atk");
+    UnitSpriteSheets PYTHON_SPRITE = new UnitSpriteSheets("python_idle", "python_atk");
+    
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER);
@@ -39,12 +44,17 @@ public interface UnitConfig {
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 999, 42, 150, 7, GUARD);
     UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 300, 1800, 50, 50, 30, UnitConfig.EXPLOTION);
     UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 20, 0.5, 50, 60, COST_GEN);
+    UnitStats MIPYA_STATS = new UnitStats(MIPYA_SPRITE, 150, 10, 1.5, 80, 20, ATTACKER);
+    UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE, 500, 25, 1, 200, 30, GUARD);
+    UnitStats PYTHON_STATS = new UnitStats(PYTHON_SPRITE, 600, 15, 1.5, 200, 30, ATTACKER);
     //TEST ONLY//
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 5, 200, 50, COST_GEN);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 100, 10, 400, 7, ATTACKER);
     UnitStats EXPLOSIVE_TURTLE_STATS = new UnitStats(EXPLOSIVE_TURTLE_SPRITE, 1, 500, 0, 50, 5, EXPLOTION);
     UnitStats SEMI_AUTO_BOT_STATS = new UnitStats(SEMI_AUTO_BOT_SPRITE, 300, 20, 3, 200, 20, ATTACKER);
-    // Too OP
+    // Not for Operator
     UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 9999, 1800, 0, 125, 50, EXPLOTION);
+    UnitStats BLOCK_FIELD_STATS = new UnitStats(BLOCK_FIELD_SPRITE, 1, 0, 0, 0, 0, -1);
+    // Too OP
     UnitStats NIKE_STATS = new UnitStats(NIKE_SPRITE, 1, 9999, 1, 0, 9999, EXPLOTION);
 }

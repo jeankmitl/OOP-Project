@@ -124,12 +124,12 @@ public abstract class Entity {
     
     public BufferedImage getBufferedImage() { //2 Sprite Sheet
         if (status.equals("idle")){
-            if (currentFrame * frame_Width > actionIdle.getWidth()) {
+            if (currentFrame * frame_Width >= actionIdle.getWidth()) {
                 currentFrame = 0;
             }
             return actionIdle.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);}
         else {
-            if (currentFrame * frame_Width > actionATK.getWidth()) {
+            if (currentFrame * frame_Width >= actionATK.getWidth()) {
                 currentFrame = 0;
             }
             return actionATK.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);

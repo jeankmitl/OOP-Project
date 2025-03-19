@@ -152,13 +152,17 @@ public class GamePanel extends JPanel {
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
         unitTypes.add(new UnitType(Mimic.class)); //BETA unit
-        unitTypes.add(new UnitType(BigBall.class));
+//        unitTypes.add(new UnitType(BigBall.class));
 //        unitTypes.add(new UnitType(GolemSupport.class));
 //        unitTypes.add(new UnitType(Explosion.class));
 //        unitTypes.add(new UnitType(Explosive_turtle.class));
-        unitTypes.add(new UnitType(Nike.class));
+//        unitTypes.add(new UnitType(Nike.class));
 //        unitTypes.add(new UnitType(SemiAutoBot.class));
-        unitTypes.add(new UnitType(GiveawaySlime.class));
+//        unitTypes.add(new UnitType(GiveawaySlime.class));
+        unitTypes.add(new UnitType(MiPya.class));
+        unitTypes.add(new UnitType(Snake.class));
+        unitTypes.add(new UnitType(Python.class));
+        
         
         if (DEBUG_MODE) {
             unitTypes.add(new UnitType(Candles6.class));
@@ -202,10 +206,20 @@ public class GamePanel extends JPanel {
     }
     
     public boolean isFieldExtraAvailable(UnitType unit, int row, int col) {
-        if (UnitExtraFieldAvailable.class.isAssignableFrom(unit.unitClass)) {
+        if (UnitCommensalism.class.isAssignableFrom(unit.unitClass)) {
+            return getUnitCountFromField(col, row) == 1;
+        } else if (UnitExtraFieldAvailable.class.isAssignableFrom(unit.unitClass)) {
             return getUnitCountFromField(col, row) < 2;
         } else if (UnitIgnoreFieldAvailable.class.isAssignableFrom(unit.unitClass)) {
             return true;
+        }
+        return false;
+    }
+    
+    public boolean isFieldRestricted(UnitType unit, int row, int col) {
+        if (UnitCommensalism.class.isAssignableFrom(unit.unitClass)) {
+            System.out.println("hi");
+            return getUnitCountFromField(col, row) != 1;
         }
         return false;
     }
@@ -408,17 +422,19 @@ public class GamePanel extends JPanel {
                 vfx.setHeight(CELL_HEIGHT + 20);
                 GamePanel.getVfxs().add(vfx);
                 getVfxs().add(vfx);
-            } else if (bullet instanceof Bite) { //Mimic Beta test
-                for (Enemy enemy : enemies) {
-                    if (bullet.getBounds().intersects(enemy.getBounds())) {
-                        enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
-                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
-                        bulletIterator.remove();
-                        Audio.play(AudioName.HIT);
-                        break;
-                    }
-                }
-            } else {
+            } 
+//            else if (bullet instanceof Bite) { //Mimic Beta test
+//                for (Enemy enemy : enemies) {
+//                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+//                        enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
+//                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
+//                        bulletIterator.remove();
+//                        Audio.play(AudioName.HIT);
+//                        break;
+//                    }
+//                }
+//            } 
+            else { //Keep same stat with this here
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
 //                        enemy.debuff_stun();
@@ -628,7 +644,7 @@ public class GamePanel extends JPanel {
             if (unit.isDragging()) {
                 runDynamicHover(row, col, 0.3);
                 if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                    if (isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) {
+                    if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
                         iconImage = ImgManager.loadIcon("green_place_hover");
                         g.drawImage(iconImage, hoverPlaceX,  hoverPlaceY, CELL_WIDTH, CELL_HEIGHT, this);
                     } else {
@@ -779,7 +795,7 @@ public class GamePanel extends JPanel {
             private void placeUnit(UnitType unit, int row, int col) {
                 if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
                     
-                    if (isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) {
+                    if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
                         Unit unitIns = UnitFactory.createUnit(unit.unitClass, row, col);
                         units.add(unitIns);
                         remainMana -= unit.getManaCost();

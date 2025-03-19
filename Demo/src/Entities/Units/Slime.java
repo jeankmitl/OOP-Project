@@ -13,7 +13,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Slime extends Unit implements UnitGeneratable, UnitExtraFieldAvailable {
+public class Slime extends Unit implements UnitGeneratable {
 
     public Slime(int row, int col) {
         super(row, col, getUNIT_STATS());
@@ -32,10 +32,5 @@ public class Slime extends Unit implements UnitGeneratable, UnitExtraFieldAvaila
             setStatus(IDLE_STATUS);
             GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
         }).start();
-    }
-
-    @Override
-    public void getUnitFromField(Unit unit) {
-        System.out.println("hi");
     }
 }

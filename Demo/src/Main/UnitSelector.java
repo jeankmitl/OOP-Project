@@ -85,6 +85,9 @@ public class UnitSelector extends JFrame {
             unitTypes.add(new UnitType(GolemSupport.class));
             unitTypes.add(new UnitType(Explosive_turtle.class));
             unitTypes.add(new UnitType(Nike.class));
+            unitTypes.add(new UnitType(MiPya.class));
+            unitTypes.add(new UnitType(Snake.class));
+            unitTypes.add(new UnitType(Python.class));
         }
         
         for (int i = 0; i < unitTypes.size(); i += COLS) {
@@ -152,7 +155,7 @@ public class UnitSelector extends JFrame {
         private final int frame_Width = 32;
         private int total_Frame_ATK;
         private int total_Frame_Idle;
-        public static final int OFFSET_X = 46, OFFSET_Y = 60;
+        public static final int OFFSET_X = 40, OFFSET_Y = 61;
         
         public BGPreviewLabel(Icon image) {
             super(image);
