@@ -20,6 +20,10 @@ import java.util.Random;
  */
 public class stage_Tutorial extends GamePanel{
     protected DWait start,w1,w2,w3,w4;
+
+    public stage_Tutorial() {
+        super(14);
+    }
     
     @Override
     public void Spawn_Enemy(Enemy enemy,int num,int delay){
@@ -32,29 +36,6 @@ public class stage_Tutorial extends GamePanel{
                 }).start();
            }
     }
-//    public void banndit(int num){
-//        System.out.println("bandit");
-//        int delay = 10;
-//        // future maybe fix delay?
-//        for (int i=0;i<num;i++){
-//            new DWait(i*delay, e->{
-//               int randomBandit = 2; 
-//               enemies.add(new Bandit(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomBandit));
-//                System.out.println("spawn success"); 
-//            }).start();
-//        }
-//    }
-//    
-//    public void banndit(int num,int delay){
-//        // future maybe fix delay?
-//        for (int i=0;i<num;i++){
-//            new DWait(i*delay, e->{
-//               int randomBandit = 2;
-//                enemies.add(new Bandit(1280-GRID_OFFSET_X+random.nextInt(10)*10, randomBandit));
-//                System.out.println("spawn success"); 
-//            }).start();
-//        }
-//    }
     
     @Override
     public void summonEnemies() { // maybe 12 enermy

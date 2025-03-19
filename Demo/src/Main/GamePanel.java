@@ -87,9 +87,11 @@ public class GamePanel extends JPanel {
     
     private boolean isAnyUnitDragging = false;
     
+    protected int target,count_kill=0;
+    private boolean victory = false;
     
     //same as: public awake()
-    public GamePanel() {
+    public GamePanel(int target) {
         /**
          * Awake. = for create Object w/ 'new'
          * - play: music 🎵, 
@@ -105,6 +107,7 @@ public class GamePanel extends JPanel {
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         vfxs = new ArrayList<>();
+        this.target = target;
         
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
         addKeyListener(new GameKeyboardListener());
@@ -172,8 +175,9 @@ public class GamePanel extends JPanel {
         manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
         
         // spawn: enemies every 10s ➕
-       if (spawnEnemiesTimer10.tick(deltaTime)) { // <<--- Off this bebore play stage 1
-//           summonEnemies();
+       if (this.target == this.count_kill && !this.victory) { // <<--- Off this bebore play stage 1
+            System.out.println("You win");
+            this.victory = true;
         }
         
         // update: animation every 2s
@@ -360,6 +364,8 @@ public class GamePanel extends JPanel {
             }
 
             if (enemy.isDead()) {
+                count_kill += 1;
+                System.out.println(count_kill);
                 enemyIterator.remove();
                 Audio.play(AudioName.KILL2);
                 getVfxs().add(new VFX(enemy.getX(), enemy.getY(), "dead_ghost_vfx"));
@@ -402,7 +408,7 @@ public class GamePanel extends JPanel {
                 vfx.setHeight(CELL_HEIGHT + 20);
                 GamePanel.getVfxs().add(vfx);
                 getVfxs().add(vfx);
-            } else if (bullet instanceof Beta_bullet) { //Mimic Beta test
+            } else if (bullet instanceof Bite) { //Mimic Beta test
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
                         enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
@@ -569,7 +575,12 @@ public class GamePanel extends JPanel {
         g.drawImage(iconImage, BAR_X+730, BAR_Y-63,70,70, null);
         g.fillRect(BAR_X + 740, BAR_Y - 5, (int)(manaRegenPct * (116.0 / 100.0)), 5);
         ///show mana system
-        
+        g.setColor(new Color(0,0,0,180));
+        g.fillRect(550, 0, 150, 30);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+        g.drawString(count_kill+" / "+target, 600, 20); // Display at top-left
+        /////Count Enemy
         // frame operator
         for (int i = 0; i < COLS; i++) {
             iconImage = ImgManager.loadIcon("frame_op1");

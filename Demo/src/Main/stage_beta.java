@@ -13,6 +13,10 @@ import Entities.Enemies.*;
  */
 public class stage_beta extends GamePanel{
     protected DWait start;
+
+    public stage_beta() {
+        super(9999);
+    }
     
     @Override
     public void summonEnemies() {
