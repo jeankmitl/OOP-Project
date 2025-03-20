@@ -8,6 +8,11 @@ package Main;
  *
  * @author USER
  */
-public class stage4 {
+public class stage4 extends GamePanel{
+
+    public stage4() {
+        super(9);
+    }
+    
     
 }

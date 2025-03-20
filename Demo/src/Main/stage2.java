@@ -19,7 +19,7 @@ import java.util.Random;
 public class stage2 extends GamePanel{
     protected DWait start,w1,w2,w3,w4,w5;
     
-    public stage2(int target) {
+    public stage2() {
         super(31);
     }
 
@@ -28,7 +28,7 @@ public class stage2 extends GamePanel{
         Random random = new Random();
         for (int i=0;i<num;i++){
             new DWait(i*delay, e->{
-               int randomBandit = random.nextInt(3)+1; //fix Because Stage 1
+               int randomBandit = random.nextInt(3)+1; //fix Because Stage 2 lane 1-3
                     enemies.add(enemy.createNew(1280 - GRID_OFFSET_X + random.nextInt(10) * 10, randomBandit));
                     System.out.println("Spawn Success");
                 }).start();
@@ -69,9 +69,10 @@ public class stage2 extends GamePanel{
             System.out.println("WAVE 4");
             Spawn_Enemy(new Bandit(0, 0),4,10); // 8
             Spawn_Enemy(new BanditV2(0,0),4 ,5);
+            w5.start();
         });
         
-        w5 = new DWait(60, e->{
+        w5 = new DWait(40, e->{
             System.out.println("WAVE Final");
             Spawn_Enemy(new Bandit(0, 0),4,10); //9
             Spawn_Enemy(new BanditV2(0,0), 5,6);

@@ -8,6 +8,12 @@ package Main;
  *
  * @author USER
  */
-public class stagechinatown {
+public class stagechinatown extends GamePanel{
+
+    public stagechinatown() {
+        super(0);
+    }
+    
+    
     
 }

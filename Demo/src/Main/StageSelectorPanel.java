@@ -39,10 +39,26 @@ public class StageSelectorPanel extends JPanel{
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (st1.contains(e.getPoint())) {
-                    selectStage("Beta");
-                } else if (st2.contains(e.getPoint())) {
                     selectStage("St1");
-                } else {
+                } else if (st2.contains(e.getPoint())) {
+                    selectStage("St2");
+                }else if (st3.contains(e.getPoint())) {
+                    selectStage("St3");}
+                else if (st4.contains(e.getPoint())) {
+                    selectStage("St4");}
+                else if (st5.contains(e.getPoint())) {
+                    selectStage("St5");}
+                else if (st6.contains(e.getPoint())) {
+                    selectStage("St6");}
+                else if (st7.contains(e.getPoint())) {
+                    selectStage("St7");}
+                else if (st8.contains(e.getPoint())) {
+                    selectStage("St8");}
+                else if (st9.contains(e.getPoint())) {
+                    selectStage("St9");}
+                else if (st10.contains(e.getPoint())) {
+                    selectStage("St10");}
+                else{
                     Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     System.out.println("Stage not yet finished.");
                 }
