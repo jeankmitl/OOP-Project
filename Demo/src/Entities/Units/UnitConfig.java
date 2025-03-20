@@ -28,7 +28,7 @@ public interface UnitConfig {
     UnitSpriteSheets EXPLOSIVE_TURTLE_SPRITE = new UnitSpriteSheets("explosive_tutle_idle", "explosive_tutle_atk");
     UnitSpriteSheets NIKE_SPRITE = new UnitSpriteSheets("nike", "nike");
     UnitSpriteSheets SEMI_AUTO_BOT_SPRITE = new UnitSpriteSheets("mini_lazer_idle", "mini_lazer_atk");
-    UnitSpriteSheets GIVEAWAY_SLIME_SPRITE = new UnitSpriteSheets("Slime_re", "SlimeGenerate");
+    UnitSpriteSheets GIVEAWAY_SLIME_SPRITE = new UnitSpriteSheets("rainbow_slime", "rainbow_slime");
     UnitSpriteSheets BLOCK_FIELD_SPRITE = new UnitSpriteSheets();
     UnitSpriteSheets MIPYA_SPRITE = new UnitSpriteSheets("mipya_idle", "mipya_atkpng");
     UnitSpriteSheets SNAKE_SPRITE = new UnitSpriteSheets("snake_idle", "snake_atk");
@@ -37,13 +37,13 @@ public interface UnitConfig {
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER);
-    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 0, 25, 50, 7, COST_GEN);
+    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 50, 25, 50, 7, COST_GEN);
     UnitStats KANIWALL_STATS = new UnitStats(KANIWALL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER);
     ///BETA///
     UnitStats CANNON_STATS = new UnitStats(CANNON_SPRITE,300,500,60,250,20,ATTACKER);
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 999, 42, 150, 7, GUARD);
     UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 300, 1800, 50, 50, 30, UnitConfig.EXPLOTION);
-    UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 20, 0.5, 50, 60, COST_GEN);
+    UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 20, 0.5, 0, 60, COST_GEN);
     UnitStats MIPYA_STATS = new UnitStats(MIPYA_SPRITE, 150, 10, 1.5, 80, 20, ATTACKER);
     UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE, 500, 25, 1, 200, 30, GUARD);
     UnitStats PYTHON_STATS = new UnitStats(PYTHON_SPRITE, 600, 15, 1.5, 200, 30, ATTACKER);

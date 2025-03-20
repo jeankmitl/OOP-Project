@@ -88,6 +88,9 @@ public class UnitSelector extends JFrame {
             unitTypes.add(new UnitType(MiPya.class));
             unitTypes.add(new UnitType(Snake.class));
             unitTypes.add(new UnitType(Python.class));
+            unitTypes.add(new UnitType(Explosion.class));
+            unitTypes.add(new UnitType(GiveawaySlime.class));
+            
         }
         
         for (int i = 0; i < unitTypes.size(); i += COLS) {

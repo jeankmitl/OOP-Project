@@ -162,11 +162,12 @@ public class GamePanel extends JPanel {
         unitTypes.add(new UnitType(MiPya.class));
         unitTypes.add(new UnitType(Snake.class));
         unitTypes.add(new UnitType(Python.class));
+        unitTypes.add(new UnitType(GiveawaySlime.class));
         
         
-        if (DEBUG_MODE) {
-            unitTypes.add(new UnitType(Candles6.class));
-        }
+//        if (DEBUG_MODE) {
+//            unitTypes.add(new UnitType(Candles6.class));
+//        }
     }
    
     
