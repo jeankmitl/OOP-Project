@@ -37,7 +37,7 @@ public interface UnitConfig {
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER);
-    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 0, 25, 50, 7, COST_GEN);
+    UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 25, 25, 50, 7, COST_GEN);
     UnitStats KANIWALL_STATS = new UnitStats(KANIWALL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER);
     ///BETA///
     UnitStats CANNON_STATS = new UnitStats(CANNON_SPRITE,300,500,60,250,20,ATTACKER);
