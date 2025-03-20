@@ -23,6 +23,8 @@ public class stage_beta extends GamePanel{
         start = new DWait(10, e->{
             System.out.println("Endless Wave");
             super.Spawn_Enemy(new Bandit(0, 0),99);
+            super.Spawn_Enemy(new BanditV2(0, 0),99);
+            super.Spawn_Enemy(new BanditV3(0, 0),99);
             super.Spawn_Enemy(new Ninja(0, 0),99);
             super.Spawn_Enemy(new LittleRedHood(0, 0),99);
             super.Spawn_Enemy(new Sorcerer(0, 0),99);
