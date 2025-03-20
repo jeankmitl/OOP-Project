@@ -174,7 +174,7 @@ public class GamePanel extends JPanel {
     private void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
         if (manaRecoverTimer10.tick(deltaTime)) {
-            increaeMana(10);
+            increaseMana(10);
         }
         manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
         
@@ -243,10 +243,18 @@ public class GamePanel extends JPanel {
         return i;
     }
     
-    public static void increaeMana(int mana) {
+    public static void increaseMana(int mana) {
         remainMana += mana;
         if (remainMana > MAX_MANA) {
             remainMana = MAX_MANA;
+        }
+    }
+    
+    public static void reduceMana(int mana) {
+        if (remainMana - mana < 0) {
+            remainMana = 0;
+        } else {
+            remainMana -= mana;
         }
     }
     
@@ -339,7 +347,7 @@ public class GamePanel extends JPanel {
         Iterator<Enemy> enemyIterator = enemies.iterator();
         while (enemyIterator.hasNext()) {
             Enemy enemy = enemyIterator.next();
-
+            
             boolean stop = false;
             for (Unit unit : units) {
                 if (unit.getBounds().intersects(enemy.getBounds())) {
@@ -353,6 +361,16 @@ public class GamePanel extends JPanel {
                         long currentTime = System.currentTimeMillis();
                         if (currentTime - enemy.getLastAttackTime() >= 1000) {
                             enemy.attack(unit);
+                            //--------------- RedHood Sustain Skill ----------------------
+                            if (enemy instanceof LittleRedHood) {
+                                LittleRedHood redHood = (LittleRedHood)enemy;
+                                if (redHood.getHealth() + 5 > 181) {
+                                    redHood.setHealth(181);
+                                } else {
+                                    redHood.setHealth(redHood.getHealth()+5);
+                                }
+                            // -----------------------------------------------------------
+                            }
                             if (unit.isDead()) {
                                 Audio.play(AudioName.KILL2);
                                 getVfxs().add(new VFX(unit.getX(), unit.getY(), "dead_ghost_vfx"));

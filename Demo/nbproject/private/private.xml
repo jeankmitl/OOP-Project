@@ -19,6 +19,17 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Main/Main.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Entity.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Main/GamePanel.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Enemies/EnemySpriteSheets.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Enemies/EnemyConfig.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Enemies/Ninja.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Units/Slime.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Enemies/Support.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Enemies/Sorcerer.java</file>
+            <file>file:/C:/Users/sarin/Desktop/OOP-Project/Demo/src/Entities/Enemies/Bandit.java</file>
+        </group>
     </open-files>
 </project-private>

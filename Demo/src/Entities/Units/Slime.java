@@ -27,7 +27,7 @@ public class Slime extends Unit implements UnitGeneratable {
     @Override
     public void generateByAtkSpeed() {
         setStatus(ATK_STATUS);
-        GamePanel.increaeMana(atk);
+        GamePanel.increaseMana(atk);
         new DWait(1.5, (e) -> {
             setStatus(IDLE_STATUS);
             GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));

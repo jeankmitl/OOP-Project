@@ -40,7 +40,7 @@ public class GiveawaySlime extends Unit implements UnitInvisible, UnitIgnoreFiel
     public void triggerWhenPlace() {
         setStatus(ATK_STATUS);
         new DRepeat(0.6, 3, false, e -> {
-            GamePanel.increaeMana(atk);
+            GamePanel.increaseMana(atk);
             GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "get_mana_slime_vfx"));
         }, e -> {
             setHealth(0);
