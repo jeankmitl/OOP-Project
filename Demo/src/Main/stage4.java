@@ -16,7 +16,7 @@ import java.awt.event.MouseEvent;
  *
  * @author USER
  */
-public class stage4 extends GamePanel{
+public class stage4 extends GamePanel{ // Ninja appear
     protected DWait start,w1,w2,w3,w4,w5,w6,w7;
     private StageSelector stage;
 
