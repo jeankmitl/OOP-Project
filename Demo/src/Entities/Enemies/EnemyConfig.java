@@ -19,9 +19,9 @@ public interface EnemyConfig {
     
     // All sprite sheet ️🎥
     EnemySpriteSheets NINJA_SPRITE = new EnemySpriteSheets("ninja-walk", "ninja-att");
-    EnemySpriteSheets BANDIT_SPRITE = new EnemySpriteSheets("Bandit", "Bandit");
-    EnemySpriteSheets BANDIT_SPRITEV2 = new EnemySpriteSheets("Bandit", "Bandit");
-    EnemySpriteSheets BANDIT_SPRITEV3 = new EnemySpriteSheets("Bandit", "Bandit");
+    EnemySpriteSheets BANDIT_SPRITE = new EnemySpriteSheets("hum-walk", "hum-att");
+    EnemySpriteSheets BANDIT_SPRITEV2 = new EnemySpriteSheets("hum2-walk", "hum2-att");
+    EnemySpriteSheets BANDIT_SPRITEV3 = new EnemySpriteSheets("hum3-walk", "hum3-att");
     EnemySpriteSheets SORCERER_SPRITE = new EnemySpriteSheets("Sorcerer", "SorcererATK");
     EnemySpriteSheets LITTLE_RED_HOOD_SPRITE = new EnemySpriteSheets("little_Red_Hood_Idle", "little_Red_Hood_ATK");
     EnemySpriteSheets RC_BOMBER_SPRITE = new EnemySpriteSheets("rc_bomber", "rc_bomber");
@@ -31,8 +31,8 @@ public interface EnemyConfig {
     // All Unit stats 💡
     EnemyStats NINJA_STATS = new EnemyStats(NINJA_SPRITE, 335, 100, 1, WALK_SLOW, NORMAL);
     EnemyStats BANDIT_STATS = new EnemyStats(BANDIT_SPRITE, 181, 100, 1, WALK_NORMAL, LONG_RANGE);
-    EnemyStats BANDIT_STATSV2 = new EnemyStats(BANDIT_SPRITE, 551, 100, 1, WALK_NORMAL, LONG_RANGE);
-    EnemyStats BANDIT_STATSV3 = new EnemyStats(BANDIT_SPRITE, 1290, 100, 1, WALK_NORMAL, LONG_RANGE);
+    EnemyStats BANDIT_STATSV2 = new EnemyStats(BANDIT_SPRITEV2, 551, 100, 1, WALK_NORMAL, LONG_RANGE);
+    EnemyStats BANDIT_STATSV3 = new EnemyStats(BANDIT_SPRITEV3, 1290, 100, 1, WALK_NORMAL, LONG_RANGE);
     EnemyStats SORCERER_STATS = new EnemyStats(SORCERER_SPRITE, 181, 100, 1, WALK_SLOW, NORMAL);
     EnemyStats LITTLE_RED_HOOD_STATS = new EnemyStats(LITTLE_RED_HOOD_SPRITE, 181, 150, 1, WALK_FAST, NORMAL);
     EnemyStats RC_BOMBER_STATS = new EnemyStats(RC_BOMBER_SPRITE, 50, 2000, 1, WALK_CAR, NORMAL);
