@@ -31,7 +31,7 @@ import javax.swing.border.BevelBorder;
  *
  * @author anawi
  */
-public class UnitSelector extends JFrame {
+public class UnitSelector extends JDialog {
     private static final List<UnitType> unitTypes = new ArrayList<>();
     private static final List<UnitLabelBox> unitChosens = new ArrayList<>();
     private final JPanel unitPanelList, unitChosenPanelList, operatorPanel, unitStatsPanel, optionsPanel;
@@ -52,7 +52,7 @@ public class UnitSelector extends JFrame {
     
     public UnitSelector() {
         setTitle("Select Unit");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(CELL_WIDTH * MAX_UNIT, 720);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -181,9 +181,9 @@ public class UnitSelector extends JFrame {
         new Timer(16, e -> updateFPS()).start();
     }
     
-    public static void main(String[] args) {
-        new UnitSelector();
-    }
+//    public static void main(String[] args) {
+//        new UnitSelector();
+//    }
     
     private void updateAnimation() {
         bgPreviewLabel.updateFrame();
@@ -226,7 +226,7 @@ public class UnitSelector extends JFrame {
         }
     }
     
-    private List<UnitType> getResultUnits() {
+    public List<UnitType> getResultUnits() {
         List<UnitType> unitTypes = new ArrayList<>();
         for (UnitLabelBox ulb: unitChosens) {
             unitTypes.add(ulb.getUnitType());

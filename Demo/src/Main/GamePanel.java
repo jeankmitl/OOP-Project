@@ -66,7 +66,7 @@ public class GamePanel extends JPanel {
     
     
     protected final Random random = new Random();
-    private static final List<UnitType> unitTypes = new ArrayList<>(COLS - 1);
+    private static List<UnitType> unitTypes;
     
     private boolean draggingRecall = false;
     private int mouseX, mouseY;
@@ -92,7 +92,14 @@ public class GamePanel extends JPanel {
     protected Rectangle homeBtn = new Rectangle(1180,15,75,75);
     
     //same as: public awake()
+
     public GamePanel(int target) {
+        this(new ArrayList<>(), target);
+    }
+    
+    
+    
+    public GamePanel(List<UnitType> unitTypes, int target) {
         /**
          * Awake. = for create Object w/ 'new'
          * - play: music 🎵, 
@@ -108,12 +115,24 @@ public class GamePanel extends JPanel {
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         vfxs = new ArrayList<>();
+        this.unitTypes = unitTypes;
         this.target = target;
         
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
-        addKeyListener(new GameKeyboardListener());
-        startGameLoop(); // Always call on last GamePanel
-        summonEnemies(); // spawn Enermy in this insted 
+        selectUnitBefore();
+    }
+    
+    private void selectUnitBefore() {
+        UnitSelector unitSelector = new UnitSelector();
+        unitSelector.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
+                addKeyListener(new GameKeyboardListener());
+                startGameLoop(); // Always call on last GamePanel
+                summonEnemies(); // spawn Enermy in this insted
+            }
+        });
     }
     
     // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
@@ -150,23 +169,7 @@ public class GamePanel extends JPanel {
             units.add(new Candles6(i, -1));
         }
 //        unitTypes.add(new UnitType(Skeleton.class));
-        unitTypes.add(new UnitType(Slime.class));
-        unitTypes.add(new UnitType(Kaniwall.class));
-        unitTypes.add(new UnitType(Mimic.class)); //BETA unit
-//        unitTypes.add(new UnitType(BigBall.class));
-//        unitTypes.add(new UnitType(GolemSupport.class));
-//        unitTypes.add(new UnitType(Explosion.class));
-//        unitTypes.add(new UnitType(Explosive_turtle.class));
-//        unitTypes.add(new UnitType(Nike.class));
-//        unitTypes.add(new UnitType(SemiAutoBot.class));
-//        unitTypes.add(new UnitType(GiveawaySlime.class));
-//        unitTypes.add(new UnitType(MiPya.class));
-//        unitTypes.add(new UnitType(Snake.class));
-//        unitTypes.add(new UnitType(Python.class));
-        unitTypes.add(new UnitType(AlphaWolf.class));
-        unitTypes.add(new UnitType(Werewolf.class));
-        unitTypes.add(new UnitType(GiveawaySlime.class));
-        unitTypes.add(new UnitType(Vampire.class));
+
         
         
 //        if (DEBUG_MODE) {
