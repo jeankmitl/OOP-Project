@@ -60,7 +60,7 @@ public class StageSelectorPanel extends JPanel{
                 else if (st10.contains(e.getPoint())) {
                     selectStage("St10");}
                 else if(homeBtn.contains(e.getPoint())){
-                    selectStage("Back");
+                    selectStage("Main");
             }
             
         }

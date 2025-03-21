@@ -4,14 +4,27 @@
  */
 package Main;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 /**
  *
  * @author USER
  */
 public class stagechinatown extends GamePanel{
-
-    public stagechinatown() {
+    private StageSelector stage;
+    public stagechinatown(StageSelector stage) {
         super(0);
+        this.stage = stage;
+        
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(homeBtn.contains(e.getPoint())){
+                    stage.loadStage("Back");
+                }
+            }
+        });
     }
     
     

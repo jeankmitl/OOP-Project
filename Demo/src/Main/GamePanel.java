@@ -89,6 +89,8 @@ public class GamePanel extends JPanel {
     protected int target,count_kill=0;
     private boolean victory = false;
     
+    protected Rectangle homeBtn = new Rectangle(1180,15,75,75);
+    
     //same as: public awake()
     public GamePanel(int target) {
         /**
@@ -743,6 +745,8 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
+             iconImage = ImgManager.loadIcon("blackLowOpacityBG");
+             g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
         }
         
         
