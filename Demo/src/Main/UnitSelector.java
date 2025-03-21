@@ -12,6 +12,7 @@ import Entities.Units.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -30,30 +31,50 @@ import javax.swing.border.BevelBorder;
  */
 public class UnitSelector extends JFrame {
     private static final List<UnitType> unitTypes = new ArrayList<>();
-    private final JPanel unitPanelList, operatorPanel, unitStatsPanel;
+    private static final List<UnitLabelBox> unitChosens = new ArrayList<>();
+    private final JPanel unitPanelList, unitChosenPanelList, operatorPanel, unitStatsPanel;
     private final JPanel leftRightPanel, upDownPanel;
     private final BGPreviewLabel bgPreviewLabel;
     private final UnitStatLabel healthStatLabel, atkStatLabel, atkSpeedLabel, cooldownLabel;
+    private final UnitDescription unitDescription;
     private final JLabel unitNameLabel, roleLabel;
     
     public static final int CELL_WIDTH = 95;
     public static final int CELL_HEIGHT = 95;
     public static final int COLS = 4;
     public static final int GAP = 7;
+    public static final int MAX_UNIT = 8;
+    private UnitInsertBox[] unitInsertBoxs = new UnitInsertBox[MAX_UNIT];
+    
     
     public UnitSelector() {
         setTitle("Select Unit");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(720, 720);
+        setSize(CELL_WIDTH * MAX_UNIT, 720);
         setResizable(false);
         setLocationRelativeTo(null);
         ImageIcon bgPreviewImg = new ImageIcon(ImgManager.loadIcon("bg_for_preview"));
         
         unitPanelList = new JPanel();
-        operatorPanel = new JPanel();
+        unitChosenPanelList = new JPanel();
+        operatorPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image img = ImgManager.loadIcon("bg_for_status");
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
         leftRightPanel = new JPanel();
         upDownPanel = new JPanel();
-        unitStatsPanel = new JPanel();
+        unitStatsPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image img = ImgManager.loadIcon("bg_for_status");
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
         bgPreviewLabel = new BGPreviewLabel(bgPreviewImg);
         unitNameLabel = new JLabel("???");
         roleLabel = new JLabel("role: ");
@@ -61,42 +82,48 @@ public class UnitSelector extends JFrame {
         atkStatLabel = new UnitStatLabel("Atk", 200);
         atkSpeedLabel = new UnitStatLabel("Atk speed", 100, 1000);
         cooldownLabel = new UnitStatLabel("Cooldown", 100, 300);
-        
+        unitDescription = new UnitDescription();
         
         unitPanelList.setLayout(new BoxLayout(unitPanelList, BoxLayout.Y_AXIS));
-        unitPanelList.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.lightGray, Color.yellow));
+        unitPanelList.setBackground(new Color(0x1B1B24));
+        
+        unitChosenPanelList.setLayout(new GridLayout(1, 8));
+        
         upDownPanel.setLayout(new BorderLayout());
         leftRightPanel.setLayout(new BorderLayout());
         operatorPanel.setPreferredSize(new Dimension(0, 200));
+        operatorPanel.setLayout(new GridLayout(2, 1));
         unitStatsPanel.setLayout(new BoxLayout(unitStatsPanel, BoxLayout.Y_AXIS));
         unitNameLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
         unitNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 2, 0));
+        unitNameLabel.setForeground(Color.white);
         roleLabel.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 12));
         roleLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 7, 0));
+        roleLabel.setForeground(Color.white);
         
         
-        for (int i=0; i<2; i++) {
-            unitTypes.add(new UnitType(Skeleton.class));
-            unitTypes.add(new UnitType(Slime.class));
-            unitTypes.add(new UnitType(Kaniwall.class));
-            unitTypes.add(new UnitType(Mimic.class));
-            unitTypes.add(new UnitType(SemiAutoBot.class));
-            unitTypes.add(new UnitType(BigBall.class));
-            unitTypes.add(new UnitType(GolemSupport.class));
-            unitTypes.add(new UnitType(Explosive_turtle.class));
-            unitTypes.add(new UnitType(Nike.class));
-            unitTypes.add(new UnitType(MiPya.class));
-            unitTypes.add(new UnitType(Snake.class));
-            unitTypes.add(new UnitType(Python.class));
-            unitTypes.add(new UnitType(Explosion.class));
-            unitTypes.add(new UnitType(GiveawaySlime.class));
-            unitTypes.add(new UnitType(AlphaWolf.class));
-            unitTypes.add(new UnitType(Werewolf.class));
-            unitTypes.add(new UnitType(Vampire.class));
-        }
+        
+        unitTypes.add(new UnitType(Skeleton.class));
+        unitTypes.add(new UnitType(Slime.class));
+        unitTypes.add(new UnitType(Kaniwall.class));
+        unitTypes.add(new UnitType(Mimic.class));
+        unitTypes.add(new UnitType(SemiAutoBot.class));
+        unitTypes.add(new UnitType(BigBall.class));
+        unitTypes.add(new UnitType(GolemSupport.class));
+        unitTypes.add(new UnitType(Explosive_turtle.class));
+        unitTypes.add(new UnitType(Nike.class));
+        unitTypes.add(new UnitType(MiPya.class));
+        unitTypes.add(new UnitType(Snake.class));
+        unitTypes.add(new UnitType(Python.class));
+        unitTypes.add(new UnitType(Explosion.class));
+        unitTypes.add(new UnitType(GiveawaySlime.class));
+        unitTypes.add(new UnitType(AlphaWolf.class));
+        unitTypes.add(new UnitType(Werewolf.class));
+        unitTypes.add(new UnitType(Vampire.class));
         
         for (int i = 0; i < unitTypes.size(); i += COLS) {
             JPanel rowPanel = new JPanel(new GridLayout(1, COLS, GAP, 0));
+            rowPanel.setOpaque(false);
             rowPanel.setBorder(BorderFactory.createEmptyBorder(GAP, GAP, 0, GAP + 13));
             for (int j = 0; j < COLS; j++) {
                 int index = i + j;
@@ -108,14 +135,17 @@ public class UnitSelector extends JFrame {
             }
             unitPanelList.add(rowPanel);
         }
-
+        for (int i = 0; i < MAX_UNIT; i++) {
+            UnitInsertBox uib = new UnitInsertBox();
+            unitChosenPanelList.add(uib);
+            unitInsertBoxs[i] = uib;
+        }
+        
         JScrollPane scrollUnitPanelList = new JScrollPane(unitPanelList);
         scrollUnitPanelList.getVerticalScrollBar().setUnitIncrement(16);
         scrollUnitPanelList.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        
-        
-        
-        
+        scrollUnitPanelList.setBorder(BorderFactory.createLineBorder(Color.black));
+
         add(upDownPanel);
         upDownPanel.add(leftRightPanel);
         upDownPanel.add(operatorPanel, BorderLayout.SOUTH);
@@ -129,6 +159,10 @@ public class UnitSelector extends JFrame {
         unitStatsPanel.add(atkStatLabel);
         unitStatsPanel.add(atkSpeedLabel);
         unitStatsPanel.add(cooldownLabel);
+        unitStatsPanel.add(unitDescription);
+        
+        operatorPanel.add(new JLabel());
+        operatorPanel.add(unitChosenPanelList);
         
         setVisible(true);
         
@@ -153,6 +187,19 @@ public class UnitSelector extends JFrame {
         cooldownLabel.updateFrame();
     }
     
+    private void updateUnitInsertBox() {
+        for (int i = 0; i < MAX_UNIT; i++) {
+            if (i <= unitChosens.size() - 1) {
+                unitInsertBoxs[i].setUnit(unitChosens.get(i));
+            } else {
+                unitInsertBoxs[i].setUnit(null);
+            }
+        }
+        
+        revalidate();
+        repaint();
+    }
+    
     private class BGPreviewLabel extends JLabel {
         private UnitSpriteSheets unitSp;
         private int currentFrameIdle, currentFrameAtk;
@@ -160,7 +207,7 @@ public class UnitSelector extends JFrame {
         private final int frame_Width = 32;
         private int total_Frame_ATK;
         private int total_Frame_Idle;
-        public static final int OFFSET_X = 40, OFFSET_Y = 61;
+        public static final int OFFSET_X = 47, OFFSET_Y = 61;
         
         public BGPreviewLabel(Icon image) {
             super(image);
@@ -205,6 +252,8 @@ public class UnitSelector extends JFrame {
     
     private class UnitLabelBox extends JLabel{
         private UnitType unit;
+        private boolean isMouseHovered = false;
+        private boolean isChosen = false;
         
         public UnitLabelBox(UnitType unitType) {
             super();
@@ -221,17 +270,88 @@ public class UnitSelector extends JFrame {
             g.drawImage(iconImage, 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
             iconImage = ImgManager.loadIcon("frame_operator");
             g.drawImage(iconImage, 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
-            g.drawImage(unit.getProfileImg(), 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
-            g.drawImage(unit.getRoleIconImg(), CELL_WIDTH - 35, 0, 30, 30, this);
             
-            g.setColor(new Color(162, 252, 255));
-            g.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
-            g.drawString(unit.getManaCost() + "", 5, CELL_HEIGHT - 5);
-            
+            if (unit != null) {
+                g.drawImage(unit.getProfileImg(), 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
+                g.drawImage(unit.getRoleIconImg(), CELL_WIDTH - 35, 0, 30, 30, this);
+                g.setColor(new Color(162, 252, 255));
+                g.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+                g.drawString(unit.getManaCost() + "", 5, CELL_HEIGHT - 5);
+                if (isChosen) {
+                    iconImage = ImgManager.loadIcon("blackLowOpacityBG");
+                    g.drawImage(iconImage, 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
+                }
+                if (isMouseHovered) {
+                    if (unitChosens.size() >= MAX_UNIT) {
+                        iconImage = ImgManager.loadIcon("white_less_place_hover");
+                    } else if (unitChosens.contains(this)) {
+                        iconImage = ImgManager.loadIcon("red_registered_hover");
+                    } else {
+                        iconImage = ImgManager.loadIcon("green_registerable_hover");
+                    }
+                    g.drawImage(iconImage, 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
+                }
+            }
         }
 
         public UnitType getUnitType() {
             return unit;
+        }
+        
+        public void setIsMouseHovered(boolean isMouseHovered) {
+            this.isMouseHovered = isMouseHovered;
+            repaint();
+        }
+
+        public void setIsChosen(boolean isChosen) {
+            this.isChosen = isChosen;
+        }
+    }
+    
+    private class UnitInsertBox extends JLabel {
+        private UnitLabelBox unitBox;
+        private boolean isMouseHovered = false;
+        
+        public UnitInsertBox() {
+            super();
+            setPreferredSize(new Dimension(CELL_WIDTH, CELL_HEIGHT));
+            addMouseListener(new BoxMouseListenr());
+        }
+        
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Image iconImage;
+            iconImage = ImgManager.loadIcon("frame_op1");
+            g.drawImage(iconImage, 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
+            iconImage = ImgManager.loadIcon("frame_operator");
+            g.drawImage(iconImage, 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
+            
+            if (unitBox != null) {
+                UnitType unitType = unitBox.getUnitType();
+                g.drawImage(unitType.getProfileImg(), 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
+                g.drawImage(unitType.getRoleIconImg(), CELL_WIDTH - 35, 0, 30, 30, this);
+                g.setColor(new Color(162, 252, 255));
+                g.setFont(new Font("Comic Sans MS", Font.BOLD, 16));
+                g.drawString(unitType.getManaCost() + "", 5, CELL_HEIGHT - 5);
+                if (isMouseHovered) {
+                    iconImage = ImgManager.loadIcon("recall_mini_place_hover");
+                    g.drawImage(iconImage, 0, 0, CELL_WIDTH, CELL_HEIGHT, this);
+                }
+            }
+        }
+
+        public UnitLabelBox getUnit() {
+            return unitBox;
+        }
+
+        public void setUnit(UnitLabelBox unit) {
+            this.unitBox = unit;
+        }
+
+        public void setIsMouseHovered(boolean isMouseHovered) {
+            this.isMouseHovered = isMouseHovered;
+            repaint();
         }
     }
     
@@ -261,6 +381,7 @@ public class UnitSelector extends JFrame {
             setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
             setLayout(new GridLayout(1, 2));
             setMaximumSize(new Dimension(250, 30));
+            setAlignmentX(CENTER);
             
             label = new JLabel();
             progressBar = new JProgressBar(0, maxValue);
@@ -269,9 +390,9 @@ public class UnitSelector extends JFrame {
             label.setHorizontalAlignment(JLabel.RIGHT);
             label.setFont(new Font("Helvetica", Font.BOLD, 14));
             label.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+            label.setForeground(Color.white);
             
-            
-            progressBar.setBackground(Color.DARK_GRAY);
+            progressBar.setBackground(new Color(0x222222));
             progressBar.setForeground(new Color(0xA6F3EE));
             progressBar.setBorderPainted(false);
 
@@ -299,29 +420,112 @@ public class UnitSelector extends JFrame {
         }
     }
     
+    private class UnitDescription extends JLabel {
+        private final JTextArea unitDescTextArea;
+        
+        public UnitDescription() {
+            unitDescTextArea = new JTextArea("???");
+            
+            setLayout(new GridLayout(1, 1));
+            setMaximumSize(new Dimension(270, 100));
+            setBorder(BorderFactory.createEmptyBorder(5, 2, 0, 2));
+            unitDescTextArea.setBorder(BorderFactory.createLineBorder(Color.darkGray));
+            unitDescTextArea.setEnabled(false);
+            unitDescTextArea.setDisabledTextColor(Color.white);
+            unitDescTextArea.setLineWrap(true);
+            unitDescTextArea.setWrapStyleWord(true);
+            unitDescTextArea.setBackground(Color.darkGray);
+            add(unitDescTextArea);
+        }
+        
+        public void setText(String text) {
+            if (unitDescTextArea != null) {
+                unitDescTextArea.setText(text);
+            }
+        }
+    }
+    
+    
+    private void updateStatus(UnitType unitType) {
+        bgPreviewLabel.setUnitSp(unitType.getUnitSp());
+        unitNameLabel.setText(StringFormatter.formatString(unitType.getClassName()));
+        roleLabel.setText("Role: " + unitType.getRoleName() + "  -  " + unitType.getManaCost() + " c");
+        healthStatLabel.setValue(unitType.getHealth());
+        atkStatLabel.setValue(unitType.getAtk());
+        atkSpeedLabel.setValue((int)(unitType.getAtkSpeed() * 10));
+        cooldownLabel.setValue((int)unitType.getCooldown());
+        unitDescription.setText(unitType.getDesc());
+    }
+    
     private class BoxMouseListenr extends MouseAdapter {
         @Override
         public void mouseEntered(MouseEvent e) {
             if (e.getSource() instanceof UnitLabelBox) {
                 UnitLabelBox unitLabelBox = (UnitLabelBox)e.getSource();
+                unitLabelBox.setIsMouseHovered(true);
                 UnitType unitType = unitLabelBox.getUnitType();
                 Audio.play(AudioName.BUTTON_HOVER);
+                updateStatus(unitType);
                 
-                bgPreviewLabel.setUnitSp(unitType.getUnitSp());
-                unitNameLabel.setText(StringFormatter.formatString(unitType.getClassName()));
-                roleLabel.setText("Role: " + unitType.getRoleName() + "  -  " + unitType.getManaCost() + " c");
-                healthStatLabel.setValue(unitType.getHealth());
-                atkStatLabel.setValue(unitType.getAtk());
-                atkSpeedLabel.setValue((int)(unitType.getAtkSpeed() * 10));
-                cooldownLabel.setValue((int)unitType.getCooldown());
-                
+            } else if (e.getSource() instanceof UnitInsertBox) {
+                Audio.play(AudioName.BUTTON_HOVER);
+                UnitInsertBox unitLabelBox = (UnitInsertBox)e.getSource();
+                unitLabelBox.setIsMouseHovered(true);
+                UnitLabelBox unit = unitLabelBox.getUnit();
+                if (unit != null) {
+                    updateStatus(unit.getUnitType());
+                }
             }
         }
 
         @Override
+        public void mouseExited(MouseEvent e) {
+            if (e.getSource() instanceof UnitLabelBox) {
+                UnitLabelBox unitLabelBox = (UnitLabelBox)e.getSource();
+                unitLabelBox.setIsMouseHovered(false);
+            } else if (e.getSource() instanceof UnitInsertBox) {
+                UnitInsertBox unitLabelBox = (UnitInsertBox)e.getSource();
+                unitLabelBox.setIsMouseHovered(false);
+            }
+        }
+        
+        
+
+        @Override
         public void mousePressed(MouseEvent e) {
-            Audio.play(AudioName.PLANT_PICK_UP);
+            if (e.getSource() instanceof UnitLabelBox) {
+                if (unitChosens.size() < MAX_UNIT) {
+                    UnitLabelBox unitLabelBox = (UnitLabelBox)e.getSource();
+                    if (!unitChosens.contains(unitLabelBox)) {
+                        Audio.play(AudioName.PLANT_PICK_UP);
+                        unitChosens.add(unitLabelBox);
+                        unitLabelBox.setIsChosen(true);
+                        updateUnitInsertBox();
+                    } else {
+                        Audio.play(AudioName.PLANT_CANT_PICK_UP);
+                        System.out.println("cannot use same field");
+                    }
+                } else {
+                    Audio.play(AudioName.PLANT_CANT_PICK_UP);
+                    System.out.println("maximum!");
+                }
+            } else if (e.getSource() instanceof UnitInsertBox) {
+                if (!unitChosens.isEmpty()) {
+                    UnitInsertBox unitLabelBox = (UnitInsertBox)e.getSource();
+                    UnitLabelBox unit = unitLabelBox.getUnit();
+                    if (unit != null) {
+                        Audio.play(AudioName.PLANT_DELETE);
+                        unit.setIsChosen(false);
+                        unitChosens.remove(unit);
+                        updateUnitInsertBox();
+                    }
+                }
+            }
+            repaint();
         }
     }
+
+
+    
     
 }

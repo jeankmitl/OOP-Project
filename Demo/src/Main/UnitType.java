@@ -110,4 +110,8 @@ public class UnitType {
     public BufferedImage getRoleIconImg(int i) {
         return unitStats.getUnitSp().getStatsIcon(i);
     }
+    
+    public String getDesc() {
+        return unitStats.getDesc();
+    }
 }

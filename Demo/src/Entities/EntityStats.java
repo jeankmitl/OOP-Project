@@ -16,13 +16,15 @@ public class EntityStats {
     private int atk;
     private double atkSpeed;
     private int role;
+    private String desc;
     
-    public EntityStats(EntitySpriteSheets entitySp, int health, int atk, double atkSpeed, int role) {
+    public EntityStats(EntitySpriteSheets entitySp, int health, int atk, double atkSpeed, int role, String desc) {
         this.entitySp = entitySp;
         this.health = health;
         this.atk = atk;
         this.atkSpeed = atkSpeed;
         this.role = role;
+        this.desc = desc;
     }
 
     public EntitySpriteSheets getEntitySp() {
@@ -55,5 +57,9 @@ public class EntityStats {
             case UnitConfig.GUARD -> name = "Guard";
         }
         return name;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 }

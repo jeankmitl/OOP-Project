@@ -17,7 +17,14 @@ public class UnitStats extends EntityStats {
     private int role;
     
     public UnitStats(UnitSpriteSheets unitSp, int health, int atk, double atkSpeed, int cost, double cooldown, int role) {
-        super(unitSp, health, atk, atkSpeed, role);
+        super(unitSp, health, atk, atkSpeed, role, "(No Description).");
+        this.unitSp = unitSp;
+        this.cost = cost;
+        this.cooldown = cooldown;
+    }
+    
+    public UnitStats(UnitSpriteSheets unitSp, int health, int atk, double atkSpeed, int cost, double cooldown, int role, String desc) {
+        super(unitSp, health, atk, atkSpeed, role, desc);
         this.unitSp = unitSp;
         this.cost = cost;
         this.cooldown = cooldown;
