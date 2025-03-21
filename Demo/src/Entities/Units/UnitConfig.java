@@ -14,6 +14,7 @@ public interface UnitConfig {
     int EXPLOTION = 2;
     int COST_GEN = 3;
     int ATTACKER = 4;
+    int SUPPORT = 5;
     
     
     String SKELETON_DESC = "A few damage but good for starting";
@@ -72,13 +73,13 @@ public interface UnitConfig {
     UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE, 500, 25, 1, 200, 30, GUARD, SNAKE_DESC);
     UnitStats PYTHON_STATS = new UnitStats(PYTHON_SPRITE, 600, 15, 1.5, 200, 30, ATTACKER, PYTHON_DESC);
     //TEST ONLY//
-    UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 5, 200, 50, COST_GEN, GOLEM_DESC);
+    UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 5, 200, 50, SUPPORT, GOLEM_DESC);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 300, 10, 400, 7, ATTACKER, BIGBALL);
     UnitStats EXPLOSIVE_TURTLE_STATS = new UnitStats(EXPLOSIVE_TURTLE_SPRITE, 1, 500, 0, 50, 5, EXPLOTION, EXPLOSIVE_TURTLE_DESC);
     UnitStats SEMI_AUTO_BOT_STATS = new UnitStats(SEMI_AUTO_BOT_SPRITE, 300, 20, 3, 200, 20, ATTACKER, SEMI_AUTO_BOT_DESC);
     UnitStats ALPHA_WOLF_STATS = new UnitStats(ALPHA_WOLF_SPRITE, 300, 100, 5, 300, 60, GUARD, ALPHA_WOLF_DESC);
     UnitStats WEREWOLF_STATS = new UnitStats(WEREWOLF_SPRITE, 900, 30, 1, 300, 60, GUARD, WEREWOLF_DESC);
-    UnitStats VAMPIRE_STATS = new UnitStats(VAMPIRE_SPRITE, 300, -20, 5, 50, 14, COST_GEN, VAMPIRE_DESC);
+    UnitStats VAMPIRE_STATS = new UnitStats(VAMPIRE_SPRITE, 300, -20, 5, 50, 14, SUPPORT, VAMPIRE_DESC);
     // Not for Operator
     UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 9999, 1800, 0, 125, 50, EXPLOTION, CANDLES6_DESC);
     UnitStats BLOCK_FIELD_STATS = new UnitStats(BLOCK_FIELD_SPRITE, 1, 0, 0, 0, 0, -1, BLOCK_FIELD_DESC);

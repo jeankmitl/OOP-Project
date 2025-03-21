@@ -4,6 +4,8 @@
  */
 package Main;
 
+import Asset.Audio;
+import Asset.AudioName;
 import DSystem.DWait;
 import Entities.Enemies.*;
 import java.awt.event.MouseAdapter;
@@ -35,6 +37,7 @@ public class stage_beta extends GamePanel{
     public void summonEnemies() {
         start = new DWait(10, e->{
             System.out.println("Endless Wave");
+            Audio.play(AudioName.NEXT_SUMMON);
             super.Spawn_Enemy(new Bandit(0, 0),99);
             super.Spawn_Enemy(new BanditV2(0, 0),99);
             super.Spawn_Enemy(new BanditV3(0, 0),99);

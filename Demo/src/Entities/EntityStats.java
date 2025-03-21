@@ -55,6 +55,7 @@ public class EntityStats {
             case UnitConfig.DEFENDER -> name = "Defender";
             case UnitConfig.EXPLOTION -> name = "Explotion";
             case UnitConfig.GUARD -> name = "Guard";
+            case UnitConfig.SUPPORT -> name = "Support";
         }
         return name;
     }

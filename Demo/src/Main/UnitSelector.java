@@ -483,12 +483,14 @@ public class UnitSelector extends JDialog {
     private void updateStatus(UnitType unitType) {
         bgPreviewLabel.setUnitSp(unitType.getUnitSp());
         unitNameLabel.setText(StringFormatter.formatString(unitType.getClassName()));
+        unitNameLabel.setIcon(new ImageIcon(unitType.getRoleIconImg()));
         roleLabel.setText("Role: " + unitType.getRoleName() + "  -  " + unitType.getManaCost() + " c");
         healthStatLabel.setValue(unitType.getHealth());
         atkStatLabel.setValue(unitType.getAtk());
         atkSpeedLabel.setValue((int)(unitType.getAtkSpeed() * 10));
         cooldownLabel.setValue((int)unitType.getCooldown());
         unitDescription.setText(unitType.getDesc());
+        
     }
     
     private class BoxMouseListenr extends MouseAdapter {

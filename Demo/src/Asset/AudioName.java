@@ -16,4 +16,5 @@ public interface AudioName {
     String CANDLE_ACTIVATE = "candle_activate";
     String BUTTON_CLICK = "click_btn";
     String BUTTON_HOVER = "hover_btn";
+    String NEXT_SUMMON = "next_summon";
 }

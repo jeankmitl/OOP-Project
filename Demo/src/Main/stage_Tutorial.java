@@ -4,6 +4,8 @@
  */
 package Main;
 
+import Asset.Audio;
+import Asset.AudioName;
 import DSystem.DTimer;
 import DSystem.DWait;
 import DSystem.OTimer;
@@ -55,18 +57,21 @@ public class stage_Tutorial extends GamePanel{
         
         start = new DWait(30, e->{
             System.out.println("WAVE START");
+            Audio.play(AudioName.NEXT_SUMMON);
             Spawn_Enemy(new Bandit(0, 0));
             w1.start();
         });
         
         w1 = new DWait(30, e->{
             System.out.println("WAVE 1");
+            Audio.play(AudioName.NEXT_SUMMON);
             Spawn_Enemy(new Bandit(0, 0),2);
             w2.start();
         });
         
         w2 = new DWait(30, e->{
             System.out.println("WAVE 2");
+            Audio.play(AudioName.NEXT_SUMMON);
             Spawn_Enemy(new Bandit(0, 0),2);
             Spawn_Enemy(new Bandit(0, 0),1,8);
             w3.start();
@@ -74,6 +79,7 @@ public class stage_Tutorial extends GamePanel{
         
         w3 = new DWait(30, e->{
             System.out.println("WAVE 3");
+            Audio.play(AudioName.NEXT_SUMMON);
             Spawn_Enemy(new Bandit(0, 0),2,8);
             Spawn_Enemy(new Bandit(0, 0),2);
             w4.start();
@@ -81,6 +87,7 @@ public class stage_Tutorial extends GamePanel{
         
         w4 = new DWait(40, e->{
             System.out.println("WAVE Final");
+            Audio.play(AudioName.NEXT_SUMMON);
             Spawn_Enemy(new Bandit(0, 0),4,10);
             System.out.println("how you survival this?");
         });

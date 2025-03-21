@@ -109,7 +109,7 @@ public class GamePanel extends JPanel {
         Audio.playMusic(AudioName.MUSIC_ONE);
 
         OTHER_THREAD = Thread.activeCount();
-        backgroundImage = ImgManager.loadBG("bg_test");
+        backgroundImage = ImgManager.loadBG("bg_dark_zone");
 
         units = new ArrayList<>();
         enemies = new ArrayList<>();
