@@ -18,10 +18,4 @@ public class BanditV2 extends Enemy{
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.BANDIT_STATSV2;
     }
-    
-    @Override
-    public Enemy createNew(int x, int y) {
-        return new BanditV2(x, y);
-    }
-    
 }

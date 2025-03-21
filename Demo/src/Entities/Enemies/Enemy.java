@@ -7,6 +7,7 @@ import DSystem.DTimer;
 import DSystem.DWait;
 import DSystem.OTimer;
 import Entities.Entity;
+import Entities.UnitFactory;
 import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Random;
@@ -131,8 +132,13 @@ public abstract class Enemy extends Entity {
         throw new NoSuchMethodException("Make sure to return their unit STATS");
     }
     
-    public abstract Enemy createNew(int x, int y);
-    
-    
+    public Enemy createNew(double x, int row) {
+        try {
+            return (Enemy)UnitFactory.createEntity(this.getClass(), x, row);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } 
+    }
     
 }

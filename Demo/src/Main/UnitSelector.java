@@ -59,8 +59,8 @@ public class UnitSelector extends JFrame {
         roleLabel = new JLabel("role: ");
         healthStatLabel = new UnitStatLabel("Health", 1000);
         atkStatLabel = new UnitStatLabel("Atk", 200);
-        atkSpeedLabel = new UnitStatLabel("Atk speed", 100);
-        cooldownLabel = new UnitStatLabel("Cooldown", 100);
+        atkSpeedLabel = new UnitStatLabel("Atk speed", 100, 1000);
+        cooldownLabel = new UnitStatLabel("Cooldown", 100, 300);
         
         
         unitPanelList.setLayout(new BoxLayout(unitPanelList, BoxLayout.Y_AXIS));
@@ -75,7 +75,7 @@ public class UnitSelector extends JFrame {
         roleLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 7, 0));
         
         
-        for (int i=0; i<10; i++) {
+        for (int i=0; i<2; i++) {
             unitTypes.add(new UnitType(Skeleton.class));
             unitTypes.add(new UnitType(Slime.class));
             unitTypes.add(new UnitType(Kaniwall.class));
@@ -90,7 +90,9 @@ public class UnitSelector extends JFrame {
             unitTypes.add(new UnitType(Python.class));
             unitTypes.add(new UnitType(Explosion.class));
             unitTypes.add(new UnitType(GiveawaySlime.class));
-            
+            unitTypes.add(new UnitType(AlphaWolf.class));
+            unitTypes.add(new UnitType(Werewolf.class));
+            unitTypes.add(new UnitType(Vampire.class));
         }
         
         for (int i = 0; i < unitTypes.size(); i += COLS) {
@@ -239,15 +241,22 @@ public class UnitSelector extends JFrame {
         private final String text;
         private int value;
         private int motionValue;
+        private int reverseValue;
         
         
         public UnitStatLabel(String text) {
-            this(text, 500);
+            this(text, 500, -1);
         }
         
         public UnitStatLabel(String text, int maxValue) {
+            this(text, maxValue, -1);
+        }
+        
+        public UnitStatLabel(String text, int maxValue, int reverseValue) {
             this.text = text;
+            this.reverseValue = reverseValue;
             motionValue = value;
+            
             
             setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
             setLayout(new GridLayout(1, 2));
@@ -272,7 +281,16 @@ public class UnitSelector extends JFrame {
         
         public void setValue(int value) {
             label.setText(text + ":  " + String.format("%03d", value));
-            this.value = value;
+            if (reverseValue == -1) {
+                this.value = value;
+            } else {
+                if (value != 0) {
+                    this.value = (reverseValue == -1) ? value : reverseValue / value;
+                } else {
+                    this.value = 0;
+                }
+            }
+//            System.out.println(reverseValue / value);
         }
         
         public void updateFrame() {
@@ -287,7 +305,6 @@ public class UnitSelector extends JFrame {
             if (e.getSource() instanceof UnitLabelBox) {
                 UnitLabelBox unitLabelBox = (UnitLabelBox)e.getSource();
                 UnitType unitType = unitLabelBox.getUnitType();
-                System.out.println(unitType.getManaCost());
                 Audio.play(AudioName.BUTTON_HOVER);
                 
                 bgPreviewLabel.setUnitSp(unitType.getUnitSp());

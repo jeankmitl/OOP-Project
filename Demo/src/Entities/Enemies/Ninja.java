@@ -29,8 +29,8 @@ public class Ninja extends Enemy {
         }
     }
     
-    @Override
-    public Enemy createNew(int x, int y) {
-        return new Ninja(x, y);
-    }
+//    @Override
+//    public Enemy createNew(int x, int y) {
+//        return new Ninja(x, y);
+//    }
 }

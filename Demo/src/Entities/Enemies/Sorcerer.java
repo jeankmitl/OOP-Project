@@ -27,11 +27,6 @@ public class Sorcerer extends Enemy {
     }
     
     @Override
-    public Enemy createNew(int x, int y) {
-        return new Sorcerer(x, y);
-    }
-    
-    @Override
     public void ability() {
         GamePanel.reduceMana(50);
         System.out.println("Mana Steal!!!");

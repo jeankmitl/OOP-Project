@@ -30,6 +30,7 @@ public class stage_beta extends GamePanel{
             super.Spawn_Enemy(new Sorcerer(0, 0),99);
             super.Spawn_Enemy(new RCBomber(0, 0),99);
             super.Spawn_Enemy(new RobotMonoWheel(0, 0),99);
+            super.Spawn_Enemy(new Tank(0, 0),99);
         });
         start.start();
     }

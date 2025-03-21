@@ -148,7 +148,7 @@ public class GamePanel extends JPanel {
         for (int i=0; i<ROWS; i++) {
             units.add(new Candles6(i, -1));
         }
-        unitTypes.add(new UnitType(Skeleton.class));
+//        unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
         unitTypes.add(new UnitType(Mimic.class)); //BETA unit
@@ -159,10 +159,13 @@ public class GamePanel extends JPanel {
 //        unitTypes.add(new UnitType(Nike.class));
 //        unitTypes.add(new UnitType(SemiAutoBot.class));
 //        unitTypes.add(new UnitType(GiveawaySlime.class));
-        unitTypes.add(new UnitType(MiPya.class));
-        unitTypes.add(new UnitType(Snake.class));
-        unitTypes.add(new UnitType(Python.class));
+//        unitTypes.add(new UnitType(MiPya.class));
+//        unitTypes.add(new UnitType(Snake.class));
+//        unitTypes.add(new UnitType(Python.class));
+        unitTypes.add(new UnitType(AlphaWolf.class));
+        unitTypes.add(new UnitType(Werewolf.class));
         unitTypes.add(new UnitType(GiveawaySlime.class));
+        unitTypes.add(new UnitType(Vampire.class));
         
         
 //        if (DEBUG_MODE) {
@@ -279,6 +282,10 @@ public class GamePanel extends JPanel {
     
     public void summonEnemies(){}
     
+    public static List<Unit> getUnits() {
+        return units;
+    }
+    
     public static List<Enemy> getEnemies() {
         return enemies;
     }
@@ -294,6 +301,7 @@ public class GamePanel extends JPanel {
     public static List<UnitType> getUnitTypes() {
         return unitTypes;
     }
+    
     // </editor-fold>
     
     public void updateAnimation(double deltaTime) {
@@ -360,7 +368,7 @@ public class GamePanel extends JPanel {
                         }
                         stop = true;
                         long currentTime = System.currentTimeMillis();
-                        if (currentTime - enemy.getLastAttackTime() >= 1000) {
+                        if (currentTime - enemy.getLastAttackTime() >= enemy.getAtkSpeed() * 1000) {
                             enemy.attack(unit);
                             //--------------- RedHood Sustain Skill ----------------------
                             if (enemy instanceof LittleRedHood) {
@@ -815,7 +823,7 @@ public class GamePanel extends JPanel {
                 if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
                     
                     if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
-                        Unit unitIns = UnitFactory.createUnit(unit.unitClass, row, col);
+                        Unit unitIns = (Unit)UnitFactory.createEntity(unit.unitClass, row, col);
                         units.add(unitIns);
                         remainMana -= unit.getManaCost();
                         unit.startCooldown();

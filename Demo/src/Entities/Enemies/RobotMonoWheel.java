@@ -16,10 +16,5 @@ public class RobotMonoWheel extends Enemy {
 
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.ROBOT_MONOWHEEL_STATS;
-    }  
-
-    @Override
-    public Enemy createNew(int x, int y) {
-        return new RobotMonoWheel(x, y);
     }
 }

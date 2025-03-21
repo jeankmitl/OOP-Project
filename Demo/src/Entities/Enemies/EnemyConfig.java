@@ -26,6 +26,7 @@ public interface EnemyConfig {
     EnemySpriteSheets LITTLE_RED_HOOD_SPRITE = new EnemySpriteSheets("little_Red_Hood_Idle", "little_Red_Hood_ATK");
     EnemySpriteSheets RC_BOMBER_SPRITE = new EnemySpriteSheets("rc_bomber", "rc_bomber");
     EnemySpriteSheets ROBOT_MONOWHEEL_SPRITE = new EnemySpriteSheets("robot_monowheel_idle", "robot_monowheel_atk");
+    EnemySpriteSheets TANK_SPRITE = new EnemySpriteSheets("tank", "tank");
     
     // All Unit stats 💡
     EnemyStats NINJA_STATS = new EnemyStats(NINJA_SPRITE, 335, 100, 1, WALK_SLOW, NORMAL);
@@ -36,4 +37,5 @@ public interface EnemyConfig {
     EnemyStats LITTLE_RED_HOOD_STATS = new EnemyStats(LITTLE_RED_HOOD_SPRITE, 181, 150, 1, WALK_FAST, NORMAL);
     EnemyStats RC_BOMBER_STATS = new EnemyStats(RC_BOMBER_SPRITE, 50, 2000, 1, WALK_CAR, NORMAL);
     EnemyStats ROBOT_MONOWHEEL_STATS = new EnemyStats(ROBOT_MONOWHEEL_SPRITE, 300, 150, 1, WALK_NORMAL, NORMAL);
+    EnemyStats TANK_STATS = new EnemyStats(TANK_SPRITE, 1000, 20, 0.1, WALK_SLOW, NORMAL);
 }
