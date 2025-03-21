@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class StageSelectorPanel extends JPanel{
-    private Rectangle st1, st2, st3, st4, st5, st6, st7, st8, st9, st10;
+    private Rectangle st1, st2, st3, st4, st5, st6, st7, st8, st9, st10, homeBtn;
     private Image stageFrame;
     private boolean isButtonHovered = false;
     private StageSelector stageSelector;
@@ -28,6 +28,7 @@ public class StageSelectorPanel extends JPanel{
         st8 = new Rectangle(550, 450, 150, 150);
         st9 = new Rectangle(750, 450, 150, 150);
         st10 = new Rectangle(950, 450, 150, 150);
+        homeBtn = new Rectangle(1180,15,75,75);
 
         try {
             stageFrame = ImageIO.read(getClass().getResource("/Asset/Img/Icons/frame_op1.png"));
@@ -58,11 +59,11 @@ public class StageSelectorPanel extends JPanel{
                     selectStage("St9");}
                 else if (st10.contains(e.getPoint())) {
                     selectStage("St10");}
-                else{
-                    Audio.play(AudioName.PLANT_CANT_PICK_UP);
-                    System.out.println("Stage not yet finished.");
-                }
+                else if(homeBtn.contains(e.getPoint())){
+                    selectStage("Back");
             }
+            
+        }
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
@@ -130,7 +131,8 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawImage(stageFrame, st7.x, st7.y, st7.width, st7.height,this);
             g2d.drawImage(stageFrame, st8.x, st8.y, st8.width, st8.height,this);
             g2d.drawImage(stageFrame, st9.x, st9.y, st9.width, st9.height,this);
-            g2d.drawImage(stageFrame, st10.x, st10.y, st10.width, st10.height,this);            
+            g2d.drawImage(stageFrame, st10.x, st10.y, st10.width, st10.height,this);         
+            g2d.drawImage(stageFrame, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
         }
     }
 }

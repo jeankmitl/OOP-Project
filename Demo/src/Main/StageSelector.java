@@ -70,7 +70,10 @@ public class StageSelector extends JFrame {
             getContentPane().add(dlc);
             addKeyListener(dlc.new GameKeyboardListener());
             setTitle("Stage Special China Edition");
-        }else if(stageName.equals(ABORT))
+        }else if(stageName.equals("Back")){
+            dispose();
+            new MainMenu();
+        }
         revalidate();
         repaint();
     }
