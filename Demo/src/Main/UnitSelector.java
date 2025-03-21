@@ -17,6 +17,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -29,15 +31,16 @@ import javax.swing.border.BevelBorder;
  *
  * @author anawi
  */
-public class UnitSelector extends JFrame {
+public class UnitSelector extends JDialog {
     private static final List<UnitType> unitTypes = new ArrayList<>();
     private static final List<UnitLabelBox> unitChosens = new ArrayList<>();
-    private final JPanel unitPanelList, unitChosenPanelList, operatorPanel, unitStatsPanel;
+    private final JPanel unitPanelList, unitChosenPanelList, operatorPanel, unitStatsPanel, optionsPanel;
     private final JPanel leftRightPanel, upDownPanel;
     private final BGPreviewLabel bgPreviewLabel;
     private final UnitStatLabel healthStatLabel, atkStatLabel, atkSpeedLabel, cooldownLabel;
     private final UnitDescription unitDescription;
     private final JLabel unitNameLabel, roleLabel;
+    private final JButton goButton;
     
     public static final int CELL_WIDTH = 95;
     public static final int CELL_HEIGHT = 95;
@@ -49,7 +52,7 @@ public class UnitSelector extends JFrame {
     
     public UnitSelector() {
         setTitle("Select Unit");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(CELL_WIDTH * MAX_UNIT, 720);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -57,14 +60,15 @@ public class UnitSelector extends JFrame {
         
         unitPanelList = new JPanel();
         unitChosenPanelList = new JPanel();
-        operatorPanel = new JPanel() {
+        optionsPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                Image img = ImgManager.loadIcon("bg_for_status");
+                Image img = ImgManager.loadIcon("bg_for_status2");
                 g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
             }
         };
+        operatorPanel = new JPanel();
         leftRightPanel = new JPanel();
         upDownPanel = new JPanel();
         unitStatsPanel = new JPanel() {
@@ -78,15 +82,16 @@ public class UnitSelector extends JFrame {
         bgPreviewLabel = new BGPreviewLabel(bgPreviewImg);
         unitNameLabel = new JLabel("???");
         roleLabel = new JLabel("role: ");
+        goButton = new JButton("Go!");
         healthStatLabel = new UnitStatLabel("Health", 1000);
         atkStatLabel = new UnitStatLabel("Atk", 200);
         atkSpeedLabel = new UnitStatLabel("Atk speed", 100, 1000);
         cooldownLabel = new UnitStatLabel("Cooldown", 100, 300);
         unitDescription = new UnitDescription();
         
+        
         unitPanelList.setLayout(new BoxLayout(unitPanelList, BoxLayout.Y_AXIS));
         unitPanelList.setBackground(new Color(0x1B1B24));
-        
         unitChosenPanelList.setLayout(new GridLayout(1, 8));
         
         upDownPanel.setLayout(new BorderLayout());
@@ -100,8 +105,11 @@ public class UnitSelector extends JFrame {
         roleLabel.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 12));
         roleLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 7, 0));
         roleLabel.setForeground(Color.white);
-        
-        
+        goButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.lightGray, Color.darkGray));
+        goButton.setBackground(Color.gray);
+        goButton.setFocusable(false);
+        goButton.setPreferredSize(new Dimension(100, 50));
+        goButton.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));
         
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
@@ -161,8 +169,11 @@ public class UnitSelector extends JFrame {
         unitStatsPanel.add(cooldownLabel);
         unitStatsPanel.add(unitDescription);
         
-        operatorPanel.add(new JLabel());
+        operatorPanel.add(optionsPanel);
         operatorPanel.add(unitChosenPanelList);
+        
+        optionsPanel.add(goButton);
+        goButton.addActionListener(new ButtonListener());
         
         setVisible(true);
         
@@ -170,9 +181,9 @@ public class UnitSelector extends JFrame {
         new Timer(16, e -> updateFPS()).start();
     }
     
-    public static void main(String[] args) {
-        new UnitSelector();
-    }
+//    public static void main(String[] args) {
+//        new UnitSelector();
+//    }
     
     private void updateAnimation() {
         bgPreviewLabel.updateFrame();
@@ -198,6 +209,29 @@ public class UnitSelector extends JFrame {
         
         revalidate();
         repaint();
+    }
+
+    private class ButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource().equals(goButton)) {
+                if (unitChosens.size() >= 3) {
+                    System.out.println("Let's go");
+//                    getResultUnits();
+                    dispose();
+                } else {
+                    System.out.println("You need to have Units at least 3");
+                }
+            }
+        }
+    }
+    
+    public List<UnitType> getResultUnits() {
+        List<UnitType> unitTypes = new ArrayList<>();
+        for (UnitLabelBox ulb: unitChosens) {
+            unitTypes.add(ulb.getUnitType());
+        }
+        return unitTypes;
     }
     
     private class BGPreviewLabel extends JLabel {

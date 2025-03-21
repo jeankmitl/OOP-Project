@@ -25,7 +25,9 @@ public class StageSelector extends JFrame {
     }
 
     public void loadStage(String stageName) {
-        getContentPane().removeAll();
+        if (!stageName.equals("Back")) {
+            getContentPane().removeAll();
+        }
         if (stageName.equals("St10")) {
             game = new stage_beta(this);
             addKeyListener(game.new GameKeyboardListener());
@@ -77,8 +79,13 @@ public class StageSelector extends JFrame {
             getContentPane().add(game);
             setTitle("Stage Special China Edition");
         }else if(stageName.equals("Back")){
-            getContentPane().add(panel);
-            setTitle("Select stage");
+            int res = JOptionPane.showConfirmDialog(this, "Do you want to Exit during the game?",
+                    "Exit Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (res == JOptionPane.YES_OPTION) {
+                getContentPane().removeAll();
+                getContentPane().add(panel);
+                setTitle("Select stage");
+            }
         }else if(stageName.equals("Main")){
             dispose();
             new MainMenu();
