@@ -10,6 +10,7 @@ import Entities.Enemies.BanditV2;
 import Entities.Enemies.Enemy;
 import static Main.GamePanel.GRID_OFFSET_X;
 import static Main.GamePanel.enemies;
+import java.awt.event.*;
 import java.util.Random;
 
 /**
@@ -18,9 +19,20 @@ import java.util.Random;
  */
 public class stage2 extends GamePanel{
     protected DWait start,w1,w2,w3,w4,w5;
+    private StageSelector stage;
     
-    public stage2() {
+    public stage2(StageSelector stage) {
         super(31);
+        this.stage = stage;
+        
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(homeBtn.contains(e.getPoint())){
+                    stage.loadStage("Back");
+                }
+            }
+        });
     }
 
     @Override

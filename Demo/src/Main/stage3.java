@@ -8,6 +8,8 @@ import DSystem.DWait;
 import Entities.Enemies.Bandit;
 import Entities.Enemies.BanditV2;
 import Entities.Enemies.BanditV3;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -15,9 +17,20 @@ import Entities.Enemies.BanditV3;
  */
 public class stage3 extends GamePanel{
     protected DWait start,w1,w2,w3,w4,w5;
+    private StageSelector stage;
     
-    public stage3() {
+    public stage3(StageSelector stage) {
         super(34);
+        this.stage = stage;
+        
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(homeBtn.contains(e.getPoint())){
+                    stage.loadStage("Back");
+                }
+            }
+        });
     }
 
     @Override

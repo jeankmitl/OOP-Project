@@ -12,6 +12,8 @@ import Entities.Enemies.*;
 import Entities.Enemies.Enemy;
 import static Main.GamePanel.GRID_OFFSET_X;
 import static Main.GamePanel.enemies;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 
 /**
@@ -20,9 +22,20 @@ import java.util.Random;
  */
 public class stage_Tutorial extends GamePanel{
     protected DWait start,w1,w2,w3,w4;
+    private StageSelector stage;
 
-    public stage_Tutorial() {
+    public stage_Tutorial(StageSelector stage) {
         super(14);
+        this.stage = stage;
+        
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(homeBtn.contains(e.getPoint())){
+                    stage.loadStage("Back");
+                }
+            }
+        });
     }
     
     @Override

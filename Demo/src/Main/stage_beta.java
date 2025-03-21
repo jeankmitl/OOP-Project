@@ -6,6 +6,8 @@ package Main;
 
 import DSystem.DWait;
 import Entities.Enemies.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  *
@@ -13,9 +15,20 @@ import Entities.Enemies.*;
  */
 public class stage_beta extends GamePanel{
     protected DWait start;
+    private StageSelector stage;
 
-    public stage_beta() {
+    public stage_beta(StageSelector stage) {
         super(9999);
+        this.stage = stage;
+
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(homeBtn.contains(e.getPoint())){
+                    stage.loadStage("Back");
+                }
+            }
+        });
     }
     
     @Override

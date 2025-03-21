@@ -4,14 +4,28 @@
  */
 package Main;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 /**
  *
  * @author USER
  */
 public class stage5 extends GamePanel{
+    private StageSelector stage;
     
-    public stage5() {
+    public stage5(StageSelector stage) {
         super(9);
+        this.stage = stage;
+        
+        addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+                if(homeBtn.contains(e.getPoint())){
+                    stage.loadStage("Back");
+                }
+            }
+        });
     }
     
 }
