@@ -3,11 +3,7 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.event.*;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,12 +14,7 @@ public class MainMenu extends JFrame {
     private boolean isButtonHovered = false;
 
     public MainMenu() {
-        setTitle("Defense of the Dungeon");
-        setSize(1280, 720);
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        
+
         logo = new Rectangle(465, 170, 800, 400);
         menuBar = new Rectangle(100, 100, 400, 550);
         start = new Rectangle(125, 110, 310, 125);
@@ -40,6 +31,11 @@ public class MainMenu extends JFrame {
             System.out.println("Wrong image path.");
         }
 
+        setTitle("Defense of the Dungeon");
+        setSize(1280, 720);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
         setVisible(true);
 
         addMouseListener(new MouseAdapter() {
@@ -53,6 +49,7 @@ public class MainMenu extends JFrame {
                     SwingWorker<Void, Void> worker = new SwingWorker<>() {
                         @Override
                         protected Void doInBackground() throws Exception {
+                            dispose();
                             Thread.sleep(1500);
                             return null;
                         }
@@ -61,7 +58,6 @@ public class MainMenu extends JFrame {
                         protected void done() {
                             System.out.println("Finished loading.");
                             loadingScreen.dispose();
-                            dispose();
                             new StageSelector();
                         }
                     };
