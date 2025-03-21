@@ -59,10 +59,10 @@ public class GamePanel extends JPanel {
     public static final int MAX_MANA = 9999;
     public int manaRegenPct = 0; //test mana
     
-    private static List<Unit> units;
+    protected static List<Unit> units;
     protected static List<Enemy> enemies;
-    private static List<Bullet> bullets;
-    private static List<VFX> vfxs;
+    protected static List<Bullet> bullets;
+    protected static List<VFX> vfxs;
     
     
     protected final Random random = new Random();
@@ -374,7 +374,7 @@ public class GamePanel extends JPanel {
                             //--------------- RedHood Sustain Skill ----------------------
                             if (enemy instanceof LittleRedHood) {
                                 LittleRedHood redHood = (LittleRedHood)enemy;
-                                if (redHood.getHealth() + 5 > 181) {
+                                if (redHood.getHealth() + 10 > 181) {
                                     redHood.setHealth(181);
                                 } else {
                                     redHood.setHealth(redHood.getHealth()+5);
