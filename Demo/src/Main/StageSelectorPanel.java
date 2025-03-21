@@ -2,6 +2,7 @@ package Main;
 
 import Asset.Audio;
 import Asset.AudioName;
+import Asset.ImgManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -121,6 +122,7 @@ public class StageSelectorPanel extends JPanel{
         g2d.setFont(new Font("Algerian", Font.BOLD, 100));
         g2d.setPaint(Color.RED);
         g2d.drawString("Select the stage", 150, 175);
+        Image image = ImgManager.loadIcon("home_btn");
         if (stageFrame != null) {
             g2d.drawImage(stageFrame, st1.x, st1.y, st1.width, st1.height,this);
             g2d.drawImage(stageFrame, st2.x, st2.y, st2.width, st2.height,this);
@@ -133,6 +135,8 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawImage(stageFrame, st9.x, st9.y, st9.width, st9.height,this);
             g2d.drawImage(stageFrame, st10.x, st10.y, st10.width, st10.height,this);         
             g2d.drawImage(stageFrame, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
+            g2d.drawImage(stageFrame, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
+            g2d.drawImage(image, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
         }
     }
 }

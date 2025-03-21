@@ -745,9 +745,12 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
-             iconImage = ImgManager.loadIcon("blackLowOpacityBG");
-             g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
         }
+        //Back button
+        iconImage = ImgManager.loadIcon("blackLowOpacityBG");
+        g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
+        iconImage = ImgManager.loadIcon("exit_btn");
+        g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
         
         
         if (DEBUG_MODE) {
