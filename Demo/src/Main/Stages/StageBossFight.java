@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Main;
+package Main.Stages;
 
 import Asset.Audio;
 import Asset.AudioName;
@@ -25,6 +25,10 @@ import Entities.Units.Candles6;
 import Entities.Units.Roles.UnitInvisible;
 import Entities.Units.Roles.UnitReflectable;
 import Entities.Units.Unit;
+import Main.EnemySummoner;
+import Main.GamePanel;
+import Main.StageConfig;
+import Main.StageStats;
 import static Main.GamePanel.CELL_HEIGHT;
 import static Main.GamePanel.CELL_WIDTH;
 import static Main.GamePanel.GRID_OFFSET_X;
@@ -45,41 +49,33 @@ import java.util.Random;
  *
  * @author USER
  */
-public class StageBossFight extends GamePanel {
-
+public class StageBossFight implements EnemySummoner {
     protected DWait start;
-    private StageSelector stage;
-
-    public StageBossFight(StageSelector stage) {
-        super(1);
-
-        // Stop the default GamePanel music (if needed)
-//        Audio.shutDownMusic();
-        Audio.isMusicEnable = false;
-        this.stage = stage;
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (homeBtn.contains(e.getPoint())) {
-                    stage.loadStage("Back");
-                }
-            }
-        });
+    
+    
+    @Override
+    public StageStats getSTAGE_STATS() {
+        return StageConfig.STAGE_BOSS;
     }
 
-
     @Override
-    public void summonEnemies() {
+    public void summonEnemies(GamePanel game) {
         start = new DWait(5, e -> {//2
             System.out.println("The Last Fight is BEGIN!");
-            Spawn_Enemy(new SongChinWu(0, 2), 1, 1); //1
+            game.Spawn_Enemy(new SongChinWu(0, 2), 1, 1); //1
             
             Audio.isMusicEnable = true;
             Audio.playMusic(AudioName.BOSS_THEME);
+//            game.Spawn_Enemy(Enemy enemy, int num, int delay);
         });
         start.start();
     }
+    
+    
+    /**
+     Don't extends anymore (More Buggy & inconvenience for the future)
+     * instead try to use 'game.???()'
+     */
     
     @Override
     public void Spawn_Enemy(Enemy enemy, int num, int delay) {
@@ -88,7 +84,6 @@ public class StageBossFight extends GamePanel {
             System.out.println("Spawn Sucess");
         }).start();
     }
-    
 
     private void start() {
         if (DEBUG_MODE) runDebugMode();

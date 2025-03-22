@@ -32,8 +32,8 @@ import javax.swing.border.BevelBorder;
  * @author anawi
  */
 public class UnitSelector extends JDialog {
-    private static final List<UnitType> unitTypes = new ArrayList<>();
-    private static final List<UnitLabelBox> unitChosens = new ArrayList<>();
+    private final List<UnitType> unitTypes = new ArrayList<>();
+    private final List<UnitLabelBox> unitChosens = new ArrayList<>();
     private final JPanel unitPanelList, unitChosenPanelList, operatorPanel, unitStatsPanel, optionsPanel;
     private final JPanel leftRightPanel, upDownPanel;
     private final BGPreviewLabel bgPreviewLabel;

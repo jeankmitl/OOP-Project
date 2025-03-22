@@ -33,9 +33,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class GamePanel extends JPanel {
+public final class GamePanel extends JPanel {
     
-    //TURN OFF IF NOT DEBUG: set mana, faster spawn, etc...
+    //TURN OFF IF NOT DEBUG: set mana, show status, etc...
     protected final boolean DEBUG_MODE = true;
     
     private static GamePanel instance;
@@ -74,6 +74,7 @@ public class GamePanel extends JPanel {
     
     private int hoverPlaceX, hoverPlaceY;
     
+    private final GameLoop gameLoop;
     private final DTimer gameTimer;
     
     private final OTimer manaRecoverTimer10 = new OTimer(5);
@@ -90,15 +91,12 @@ public class GamePanel extends JPanel {
     protected int target,count_kill=0;
     private boolean victory = false;
     
-    protected Rectangle homeBtn = new Rectangle(1180,15,75,75);
-    
+    private Rectangle homeBtn = new Rectangle(1180,15,75,75);
+    private StageSelector stage;
+    private EnemySummoner summoner;
     //same as: public awake()
 
-    public GamePanel(int target) {
-        this(new ArrayList<>(), target);
-    }
-
-    private GamePanel(List<UnitType> unitTypes, int target) {
+    private GamePanel(StageSelector stage, EnemySummoner summoner) {
         /**
          * Awake. = for create Object w/ 'new'
          * - play: music 🎵, 
@@ -107,20 +105,19 @@ public class GamePanel extends JPanel {
          */
         Audio.playMusic(AudioName.MUSIC_ONE);
         OTHER_THREAD = Thread.activeCount();
-        backgroundImage = ImgManager.loadBG("bg_dark_zone");
-
+        
         units = new ArrayList<>();
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
         vfxs = new ArrayList<>();
-        this.unitTypes = unitTypes;
-        this.target = target;
+        unitTypes = new ArrayList<>();
         
-        GameLoop gameLoop = new GameLoop();
+        stage.addKeyListener(new GameKeyboardListener());
+        addMouseListeners();
         GameLoop.setLateListener((d) -> lateUpdate());
+        gameLoop = new GameLoop();
         gameLoop.start();
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
-        selectUnitBefore();
     }
     
     private void selectUnitBefore() {
@@ -137,12 +134,12 @@ public class GamePanel extends JPanel {
     }
     
     // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
-    private void startGameLoop() {
+    public void startGameLoop() {
         gameTimer.start();
         start();
     }
     
-    private void stopGameLoop() {
+    public void stopGameLoop() {
         gameTimer.stop();
     }
     
@@ -154,30 +151,36 @@ public class GamePanel extends JPanel {
     
     private void runDebugMode() {
         remainMana = 500;
-//        summonEnemies(); //<<--- Off this bebore play stage 1
     }
     // </editor-fold>
     
-    public static GamePanel getInstance(int target) {
-        if (instance == null) instance = new GamePanel(target);
-        instance.resetGamePanel();
+    public static GamePanel getInstance(StageSelector stage, EnemySummoner summoner) {
+        if (instance == null) instance = new GamePanel(stage, summoner);
+        instance.resetGamePanel(stage, summoner);
         return instance;
     }
     
-    private void resetGamePanel() {
+    private void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
         stopGameLoop();
-        backgroundImage = ImgManager.loadBG("bg_dark_zone");
+        GameLoop.clearListener();
+        this.stage = stage;
+        this.summoner = summoner;
+        StageStats ss = summoner.getSTAGE_STATS();
+        target = ss.getTarget();
+        backgroundImage = ss.getBackground();
+        stage.setTitle(ss.getTitle());
+        
         units.clear();
         enemies.clear();
         bullets.clear();
         vfxs.clear();
         unitTypes.clear();
+        selectUnitBefore();
     }
     
     //run after setup GameLoop
     private void start() {
         if (DEBUG_MODE) runDebugMode();
-        addMouseListeners();
         
         new DWait(3, e -> {
             System.out.println("Enemies is coming!");
@@ -186,13 +189,6 @@ public class GamePanel extends JPanel {
         for (int i=0; i<ROWS; i++) {
             units.add(new Candles6(i, -1));
         }
-//        unitTypes.add(new UnitType(Skeleton.class));
-
-        
-        
-//        if (DEBUG_MODE) {
-//            unitTypes.add(new UnitType(Candles6.class));
-//        }
     }
    
     
@@ -302,7 +298,9 @@ public class GamePanel extends JPanel {
            }
     }
     
-    public void summonEnemies(){}
+    public void summonEnemies(){
+        summoner.summonEnemies(this);
+    }
     
     public static List<Unit> getUnits() {
         return units;
@@ -798,6 +796,11 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                if(homeBtn.contains(e.getPoint())){
+                    stage.loadStage("Back");
+                    return;
+                }
+                
                 if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS 
                         && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;

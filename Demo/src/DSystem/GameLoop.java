@@ -84,6 +84,10 @@ public class GameLoop extends Thread {
         GameLoop.lateListener = lateListener;
     }
     
+    public static void clearListener() {
+        listeners.clear();
+    }
+    
     public void stopLoop() {
         this.stopLoop = true;
     }
