@@ -38,6 +38,7 @@ public class GamePanel extends JPanel {
     //TURN OFF IF NOT DEBUG: set mana, faster spawn, etc...
     protected final boolean DEBUG_MODE = true;
     
+    private static GamePanel instance;
     private Image backgroundImage;
     private Image iconImage;
     
@@ -63,10 +64,10 @@ public class GamePanel extends JPanel {
     protected static List<Enemy> enemies;
     protected static List<Bullet> bullets;
     protected static List<VFX> vfxs;
+    private static List<UnitType> unitTypes;
     
     
     protected final Random random = new Random();
-    private static List<UnitType> unitTypes;
     
     private boolean draggingRecall = false;
     private int mouseX, mouseY;
@@ -96,10 +97,8 @@ public class GamePanel extends JPanel {
     public GamePanel(int target) {
         this(new ArrayList<>(), target);
     }
-    
-    
-    
-    public GamePanel(List<UnitType> unitTypes, int target) {
+
+    private GamePanel(List<UnitType> unitTypes, int target) {
         /**
          * Awake. = for create Object w/ 'new'
          * - play: music 🎵, 
@@ -107,7 +106,6 @@ public class GamePanel extends JPanel {
          * - start: Game Loop 🔁
          */
         Audio.playMusic(AudioName.MUSIC_ONE);
-
         OTHER_THREAD = Thread.activeCount();
         backgroundImage = ImgManager.loadBG("bg_dark_zone");
 
@@ -118,6 +116,9 @@ public class GamePanel extends JPanel {
         this.unitTypes = unitTypes;
         this.target = target;
         
+        GameLoop gameLoop = new GameLoop();
+        GameLoop.setLateListener((d) -> lateUpdate());
+        gameLoop.start();
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
         selectUnitBefore();
     }
@@ -137,11 +138,12 @@ public class GamePanel extends JPanel {
     
     // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
     private void startGameLoop() {
-        GameLoop gameLoop = new GameLoop();
-        GameLoop.setLateListener((d) -> lateUpdate());
-        gameLoop.start();
         gameTimer.start();
         start();
+    }
+    
+    private void stopGameLoop() {
+        gameTimer.stop();
     }
     
     // after run All Timer
@@ -155,6 +157,22 @@ public class GamePanel extends JPanel {
 //        summonEnemies(); //<<--- Off this bebore play stage 1
     }
     // </editor-fold>
+    
+    public static GamePanel getInstance(int target) {
+        if (instance == null) instance = new GamePanel(target);
+        instance.resetGamePanel();
+        return instance;
+    }
+    
+    private void resetGamePanel() {
+        stopGameLoop();
+        backgroundImage = ImgManager.loadBG("bg_dark_zone");
+        units.clear();
+        enemies.clear();
+        bullets.clear();
+        vfxs.clear();
+        unitTypes.clear();
+    }
     
     //run after setup GameLoop
     private void start() {
