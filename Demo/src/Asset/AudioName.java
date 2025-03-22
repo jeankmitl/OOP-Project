@@ -17,4 +17,5 @@ public interface AudioName {
     String BUTTON_CLICK = "click_btn";
     String BUTTON_HOVER = "hover_btn";
     String NEXT_SUMMON = "next_summon";
+    String BOSS_THEME = "RedStone128 - The Final Battle";
 }

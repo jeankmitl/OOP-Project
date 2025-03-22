@@ -21,6 +21,11 @@ public class SongChinWu extends Enemy {
 
     }
 
+    @Override
+    public void move() {
+        x -= 0.7;
+    }
+    
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.SONG_CHIN_WU_STATS;
     }

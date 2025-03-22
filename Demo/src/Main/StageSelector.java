@@ -74,10 +74,10 @@ public class StageSelector extends JFrame {
             getContentPane().add(game);
             setTitle("Stage 8");
         } else if (stageName.equals("St9")) {
-            game = new stagechinatown(this);
+            game = new StageBossFight(this);
             addKeyListener(game.new GameKeyboardListener());
             getContentPane().add(game);
-            setTitle("Stage Special China Edition");
+            setTitle("No China Anymore, There is only HELL ahead of you! Now TATAKAE!!!");
         }else if(stageName.equals("Back")){
             int res = JOptionPane.showConfirmDialog(this, "Do you want to Exit during the game?",
                     "Exit Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);

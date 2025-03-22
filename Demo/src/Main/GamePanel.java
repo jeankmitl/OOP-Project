@@ -36,14 +36,14 @@ import java.util.Random;
 public class GamePanel extends JPanel {
     
     //TURN OFF IF NOT DEBUG: set mana, faster spawn, etc...
-    private final boolean DEBUG_MODE = true;
+    protected final boolean DEBUG_MODE = true;
     
     private Image backgroundImage;
     private Image iconImage;
     
     // <editor-fold defaultstate="collapsed" desc="All static final variables">
-    private static final int ROWS = 5;
-    private static final int COLS = 9;
+    protected static final int ROWS = 5;
+    protected static final int COLS = 9;
     public static final int CELL_WIDTH = 95;
     public static final int CELL_HEIGHT = 95;
     public static final int GRID_OFFSET_X = 175; // Move grid right
@@ -55,10 +55,10 @@ public class GamePanel extends JPanel {
     // </editor-fold>
 
     public final int OTHER_THREAD;
-    private static int remainMana = 50;
+    protected static int remainMana = 50;
     public static final int MAX_MANA = 9999;
     public int manaRegenPct = 0; //test mana
-    
+        
     protected static List<Unit> units;
     protected static List<Enemy> enemies;
     protected static List<Bullet> bullets;

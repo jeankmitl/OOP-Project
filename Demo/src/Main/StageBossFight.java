@@ -6,7 +6,9 @@ package Main;
 
 import Asset.Audio;
 import Asset.AudioName;
+import Asset.ImgManager;
 import Asset.VFX;
+import DSystem.DTimer;
 import DSystem.DWait;
 import Entities.Bullets.BeamCleanRow;
 import Entities.Bullets.Bullet;
@@ -26,11 +28,18 @@ import Entities.Units.Unit;
 import static Main.GamePanel.CELL_HEIGHT;
 import static Main.GamePanel.CELL_WIDTH;
 import static Main.GamePanel.GRID_OFFSET_X;
+import static Main.GamePanel.SPF;
+import static Main.GamePanel.bullets;
 import static Main.GamePanel.enemies;
 import static Main.GamePanel.getVfxs;
+import static Main.GamePanel.units;
+import static Main.GamePanel.vfxs;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -43,6 +52,10 @@ public class StageBossFight extends GamePanel {
 
     public StageBossFight(StageSelector stage) {
         super(1);
+
+        // Stop the default GamePanel music (if needed)
+//        Audio.shutDownMusic();
+        Audio.isMusicEnable = false;
         this.stage = stage;
 
         addMouseListener(new MouseAdapter() {
@@ -55,14 +68,43 @@ public class StageBossFight extends GamePanel {
         });
     }
 
+
     @Override
     public void summonEnemies() {
-        start = new DWait(10, e -> {//2
-            System.out.println("Wave 1");
-            Spawn_Enemy(new SongChinWu(0, 0), 1, 1); //1
+        start = new DWait(5, e -> {//2
+            System.out.println("The Last Fight is BEGIN!");
+            Spawn_Enemy(new SongChinWu(0, 2), 1, 1); //1
+            
+            Audio.isMusicEnable = true;
+            Audio.playMusic(AudioName.BOSS_THEME);
         });
-
         start.start();
+    }
+    
+    @Override
+    public void Spawn_Enemy(Enemy enemy, int num, int delay) {
+        new DWait(delay, e -> {
+            enemies.add(enemy.createNew(1280 - GRID_OFFSET_X + random.nextInt(10) * 10, 2));
+            System.out.println("Spawn Sucess");
+        }).start();
+    }
+    
+
+    private void start() {
+        if (DEBUG_MODE) runDebugMode();
+        addMouseListeners();
+        
+        new DWait(3, e -> {
+            System.out.println("Enemies is coming!");
+        }).start();
+        
+        for (int i=0; i<ROWS; i++) {
+            units.add(new Candles6(i, -1));
+        }
+    }
+    
+    private void runDebugMode() {
+        remainMana = 500;
     }
 
     @Override
