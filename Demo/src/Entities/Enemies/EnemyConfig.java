@@ -27,6 +27,8 @@ public interface EnemyConfig {
     EnemySpriteSheets RC_BOMBER_SPRITE = new EnemySpriteSheets("rc_bomber", "rc_bomber");
     EnemySpriteSheets ROBOT_MONOWHEEL_SPRITE = new EnemySpriteSheets("robot_monowheel_idle", "robot_monowheel_atk");
     EnemySpriteSheets TANK_SPRITE = new EnemySpriteSheets("tank", "tank");
+    EnemySpriteSheets SONG_CHIN_WU_SPRITE = new EnemySpriteSheets("SongChinWu_walk", "ninja-att");  // <--------- SongChinWu beta
+    
 
     // All Unit stats 💡
     EnemyStats NINJA_STATS = new EnemyStats(NINJA_SPRITE, 340, 100, 1, WALK_NORMAL, NORMAL);
@@ -38,4 +40,5 @@ public interface EnemyConfig {
     EnemyStats RC_BOMBER_STATS = new EnemyStats(RC_BOMBER_SPRITE, 50, 2000, 1, WALK_CAR, NORMAL);
     EnemyStats ROBOT_MONOWHEEL_STATS = new EnemyStats(ROBOT_MONOWHEEL_SPRITE, 190, 100, 1, WALK_NORMAL, NORMAL);
     EnemyStats TANK_STATS = new EnemyStats(TANK_SPRITE, 2200, 100, 0.1, WALK_SLOW, NORMAL);
+    EnemyStats SONG_CHIN_WU_STATS = new EnemyStats(SONG_CHIN_WU_SPRITE, 99999, 200, 1, WALK_SLOW, NORMAL); // <-------- SongChinWu beta
 }

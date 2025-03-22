@@ -1,3 +1,4 @@
 /Demo/dist/
 *.class
 Demo/build/classes/
+Demo/nbproject/
