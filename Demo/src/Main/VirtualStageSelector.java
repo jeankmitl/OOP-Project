@@ -13,12 +13,14 @@ import javax.swing.JFrame;
 public class VirtualStageSelector extends JFrame {
 
     public VirtualStageSelector() {
+
         setTitle("Select stage - Virtual");
         setSize(1280, 720);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
+
     }
-    
+
 }
