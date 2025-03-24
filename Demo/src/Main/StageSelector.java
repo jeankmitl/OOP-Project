@@ -25,6 +25,7 @@ public class StageSelector extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLocationRelativeTo(null);
+        setUndecorated(true);
         setVisible(true);
     }
 

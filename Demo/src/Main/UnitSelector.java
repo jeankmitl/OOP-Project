@@ -51,12 +51,9 @@ public class UnitSelector extends JDialog {
     
     
     public UnitSelector(JFrame parent) {
+
         super(parent);
-        setTitle("Select Unit");
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(CELL_WIDTH * MAX_UNIT, 720);
-        setResizable(false);
-        setLocationRelativeTo(null);
+
         ImageIcon bgPreviewImg = new ImageIcon(ImgManager.loadIcon("bg_for_preview"));
         
         unitPanelList = new JPanel();
@@ -80,6 +77,7 @@ public class UnitSelector extends JDialog {
                 g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
             }
         };
+
         bgPreviewLabel = new BGPreviewLabel(bgPreviewImg);
         unitNameLabel = new JLabel("???");
         roleLabel = new JLabel("role: ");
@@ -89,7 +87,6 @@ public class UnitSelector extends JDialog {
         atkSpeedLabel = new UnitStatLabel("Atk speed", 100, 1000);
         cooldownLabel = new UnitStatLabel("Cooldown", 100, 300);
         unitDescription = new UnitDescription();
-        
         
         unitPanelList.setLayout(new BoxLayout(unitPanelList, BoxLayout.Y_AXIS));
         unitPanelList.setBackground(new Color(0x1B1B24));
@@ -177,22 +174,29 @@ public class UnitSelector extends JDialog {
         optionsPanel.add(goButton);
         goButton.addActionListener(new ButtonListener());
         
+        setTitle("Select Unit");
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        setSize(CELL_WIDTH * MAX_UNIT, 720);
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setUndecorated(true);
         setVisible(true);
-        
+
         new Timer(250, e -> updateAnimation()).start();
         new Timer(16, e -> updateFPS()).start();
     }
-    
+
 //    public static void main(String[] args) {
 //        new UnitSelector();
 //    }
-    
-    private void updateAnimation() {
-        bgPreviewLabel.updateFrame();
 
+    private void updateAnimation() {
+
+        bgPreviewLabel.updateFrame();
         repaint();
+
     }
-    
+
     private void updateFPS() {
         healthStatLabel.updateFrame();
         atkStatLabel.updateFrame();
