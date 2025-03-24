@@ -803,7 +803,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(homeBtn.contains(e.getPoint())){
+                if(homeBtn.contains(e.getPoint()) && gameTimer.isRunning()){
                     stage.loadStage("Back");
                     return;
                 }
