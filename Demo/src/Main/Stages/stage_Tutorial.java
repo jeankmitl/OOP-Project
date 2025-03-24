@@ -28,7 +28,7 @@ public class stage_Tutorial implements EnemySummoner {
     @Override
     public void summonEnemies(GamePanel game) { // maybe 12 enermy
         
-        start = new DWait(30, e->{
+        start = new DWait(20, e->{
             System.out.println("WAVE START");
             Audio.play(AudioName.NEXT_SUMMON);
             game.Spawn_Enemy(new Bandit(0, 0));

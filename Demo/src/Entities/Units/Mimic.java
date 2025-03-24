@@ -25,26 +25,20 @@ public class Mimic extends Unit {
     
     public Mimic(int row, int col) {
         super(row, col, getUNIT_STATS());
-       
-    
-    
-    
+
         attackTimer = new DTimer(1,e->{
-            if(isEnemyInfront(GamePanel.getEnemies())){
-                attack(GamePanel.getBullets());
-                if (isDead()) {
+            if(this.getHealth() <= 0){
                     attackTimer.stop();
-                    return;
                 }
-                attack(GamePanel.getBullets());
-                Audio.play(AudioName.FIRE_TINY);
+            if(isEnemyInfront(GamePanel.getEnemies())){
+                    attack(GamePanel.getBullets());
+                    Audio.play(AudioName.FIRE_TINY);
             }
-            });
+        });
         attackTimer.start();
     }
-    ///BETA/// tester //I think i goona rework sprite
+    
     public void cd_stage(){
-        //setStatus("CHEWING"); //<- IDK
         crunchSpeed = new DWait(15,e->{
             crunch_avalible = true;
         });
@@ -54,15 +48,14 @@ public class Mimic extends Unit {
     public void attack(List<Bullet> bullets) {
         bullets.add(new Bite(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30,atk));
     }
-
     @Override
         public boolean isEnemyInfront(List<Enemy> enermies) {
         for (Enemy enermy : enermies) {
-                if (enermy.getRow() == this.getRow() && enermy.getX() < this.getX()+200 && crunch_avalible) {
-                setStatus(ATK_STATUS);
-                crunch_avalible = false;
-                cd_stage();
-                return true;
+                if (enermy.getRow() == this.getRow() && enermy.getX() < this.getX()+150 && crunch_avalible) {
+                    setStatus(ATK_STATUS);
+                    crunch_avalible = false;
+                    cd_stage();
+                    return true;
             }
         }
         setStatus(IDLE_STATUS);

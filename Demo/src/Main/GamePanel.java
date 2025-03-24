@@ -201,7 +201,7 @@ public final class GamePanel extends JPanel {
         manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
         
         // spawn: enemies every 10s ➕
-       if (this.target == this.count_kill && !this.victory) { // <<--- Off this bebore play stage 1
+       if (this.target == this.count_kill && !this.victory) {
             System.out.println("You win");
             this.victory = true;
         }
@@ -476,17 +476,16 @@ public final class GamePanel extends JPanel {
                 GamePanel.getVfxs().add(vfx);
                 getVfxs().add(vfx);
             } 
-//            else if (bullet instanceof Bite) { //Mimic Beta test
-//                for (Enemy enemy : enemies) {
-//                    if (bullet.getBounds().intersects(enemy.getBounds())) {
-//                        enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
-//                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
-//                        bulletIterator.remove();
-//                        Audio.play(AudioName.HIT);
-//                        break;
-//                    }
-//                }
-//            } 
+            else if (bullet instanceof Bite) { //Mimic Beta test
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
+                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
+                        bulletIterator.remove();
+                        Audio.play(AudioName.HIT);
+                    }
+                }
+            } 
             else { //Keep same stat with this here
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
@@ -503,7 +502,7 @@ public final class GamePanel extends JPanel {
 
         units.removeIf(Unit::isDead);
     }
-    
+
     private void paintHealthBar(Graphics g, Entity et) {
         if (et.getHealth() >= 9000) return;
         FontMetrics metrics = getFontMetrics(g.getFont());
@@ -886,6 +885,7 @@ public final class GamePanel extends JPanel {
                         Unit unit = unitIterator.next();
                         if (unit.getRow() == row && unit.getCol() == col) {
                             unitIterator.remove();
+                            unit.setHealth(0);
                             getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
                             Audio.play(AudioName.PLANT_DELETE);
                         }
