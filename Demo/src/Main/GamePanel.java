@@ -298,6 +298,12 @@ public final class GamePanel extends JPanel {
            }
     }
     
+    public void spawnEnemy(Enemy enemy, int delay) {
+        new DWait(delay, e->{
+            enemies.add(enemy);
+        }).start();
+    }
+    
     public void summonEnemies(){
         summoner.summonEnemies(this);
     }
