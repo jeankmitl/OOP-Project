@@ -11,4 +11,5 @@ package CoOpSystem;
 public interface CoKeys {
     String MSG_TEST = "msgTest";
     String IS_READY_PLAY = "isReadyPlay";
+    String STAGE_NAME = "stageName";
 }

@@ -5,6 +5,7 @@
 package CoOpSystem;
 
 import Asset.ImgManager;
+import Main.GamePanel;
 import Main.LoadingScreen;
 import Main.StageSelector;
 import Main.VirtualStageSelector;
@@ -35,7 +36,7 @@ import javax.swing.*;
  *
  * @author anawi
  */
-public class FindingCoOpFrame extends JFrame implements ActionListener {
+public class CoOpFrame extends JFrame implements ActionListener {
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
     private Socket socket;
@@ -55,7 +56,7 @@ public class FindingCoOpFrame extends JFrame implements ActionListener {
     private StageSelector stageSelector;
     
     
-    public FindingCoOpFrame() {
+    public CoOpFrame() {
         setTitle("Co-op room");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(360, 360);
@@ -124,9 +125,10 @@ public class FindingCoOpFrame extends JFrame implements ActionListener {
     }
     
     public static void main(String[] args) {
-        new FindingCoOpFrame();
+        new CoOpFrame();
     }
-
+    
+    // <editor-fold defaultstate="collapsed" desc="Test in Co-op Room">
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(createServerButton)) {
@@ -194,7 +196,9 @@ public class FindingCoOpFrame extends JFrame implements ActionListener {
         msgTextField.setEnabled(enabled);
         startButton.setEnabled(enabled);
     }
+    // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Backend Server/Client">
     private void createServer(String ip, int port) {
         new Thread(() -> {
             try {
@@ -272,54 +276,6 @@ public class FindingCoOpFrame extends JFrame implements ActionListener {
         }
     }
     
-    private void requestMsg(Properties properties) {
-        StringWriter writer = new StringWriter();
-        try {
-            properties.store(writer, null);
-            out.println(writer.toString());
-            
-            processMsg(properties, true);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void responseMsg(String message) {
-        Properties properties = new Properties();
-        try {
-            properties.load(new StringReader(message));
-            
-            String msgTest = properties.getProperty(CoKeys.MSG_TEST);
-            String isReadyPlay = properties.getProperty(CoKeys.IS_READY_PLAY);
-            
-            processMsg(properties, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void processMsg(Properties properties, boolean isYou) {
-        String msgTest = properties.getProperty(CoKeys.MSG_TEST);
-        String isReadyPlay = properties.getProperty(CoKeys.IS_READY_PLAY);
-        
-        SwingUtilities.invokeLater(() -> {
-            if (msgTest != null) {
-                msgTextArea.append((isYou?"(You)":"B") + ": " + msgTest + "\n");
-            }
-            if (isReadyPlay != null) {
-                if (isServer && isYou || !isServer && !isYou) {
-                    msgTextArea.append("---Start Play...---\n");
-                    startGame();
-                } else {
-                    msgTextArea.append("---" + (isYou?"(You) are":"B is") + " Ready---\n");
-                    if (isServer) {
-                        startButton.setEnabled(true);
-                    }
-                }
-            }
-        });
-    }
-    
     private void stopServer() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {
@@ -362,14 +318,42 @@ public class FindingCoOpFrame extends JFrame implements ActionListener {
             }
         }).start();
     }
+    // </editor-fold>
+
+    public boolean isServer() {
+        return isServer;
+    }
     
+    public void requestMsg(Properties properties) {
+        StringWriter writer = new StringWriter();
+        try {
+            properties.store(writer, null);
+            out.println(writer.toString());
+            processMsg(properties, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void responseMsg(String message) {
+        Properties properties = new Properties();
+        try {
+            properties.load(new StringReader(message));            
+            processMsg(properties, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private VirtualStageSelector vtStage;
+    private StageSelector stage;
+    private GamePanel gamePanel;
     
     private void startGame() {
         LoadingScreen loadingScreen = new LoadingScreen();
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    dispose();
                     Thread.sleep(1500);
                     return null;
                 }
@@ -379,12 +363,44 @@ public class FindingCoOpFrame extends JFrame implements ActionListener {
                     System.out.println("Finished loading.");
                     loadingScreen.dispose();
                     if (isServer) {
-                        new StageSelector();
+                        stage = new StageSelector(CoOpFrame.this);
+                        stage.loadStage("St10");
                     } else {
-                        new VirtualStageSelector();
+                        vtStage = new VirtualStageSelector(CoOpFrame.this);
                     }
             }
         };
         worker.execute();
+    }
+    
+    private void processMsg(Properties properties, boolean isYou) {
+        String msgTest = properties.getProperty(CoKeys.MSG_TEST);
+        String isReadyPlay = properties.getProperty(CoKeys.IS_READY_PLAY);
+        String stageName = properties.getProperty(CoKeys.STAGE_NAME);
+        
+        SwingUtilities.invokeLater(() -> {
+            if (msgTest != null) {
+                msgTextArea.append((isYou?"(You)":"B") + ": " + msgTest + "\n");
+            }
+            if (isReadyPlay != null) {
+                if (isServer && isYou || !isServer && !isYou) {
+                    msgTextArea.append("---Start Play...---\n");
+                    startGame();
+                } else {
+                    msgTextArea.append("---" + (isYou?"(You) are":"B is") + " Ready---\n");
+                    if (isServer) {
+                        startButton.setEnabled(true);
+                    }
+                }
+            }
+            if (stageName != null) {
+                System.out.println("Hellooosadfpja");
+                if (isServer) {
+                    gamePanel = stage.getGamePanel();
+                } else {
+                    vtStage.loadStage(stageName);
+                }
+            }
+        });
     }
 }

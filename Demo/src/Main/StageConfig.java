@@ -23,5 +23,5 @@ public interface StageConfig {
     StageStats STAGE_5 = new StageStats("Stage 4", MEDIUM, 55, "bg_dark_greek");
     StageStats STAGE_6 = new StageStats("Stage 4", MEDIUM, 61, "Stage1");
     
-    StageStats STAGE_BOSS = new StageStats("Stage 4", BOSS, 1, "Stage1");
+    StageStats STAGE_BOSS = new StageStats("Together Unto Death", BOSS, 1, "bg_dark_greek");
 }
