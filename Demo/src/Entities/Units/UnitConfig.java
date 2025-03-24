@@ -18,6 +18,7 @@ public interface UnitConfig {
     
     
     String SKELETON_DESC = "A few damage but good for starting";
+    String BLACK_SKELETON_DESC = "triple shots";
     String SLIME_DESC = "Generate 50 mana every atkSpeed, this is enough to balance mana before empty";
     String KANIWALL_DESC = "Defend";
     String CANNON_DESC = "IDK. When finish";
@@ -39,6 +40,7 @@ public interface UnitConfig {
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
+    UnitSpriteSheets BLACK_SKELETON_SRITE = new UnitSpriteSheets("black_skeleton_idle", "black_skeleton_atk");
     UnitSpriteSheets SLIME_SPRITE = new UnitSpriteSheets("Slime_re", "SlimeGenerate");
     UnitSpriteSheets KANIWALL_SPRITE = new UnitSpriteSheets("kaniwall", "kaniwall_crack", "kaniwall_cracker");
     UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic", "Mimic");
@@ -62,6 +64,7 @@ public interface UnitConfig {
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER, SKELETON_DESC);
+    UnitStats BLACK_SKELETON_STATS = new UnitStats(BLACK_SKELETON_SRITE, 300, 20, 1.5, 300, 14, ATTACKER, BLACK_SKELETON_DESC);
     UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 25, 25, 50, 7, COST_GEN, SLIME_DESC);
     UnitStats KANIWALL_STATS = new UnitStats(KANIWALL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER, KANIWALL_DESC);
     ///BETA///
