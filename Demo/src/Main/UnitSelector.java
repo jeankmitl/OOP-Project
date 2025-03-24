@@ -50,7 +50,8 @@ public class UnitSelector extends JDialog {
     private UnitInsertBox[] unitInsertBoxs = new UnitInsertBox[MAX_UNIT];
     
     
-    public UnitSelector() {
+    public UnitSelector(JFrame parent) {
+        super(parent, true);
         setTitle("Select Unit");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(CELL_WIDTH * MAX_UNIT, 720);

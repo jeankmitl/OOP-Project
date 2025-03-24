@@ -395,11 +395,11 @@ public class CoOpFrame extends JFrame implements ActionListener {
             }
             if (stageName != null) {
                 System.out.println("Hellooosadfpja");
-                if (isServer) {
-                    gamePanel = stage.getGamePanel();
-                } else {
-                    vtStage.loadStage(stageName);
-                }
+//                if (isServer) {
+//                    gamePanel = stage.getGamePanel();
+//                } else {
+//                    vtStage.loadStage(stageName);
+//                }
             }
         });
     }

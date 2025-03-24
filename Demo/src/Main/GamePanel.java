@@ -33,7 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public final class GamePanel extends JPanel {
+public class GamePanel extends JPanel {
     
     //TURN OFF IF NOT DEBUG: set mana, show status, etc...
     protected final boolean DEBUG_MODE = true;
@@ -93,10 +93,10 @@ public final class GamePanel extends JPanel {
     
     private Rectangle homeBtn = new Rectangle(1180,15,75,75);
     private StageSelector stage;
-    private EnemySummoner summoner;
+        private EnemySummoner summoner;
     //same as: public awake()
 
-    private GamePanel(StageSelector stage, EnemySummoner summoner) {
+    protected GamePanel(StageSelector stage, EnemySummoner summoner) {
         /**
          * Awake. = for create Object w/ 'new'
          * - play: music 🎵, 
@@ -121,15 +121,17 @@ public final class GamePanel extends JPanel {
     }
     
     private void selectUnitBefore() {
-        UnitSelector unitSelector = new UnitSelector();
-        unitSelector.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
-                addKeyListener(new GameKeyboardListener());
-                startGameLoop(); // Always call on last GamePanel
-                summonEnemies(); // spawn Enermy in this insted
-            }
+        SwingUtilities.invokeLater(() -> {
+            UnitSelector unitSelector = new UnitSelector(stage);
+            unitSelector.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
+                    addKeyListener(new GameKeyboardListener());
+                    startGameLoop(); // Always call on last GamePanel
+                    summonEnemies(); // spawn Enermy in this insted
+                }
+            });
         });
     }
     
@@ -160,7 +162,7 @@ public final class GamePanel extends JPanel {
         return instance;
     }
     
-    private void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
+    protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
         stopGameLoop();
         GameLoop.clearListener();
         this.stage = stage;
