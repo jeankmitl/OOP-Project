@@ -24,7 +24,7 @@ https://github.com/jeankmitl/OOP-Project.git
 * ```Programming``` Gear 
 * ```Graphic Design``` Jean 
 * ```Graphic Design``` Beam 
-* ```Graphic Design``` Sun 
+* ```Graphic Design``` Son 
 * ```Graphic Design``` Power 
 * ```Graphic Design``` Khatha 
 * ```Programming``` ```Graphic Design``` Harley 
