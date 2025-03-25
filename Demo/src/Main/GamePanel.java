@@ -27,7 +27,14 @@ import Asset.VFX;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Main.Stages.*;
+import Main.Stages.stage_Tutorial;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -105,7 +112,6 @@ public class GamePanel extends JPanel {
          */
         Audio.playMusic(AudioName.MUSIC_ONE);
         OTHER_THREAD = Thread.activeCount();
-        
         units = new ArrayList<>();
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
@@ -194,11 +200,32 @@ public class GamePanel extends JPanel {
             units.add(new Candles6(i, -1));
         }
     }
-   
+    
+    private void save_Progress(int num){
+        SaveGame data = null;
+        try(ObjectInputStream tempo = new ObjectInputStream(new FileInputStream("Save.bat"))){
+            data = (SaveGame) tempo.readObject();
+        }catch(IOException ex) {
+            data = new SaveGame();
+            System.out.println("No Save");
+        }catch(ClassNotFoundException ee){
+            data = new SaveGame();
+            System.out.println("No Save");
+        }
+        data.set_Stage_Num(num-1);
+        data.check_stage();
+        try(ObjectOutputStream temp = new ObjectOutputStream(new FileOutputStream("Save.bat"))){
+            temp.writeObject(data);
+            System.out.println("Save Done");
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
     
     // SPF = 0.016666666666666666 (99% 60fps)
     protected void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
+        if (summoner instanceof stage_Tutorial){}
         if (manaRecoverTimer10.tick(deltaTime)) {
             increaseMana(10);
         }
@@ -208,6 +235,16 @@ public class GamePanel extends JPanel {
        if (this.target == this.count_kill && !this.victory) {
             System.out.println("You win");
             this.victory = true;
+            if (summoner instanceof stage_Tutorial){save_Progress(1);}
+            if (summoner instanceof stage2){save_Progress(2);}
+            if (summoner instanceof stage3){save_Progress(3);}
+            if (summoner instanceof stage4){save_Progress(4);}
+            if (summoner instanceof stage5){save_Progress(5);}
+            if (summoner instanceof stage6){save_Progress(6);}
+            if (summoner instanceof stage7){save_Progress(7);}
+            if (summoner instanceof stage8){save_Progress(8);}
+            if (summoner instanceof StageBossFight){save_Progress(9);}
+            if (summoner instanceof stage_beta){save_Progress(10);}
         }
         
         // update: animation every 2s

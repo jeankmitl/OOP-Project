@@ -9,6 +9,8 @@ import Asset.AudioName;
 import Asset.ImgManager;
 import Asset.StringFormatter;
 import Entities.Units.*;
+import Main.SaveGame;
+import Main.UnitType;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,6 +24,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -50,6 +55,10 @@ public class UnitSelector extends JDialog {
     private UnitInsertBox[] unitInsertBoxs = new UnitInsertBox[MAX_UNIT];
     
     private final String type;
+    private SaveGame progress = null;
+    protected final boolean DEBUG_MODE = true; //<----- Open on this
+    
+    public UnitSelector(JFrame parent) {
 
     public UnitSelector(JFrame parent) {
         this(parent, "");
@@ -61,6 +70,16 @@ public class UnitSelector extends JDialog {
 
         ImageIcon bgPreviewImg = new ImageIcon(ImgManager.loadIcon("bg_for_preview"));
         
+        try(ObjectInputStream temp = new ObjectInputStream(new FileInputStream("Save.bat"))){
+            progress = (SaveGame) temp.readObject();
+            loader(progress);
+            System.out.println("Load Done");
+        }catch(IOException ex){
+            System.out.println("No Save Progress");
+            if(DEBUG_MODE){this.loader(new SaveGame());} //<--- For No Save And Debug mode
+        }catch(ClassNotFoundException ee){
+            ee.printStackTrace();
+        }
         unitPanelList = new JPanel();
         unitChosenPanelList = new JPanel();
         optionsPanel = new JPanel() {
@@ -129,25 +148,25 @@ public class UnitSelector extends JDialog {
         }
         
         unitTypes.add(new UnitType(Skeleton.class));
-        unitTypes.add(new UnitType(BlackSkeleton.class));
-//        unitTypes.add(new UnitType(SniperSkeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
-        unitTypes.add(new UnitType(Mimic.class));
-        unitTypes.add(new UnitType(SemiAutoBot.class));
-        unitTypes.add(new UnitType(BigBall.class));
-        unitTypes.add(new UnitType(GolemSupport.class));
-        unitTypes.add(new UnitType(Explosive_turtle.class));
-        unitTypes.add(new UnitType(Nike.class));
-        unitTypes.add(new UnitType(MiPya.class));
-        unitTypes.add(new UnitType(Snake.class));
-        unitTypes.add(new UnitType(Python.class));
-        unitTypes.add(new UnitType(Explosion.class));
-        unitTypes.add(new UnitType(GiveawaySlime.class));
-        unitTypes.add(new UnitType(AlphaWolf.class));
-        unitTypes.add(new UnitType(Werewolf.class));
-        unitTypes.add(new UnitType(Vampire.class));
-        
+        // unitTypes.add(new UnitType(BlackSkeleton.class));
+//        unitTypes.add(new UnitType(SniperSkeleton.class));
+//        unitTypes.add(new UnitType(BlackSkeleton.class));
+//        unitTypes.add(new UnitType(SemiAutoBot.class));
+//        unitTypes.add(new UnitType(BigBall.class));
+//        unitTypes.add(new UnitType(GolemSupport.class));
+//        unitTypes.add(new UnitType(Explosive_turtle.class));
+//        unitTypes.add(new UnitType(Nike.class));
+//        unitTypes.add(new UnitType(MiPya.class));
+//        unitTypes.add(new UnitType(Snake.class));
+//        unitTypes.add(new UnitType(Python.class));
+//        unitTypes.add(new UnitType(Explosion.class));
+//        unitTypes.add(new UnitType(GiveawaySlime.class));
+//        unitTypes.add(new UnitType(AlphaWolf.class));
+//        unitTypes.add(new UnitType(Werewolf.class));
+//        unitTypes.add(new UnitType(Vampire.class));
+        ///////////
         for (int i = 0; i < unitTypes.size(); i += COLS) {
             JPanel rowPanel = new JPanel(new GridLayout(1, COLS, GAP, 0));
             rowPanel.setOpaque(false);
@@ -211,6 +230,13 @@ public class UnitSelector extends JDialog {
 //    public static void main(String[] args) {
 //        new UnitSelector();
 //    }
+    private void loader(SaveGame progress){
+        if (progress.get_Stage_Num(1) || DEBUG_MODE){
+            unitTypes.add(new UnitType(Mimic.class));
+        }if(progress.get_Stage_Num(2)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(Explosive_turtle.class));
+        }
+    }
 
     private void updateAnimation() {
 
@@ -595,8 +621,6 @@ public class UnitSelector extends JDialog {
             repaint();
         }
     }
-
-
     
     
 }
