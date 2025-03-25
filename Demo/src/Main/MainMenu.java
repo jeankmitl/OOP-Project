@@ -31,6 +31,7 @@ public class MainMenu extends JFrame {
             System.out.println("Wrong image path.");
         }
 
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Defense of the Dungeon");
         setSize(1264, 681);
         setResizable(false);
@@ -63,8 +64,26 @@ public class MainMenu extends JFrame {
                     };
                     worker.execute();
                 } else if (dict.contains(e.getPoint())) {
-                    Audio.play(AudioName.PLANT_CANT_PICK_UP);
-                    System.out.println("This feature hasn't been finished");
+                    Audio.play(AudioName.BUTTON_CLICK);
+                    System.out.println("Choose the stage you want");
+
+                    LoadingScreen loadingScreen = new LoadingScreen();
+                    SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            dispose();
+                            Thread.sleep(1500);
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            System.out.println("Finished loading.");
+                            loadingScreen.dispose();
+                            new StageSelector("2p");
+                        }
+                    };
+                    worker.execute();
                 } else if (config.contains(e.getPoint())) {
                     Audio.play(AudioName.PLANT_CANT_PICK_UP);
                     System.out.println("This feature hasn't been finished");

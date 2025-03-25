@@ -8,20 +8,29 @@ import javax.swing.*;
 public class StageSelector extends JFrame {
     private StageSelectorPanel panel;
     private GamePanel game;
+    private String type;
     private CoOpFrame cof;
 
     public StageSelector() {
-        this(null);
+        this("solo", null);
     }
     
-    public StageSelector(CoOpFrame cof) {
-
+    public StageSelector(String type) {
+        this(type, null);
+    }
+    
+    public StageSelector(String type, CoOpFrame cof) {
+        this.type = type;
         this.cof = cof;
-        panel = new StageSelectorPanel(this);
+        panel = new StageSelectorPanel(this, type);
         add(panel);
         setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
     
-        setTitle("Select stage");
+        if (type.equals("2p")) {
+            setTitle("Select stage - 2 Players");
+        } else {
+            setTitle("Select stage");
+        }
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1264, 681);
         setResizable(false);
@@ -66,7 +75,11 @@ public class StageSelector extends JFrame {
                 case "St8" -> summoner = new stage8();
                 default -> throw new AssertionError();
             }
-            game = GamePanel2Player.getInstance(this, summoner);
+            if (type.equals("2p")) {
+                game = GamePanel2Player.getInstance(this, summoner);
+            } else {
+                game = GamePanel.getInstance(this, summoner);
+            }
         }
         getContentPane().add(game);
 

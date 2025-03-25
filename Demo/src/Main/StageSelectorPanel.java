@@ -14,8 +14,10 @@ public class StageSelectorPanel extends JPanel{
     private Image stageFrame;
     private boolean isButtonHovered = false;
     private StageSelector stageSelector;
+    private String type;
 
-    public StageSelectorPanel(StageSelector frame) {
+    public StageSelectorPanel(StageSelector frame, String type) {
+        this.type = type;
         this.stageSelector = frame;
         setLayout(null);
 
@@ -122,6 +124,11 @@ public class StageSelectorPanel extends JPanel{
         g2d.setFont(new Font("Algerian", Font.BOLD, 100));
         g2d.setPaint(Color.RED);
         g2d.drawString("Select the stage", 150, 175);
+        if (type.equals("2p")) {
+            g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+            g2d.setColor(Color.black);
+            g2d.drawString("2-Player Mode", 200, 200);
+        }
         Image image = ImgManager.loadIcon("home_btn");
         if (stageFrame != null) {
             g2d.drawImage(stageFrame, st1.x, st1.y, st1.width, st1.height,this);

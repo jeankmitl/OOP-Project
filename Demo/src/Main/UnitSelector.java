@@ -59,8 +59,6 @@ public class UnitSelector extends JDialog {
     protected final boolean DEBUG_MODE = true; //<----- Open on this
     
     public UnitSelector(JFrame parent) {
-
-    public UnitSelector(JFrame parent) {
         this(parent, "");
     }
     
