@@ -128,20 +128,22 @@ public class UnitSelector extends JDialog {
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
-//        unitTypes.add(new UnitType(BlackSkeleton.class));
-//        unitTypes.add(new UnitType(SemiAutoBot.class));
-//        unitTypes.add(new UnitType(BigBall.class));
-//        unitTypes.add(new UnitType(GolemSupport.class));
-//        unitTypes.add(new UnitType(Explosive_turtle.class));
-//        unitTypes.add(new UnitType(Nike.class));
-//        unitTypes.add(new UnitType(MiPya.class));
-//        unitTypes.add(new UnitType(Snake.class));
-//        unitTypes.add(new UnitType(Python.class));
-//        unitTypes.add(new UnitType(Explosion.class));
-//        unitTypes.add(new UnitType(GiveawaySlime.class));
-//        unitTypes.add(new UnitType(AlphaWolf.class));
-//        unitTypes.add(new UnitType(Werewolf.class));
-//        unitTypes.add(new UnitType(Vampire.class));
+//        unitTypes.add(new UnitType(BlackSkeleton.class));// done
+//        unitTypes.add(new UnitType(SemiAutoBot.class)); //done
+//        unitTypes.add(new UnitType(BigBall.class)); //done
+//        unitTypes.add(new UnitType(GolemSupport.class)); //done
+//        unitTypes.add(new UnitType(Explosive_turtle.class)); //done
+//        unitTypes.add(new UnitType(Nike.class)); //done
+//        unitTypes.add(new UnitType(MiPya.class));// done
+//        unitTypes.add(new UnitType(Snake.class));//done
+//        unitTypes.add(new UnitType(Python.class));//done
+//        unitTypes.add(new UnitType(Explosion.class)); //done
+//        unitTypes.add(new UnitType(GiveawaySlime.class)); //done
+//        unitTypes.add(new UnitType(AlphaWolf.class)); //done
+//        unitTypes.add(new UnitType(Werewolf.class)); //done
+//        unitTypes.add(new UnitType(Vampire.class)); //done
+//           unitTypes.add(new UnitType(Explosive_turtle.class)); done
+//            unitTypes.add(new UnitType(Mimic.class)); done
         ///////////
         for (int i = 0; i < unitTypes.size(); i += COLS) {
             JPanel rowPanel = new JPanel(new GridLayout(1, COLS, GAP, 0));
@@ -206,9 +208,32 @@ public class UnitSelector extends JDialog {
 //    }
     private void loader(SaveGame progress){
         if (progress.get_Stage_Num(1) || DEBUG_MODE){
+            unitTypes.add(new UnitType(Explosive_turtle.class));
             unitTypes.add(new UnitType(Mimic.class));
         }if(progress.get_Stage_Num(2)|| DEBUG_MODE){
-            unitTypes.add(new UnitType(Explosive_turtle.class));
+            unitTypes.add(new UnitType(SemiAutoBot.class));
+            unitTypes.add(new UnitType(BigBall.class));
+        }if(progress.get_Stage_Num(3)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(Vampire.class));
+        }if(progress.get_Stage_Num(4)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(GolemSupport.class));
+            unitTypes.add(new UnitType(GiveawaySlime.class));
+        }if(progress.get_Stage_Num(5)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(MiPya.class));
+            unitTypes.add(new UnitType(BlackSkeleton.class));
+        }if(progress.get_Stage_Num(6)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(Python.class));
+            unitTypes.add(new UnitType(Explosion.class));
+            unitTypes.add(new UnitType(Snake.class));
+        }if(progress.get_Stage_Num(7)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(AlphaWolf.class));
+            unitTypes.add(new UnitType(Werewolf.class));
+        }if(progress.get_Stage_Num(8)|| DEBUG_MODE){
+            
+        }if(progress.get_Stage_Num(9)|| DEBUG_MODE){
+            // No reward
+        }if(progress.get_Stage_Num(10)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(Nike.class));
         }
     }
 

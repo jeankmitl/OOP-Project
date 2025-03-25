@@ -223,7 +223,7 @@ public class GamePanel extends JPanel {
     // SPF = 0.016666666666666666 (99% 60fps)
     private void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
-        if (summoner instanceof stage_Tutorial){}
+//        if (summoner instanceof stage_Tutorial){}
         if (manaRecoverTimer10.tick(deltaTime)) {
             increaseMana(10);
         }
