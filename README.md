@@ -46,7 +46,7 @@ Download ```Defense of the Dungeon.jar``` from ```Releases``` section (In proces
 * ```Graphic Design``` Power
 * ```Graphic Design``` Beam
 * ```Graphic Design``` Jean
-* ```Graphic Design``` Khatha
+* ```Graphic Design``` Kata
 * ```Programming``` ```Graphic Design``` Sea
 * ```Programming``` ```Graphic Design``` Win
 * ```Programming``` ```Graphic Design``` Harley
