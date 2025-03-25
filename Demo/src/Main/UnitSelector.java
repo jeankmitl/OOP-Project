@@ -57,13 +57,11 @@ public class UnitSelector extends JDialog {
     private final String type;
     private SaveGame progress = null;
     protected final boolean DEBUG_MODE = true; //<----- Open on this
-    
-    public UnitSelector(JFrame parent) {
 
     public UnitSelector(JFrame parent) {
         this(parent, "");
     }
-    
+
     public UnitSelector(JFrame parent, String type) {
         super(parent);
         this.type = type;
