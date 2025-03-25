@@ -109,7 +109,7 @@ public class UnitSelector extends JDialog {
         goButton.setPreferredSize(new Dimension(100, 50));
         goButton.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));
         
-        unitTypes.add(new UnitType(Skeleton.class));
+//        unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(BlackSkeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
