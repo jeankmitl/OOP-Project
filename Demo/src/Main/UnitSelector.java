@@ -44,7 +44,7 @@ public class UnitSelector extends JDialog {
     private final BGPreviewLabel bgPreviewLabel;
     private final UnitStatLabel healthStatLabel, atkStatLabel, atkSpeedLabel, cooldownLabel;
     private final UnitDescription unitDescription;
-    private final JLabel unitNameLabel, roleLabel;
+    private final JLabel unitNameLabel, roleLabel, selectorTypeLabel, warnLabel;
     private final JButton goButton;
     
     public static final int CELL_WIDTH = 95;
@@ -53,12 +53,20 @@ public class UnitSelector extends JDialog {
     public static final int GAP = 7;
     public static final int MAX_UNIT = 8;
     private UnitInsertBox[] unitInsertBoxs = new UnitInsertBox[MAX_UNIT];
+    
+    private final String type;
     private SaveGame progress = null;
     protected final boolean DEBUG_MODE = true; //<----- Open on this
     
     public UnitSelector(JFrame parent) {
 
+    public UnitSelector(JFrame parent) {
+        this(parent, "");
+    }
+    
+    public UnitSelector(JFrame parent, String type) {
         super(parent);
+        this.type = type;
 
         ImageIcon bgPreviewImg = new ImageIcon(ImgManager.loadIcon("bg_for_preview"));
         
@@ -97,6 +105,8 @@ public class UnitSelector extends JDialog {
         bgPreviewLabel = new BGPreviewLabel(bgPreviewImg);
         unitNameLabel = new JLabel("???");
         roleLabel = new JLabel("role: ");
+        selectorTypeLabel = new JLabel();
+        warnLabel = new JLabel("Need at least 3 units");
         goButton = new JButton("Go!");
         healthStatLabel = new UnitStatLabel("Health", 1000);
         atkStatLabel = new UnitStatLabel("Atk", 200);
@@ -122,9 +132,21 @@ public class UnitSelector extends JDialog {
         goButton.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.lightGray, Color.darkGray));
         goButton.setBackground(Color.gray);
         goButton.setFocusable(false);
+        goButton.setEnabled(false);
         goButton.setPreferredSize(new Dimension(100, 50));
         goButton.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));
-        ///////
+        selectorTypeLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+        selectorTypeLabel.setForeground(Color.white);
+        warnLabel.setForeground(Color.lightGray);
+        switch (type) {
+            case "p1":
+                selectorTypeLabel.setText("Player 1: ");
+                break;
+            case "p2":
+                selectorTypeLabel.setText("Player 2: ");
+                break;
+        }
+        
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
@@ -188,7 +210,9 @@ public class UnitSelector extends JDialog {
         operatorPanel.add(optionsPanel);
         operatorPanel.add(unitChosenPanelList);
         
+        optionsPanel.add(selectorTypeLabel);
         optionsPanel.add(goButton);
+        optionsPanel.add(warnLabel);
         goButton.addActionListener(new ButtonListener());
         
         setTitle("Select Unit");
@@ -259,7 +283,14 @@ public class UnitSelector extends JDialog {
                 unitInsertBoxs[i].setUnit(null);
             }
         }
-        
+        if (unitChosens.size() >= 3) {
+            goButton.setBackground(Color.gray);
+            goButton.setEnabled(true);
+            warnLabel.setText("                                   ");
+        } else {
+            goButton.setEnabled(false);
+            warnLabel.setText("Need at least 3 units");
+        }
         revalidate();
         repaint();
     }
