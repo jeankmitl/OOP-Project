@@ -20,8 +20,8 @@ public interface StageConfig {
     StageStats STAGE_2 = new StageStats("Stage 2", EASY, 31, "bg_dark_zone");
     StageStats STAGE_3 = new StageStats("Stage 3", EASY, 34, "bg_dark_zone");
     StageStats STAGE_4 = new StageStats("Stage 4", EASY, 45, "bg_dark_greek");
-    StageStats STAGE_5 = new StageStats("Stage 4", MEDIUM, 55, "bg_dark_greek");
-    StageStats STAGE_6 = new StageStats("Stage 4", MEDIUM, 61, "Stage1");
+    StageStats STAGE_5 = new StageStats("Stage 5", MEDIUM, 55, "bg_dark_greek");
+    StageStats STAGE_6 = new StageStats("Stage 6", MEDIUM, 61, "Stage1");
     
     StageStats STAGE_BOSS = new StageStats("Together Unto Death", BOSS, 1, "bg_dark_greek");
 }

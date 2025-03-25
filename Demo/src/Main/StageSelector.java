@@ -15,14 +15,14 @@ public class StageSelector extends JFrame {
     }
     
     public StageSelector(CoOpFrame cof) {
+
         this.cof = cof;
         panel = new StageSelectorPanel(this);
         add(panel);
         setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
     
         setTitle("Select stage");
-        setSize(1280, 720);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1264, 681);
         setResizable(false);
         setLocationRelativeTo(null);
         setUndecorated(true);

@@ -24,7 +24,7 @@ public class LoadingScreen extends JFrame {
         }
 
         setTitle("Loading...");
-        setSize(1280,720);
+        setSize(1264, 681);
         setLocationRelativeTo(null);
         setUndecorated(true);
         setVisible(true);

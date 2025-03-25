@@ -147,7 +147,7 @@ public class UnitSelector extends JDialog {
             unitChosenPanelList.add(uib);
             unitInsertBoxs[i] = uib;
         }
-        
+
         JScrollPane scrollUnitPanelList = new JScrollPane(unitPanelList);
         scrollUnitPanelList.getVerticalScrollBar().setUnitIncrement(16);
         scrollUnitPanelList.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -176,7 +176,7 @@ public class UnitSelector extends JDialog {
         
         setTitle("Select Unit");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(CELL_WIDTH * MAX_UNIT, 720);
+        setSize(CELL_WIDTH * MAX_UNIT, 681);
         setResizable(false);
         setLocationRelativeTo(null);
         setUndecorated(true);

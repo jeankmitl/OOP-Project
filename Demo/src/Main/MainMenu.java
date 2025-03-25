@@ -15,8 +15,8 @@ public class MainMenu extends JFrame {
 
     public MainMenu() {
 
-        logo = new Rectangle(465, 170, 800, 400);
-        menuBar = new Rectangle(100, 100, 400, 550);
+        logo = new Rectangle(450, 170, 800, 400);
+        menuBar = new Rectangle(50, 65, 400, 550);
         start = new Rectangle(125, 110, 310, 125);
         dict = new Rectangle(125, 250, 300, 110);
         config = new Rectangle(125, 385, 300, 115);
@@ -32,7 +32,7 @@ public class MainMenu extends JFrame {
         }
 
         setTitle("Defense of the Dungeon");
-        setSize(1280, 720);
+        setSize(1264, 681);
         setResizable(false);
         setLocationRelativeTo(null);
         setUndecorated(true);
