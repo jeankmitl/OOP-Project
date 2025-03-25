@@ -4,29 +4,29 @@ This project is part of Object-Oriented Programming course @School of Informatio
 
 ## 📓 Description
 
-Tower Defense video game released in 2025, developed and published by Game Name?. It was first released on Github, where players take on the role of a Dungeon Master, defending against the invasion of the Tomb Raider. When a Tomb Raider enters a dungeon, players must defend their dungeon by placing monsters that will attack the Tomb Raider or block the Tomb Raider from passing. The Tomb Raider can also defeat monsters. Players must also gather energy called Mana to summon monsters. If the Tomb Raider reaches the entrance of the dungeon, the player loses the level.
+A Tower Defense video game in 2025, developed and published by Game Name. It was first released on GitHub, where players take on the role of a Dungeon Master, defending against the invasion of the Tomb Raider. When a Tomb Raider enters a dungeon, players must defend their dungeon by placing monsters that will attack the Tomb Raider or block the Tomb Raider from passing. The Tomb Raider can also defeat monsters. Players must also gather energy called Mana to summon monsters. If the Tomb Raider reaches the entrance of the dungeon, the player loses the game
 
-## ⬇️ Download
+## ⬇️ Installation
 
 ### First method
-Go to ```Code``` Drop-down and ```Download ZIP```
+Go to ```<> Code``` Drop-down and click ```Download ZIP```
 
 ### Second method
-Clone using the web URL
+Clone repository using web URL
 
 ```sh
-https://github.com/jeankmitl/OOP-Project.git
+git clone https://github.com/jeankmitl/OOP-Project.git
 ```
 
 ## 🧑‍💻 Collaborators
 
-* ```Programming``` Office 
-* ```Programming``` Kia 
-* ```Graphic Design``` Jean 
-* ```Graphic Design``` Beam 
-* ```Graphic Design``` Son 
-* ```Graphic Design``` Power 
-* ```Graphic Design``` Khatha 
-* ```Programming``` ```Graphic Design``` Harley 
-* ```Programming``` ```Graphic Design``` Win 
+* ```Programming``` Office
+* ```Programming``` Kia
+* ```Graphic Design``` Son
+* ```Graphic Design``` Power
+* ```Graphic Design``` Beam
+* ```Graphic Design``` Jean
+* ```Graphic Design``` Khatha
 * ```Programming``` ```Graphic Design``` Sea
+* ```Programming``` ```Graphic Design``` Win
+* ```Programming``` ```Graphic Design``` Harley
