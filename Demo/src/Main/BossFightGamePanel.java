@@ -52,7 +52,6 @@ import java.util.Random;
 public class BossFightGamePanel extends GamePanel {
     private static BossFightGamePanel instance;
     
-    
     private BossFightGamePanel(StageSelector stage, EnemySummoner summoner) {
         super(stage, summoner);
     }

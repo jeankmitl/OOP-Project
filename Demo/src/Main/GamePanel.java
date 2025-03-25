@@ -64,7 +64,7 @@ public class GamePanel extends JPanel {
     protected static List<Enemy> enemies;
     protected static List<Bullet> bullets;
     protected static List<VFX> vfxs;
-    private static List<UnitType> unitTypes;
+    protected static List<UnitType> unitTypes;
     
     
     protected final Random random = new Random();
@@ -93,7 +93,7 @@ public class GamePanel extends JPanel {
     
     private Rectangle homeBtn = new Rectangle(1180,15,75,75);
     private StageSelector stage;
-        private EnemySummoner summoner;
+    private EnemySummoner summoner;
     //same as: public awake()
 
     protected GamePanel(StageSelector stage, EnemySummoner summoner) {
@@ -120,7 +120,7 @@ public class GamePanel extends JPanel {
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
     }
     
-    private void selectUnitBefore() {
+    protected void selectUnitBefore() {
         SwingUtilities.invokeLater(() -> {
             UnitSelector unitSelector = new UnitSelector(stage);
             unitSelector.addWindowListener(new WindowAdapter() {
@@ -177,6 +177,8 @@ public class GamePanel extends JPanel {
         bullets.clear();
         vfxs.clear();
         unitTypes.clear();
+        
+        remainMana = 0;
         selectUnitBefore();
     }
     
@@ -195,7 +197,7 @@ public class GamePanel extends JPanel {
    
     
     // SPF = 0.016666666666666666 (99% 60fps)
-    private void fixedUpdate(double deltaTime) {
+    protected void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
         if (manaRecoverTimer10.tick(deltaTime)) {
             increaseMana(10);
@@ -807,7 +809,6 @@ public class GamePanel extends JPanel {
                     stage.loadStage("Back");
                     return;
                 }
-                
                 if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS 
                         && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;
@@ -821,7 +822,7 @@ public class GamePanel extends JPanel {
                     
                     if (e.getX() >= unitX && e.getX() <= unitX + CELL_WIDTH 
                             && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                        if (unit.isNoCoolDown()){
+                        if (unit.isNoCoolDown()) {
                             if (remainMana >= unit.getManaCost()) {
                                 unit.setDragging(true);
                                 Audio.play(AudioName.PLANT_PICK_UP);
@@ -855,46 +856,6 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
-
-            private void placeUnit(UnitType unit, int row, int col) {
-                if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                    
-                    if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
-                        Unit unitIns = (Unit)UnitFactory.createEntity(unit.unitClass, row, col);
-                        units.add(unitIns);
-                        remainMana -= unit.getManaCost();
-                        unit.startCooldown();
-                        if (unitIns instanceof UnitTriggerable) {
-                            ((UnitTriggerable)unitIns).triggerWhenPlace();
-                        }
-                        if (unitIns instanceof UnitIgnoreFieldAvailable) {
-                            ((UnitIgnoreFieldAvailable)unitIns).getUnitFromField(getUnitFromField(col, row));
-                        }
-                        Audio.play(AudioName.PLANT_PLACE);
-                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
-                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
-                    } else {
-                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
-//                      System.out.println("***Field is Not available***");
-                    }
-                }
-            }
-            
-            private void recallUnit(int col, int row) {
-                if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
-                    Iterator<Unit> unitIterator = units.iterator();
-                    while (unitIterator.hasNext()) {
-                        Unit unit = unitIterator.next();
-                        if (unit.getRow() == row && unit.getCol() == col) {
-                            unitIterator.remove();
-                            unit.setHealth(0);
-                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
-                            Audio.play(AudioName.PLANT_DELETE);
-                        }
-                    }
-                }
-            }
-
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
@@ -920,8 +881,47 @@ public class GamePanel extends JPanel {
                 }
             }
         });
-
     }
+    
+    public void placeUnit(UnitType unit, int row, int col) {
+        if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+
+            if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
+                Unit unitIns = (Unit)UnitFactory.createEntity(unit.unitClass, row, col);
+                units.add(unitIns);
+                remainMana -= unit.getManaCost();
+                unit.startCooldown();
+                if (unitIns instanceof UnitTriggerable) {
+                    ((UnitTriggerable)unitIns).triggerWhenPlace();
+                }
+                if (unitIns instanceof UnitIgnoreFieldAvailable) {
+                    ((UnitIgnoreFieldAvailable)unitIns).getUnitFromField(getUnitFromField(col, row));
+                }
+                Audio.play(AudioName.PLANT_PLACE);
+                getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
+                getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
+            } else {
+                getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
+//                      System.out.println("***Field is Not available***");
+            }
+        }
+    }
+
+    public void recallUnit(int col, int row) {
+        if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
+            Iterator<Unit> unitIterator = units.iterator();
+            while (unitIterator.hasNext()) {
+                Unit unit = unitIterator.next();
+                if (unit.getRow() == row && unit.getCol() == col) {
+                    unitIterator.remove();
+                    unit.setHealth(0);
+                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
+                    Audio.play(AudioName.PLANT_DELETE);
+                }
+            }
+        }
+    }
+    
     
     public class GameKeyboardListener extends KeyAdapter {
         @Override

@@ -22,6 +22,7 @@ public class StageSelector extends JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
     
         setTitle("Select stage");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1264, 681);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -65,7 +66,7 @@ public class StageSelector extends JFrame {
                 case "St8" -> summoner = new stage8();
                 default -> throw new AssertionError();
             }
-            game = GamePanel.getInstance(this, summoner);
+            game = GamePanel2Player.getInstance(this, summoner);
         }
         getContentPane().add(game);
 
