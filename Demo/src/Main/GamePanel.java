@@ -121,8 +121,10 @@ public class GamePanel extends JPanel {
         stage.addKeyListener(new GameKeyboardListener());
         addMouseListeners();
         GameLoop.setLateListener((d) -> lateUpdate());
-        gameLoop = new GameLoop();
-        gameLoop.start();
+        gameLoop = GameLoop.getInstance();
+        if (!gameLoop.isAlive()) {
+            gameLoop.start();
+        }
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
     }
     

@@ -6,6 +6,7 @@ import java.util.List;
 
 
 public class GameLoop extends Thread {
+    private static GameLoop gameLoop;
     private static final List<GameLoopListener> listeners = new ArrayList<>();
     private static GameLoopLateListener lateListener;
     
@@ -46,6 +47,11 @@ public class GameLoop extends Thread {
                 }
             }
         }
+    }
+    
+    public static GameLoop getInstance() {
+        if (gameLoop == null) gameLoop = new GameLoop();
+        return gameLoop;
     }
 
     //Call every 60fps 
