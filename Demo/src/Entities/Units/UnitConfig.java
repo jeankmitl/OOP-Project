@@ -38,6 +38,7 @@ public interface UnitConfig {
     String CANDLES6_DESC = "6 candles. Summon beam to kill all enemy in that row";
     String BLOCK_FIELD_DESC = "Betray unit, why are you use this?";
     String NIKE_DESC = "Make screen clean w/o enemy";
+    String GHOST_DESC = "don't TOUCH mep, I shy. UwU";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -62,7 +63,7 @@ public interface UnitConfig {
     UnitSpriteSheets ALPHA_WOLF_SPRITE = new UnitSpriteSheets("alpha_wolf_idle", "alpha_wolf_atk");
     UnitSpriteSheets WEREWOLF_SPRITE = new UnitSpriteSheets("werewolf_idle", null);
     UnitSpriteSheets VAMPIRE_SPRITE = new UnitSpriteSheets("vampire_idle", "vampire_atk");
-    
+    UnitSpriteSheets GHOST_SPRITE = new UnitSpriteSheets("Ghost", null);
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER, SKELETON_DESC);
@@ -91,5 +92,6 @@ public interface UnitConfig {
     UnitStats BLOCK_FIELD_STATS = new UnitStats(BLOCK_FIELD_SPRITE, 1, 0, 0, 0, 0, -1, BLOCK_FIELD_DESC);
     // Too OP
     UnitStats NIKE_STATS = new UnitStats(NIKE_SPRITE, 1, 9999, 1, 0, 9999, EXPLOTION, NIKE_DESC);
+    UnitStats GHOST_STATS = new UnitStats(GHOST_SPRITE, 1, 1290, 0, 300, 30, DEFENDER, GHOST_DESC);
 
 }

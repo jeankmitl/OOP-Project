@@ -56,7 +56,7 @@ public class UnitSelector extends JDialog {
     
     private final String type;
     private SaveGame progress = null;
-    protected final boolean DEBUG_MODE = false; //<----- Open on this
+    protected final boolean DEBUG_MODE = true; //<----- Open on this
 
     
     public UnitSelector(JFrame parent) {
@@ -145,27 +145,7 @@ public class UnitSelector extends JDialog {
                 selectorTypeLabel.setText("Player 2: ");
                 break;
         }
-        
-        unitTypes.add(new UnitType(Skeleton.class));
-        unitTypes.add(new UnitType(Slime.class));
-        unitTypes.add(new UnitType(Kaniwall.class));
-//        unitTypes.add(new UnitType(BlackSkeleton.class));// done
-//        unitTypes.add(new UnitType(SemiAutoBot.class)); //done
-//        unitTypes.add(new UnitType(BigBall.class)); //done
-//        unitTypes.add(new UnitType(GolemSupport.class)); //done
-//        unitTypes.add(new UnitType(Explosive_turtle.class)); //done
-//        unitTypes.add(new UnitType(Nike.class)); //done
-//        unitTypes.add(new UnitType(MiPya.class));// done
-//        unitTypes.add(new UnitType(Snake.class));//done
-//        unitTypes.add(new UnitType(Python.class));//done
-//        unitTypes.add(new UnitType(Explosion.class)); //done
-//        unitTypes.add(new UnitType(GiveawaySlime.class)); //done
-//        unitTypes.add(new UnitType(AlphaWolf.class)); //done
-//        unitTypes.add(new UnitType(Werewolf.class)); //done
-//        unitTypes.add(new UnitType(Vampire.class)); //done
-//           unitTypes.add(new UnitType(Explosive_turtle.class)); done
-//            unitTypes.add(new UnitType(Mimic.class)); done
-        ///////////
+
         for (int i = 0; i < unitTypes.size(); i += COLS) {
             JPanel rowPanel = new JPanel(new GridLayout(1, COLS, GAP, 0));
             rowPanel.setOpaque(false);
@@ -230,6 +210,9 @@ public class UnitSelector extends JDialog {
 //        new UnitSelector();
 //    }
     private void loader(SaveGame progress){
+        unitTypes.add(new UnitType(Skeleton.class));
+        unitTypes.add(new UnitType(Slime.class));
+        unitTypes.add(new UnitType(Kaniwall.class));
         if (progress.get_Stage_Num(1) || DEBUG_MODE){
             unitTypes.add(new UnitType(Explosive_turtle.class));
             unitTypes.add(new UnitType(Mimic.class));
@@ -257,6 +240,7 @@ public class UnitSelector extends JDialog {
             // No reward
         }if(progress.get_Stage_Num(10)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Nike.class));
+            unitTypes.add(new UnitType(Ghost.class));
         }
     }
 

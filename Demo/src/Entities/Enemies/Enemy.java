@@ -28,13 +28,14 @@ public abstract class Enemy extends Entity {
     protected int ATTACK_COOLDOWN;
     protected DTimer animationTimer;
     
-    public final EnemyStats ENEMY_STATS = null;
+    public final EnemyStats ENEMY_STATS;
     protected boolean debuff_Chills = false; // Slow When Trigger
     protected boolean debuff_Stun = false; // Stun When Trigger
     protected boolean buff_rage = false; // Stun When Trigger
     
     public Enemy(double x, int row, EnemyStats enemyStats) {
         super(enemyStats);
+        this.ENEMY_STATS = enemyStats;
         this.x = x;
         this.row = row;
         this.defaultSpeed = enemyStats.getWalkSpeed();

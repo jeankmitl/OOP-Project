@@ -637,7 +637,11 @@ public class GamePanel extends JPanel {
         for (int i=0; i<units.size(); i++) {
             Unit unit = units.get(i);
             BufferedImage img = unit.getBufferedImage();
-            g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            if (unit instanceof UnitFlipImg) {
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X + CELL_WIDTH, unit.getY() + GRID_OFFSET_Y, -GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT, null);
+            } else {
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT, null);
+            }
             if (mouseX >= unit.getX() + GRID_OFFSET_X && mouseX <= unit.getX() + RENDER_X
                     && mouseY >= unit.getY() + GRID_OFFSET_Y && mouseY <= unit.getY() + RENDER_Y) {
                 paintHealthBar(g, unit);
