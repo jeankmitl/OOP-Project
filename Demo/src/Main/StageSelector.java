@@ -3,6 +3,7 @@ package Main;
 import CoOpSystem.CoOpFrame;
 import Main.Stages.*;
 import java.awt.HeadlessException;
+import java.io.File;
 import javax.swing.*;
 
 public class StageSelector extends JFrame {

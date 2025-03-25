@@ -3,23 +3,39 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Entities.Units.UnitSpriteSheets;
+import static Main.UnitSelector.CELL_HEIGHT;
+import static Main.UnitSelector.CELL_WIDTH;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class StageSelectorPanel extends JPanel{
-    private Rectangle st1, st2, st3, st4, st5, st6, st7, st8, st9, st10, homeBtn;
+    private Rectangle st1, st2, st3, st4, st5, st6, st7, st8, st9, st10, homeBtn, resetBtn;
     private Image stageFrame;
     private boolean isButtonHovered = false;
     private StageSelector stageSelector;
     private String type;
+    private SaveGame progress;
 
     public StageSelectorPanel(StageSelector frame, String type) {
         this.type = type;
         this.stageSelector = frame;
         setLayout(null);
+
+        try(ObjectInputStream temp = new ObjectInputStream(new FileInputStream("Save.bat"))){
+            progress = (SaveGame) temp.readObject();
+            stageFrame = ImageIO.read(getClass().getResource("/Asset/Img/Icons/frame_op1.png"));
+            System.out.println("Load Done");
+        }catch(IOException ex){
+            System.out.println("No Save Progress");
+            progress = new SaveGame();
+        }catch(ClassNotFoundException ee){
+            ee.printStackTrace();
+        }
 
         st1 = new Rectangle(150, 250, 150, 150);
         st2 = new Rectangle(350, 250, 150, 150);
@@ -32,56 +48,80 @@ public class StageSelectorPanel extends JPanel{
         st9 = new Rectangle(750, 450, 150, 150);
         st10 = new Rectangle(950, 450, 150, 150);
         homeBtn = new Rectangle(1180,15,75,75);
-
-        try {
-            stageFrame = ImageIO.read(getClass().getResource("/Asset/Img/Icons/frame_op1.png"));
-        } catch (IOException | NullPointerException e) {
-            System.out.println("Wrong image path.");
-        }
+        resetBtn = new Rectangle(1180,110,75,75);
 
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (st1.contains(e.getPoint())) {
                     selectStage("St1");
-                } else if (st2.contains(e.getPoint())) {
+                    progress.set_Stage_Num(1);
+                    save();
+                } else if (st2 != null && progress.get_Stage_Num(2) && st2.contains(e.getPoint())) {
                     selectStage("St2");
-                }else if (st3.contains(e.getPoint())) {
-                    selectStage("St3");}
-                else if (st4.contains(e.getPoint())) {
-                    selectStage("St4");}
-                else if (st5.contains(e.getPoint())) {
-                    selectStage("St5");}
-                else if (st6.contains(e.getPoint())) {
-                    selectStage("St6");}
-                else if (st7.contains(e.getPoint())) {
-                    selectStage("St7");}
-                else if (st8.contains(e.getPoint())) {
-                    selectStage("St8");}
-                else if (st9.contains(e.getPoint())) {
-                    selectStage("St9");}
-                else if (st10.contains(e.getPoint())) {
-                    selectStage("St10");}
-                else if(homeBtn.contains(e.getPoint())){
+                    progress.set_Stage_Num(2);
+                    save();
+                } else if (st3 != null && progress.get_Stage_Num(3) && st3.contains(e.getPoint())) {
+                    selectStage("St3");
+                    progress.set_Stage_Num(3);
+                    save();
+                } else if (st4 != null && progress.get_Stage_Num(4) && st4.contains(e.getPoint())) {
+                    selectStage("St4");
+                    progress.set_Stage_Num(4);
+                    save();
+                } else if (st5 != null && progress.get_Stage_Num(5) && st5.contains(e.getPoint())) {
+                    selectStage("St5");
+                    progress.set_Stage_Num(5);
+                    save();
+                } else if (st6 != null && progress.get_Stage_Num(6) && st6.contains(e.getPoint())) {
+                    selectStage("St6");
+                    progress.set_Stage_Num(6);
+                    save();
+                } else if (st7 != null && progress.get_Stage_Num(7) && st7.contains(e.getPoint())) {
+                    selectStage("St7");
+                    progress.set_Stage_Num(7);
+                    save();
+                } else if (st8 != null && progress.get_Stage_Num(8) && st8.contains(e.getPoint())) {
+                    selectStage("St8");
+                    progress.set_Stage_Num(8);
+                    save();
+                } else if (st9 != null && progress.get_Stage_Num(9) && st9.contains(e.getPoint())) {
+                    selectStage("St9");
+                    progress.set_Stage_Num(9);
+                    save();
+                } else if (st10 != null && progress.get_Stage_Num(10) && st10.contains(e.getPoint())) {
+                    selectStage("St10");
+                    save();
+                } else if (homeBtn.contains(e.getPoint())) {
                     selectStage("Main");
+                } else if (resetBtn.contains(e.getPoint())){
+                    File saveFile = new File("Save.bat");
+                    if (saveFile.exists()) {
+                        boolean deleted = saveFile.delete();
+                        if (deleted) {
+                            System.out.println("Save file deleted successfully");
+                            selectStage("Main");
+                        }
+                    }
+                }
             }
-            
-        }
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 if (st1.contains(e.getPoint()) ||
-                    st2.contains(e.getPoint()) ||
-                    st3.contains(e.getPoint()) ||
-                    st4.contains(e.getPoint()) ||
-                    st5.contains(e.getPoint()) ||
-                    st6.contains(e.getPoint()) ||
-                    st7.contains(e.getPoint()) ||
-                    st8.contains(e.getPoint()) ||
-                    st9.contains(e.getPoint()) ||
-                    st10.contains(e.getPoint())) 
+                    (progress.get_Stage_Num(2) && st2.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(3) && st3.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(4) && st4.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(5) && st5.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(6) && st6.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(7) && st7.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(8) && st8.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(9) && st9.contains(e.getPoint())) ||
+                    (progress.get_Stage_Num(10) && st10.contains(e.getPoint()))||
+                     homeBtn.contains(e.getPoint())||
+                     resetBtn.contains(e.getPoint())) 
                 {
                     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     if (!isButtonHovered) {
@@ -95,7 +135,15 @@ public class StageSelectorPanel extends JPanel{
             }
         });    
     }
-
+    
+    private void save() {
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Save.bat"))) {
+                out.writeObject(progress);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    
     private void selectStage(String stageName) {
         Audio.play(AudioName.BUTTON_CLICK);
         LoadingScreen loadingScreen = new LoadingScreen();
@@ -129,21 +177,21 @@ public class StageSelectorPanel extends JPanel{
             g2d.setColor(Color.black);
             g2d.drawString("2-Player Mode", 200, 200);
         }
-        Image image = ImgManager.loadIcon("home_btn");
-        if (stageFrame != null) {
-            g2d.drawImage(stageFrame, st1.x, st1.y, st1.width, st1.height,this);
-            g2d.drawImage(stageFrame, st2.x, st2.y, st2.width, st2.height,this);
-            g2d.drawImage(stageFrame, st3.x, st3.y, st3.width, st3.height,this);
-            g2d.drawImage(stageFrame, st4.x, st4.y, st4.width, st4.height,this);
-            g2d.drawImage(stageFrame, st5.x, st5.y, st5.width, st5.height,this);
-            g2d.drawImage(stageFrame, st6.x, st6.y, st6.width, st6.height,this);
-            g2d.drawImage(stageFrame, st7.x, st7.y, st7.width, st7.height,this);
-            g2d.drawImage(stageFrame, st8.x, st8.y, st8.width, st8.height,this);
-            g2d.drawImage(stageFrame, st9.x, st9.y, st9.width, st9.height,this);
-            g2d.drawImage(stageFrame, st10.x, st10.y, st10.width, st10.height,this);         
-            g2d.drawImage(stageFrame, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
-            g2d.drawImage(stageFrame, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
-            g2d.drawImage(image, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
+        Image image = ImgManager.loadIcon("frame_op1");
+        g2d.drawImage(image, st1.x, st1.y, st1.width, st1.height, this);
+        if (progress.get_Stage_Num(2)) g2d.drawImage(image, st2.x, st2.y, st2.width, st2.height, this);
+        if (progress.get_Stage_Num(3)) g2d.drawImage(image, st3.x, st3.y, st3.width, st3.height, this);
+        if (progress.get_Stage_Num(4)) g2d.drawImage(image, st4.x, st4.y, st4.width, st4.height, this);
+        if (progress.get_Stage_Num(5)) g2d.drawImage(image, st5.x, st5.y, st5.width, st5.height, this);
+        if (progress.get_Stage_Num(6)) g2d.drawImage(image, st6.x, st6.y, st6.width, st6.height, this);
+        if (progress.get_Stage_Num(7)) g2d.drawImage(image, st7.x, st7.y, st7.width, st7.height, this);
+        if (progress.get_Stage_Num(8)) g2d.drawImage(image, st8.x, st8.y, st8.width, st8.height, this);
+        if (progress.get_Stage_Num(9)) g2d.drawImage(image, st9.x, st9.y, st9.width, st9.height, this);
+        if (progress.get_Stage_Num(10)) g2d.drawImage(image, st10.x, st10.y, st10.width, st10.height, this);
+        g2d.drawImage(image, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
+        image = ImgManager.loadIcon("home_btn");
+        g2d.drawImage(image, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
+        image = ImgManager.loadIcon("icon");
+        g2d.drawImage(image, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
         }
     }
-}

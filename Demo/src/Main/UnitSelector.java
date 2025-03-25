@@ -56,7 +56,7 @@ public class UnitSelector extends JDialog {
     
     private final String type;
     private SaveGame progress = null;
-    protected final boolean DEBUG_MODE = true; //<----- Open on this
+    protected final boolean DEBUG_MODE = false; //<----- Open on this
 
     
     public UnitSelector(JFrame parent) {
@@ -75,6 +75,7 @@ public class UnitSelector extends JDialog {
             System.out.println("Load Done");
         }catch(IOException ex){
             System.out.println("No Save Progress");
+            this.loader(new SaveGame());
             if(DEBUG_MODE){this.loader(new SaveGame());} //<--- For No Save And Debug mode
         }catch(ClassNotFoundException ee){
             ee.printStackTrace();
