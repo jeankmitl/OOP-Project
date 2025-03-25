@@ -21,7 +21,7 @@ https://github.com/jeankmitl/OOP-Project.git
 ## 🧑‍💻 Collaborators
 
 * ```Programming``` Office 
-* ```Programming``` Gear 
+* ```Programming``` Kia 
 * ```Graphic Design``` Jean 
 * ```Graphic Design``` Beam 
 * ```Graphic Design``` Son 
