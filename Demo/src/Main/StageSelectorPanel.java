@@ -283,10 +283,8 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawImage(unitIcon, st10.x, st10.y, st10.width, st10.height, this);
             g2d.drawString("INFINITE", 945, 625);
         }
-        g2d.drawImage(stageLayout, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
         Image homeIcon = ImgManager.loadIcon("home_Btn");
         g2d.drawImage(homeIcon, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
-        g2d.drawImage(stageLayout, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
         Image resetLvlIcon = ImgManager.loadIcon("del_save_btn");
         g2d.drawImage(resetLvlIcon, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
         }
