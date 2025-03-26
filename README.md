@@ -1,3 +1,7 @@
+<p align="center">
+  <img width=500 height=auto src="Demo/src/Asset/Img/Icons/defense_of_the_dungeon_no_s.png">
+</p>
+
 # Defense of the Dungeon
 
 This project is part of Object-Oriented Programming course @ School of Information Technology, KMITL
