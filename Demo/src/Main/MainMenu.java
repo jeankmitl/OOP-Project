@@ -18,15 +18,16 @@ public class MainMenu extends JFrame {
     
     public MainMenu() {
 
-        logo = new Rectangle(450, 170, 800, 400);
+        logo = new Rectangle(450, 170, 800, 330);
         menuBar = new Rectangle(50, 65, 400, 550);
-        start = new Rectangle(125, 110, 310, 125);
-        dict = new Rectangle(125, 250, 300, 110);
-        config = new Rectangle(125, 385, 300, 115);
-        exit = new Rectangle(125, 525, 300, 115);
+        start = new Rectangle(75, 80, 310, 110);
+        twoP = new Rectangle(75, 215, 300, 110);
+        config = new Rectangle(75, 350, 300, 115);
+        exit = new Rectangle(75, 485, 300, 115);
         musicBtn = new Rectangle(1170, 15, 80, 80);
         soundBtn = new Rectangle(1085, 15, 80, 80);
         mainMenuPanel = new MainMenuPanel();
+
         try {
             setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
             menu = ImageIO.read(getClass().getResource("/Asset/Img/Icons/MenuBar.PNG"));
@@ -72,7 +73,7 @@ public class MainMenu extends JFrame {
                         }
                     };
                     worker.execute();
-                } else if (dict.contains(e.getPoint())) {
+                } else if (twoP.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
                     System.out.println("Choose the stage you want");
 
@@ -126,7 +127,7 @@ public class MainMenu extends JFrame {
             @Override
             public void mouseMoved(MouseEvent e) {
                 if (start.contains(e.getPoint()) ||
-                    dict.contains(e.getPoint()) ||
+                    twoP.contains(e.getPoint()) ||
                     config.contains(e.getPoint()) ||
                     exit.contains(e.getPoint()) ||
                     musicBtn.contains(e.getPoint()) ||
