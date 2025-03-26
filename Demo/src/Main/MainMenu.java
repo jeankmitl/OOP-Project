@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class MainMenu extends JFrame {
-    private Rectangle start, dict, config, exit, menuBar, logo, musicBtn, soundBtn;
+    private Rectangle start, twoP, config, exit, menuBar, logo, musicBtn, soundBtn;
     private Image menu, title, background, musicImg, soundImg;
     private boolean isButtonHovered = false;
     private Timer timer;

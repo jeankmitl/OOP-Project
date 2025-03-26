@@ -15,7 +15,7 @@ public interface StageConfig {
     int BOSS = 3;
     int INFINITY = 4;
     
-    StageStats STAGE_BETA = new StageStats("Stage Beta", INFINITY, 9999, "Stage1");
+    StageStats STAGE_BETA = new StageStats("Stage Beta", INFINITY, 9999, "Stage1"); // <- Endless future
     StageStats STAGE_TUTORIAL = new StageStats("Stage Tutorial", EASY, 14, "bg_dark_zone");
    // StageStats STAGE_TUTORIAL = new StageStats("Stage Tutorial", EASY, 1, "bg_dark_zone"); // test ver
     StageStats STAGE_2 = new StageStats("Stage 2", EASY, 31, "bg_dark_zone");//31
@@ -23,6 +23,8 @@ public interface StageConfig {
     StageStats STAGE_4 = new StageStats("Stage 4", EASY, 45, "bg_dark_greek");
     StageStats STAGE_5 = new StageStats("Stage 5", MEDIUM, 55, "bg_dark_greek");
     StageStats STAGE_6 = new StageStats("Stage 6", MEDIUM, 61, "Stage1");
+    StageStats STAGE_7 = new StageStats("Stage 7", HARD, 73, "Stage1");
+    StageStats STAGE_8 = new StageStats("Stage 8", HARD, 85, "Stage1");
     
-    StageStats STAGE_BOSS = new StageStats("Together Unto Death", BOSS, 1, "bg_dark_greek");
+    StageStats STAGE_BOSS = new StageStats("Together Unto Death", BOSS, 1, "bg_dark_greek");//stage 9
 }
