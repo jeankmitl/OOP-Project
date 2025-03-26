@@ -32,4 +32,3 @@ public class LoadingScreen extends JFrame {
     }
 
 }
-

@@ -2,18 +2,12 @@ package Main;
 
 import Entities.Enemies.*;
 import Entities.Units.*;
-import Entities.Bullets.BeamCleanRow;
-import Entities.Bullets.Bullet;
-import Entities.Bullets.Bone;
 import Asset.VFX;
-import DSystem.DWait;
 import Asset.Audio;
 import DSystem.*;
 import Asset.AudioName;
 import Asset.ImgManager;
-import Entities.Bullets.Beta_bullet;
-import Entities.Enemies.LittleRedHood;
-import Entities.UnitFactory;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -28,7 +22,7 @@ import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
 import Main.Stages.*;
-import Main.Stages.stage_Tutorial;
+
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -103,6 +97,8 @@ public class GamePanel extends JPanel {
     private EnemySummoner summoner;
     //same as: public awake()
 
+    private GamePanel game;
+
     protected GamePanel(StageSelector stage, EnemySummoner summoner) {
         /**
          * Awake. = for create Object w/ 'new'
@@ -126,7 +122,7 @@ public class GamePanel extends JPanel {
         }
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
     }
-    
+
     protected void selectUnitBefore() {
         SwingUtilities.invokeLater(() -> {
             UnitSelector unitSelector = new UnitSelector(stage);
@@ -141,7 +137,7 @@ public class GamePanel extends JPanel {
             });
         });
     }
-    
+
     // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
     public void startGameLoop() {
         gameTimer.start();
@@ -208,25 +204,28 @@ public class GamePanel extends JPanel {
     
     private void save_Progress(int num){
         SaveGame data = null;
-        try(ObjectInputStream tempo = new ObjectInputStream(new FileInputStream("Save.bat"))){
+        try (ObjectInputStream tempo = new ObjectInputStream(new FileInputStream("Save.bat"))){
             data = (SaveGame) tempo.readObject();
-        }catch(IOException ex) {
+        }
+        catch (IOException ex) {
             data = new SaveGame();
             System.out.println("No Save");
-        }catch(ClassNotFoundException ee){
+        }
+        catch (ClassNotFoundException ee) {
             data = new SaveGame();
             System.out.println("No Save");
         }
         data.set_Stage_Num(num-1);
         data.check_stage();
-        try(ObjectOutputStream temp = new ObjectOutputStream(new FileOutputStream("Save.bat"))){
+        try (ObjectOutputStream temp = new ObjectOutputStream(new FileOutputStream("Save.bat"))){
             temp.writeObject(data);
             System.out.println("Save Done");
-        }catch(IOException ex){
+        }
+        catch (IOException ex) {
             ex.printStackTrace();
         }
     }
-    
+
     // SPF = 0.016666666666666666 (99% 60fps)
     protected void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
@@ -237,7 +236,7 @@ public class GamePanel extends JPanel {
         manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
         
         // spawn: enemies every 10s ➕
-       if (this.target == this.count_kill && !this.victory) {
+        if (this.target == this.count_kill && !this.victory) {
             System.out.println("You win");
             this.victory = true;
             if (summoner instanceof stage_Tutorial){save_Progress(1);}
@@ -251,7 +250,8 @@ public class GamePanel extends JPanel {
             if (summoner instanceof StageBossFight){save_Progress(9);}
             if (summoner instanceof stage_beta){save_Progress(10);}
         }
-        
+
+        checkVictory();
         // update: animation every 2s
         updateAnimation(deltaTime);
         
@@ -263,7 +263,31 @@ public class GamePanel extends JPanel {
         updateLogic(deltaTime);
 
     }
-    
+
+    public void checkVictory() {
+        if (this.victory) {
+            WinScreen winScreen = new WinScreen();
+            SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    Thread.sleep(1500);
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    winScreen.dispose();
+                    stopGameLoop();
+                    new StageSelector();
+                    revalidate();
+                    repaint();
+                    Audio.playMusic("mainMenu");
+                }
+            };
+            worker.execute();
+        }
+    }
+
     // <editor-fold defaultstate="collapsed" desc="All Reuse method">
     public boolean isFieldAvailable(int col, int row) {
         for (Unit unit : units) {
