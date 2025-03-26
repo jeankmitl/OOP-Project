@@ -55,4 +55,8 @@ public class EntitySpriteSheets {
     public BufferedImage getActionDead() {
         return actionDead;
     }
+    
+    public void setIdle(String idle) {
+        this.idle = idle;
+    }
 }

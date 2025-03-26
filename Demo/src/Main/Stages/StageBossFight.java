@@ -7,6 +7,7 @@ package Main.Stages;
 import Asset.Audio;
 import Asset.AudioName;
 import DSystem.DWait;
+import Entities.Enemies.Bandit;
 import Entities.Enemies.SongChinWu;
 import Main.EnemySummoner;
 import Main.GamePanel;
@@ -19,7 +20,8 @@ import static Main.GamePanel.GRID_OFFSET_X;
  * @author anawi
  */
 public class StageBossFight implements EnemySummoner {
-    protected DWait start;
+    protected DWait start, swordsWave;
+    private SongChinWu boss;
     
     @Override
     public StageStats getSTAGE_STATS() {
@@ -28,14 +30,17 @@ public class StageBossFight implements EnemySummoner {
 
     @Override
     public void summonEnemies(GamePanel game) {
-        start = new DWait(5, e -> {//2
+        start = new DWait(7, e -> {//2
             System.out.println("The Last Fight is BEGIN!");
-            game.spawnEnemy(new SongChinWu(1300-GRID_OFFSET_X, 2), 1); //1
+            boss = new SongChinWu(1300-GRID_OFFSET_X, 2);
+            game.spawnEnemy(boss, 2); //1
             
             Audio.isMusicEnable = true;
             Audio.playMusic(AudioName.BOSS_THEME);
-//            game.Spawn_Enemy(Enemy enemy, int num, int delay);
         });
+        
         start.start();
     }
+    
+    
 }

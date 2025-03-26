@@ -4,89 +4,125 @@
  */
 package Entities.Enemies;
 
+import DSystem.DWait;
+import DSystem.OWait;
+import Main.BossFightGamePanel;
+import static Main.GamePanel.CELL_HEIGHT;
+import static Main.GamePanel.CELL_WIDTH;
+import static Main.GamePanel.GRID_OFFSET_X;
+import static Main.GamePanel.GRID_OFFSET_Y;
+import Main.Stages.StageBossFight;
+import static Main.UnitSelector.COLS;
+import java.util.List;
+import java.util.Random;
+
 /**
  *
  * @author sarin
  */
 public class SongChinWu extends Enemy {
-
-    private SongChinWuState state;
+    private Random random;
+    
+    public static enum State { WALK, STAND_WITH_SWORD, DROP_SWORD, STAND_NO_SWORD_MOTIVATED, STAND_NO_SWORD, SUMMON_ENEMY, SHOOT, FINAL_ATTACK }
+    private State state;
     private long stateStartTime;
-    private final int targetX = 850; // Position for Stop walking
+    private final int targetX = 857; // Position for Stop walking
+    private SongChinWuSpriteSheets spriteSheets;
+    private boolean hasUsedSummonSwords = true;
+    public boolean isDropedSword = true;
 
     public SongChinWu(double x, int row) {
         super(x, row, getENEMY_STATS());
-        this.state = SongChinWuState.WALKING;
+        this.spriteSheets = (SongChinWuSpriteSheets) getENEMY_STATS().getEntitySp();
+        this.state = State.WALK;
         this.stateStartTime = System.currentTimeMillis();
-
-    }
-
-    @Override
-    public void move() {
-        x -= 0.7;
+        random = new Random();
     }
     
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.SONG_CHIN_WU_STATS;
     }
-    
+
+    public void move(BossFightGamePanel game) {
+        x -= 0.7;
+        System.out.println("Walking...");
+        if (x <= targetX) {
+            setState(State.STAND_WITH_SWORD, game);
+        }
+    }
+
     private boolean timePassed(int ms) {
         return System.currentTimeMillis() - stateStartTime >= ms;
     }
 
-
-    public void update() {
+    public void setState(State newState , BossFightGamePanel game) {
+        this.state = newState;
+        this.stateStartTime = System.currentTimeMillis();
+        updateAnimation(game);
+    }
+    
+    public State getState() {
+        return state;
+    }
+    
+    public void update(BossFightGamePanel game) {
         switch (state) {
-            case WALKING:
-                move();
-                if (this.x <= targetX) {
-                    changeState(SongChinWuState.STANDING);
+            case WALK:
+                if (x <= targetX) {
+                    setState(State.STAND_WITH_SWORD, game);
+                }
+                move(game);
+                break;
+                
+            case STAND_WITH_SWORD:
+                if (timePassed(8500)) {
+                    setState(State.DROP_SWORD, game);
                 }
                 break;
-
-            case STANDING:
-                if (timePassed(2500)) { // 2.5 secs
-//                    dropSword();
-                    changeState(SongChinWuState.SUMMONING);
+                
+            case DROP_SWORD:
+                if (timePassed(500)) {
+                    setState(State.STAND_NO_SWORD_MOTIVATED, game);
                 }
                 break;
-
-//            case SUMMONING:
-//                summonSwords();
-//                changeState(SongChinWuState.ATTACKING);
-//                break;
-//
-//            case ATTACKING:
-//                if (this.health > this.maxHealth * 0.1) {
-//                    teleportRandomly();
-//                    useRandomSkill();
-//                } else {
-//                    changeState(SongChinWuState.FINAL_PHASE);
-//                }
-//                break;
-//
-//            case FINAL_PHASE:
-//                if (!nukeStarted) {
-//                    startNuke();
-//                } else if (timePassed(10000)) {
-//                    playerLoses();
-//                }
-//                break;
+                
+            case STAND_NO_SWORD_MOTIVATED:
+                break;
+                
+            case STAND_NO_SWORD:
+                break;
+                
+            case SHOOT:
+                break;
+                
+            case FINAL_ATTACK:
+                break;
         }
     }
-
-    private void changeState(SongChinWuState newState) {
-        this.state = newState;
-        this.stateStartTime = System.currentTimeMillis(); // Reset timer
-    }
-
-    private void performAttack() {
-        System.out.println("Boss is attacking!");
-        // Add attack logic herew 
-    }
-
-    private void performSpecialSkill() {
-        System.out.println("Boss uses special skill!");
-        // Add special skill logic here
+    
+    public void updateAnimation(BossFightGamePanel game) {
+        switch (state) {
+            case WALK:
+                actionIdle = spriteSheets.getActionWalk();
+                break;
+            case STAND_WITH_SWORD:
+                actionIdle = spriteSheets.getActionIdleWithSword();
+                break;
+            case DROP_SWORD:
+                actionIdle = spriteSheets.getActionDropSword();
+                break;
+            case STAND_NO_SWORD_MOTIVATED:
+                actionIdle = spriteSheets.getActionIdleNoSwordMotivated();
+                break;
+            case STAND_NO_SWORD:
+                actionIdle = spriteSheets.getActionIdleNoSword();
+                break;
+            case SHOOT:
+                actionIdle = spriteSheets.getActionIdleNoSwordMotivated();
+                break;
+            case FINAL_ATTACK:
+                actionIdle = spriteSheets.getActionFinalAtk();
+                break;
+        }
     }
 }
