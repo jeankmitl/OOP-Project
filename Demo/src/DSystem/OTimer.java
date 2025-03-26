@@ -19,6 +19,10 @@ public class OTimer {
     
     public boolean tick(double deltaTime) {
         elapsedTime += deltaTime;
+        return test(deltaTime);
+    }
+    
+    public boolean test(double deltaTime) {
         if (elapsedTime >= delay) {
             elapsedTime -= delay;
             return true;

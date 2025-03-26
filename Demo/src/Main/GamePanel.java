@@ -27,7 +27,14 @@ import Asset.VFX;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Main.Stages.*;
+import Main.Stages.stage_Tutorial;
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -64,7 +71,7 @@ public class GamePanel extends JPanel {
     protected static List<Enemy> enemies;
     protected static List<Bullet> bullets;
     protected static List<VFX> vfxs;
-    private static List<UnitType> unitTypes;
+    protected static List<UnitType> unitTypes;
     
     
     protected final Random random = new Random();
@@ -93,7 +100,7 @@ public class GamePanel extends JPanel {
     
     private Rectangle homeBtn = new Rectangle(1180,15,75,75);
     private StageSelector stage;
-        private EnemySummoner summoner;
+    private EnemySummoner summoner;
     //same as: public awake()
 
     protected GamePanel(StageSelector stage, EnemySummoner summoner) {
@@ -105,7 +112,6 @@ public class GamePanel extends JPanel {
          */
         Audio.playMusic(AudioName.MUSIC_ONE);
         OTHER_THREAD = Thread.activeCount();
-        
         units = new ArrayList<>();
         enemies = new ArrayList<>();
         bullets = new ArrayList<>();
@@ -115,12 +121,14 @@ public class GamePanel extends JPanel {
         stage.addKeyListener(new GameKeyboardListener());
         addMouseListeners();
         GameLoop.setLateListener((d) -> lateUpdate());
-        gameLoop = new GameLoop();
-        gameLoop.start();
+        gameLoop = GameLoop.getInstance();
+        if (!gameLoop.isAlive()) {
+            gameLoop.start();
+        }
         gameTimer = new DTimer(SPF, e -> fixedUpdate(SPF));
     }
     
-    private void selectUnitBefore() {
+    protected void selectUnitBefore() {
         SwingUtilities.invokeLater(() -> {
             UnitSelector unitSelector = new UnitSelector(stage);
             unitSelector.addWindowListener(new WindowAdapter() {
@@ -177,6 +185,8 @@ public class GamePanel extends JPanel {
         bullets.clear();
         vfxs.clear();
         unitTypes.clear();
+        
+        remainMana = 0;
         selectUnitBefore();
     }
     
@@ -192,11 +202,32 @@ public class GamePanel extends JPanel {
             units.add(new Candles6(i, -1));
         }
     }
-   
+    
+    private void save_Progress(int num){
+        SaveGame data = null;
+        try(ObjectInputStream tempo = new ObjectInputStream(new FileInputStream("Save.bat"))){
+            data = (SaveGame) tempo.readObject();
+        }catch(IOException ex) {
+            data = new SaveGame();
+            System.out.println("No Save");
+        }catch(ClassNotFoundException ee){
+            data = new SaveGame();
+            System.out.println("No Save");
+        }
+        data.set_Stage_Num(num-1);
+        data.check_stage();
+        try(ObjectOutputStream temp = new ObjectOutputStream(new FileOutputStream("Save.bat"))){
+            temp.writeObject(data);
+            System.out.println("Save Done");
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
     
     // SPF = 0.016666666666666666 (99% 60fps)
-    private void fixedUpdate(double deltaTime) {
+    protected void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
+//        if (summoner instanceof stage_Tutorial){}
         if (manaRecoverTimer10.tick(deltaTime)) {
             increaseMana(10);
         }
@@ -206,6 +237,16 @@ public class GamePanel extends JPanel {
        if (this.target == this.count_kill && !this.victory) {
             System.out.println("You win");
             this.victory = true;
+            if (summoner instanceof stage_Tutorial){save_Progress(1);}
+            if (summoner instanceof stage2){save_Progress(2);}
+            if (summoner instanceof stage3){save_Progress(3);}
+            if (summoner instanceof stage4){save_Progress(4);}
+            if (summoner instanceof stage5){save_Progress(5);}
+            if (summoner instanceof stage6){save_Progress(6);}
+            if (summoner instanceof stage7){save_Progress(7);}
+            if (summoner instanceof stage8){save_Progress(8);}
+            if (summoner instanceof StageBossFight){save_Progress(9);}
+            if (summoner instanceof stage_beta){save_Progress(10);}
         }
         
         // update: animation every 2s
@@ -596,7 +637,11 @@ public class GamePanel extends JPanel {
         for (int i=0; i<units.size(); i++) {
             Unit unit = units.get(i);
             BufferedImage img = unit.getBufferedImage();
-            g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            if (unit instanceof UnitFlipImg) {
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X + CELL_WIDTH, unit.getY() + GRID_OFFSET_Y, -GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT, null);
+            } else {
+                g.drawImage(img, unit.getX() + GRID_OFFSET_X, unit.getY() + GRID_OFFSET_Y, GamePanel.CELL_WIDTH, GamePanel.CELL_HEIGHT, null);
+            }
             if (mouseX >= unit.getX() + GRID_OFFSET_X && mouseX <= unit.getX() + RENDER_X
                     && mouseY >= unit.getY() + GRID_OFFSET_Y && mouseY <= unit.getY() + RENDER_Y) {
                 paintHealthBar(g, unit);
@@ -807,7 +852,6 @@ public class GamePanel extends JPanel {
                     stage.loadStage("Back");
                     return;
                 }
-                
                 if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS 
                         && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;
@@ -821,7 +865,7 @@ public class GamePanel extends JPanel {
                     
                     if (e.getX() >= unitX && e.getX() <= unitX + CELL_WIDTH 
                             && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
-                        if (unit.isNoCoolDown()){
+                        if (unit.isNoCoolDown()) {
                             if (remainMana >= unit.getManaCost()) {
                                 unit.setDragging(true);
                                 Audio.play(AudioName.PLANT_PICK_UP);
@@ -855,46 +899,6 @@ public class GamePanel extends JPanel {
                     }
                 }
             }
-
-            private void placeUnit(UnitType unit, int row, int col) {
-                if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-                    
-                    if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
-                        Unit unitIns = (Unit)UnitFactory.createEntity(unit.unitClass, row, col);
-                        units.add(unitIns);
-                        remainMana -= unit.getManaCost();
-                        unit.startCooldown();
-                        if (unitIns instanceof UnitTriggerable) {
-                            ((UnitTriggerable)unitIns).triggerWhenPlace();
-                        }
-                        if (unitIns instanceof UnitIgnoreFieldAvailable) {
-                            ((UnitIgnoreFieldAvailable)unitIns).getUnitFromField(getUnitFromField(col, row));
-                        }
-                        Audio.play(AudioName.PLANT_PLACE);
-                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
-                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
-                    } else {
-                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
-//                      System.out.println("***Field is Not available***");
-                    }
-                }
-            }
-            
-            private void recallUnit(int col, int row) {
-                if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
-                    Iterator<Unit> unitIterator = units.iterator();
-                    while (unitIterator.hasNext()) {
-                        Unit unit = unitIterator.next();
-                        if (unit.getRow() == row && unit.getCol() == col) {
-                            unitIterator.remove();
-                            unit.setHealth(0);
-                            getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
-                            Audio.play(AudioName.PLANT_DELETE);
-                        }
-                    }
-                }
-            }
-
         });
 
         addMouseMotionListener(new MouseMotionAdapter() {
@@ -920,8 +924,47 @@ public class GamePanel extends JPanel {
                 }
             }
         });
-
     }
+    
+    public void placeUnit(UnitType unit, int row, int col) {
+        if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+
+            if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
+                Unit unitIns = (Unit)UnitFactory.createEntity(unit.unitClass, row, col);
+                units.add(unitIns);
+                remainMana -= unit.getManaCost();
+                unit.startCooldown();
+                if (unitIns instanceof UnitTriggerable) {
+                    ((UnitTriggerable)unitIns).triggerWhenPlace();
+                }
+                if (unitIns instanceof UnitIgnoreFieldAvailable) {
+                    ((UnitIgnoreFieldAvailable)unitIns).getUnitFromField(getUnitFromField(col, row));
+                }
+                Audio.play(AudioName.PLANT_PLACE);
+                getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
+                getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
+            } else {
+                getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
+//                      System.out.println("***Field is Not available***");
+            }
+        }
+    }
+
+    public void recallUnit(int col, int row) {
+        if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
+            Iterator<Unit> unitIterator = units.iterator();
+            while (unitIterator.hasNext()) {
+                Unit unit = unitIterator.next();
+                if (unit.getRow() == row && unit.getCol() == col) {
+                    unitIterator.remove();
+                    unit.setHealth(0);
+                    getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
+                    Audio.play(AudioName.PLANT_DELETE);
+                }
+            }
+        }
+    }
+    
     
     public class GameKeyboardListener extends KeyAdapter {
         @Override

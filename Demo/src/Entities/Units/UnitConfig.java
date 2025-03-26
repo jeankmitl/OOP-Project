@@ -19,6 +19,7 @@ public interface UnitConfig {
     
     String SKELETON_DESC = "A few damage but good for starting";
     String BLACK_SKELETON_DESC = "triple shots";
+    String SNIPER_SKELETON_DESC = "The most dangerous weapon is Sniper!";
     String SLIME_DESC = "Generate 50 mana every atkSpeed, this is enough to balance mana before empty";
     String KANIWALL_DESC = "Defend";
     String CANNON_DESC = "IDK. When finish";
@@ -37,10 +38,12 @@ public interface UnitConfig {
     String CANDLES6_DESC = "6 candles. Summon beam to kill all enemy in that row";
     String BLOCK_FIELD_DESC = "Betray unit, why are you use this?";
     String NIKE_DESC = "Make screen clean w/o enemy";
+    String GHOST_DESC = "don't TOUCH mep, I shy. UwU";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
     UnitSpriteSheets BLACK_SKELETON_SRITE = new UnitSpriteSheets("black_skeleton_idle", "black_skeleton_atk");
+    UnitSpriteSheets SNIPER_SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
     UnitSpriteSheets SLIME_SPRITE = new UnitSpriteSheets("Slime_re", "SlimeGenerate");
     UnitSpriteSheets KANIWALL_SPRITE = new UnitSpriteSheets("kaniwall", "kaniwall_crack", "kaniwall_cracker");
     UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic_1", "Mimic-att");
@@ -60,17 +63,18 @@ public interface UnitConfig {
     UnitSpriteSheets ALPHA_WOLF_SPRITE = new UnitSpriteSheets("alpha_wolf_idle", "alpha_wolf_atk");
     UnitSpriteSheets WEREWOLF_SPRITE = new UnitSpriteSheets("werewolf_idle", null);
     UnitSpriteSheets VAMPIRE_SPRITE = new UnitSpriteSheets("vampire_idle", "vampire_atk");
-    
+    UnitSpriteSheets GHOST_SPRITE = new UnitSpriteSheets("Ghost", null);
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER, SKELETON_DESC);
     UnitStats BLACK_SKELETON_STATS = new UnitStats(BLACK_SKELETON_SRITE, 300, 20, 1.5, 300, 14, ATTACKER, BLACK_SKELETON_DESC);
+    UnitStats SNIPER_SKELETON_STATS = new UnitStats(SNIPER_SKELETON_SRITE, 300, 20, 1.5, 0, 50, SUPPORT, SNIPER_SKELETON_DESC);
     UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 25, 25, 50, 7, COST_GEN, SLIME_DESC);
     UnitStats KANIWALL_STATS = new UnitStats(KANIWALL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER, KANIWALL_DESC);
     ///BETA///
     UnitStats CANNON_STATS = new UnitStats(CANNON_SPRITE,300,500,60,250,30,ATTACKER, CANNON_DESC);
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 1800, 42, 150, 7, GUARD, MIMIC_DESC);
-    UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 300, 1800, 50, 150, 50, UnitConfig.EXPLOTION, EXPLOSION_DESC);
+    UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 300, 1800, 50, 150, 50, EXPLOTION, EXPLOSION_DESC);
     UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 25, 0.5, 25, 30, COST_GEN);
     UnitStats MIPYA_STATS = new UnitStats(MIPYA_SPRITE, 50, 10, 1.5, 100, 30, ATTACKER, MIPYA_DESC);
     UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE, 300, 30, 1, 200, 30, GUARD, SNAKE_DESC);
@@ -88,5 +92,6 @@ public interface UnitConfig {
     UnitStats BLOCK_FIELD_STATS = new UnitStats(BLOCK_FIELD_SPRITE, 1, 0, 0, 0, 0, -1, BLOCK_FIELD_DESC);
     // Too OP
     UnitStats NIKE_STATS = new UnitStats(NIKE_SPRITE, 1, 9999, 1, 0, 9999, EXPLOTION, NIKE_DESC);
+    UnitStats GHOST_STATS = new UnitStats(GHOST_SPRITE, 1, 1290, 0, 300, 30, DEFENDER, GHOST_DESC);
 
 }
