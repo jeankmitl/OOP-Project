@@ -50,8 +50,9 @@ public abstract class Unit extends Entity {
     }
     
     public boolean isEnemyInfront(List<Enemy> enermies) {
-        for (Enemy enermy : enermies) {
-            if (enermy.getRow() == this.getRow() && enermy.getX() > this.getX()) {
+        for (Enemy enemy : enermies) {
+            if (enemy.getRow() == this.getRow() && enemy.getX() > this.getX() && enemy.getX() + GamePanel.GRID_OFFSET_X < 1050) {
+                System.out.println("Enemy within attacking range!!!");
                 setStatus(ATK_STATUS);
                 return true;
             }
