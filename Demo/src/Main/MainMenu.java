@@ -15,7 +15,7 @@ public class MainMenu extends JFrame {
 
     public MainMenu() {
 
-        logo = new Rectangle(450, 170, 800, 400);
+        logo = new Rectangle(450, 170, 800, 330);
         menuBar = new Rectangle(50, 65, 400, 550);
         start = new Rectangle(125, 110, 310, 125);
         dict = new Rectangle(125, 250, 300, 110);
