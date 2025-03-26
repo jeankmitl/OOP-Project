@@ -261,6 +261,7 @@ public class GamePanel extends JPanel {
         }
         updateCooldown(deltaTime);
         updateLogic(deltaTime);
+
     }
     
     // <editor-fold defaultstate="collapsed" desc="All Reuse method">

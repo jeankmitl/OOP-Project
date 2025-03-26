@@ -91,6 +91,7 @@ public class StageSelectorPanel extends JPanel{
                     progress.set_Stage_Num(9);
                     save();
                 } else if (homeBtn.contains(e.getPoint())) {
+                    stageSelector.dispose();
                     selectStage("Main");
                 } else if (resetBtn.contains(e.getPoint())){
                     File saveFile = new File("Save.bat");
@@ -101,7 +102,8 @@ public class StageSelectorPanel extends JPanel{
                             boolean deleted = saveFile.delete();
                             if (deleted) {
                                 System.out.println("Save file deleted successfully");
-                                selectStage("Main");
+                                stageSelector.dispose();
+                                selectStage("StageSelector");
                             }
                         }
                     } else {

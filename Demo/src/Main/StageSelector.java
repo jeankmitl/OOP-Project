@@ -44,11 +44,17 @@ public class StageSelector extends JFrame {
     }
 
     public void loadStage(String stageName) {
-        if(stageName.equals("Main")){
+        if (stageName.equals("Main")){
             dispose();
             new MainMenu();
             return;
-        } else if (stageName.equals("Back")) {
+        }
+        if (stageName.equals("StageSelector")){
+            dispose();
+            new StageSelector();
+            return;
+        }
+        if (stageName.equals("Back")) {
             int res = JOptionPane.showConfirmDialog(this, "Do you want to Exit during the game?",
                     "Exit Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
             if (res == JOptionPane.YES_OPTION) {
