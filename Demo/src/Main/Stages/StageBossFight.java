@@ -35,7 +35,6 @@ public class StageBossFight implements EnemySummoner {
             boss = new SongChinWu(1300-GRID_OFFSET_X, 2);
             game.spawnEnemy(boss, 2); //1
             
-            Audio.isMusicEnable = true;
             Audio.playMusic(AudioName.BOSS_THEME);
         });
         

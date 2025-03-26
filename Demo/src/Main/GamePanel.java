@@ -110,7 +110,6 @@ public class GamePanel extends JPanel {
          * - set: BG image 🎨
          * - start: Game Loop 🔁
          */
-        Audio.playMusic(AudioName.MUSIC_ONE);
         OTHER_THREAD = Thread.activeCount();
         units = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -173,6 +172,7 @@ public class GamePanel extends JPanel {
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
         stopGameLoop();
         GameLoop.clearListener();
+        Audio.stopMusic();
         this.stage = stage;
         this.summoner = summoner;
         StageStats ss = summoner.getSTAGE_STATS();
@@ -200,6 +200,9 @@ public class GamePanel extends JPanel {
         
         for (int i=0; i<ROWS; i++) {
             units.add(new Candles6(i, -1));
+        }
+        if (this.getClass() == GamePanel.class) {
+            Audio.playMusic("dungeon_song_raid.wav");
         }
     }
     

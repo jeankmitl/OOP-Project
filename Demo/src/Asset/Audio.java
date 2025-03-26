@@ -11,8 +11,10 @@ import javax.sound.sampled.LineEvent;
 public abstract class Audio {
 
     private static final ExecutorService soundPool = Executors.newFixedThreadPool(3);
-    public static boolean isSoundEnable = true;
-    public static boolean isMusicEnable = false;
+    private static boolean isSoundEnable = true;
+    private static boolean isMusicEnable = true;
+    private static Clip musicClip;
+    private static String musicFile = "";
     
     public static void play(String name) {
         if (!isSoundEnable) return;
@@ -47,25 +49,44 @@ public abstract class Audio {
         if (!name.contains(".wav")) {
             name += ".wav";
         }
+        if (musicFile.equals(name)) {
+            return;
+        } else {
+            musicFile = name;
+        }
+        stopMusic();
         File file = new File(Paths.SOUND_PATH, name);
-        new Thread(() -> {
-            try (AudioInputStream sound = AudioSystem.getAudioInputStream(file);) {
-                Clip clip = AudioSystem.getClip();
-                clip.open(sound);
-                clip.start();
-                clip.loop(Clip.LOOP_CONTINUOUSLY);
-                clip.addLineListener(event -> {
-                    if (event.getType() == LineEvent.Type.STOP) {
-                        clip.close();
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        try (AudioInputStream sound = AudioSystem.getAudioInputStream(file);) {
+            musicClip = AudioSystem.getClip();
+            musicClip.open(sound);
+            musicClip.start();
+            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
-    public static void shutDownMusic() {
-        soundPool.shutdown();
+    public static void stopMusic() {
+        if (musicClip != null && musicClip.isRunning()) {
+            musicFile = "";
+            musicClip.stop();
+            musicClip.close();
+        }
+    }
+
+    public static boolean isSoundEnable() {
+        return isSoundEnable;
+    }
+
+    public static boolean isMusicEnable() {
+        return isMusicEnable;
+    }
+
+    public static void setSoundEnable(boolean isSoundEnable) {
+        Audio.isSoundEnable = isSoundEnable;
+    }
+
+    public static void setMusicEnable(boolean isMusicEnable) {
+        Audio.isMusicEnable = isMusicEnable;
     }
 }

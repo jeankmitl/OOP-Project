@@ -1,5 +1,6 @@
 package Main;
 
+import Asset.Audio;
 import CoOpSystem.CoOpFrame;
 import Main.Stages.*;
 import java.awt.HeadlessException;
@@ -38,6 +39,8 @@ public class StageSelector extends JFrame {
         setLocationRelativeTo(null);
         setUndecorated(true);
         setVisible(true);
+        
+        Audio.playMusic("mainMenu");
     }
 
     public void loadStage(String stageName) {
@@ -55,6 +58,7 @@ public class StageSelector extends JFrame {
                 setTitle("Select stage");
                 revalidate();
                 repaint();
+                Audio.playMusic("mainMenu");
             }
             return;
         }

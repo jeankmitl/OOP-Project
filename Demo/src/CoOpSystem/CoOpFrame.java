@@ -363,10 +363,10 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     System.out.println("Finished loading.");
                     loadingScreen.dispose();
                     if (isServer) {
-                        stage = new StageSelector(CoOpFrame.this);
+//                        stage = new StageSelector(CoOpFrame.this);
                         stage.loadStage("St10");
                     } else {
-                        vtStage = new VirtualStageSelector(CoOpFrame.this);
+//                        vtStage = new VirtualStageSelector(CoOpFrame.this);
                     }
             }
         };
