@@ -95,11 +95,17 @@ public class StageSelectorPanel extends JPanel{
                 } else if (resetBtn.contains(e.getPoint())){
                     File saveFile = new File("Save.bat");
                     if (saveFile.exists()) {
-                        boolean deleted = saveFile.delete();
-                        if (deleted) {
-                            System.out.println("Save file deleted successfully");
-                            selectStage("Main");
+                        int res = JOptionPane.showConfirmDialog(frame, "Do you want to reset level? This can't be undo.",
+                            "Reset Save Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        if (res == JOptionPane.YES_OPTION) {
+                            boolean deleted = saveFile.delete();
+                            if (deleted) {
+                                System.out.println("Save file deleted successfully");
+                                selectStage("Main");
+                            }
                         }
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "You have no Save Progress.");
                     }
                 }
             }
@@ -281,5 +287,7 @@ public class StageSelectorPanel extends JPanel{
         Image homeIcon = ImgManager.loadIcon("home_Btn");
         g2d.drawImage(homeIcon, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
         g2d.drawImage(stageLayout, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
+        Image resetLvlIcon = ImgManager.loadIcon("del_save_btn");
+        g2d.drawImage(resetLvlIcon, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
         }
     }

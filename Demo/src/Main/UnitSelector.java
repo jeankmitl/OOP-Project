@@ -56,7 +56,7 @@ public class UnitSelector extends JDialog {
     
     private final String type;
     private SaveGame progress = null;
-    protected final boolean DEBUG_MODE = false; //<----- Open on this
+    protected final boolean DEBUG_MODE = true; //<----- Open on this
 
     
     public UnitSelector(JFrame parent) {
