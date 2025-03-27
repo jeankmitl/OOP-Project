@@ -251,7 +251,7 @@ public class GamePanel extends JPanel {
             if (summoner instanceof stage_beta){save_Progress(10);}
         }
 
-        checkVictory();
+        showWinScreen();
         // update: animation every 2s
         updateAnimation(deltaTime);
         
@@ -264,12 +264,14 @@ public class GamePanel extends JPanel {
 
     }
 
-    public void checkVictory() {
+    public void showWinScreen() {
         if (this.victory) {
             WinScreen winScreen = new WinScreen();
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
+                    stopGameLoop();
+                    stage.dispose();
                     Thread.sleep(1500);
                     return null;
                 }
@@ -277,10 +279,7 @@ public class GamePanel extends JPanel {
                 @Override
                 protected void done() {
                     winScreen.dispose();
-                    stopGameLoop();
                     new StageSelector();
-                    revalidate();
-                    repaint();
                     Audio.playMusic("mainMenu");
                 }
             };
