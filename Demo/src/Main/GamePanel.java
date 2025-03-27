@@ -92,7 +92,9 @@ public class GamePanel extends JPanel {
     protected int target,count_kill=0;
     private boolean victory = false;
     
-    private Rectangle homeBtn = new Rectangle(1180,15,75,75);
+    private final Rectangle homeBtn = new Rectangle(1180,15,75,75);
+    private final Rectangle speedBtn = new Rectangle(BAR_X + CELL_WIDTH * COLS + 20, BAR_Y + 20, 
+                CELL_WIDTH / 2 + 10, CELL_HEIGHT / 2 + 10);
     private StageSelector stage;
     private EnemySummoner summoner;
     //same as: public awake()
@@ -113,7 +115,6 @@ public class GamePanel extends JPanel {
         vfxs = new ArrayList<>();
         unitTypes = new ArrayList<>();
         
-        stage.addKeyListener(new GameKeyboardListener());
         addMouseListeners();
         GameLoop.setLateListener((d) -> lateUpdate());
         gameLoop = GameLoop.getInstance();
@@ -130,7 +131,6 @@ public class GamePanel extends JPanel {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
-                    addKeyListener(new GameKeyboardListener());
                     startGameLoop(); // Always call on last GamePanel
                     summonEnemies(); // spawn Enermy in this insted
                 }
@@ -272,14 +272,14 @@ public class GamePanel extends JPanel {
                 protected Void doInBackground() throws Exception {
                     stopGameLoop();
                     stage.dispose();
-                    Thread.sleep(1500);
+                    Thread.sleep(5);
                     return null;
                 }
 
                 @Override
                 protected void done() {
                     winScreen.dispose();
-                    new StageSelector();
+                    stage.loadStage("Back");
                     Audio.playMusic("mainMenu");
                 }
             };
@@ -850,6 +850,10 @@ public class GamePanel extends JPanel {
         iconImage = ImgManager.loadIcon("exit_btn");
         g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
         
+        BufferedImage speedBtns = ImgManager.loadSprite("speed_123btn");
+        BufferedImage speedBtnImg = speedBtns.getSubimage(32 * GameLoop.getSpeedMode(), 0, 32, 32);
+        g.drawImage(speedBtnImg, speedBtn.x, speedBtn.y, speedBtn.width, speedBtn.height, null);
+        
         
         if (DEBUG_MODE) {
             g.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
@@ -875,10 +879,24 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(homeBtn.contains(e.getPoint()) && gameTimer.isRunning()){
-                    stage.loadStage("Back");
-                    return;
+                if (gameTimer.isRunning()) {
+                    if(homeBtn.contains(e.getPoint())){
+                        int res = JOptionPane.showConfirmDialog(stage, "Do you want to Exit during the game?",
+                        "Exit Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        if (res == JOptionPane.YES_OPTION) {
+                            stage.loadStage("Back");
+                        }
+                        return;
+                    } else if (speedBtn.contains(e.getPoint())) {
+                        if (GameLoop.getSpeedMode() >= 2) {
+                            GameLoop.setSpeedMode(0);
+                        } else {
+                            GameLoop.setSpeedMode(GameLoop.getSpeedMode() + 1);
+                        }
+                    }
                 }
+                
+                
                 if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS 
                         && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;
@@ -990,35 +1008,5 @@ public class GamePanel extends JPanel {
                 }
             }
         }
-    }
-    
-    
-    public class GameKeyboardListener extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_RIGHT:
-                    gameTimer.setDoubleSpeed(true);
-                    break;
-                case KeyEvent.VK_ESCAPE:
-                    if (gameTimer.isRunning()) {
-                        gameTimer.stop();
-                    } else {
-                        gameTimer.start();
-                    }
-                    break;
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_RIGHT:
-                    gameTimer.setDoubleSpeed(false);
-                    break;
-            }
-        }
-        
-        
     }
 }

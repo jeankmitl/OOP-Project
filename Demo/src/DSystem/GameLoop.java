@@ -15,6 +15,7 @@ public class GameLoop extends Thread {
     private static int fps = 0;
     private boolean stopLoop = false;
     private double deltaTime = 0;
+    private static int speedMode = 0;
 
     @Override
     public void run() {
@@ -60,6 +61,8 @@ public class GameLoop extends Thread {
             for (int i = 0; i < listeners.size(); i++) {
                 GameLoopListener listener = listeners.get(i);
                 listener.onUpdate(deltaTime);
+                if (speedMode >= 1) listener.onUpdate(deltaTime);
+                if (speedMode >= 2) listener.onUpdate(deltaTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,5 +108,14 @@ public class GameLoop extends Thread {
     public double getDeltaTime() {
         return deltaTime;
     }
+
+    public static int getSpeedMode() {
+        return speedMode;
+    }
+
+    public static void setSpeedMode(int speedMode) {
+        GameLoop.speedMode = speedMode;
+    }
+
     
 }

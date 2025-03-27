@@ -17,6 +17,7 @@ public class DWait implements GameLoopListener {
     private final double delay;
     private final ActionListener listener;
     private double elapsedTime = 0;
+    private boolean isCalled = false;
     
     public DWait(double delay, ActionListener listener) {
         this.delay = delay;
@@ -26,14 +27,16 @@ public class DWait implements GameLoopListener {
     @Override
     public void onUpdate(double deltaTime) {
         elapsedTime += deltaTime;
-        if (elapsedTime >= delay) {
+        if (elapsedTime >= delay && !isCalled) {
             listener.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "DTimeLoop Tick"));
             GameLoop.removeListener(this);
+            isCalled = true;
         }
     }
     
     public void start() {
         elapsedTime = 0;
+        isCalled = false;
         GameLoop.addListener(this);
     }
 }

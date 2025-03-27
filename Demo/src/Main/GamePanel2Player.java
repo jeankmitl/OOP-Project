@@ -74,14 +74,12 @@ public class GamePanel2Player extends GamePanel {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
-                    addKeyListener(new GameKeyboardListener());
                     
                     UnitSelector unitSelector2P = new UnitSelector(stage, "p2");
                     unitSelector2P.addWindowListener(new WindowAdapter() {
                         @Override
                         public void windowClosed(WindowEvent e) {
                             unitTypesP2 = ((UnitSelector)e.getSource()).getResultUnits();
-                            addKeyListener(new GameKeyboardListener());
                             startGameLoop(); // Always call on last GamePanel
                             summonEnemies(); // spawn Enermy in this insted
                         }
