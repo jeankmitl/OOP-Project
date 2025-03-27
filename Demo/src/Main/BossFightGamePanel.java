@@ -349,5 +349,6 @@ public class BossFightGamePanel extends GamePanel {
         hasUsedSummonSwords = true;
         theRedSwordIsAlive = false;
         theBlueSwordIsAlive = false;
+        remainMana = 500;
     }
 }
