@@ -107,10 +107,9 @@ public class MainMenu extends JFrame {
 
                         @Override
                         protected void done() {
+                            System.out.println("Finished loading.");
                             loadingScreen.dispose();
-                            Audio.play(AudioName.PLANT_CANT_PICK_UP);
-                            System.out.println("This feature hasn't been finished");
-                            new MainMenu();
+                            new ConfigScreen();
                         }
                     };
                     worker.execute();
