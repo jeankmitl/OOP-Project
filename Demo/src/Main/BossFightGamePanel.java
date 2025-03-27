@@ -69,7 +69,7 @@ public class BossFightGamePanel extends GamePanel {
     private OTimer summonTimer = new OTimer(16);
 
 
-    private BossFightGamePanel(StageSelector stage, EnemySummoner summoner) {
+    protected BossFightGamePanel(StageSelector stage, EnemySummoner summoner) {
         super(stage, summoner);
         System.out.println("hasUsedSummonSwords " + hasUsedSummonSwords);
         System.out.println("theRedSwordIsAlive " + theRedSwordIsAlive);

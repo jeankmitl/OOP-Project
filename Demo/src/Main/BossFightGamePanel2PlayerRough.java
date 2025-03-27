@@ -7,17 +7,17 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
-import DSystem.OTimer;
-import Entities.Units.Nike;
 import static Main.GamePanel.BAR_X;
 import static Main.GamePanel.BAR_Y;
 import static Main.GamePanel.CELL_HEIGHT;
 import static Main.GamePanel.CELL_WIDTH;
 import static Main.GamePanel.COLS;
+import static Main.GamePanel.GRID_OFFSET_X;
+import static Main.GamePanel.GRID_OFFSET_Y;
+import static Main.GamePanel.MAX_MANA;
 import static Main.GamePanel.ROWS;
 import static Main.GamePanel.remainMana;
 import static Main.GamePanel.unitTypes;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -25,7 +25,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -36,8 +35,8 @@ import javax.swing.SwingUtilities;
  *
  * @author anawi
  */
-public class GamePanel2Player extends GamePanel {
-    private static GamePanel2Player instance;
+public class BossFightGamePanel2PlayerRough extends BossFightGamePanel {
+    private static BossFightGamePanel2PlayerRough instance;
     
     public static final int CEMI_WIDTH = CELL_WIDTH / 2;
     public static final int CEMI_HEIGHT = CELL_HEIGHT / 2;
@@ -56,7 +55,7 @@ public class GamePanel2Player extends GamePanel {
     
     protected static int remainManaP2 = 50;
     
-    private GamePanel2Player(StageSelector stage, EnemySummoner summoner) {
+    private BossFightGamePanel2PlayerRough(StageSelector stage, EnemySummoner summoner) {
         super(stage, summoner);
         unitTypesP2 = new ArrayList<>();
         
@@ -88,7 +87,7 @@ public class GamePanel2Player extends GamePanel {
     }
     
     public static GamePanel getInstance(StageSelector stage, EnemySummoner summoner) {
-        if (instance == null) instance = new GamePanel2Player(stage, summoner);
+        if (instance == null) instance = new BossFightGamePanel2PlayerRough(stage, summoner);
         instance.resetGamePanel(stage, summoner);
         return instance;
     }
