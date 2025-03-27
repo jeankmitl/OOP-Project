@@ -68,7 +68,11 @@ public class StageSelector extends JFrame {
         final EnemySummoner summoner;
         System.out.println(stageName);
         if (stageName.equals("St9")) { // Boss
-            game = BossFightGamePanel.getInstance(this, new StageBossFight());
+            if (type.equals("2p")) {
+                game = BossFightGamePanel2PlayerRough.getInstance(this, new StageBossFight());
+            } else {
+                game = BossFightGamePanel.getInstance(this, new StageBossFight());
+            }
         } else {
             switch (stageName) {
                 case "St10" -> summoner = new stage_beta();

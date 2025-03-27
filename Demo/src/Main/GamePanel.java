@@ -166,6 +166,7 @@ public class GamePanel extends JPanel {
     }
     
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
+        victory = false;
         stopGameLoop();
         GameLoop.clearListener();
         Audio.stopMusic();
@@ -197,7 +198,7 @@ public class GamePanel extends JPanel {
         for (int i=0; i<ROWS; i++) {
             units.add(new Candles6(i, -1));
         }
-        if (this.getClass() == GamePanel.class) {
+        if (getClass() != BossFightGamePanel.class) {
             Audio.playMusic("dungeon_song_raid.wav");
         }
     }
@@ -271,7 +272,7 @@ public class GamePanel extends JPanel {
                 @Override
                 protected Void doInBackground() throws Exception {
                     stopGameLoop();
-                    Thread.sleep(5000);
+                    Thread.sleep(1500);
                     return null;
                 }
 
@@ -335,6 +336,7 @@ public class GamePanel extends JPanel {
     }
     
     public static void increaseMana(int mana) {
+        GamePanel2Player.increaseMana(mana);
         remainMana += mana;
         if (remainMana > MAX_MANA) {
             remainMana = MAX_MANA;
@@ -342,6 +344,7 @@ public class GamePanel extends JPanel {
     }
     
     public static void reduceMana(int mana) {
+        GamePanel2Player.reduceMana(mana);
         if (remainMana - mana < 0) {
             remainMana = 0;
         } else {
