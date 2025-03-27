@@ -53,47 +53,38 @@ public class StageSelectorPanel extends JPanel{
                 if (st1.contains(e.getPoint())) {
                     selectStage("St1");
                     progress.set_Stage_Num(0);
-                    save();
-                } else if (st2 != null && progress.get_Stage_Num(1) && st2.contains(e.getPoint())) {
+                }if (st2 != null && progress.get_Stage_Num(1) && st2.contains(e.getPoint())) {
                     selectStage("St2");
                     progress.set_Stage_Num(1);
-                    save();
-                } else if (st3 != null && progress.get_Stage_Num(2) && st3.contains(e.getPoint())) {
+                }if (st3 != null && progress.get_Stage_Num(2) && st3.contains(e.getPoint())) {
                     selectStage("St3");
                     progress.set_Stage_Num(2);
-                    save();
-                } else if (st4 != null && progress.get_Stage_Num(3) && st4.contains(e.getPoint())) {
+                }if (st4 != null && progress.get_Stage_Num(3) && st4.contains(e.getPoint())) {
                     selectStage("St4");
                     progress.set_Stage_Num(3);
-                    save();
-                } else if (st5 != null && progress.get_Stage_Num(4) && st5.contains(e.getPoint())) {
+                }if (st5 != null && progress.get_Stage_Num(4) && st5.contains(e.getPoint())) {
                     selectStage("St5");
                     progress.set_Stage_Num(4);
-                    save();
-                } else if (st6 != null && progress.get_Stage_Num(5) && st6.contains(e.getPoint())) {
+                }if (st6 != null && progress.get_Stage_Num(5) && st6.contains(e.getPoint())) {
                     selectStage("St6");
                     progress.set_Stage_Num(5);
-                    save();
-                } else if (st7 != null && progress.get_Stage_Num(6) && st7.contains(e.getPoint())) {
+                }if(st7 != null && progress.get_Stage_Num(6) && st7.contains(e.getPoint())) {
                     selectStage("St7");
                     progress.set_Stage_Num(6);
-                    save();
-                } else if (st8 != null && progress.get_Stage_Num(7) && st8.contains(e.getPoint())) {
+                }if (st8 != null && progress.get_Stage_Num(7) && st8.contains(e.getPoint())) {
                     selectStage("St8");
                     progress.set_Stage_Num(7);
-                    save();
-                } else if (st9 != null && progress.get_Stage_Num(8) && st9.contains(e.getPoint())) {
+                }if (st9 != null && progress.get_Stage_Num(8) && st9.contains(e.getPoint())) {
                     selectStage("St9");
                     progress.set_Stage_Num(8);
-                    save();
-                } else if (st10 != null && progress.get_Stage_Num(9) && st10.contains(e.getPoint())) {
+                }if (st10 != null && progress.get_Stage_Num(9) && st10.contains(e.getPoint())) {
                     selectStage("St10");
                     progress.set_Stage_Num(9);
-                    save();
-                } else if (homeBtn.contains(e.getPoint())) {
+                } 
+                if (homeBtn.contains(e.getPoint())) {
                     stageSelector.dispose();
                     selectStage("Main");
-                } else if (resetBtn.contains(e.getPoint())){
+                }if (resetBtn.contains(e.getPoint())){
                     File saveFile = new File("Save.bat");
                     if (saveFile.exists()) {
                         int res = JOptionPane.showConfirmDialog(frame, "Do you want to reset level? This can't be undo.",
@@ -110,6 +101,7 @@ public class StageSelectorPanel extends JPanel{
                         JOptionPane.showMessageDialog(frame, "You have no Save Progress.");
                     }
                 }
+                save();
             }
         });
 
@@ -169,39 +161,13 @@ public class StageSelectorPanel extends JPanel{
         worker.execute();
     }
     
-    public BufferedImage unitIcon(String path, int frameIndex, int frame) {
-        if(frame == 1){
-            try {
-                BufferedImage spriteSheet = ImageIO.read(getClass().getResource(path));
-                int frameWidth = spriteSheet.getWidth() / 1;
-                return spriteSheet.getSubimage(frameIndex * frameWidth, 0, frameWidth, spriteSheet.getHeight());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else if (frame == 4){
-            try {
-                BufferedImage spriteSheet = ImageIO.read(getClass().getResource(path));
-                int frameWidth = spriteSheet.getWidth() / 4;
-                return spriteSheet.getSubimage(frameIndex * frameWidth, 0, frameWidth, spriteSheet.getHeight());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else if (frame == 5){
-            try {
-                BufferedImage spriteSheet = ImageIO.read(getClass().getResource(path));
-                int frameWidth = spriteSheet.getWidth() / 5;
-                return spriteSheet.getSubimage(frameIndex * frameWidth, 0, frameWidth, spriteSheet.getHeight());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }else if (frame==8){
-            try {
-                BufferedImage spriteSheet = ImageIO.read(getClass().getResource(path));
-                int frameWidth = spriteSheet.getWidth() / 8;
-                return spriteSheet.getSubimage(frameIndex * frameWidth, 0, frameWidth, spriteSheet.getHeight());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public BufferedImage spriteSlicer(String path, int frame) {
+        try {
+            BufferedImage spriteSheet = ImageIO.read(getClass().getResource(path));
+            int frameWidth = spriteSheet.getWidth() / frame;
+            return spriteSheet.getSubimage(0, 0, frameWidth, spriteSheet.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -217,9 +183,10 @@ public class StageSelectorPanel extends JPanel{
             g2d.setColor(Color.black);
             g2d.drawString("2-Player Mode", 200, 200);
         }
-        BufferedImage unitIcon = unitIcon("/Asset/Img/SpriteSheets/explosive_tutle_Idle.png", 0, 4);
+
+        BufferedImage unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/explosive_tutle_Idle.png", 4);
         Image stageLayout = ImgManager.loadIcon("frame_op1");
-        BufferedImage background = unitIcon("/Asset/Img/Background/defense_of_dungeon_wallpaper.png", 0, 1);
+        BufferedImage background = spriteSlicer("/Asset/Img/Background/defense_of_dungeon_wallpaper.png", 1);
         
         g2d.drawImage(background,0,0,1264,681,this);
         g2d.drawImage(stageLayout, st1.x, st1.y, st1.width, st1.height, this);
@@ -232,59 +199,60 @@ public class StageSelectorPanel extends JPanel{
         g2d.drawString("Stage 1", 145, 400);
 
         if (progress.get_Stage_Num(1)){
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/mini_lazer_idle.png", 0, 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/mini_lazer_idle.png", 4);
             g2d.drawImage(stageLayout, st2.x, st2.y, st2.width, st2.height, this);
             g2d.drawImage(unitIcon, st2.x, st2.y, st2.width, st2.height, this);
             g2d.drawString("Stage 2", 345, 400);
         } 
         if (progress.get_Stage_Num(2)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/vampire_idle.png", 0, 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/vampire_idle.png", 4);
             g2d.drawImage(stageLayout, st3.x, st3.y, st3.width, st3.height, this);
             g2d.drawImage(unitIcon, st3.x, st3.y, st3.width, st3.height, this);
             g2d.drawString("Stage 3", 545, 400);
         }
         if (progress.get_Stage_Num(3)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/Golem_idle.png", 0, 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/Golem_idle.png", 4);
             g2d.drawImage(stageLayout, st4.x, st4.y, st4.width, st4.height, this);
             g2d.drawImage(unitIcon, st4.x, st4.y, st4.width, st4.height, this);
             g2d.drawString("Stage 4", 745, 400);
         }
         if (progress.get_Stage_Num(4)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/mipya_idle.png", 0, 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/mipya_idle.png", 4);
             g2d.drawImage(stageLayout, st5.x, st5.y, st5.width, st5.height, this);
             g2d.drawImage(unitIcon, st5.x, st5.y, st5.width, st5.height, this);
             g2d.drawString("Stage 5", 945, 400);
         }
         if (progress.get_Stage_Num(5)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/python_idle.png", 0, 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/python_idle.png", 4);
             g2d.drawImage(stageLayout, st6.x, st6.y, st6.width, st6.height, this);
             g2d.drawImage(unitIcon, st6.x, st6.y, st6.width, st6.height, this);
             g2d.drawString("Stage 6", 145, 625);
         }
         if (progress.get_Stage_Num(6)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/alpha_wolf_idle.png", 0, 5);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/alpha_wolf_idle.png", 5);
             g2d.drawImage(stageLayout, st7.x, st7.y, st7.width, st7.height, this);
             g2d.drawImage(unitIcon, st7.x, st7.y, st7.width, st7.height, this);
             g2d.drawString("Stage 7", 345, 625);
         }
         if (progress.get_Stage_Num(7)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/werewolf_idle.png", 0, 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/werewolf_idle.png", 4);
             g2d.drawImage(stageLayout, st8.x, st8.y, st8.width, st8.height, this);
             g2d.drawImage(unitIcon, st8.x, st8.y, st8.width, st8.height, this);
             g2d.drawString("Stage 8", 545, 625);
         }
         if (progress.get_Stage_Num(8)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/werewolf_idle.png", 0, 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/SongChinWu_idle.png", 4);
             g2d.drawImage(stageLayout, st9.x, st9.y, st9.width, st9.height, this);
             g2d.drawImage(unitIcon, st9.x, st9.y, st9.width, st9.height, this);
-            g2d.drawString("BOSS", 755, 625);
+            g2d.drawString("BOSS", 775, 625);
         }
         if (progress.get_Stage_Num(9)) {
-            unitIcon = unitIcon("/Asset/Img/SpriteSheets/nike.png", 0, 1);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/nike.png", 1);
             g2d.drawImage(stageLayout, st10.x, st10.y, st10.width, st10.height, this);
             g2d.drawImage(unitIcon, st10.x, st10.y, st10.width, st10.height, this);
             g2d.drawString("INFINITE", 945, 625);
         }
+
         Image homeIcon = ImgManager.loadIcon("home_Btn");
         g2d.drawImage(homeIcon, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
         Image resetLvlIcon = ImgManager.loadIcon("del_save_btn");
