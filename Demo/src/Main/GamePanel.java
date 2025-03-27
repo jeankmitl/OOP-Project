@@ -885,10 +885,26 @@ public class GamePanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 if (gameTimer.isRunning()) {
                     if(homeBtn.contains(e.getPoint())){
-                        int res = JOptionPane.showConfirmDialog(stage, "Do you want to Exit during the game?",
-                        "Exit Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        int res = JOptionPane.showConfirmDialog(stage, "Do you want to leave during the game?",
+                        "Leave Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (res == JOptionPane.YES_OPTION) {
-                            stage.loadStage("Back");
+                            Audio.play(AudioName.BUTTON_CLICK);
+                            LoadingScreen loadingScreen = new LoadingScreen();
+                            SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                                @Override
+                                protected Void doInBackground() throws Exception {
+                                    Thread.sleep(1500);
+                                    return null;
+                                }
+
+                                @Override
+                                protected void done() {
+                                    loadingScreen.dispose();
+                                    stage.loadStage("Back");
+                                    Audio.playMusic("mainMenu");
+                                }
+                            };
+                            worker.execute();
                         }
                         return;
                     } else if (speedBtn.contains(e.getPoint())) {
@@ -899,8 +915,7 @@ public class GamePanel extends JPanel {
                         }
                     }
                 }
-                
-                
+
                 if (e.getX() >= BAR_X + CELL_WIDTH * (COLS - 1) && e.getX() <= BAR_X + CELL_WIDTH * COLS 
                         && e.getY() >= BAR_Y + 10 && e.getY() <= BAR_Y + CELL_HEIGHT - 10) {
                     draggingRecall = true;

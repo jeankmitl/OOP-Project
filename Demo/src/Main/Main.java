@@ -1,7 +1,28 @@
 package Main;
 
+import Asset.Audio;
+import Asset.AudioName;
+import javax.swing.*;
+
 public class Main {
+
     public static void main(String[] args) {
-        new MainMenu(); 
+        Audio.play(AudioName.BUTTON_CLICK);
+        LoadingScreen loadingScreen = new LoadingScreen();
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                Thread.sleep(1500);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                loadingScreen.dispose();
+                new MainMenu();
+            }
+        };
+        worker.execute();
     }
+
 }

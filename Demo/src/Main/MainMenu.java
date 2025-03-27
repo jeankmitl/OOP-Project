@@ -95,12 +95,47 @@ public class MainMenu extends JFrame {
                     };
                     worker.execute();
                 } else if (config.contains(e.getPoint())) {
-                    Audio.play(AudioName.PLANT_CANT_PICK_UP);
-                    System.out.println("This feature hasn't been finished");
-                } else if (exit.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
-                    System.out.println("Bye Bye");
-                    System.exit(0);
+                    LoadingScreen loadingScreen = new LoadingScreen();
+                    SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            dispose();
+                            Thread.sleep(1500);
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            loadingScreen.dispose();
+                            Audio.play(AudioName.PLANT_CANT_PICK_UP);
+                            System.out.println("This feature hasn't been finished");
+                            new MainMenu();
+                        }
+                    };
+                    worker.execute();
+                } else if (exit.contains(e.getPoint())) {
+                    int res = JOptionPane.showConfirmDialog(mainMenuPanel, "Do you want to exit the game?", "Exit game", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                        if (res == JOptionPane.YES_OPTION) {
+                            Audio.play(AudioName.BUTTON_CLICK);
+                            LoadingScreen loadingScreen = new LoadingScreen();
+                            SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                                @Override
+                                protected Void doInBackground() throws Exception {
+                                    dispose();
+                                    Thread.sleep(1500);
+                                    return null;
+                                }
+
+                                @Override
+                                protected void done() {
+                                    System.out.println("Good Bye Bro");
+                                    loadingScreen.dispose();
+                                    System.exit(0);
+                                }
+                            };
+                            worker.execute();
+                        }
                 } else if (musicBtn.contains(e.getPoint())) {
                     if (Audio.isMusicEnable()) {
                         Audio.setMusicEnable(false);

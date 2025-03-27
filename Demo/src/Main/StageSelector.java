@@ -61,7 +61,6 @@ public class StageSelector extends JFrame {
             setTitle("Select stage");
             revalidate();
             repaint();
-            Audio.playMusic("mainMenu");
             return;
         }
         getContentPane().removeAll();
