@@ -271,8 +271,7 @@ public class GamePanel extends JPanel {
                 @Override
                 protected Void doInBackground() throws Exception {
                     stopGameLoop();
-                    stage.dispose();
-                    Thread.sleep(5);
+                    Thread.sleep(5000);
                     return null;
                 }
 
