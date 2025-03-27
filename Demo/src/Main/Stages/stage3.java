@@ -24,7 +24,7 @@ public class stage3 implements EnemySummoner {
     
     @Override
     public StageStats getSTAGE_STATS() {
-        return StageConfig.STAGE_BETA;
+        return StageConfig.STAGE_3;
     }
 
     @Override
