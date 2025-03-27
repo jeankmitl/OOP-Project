@@ -42,7 +42,7 @@ public interface EnemyConfig {
     EnemyStats RC_BOMBER_STATS = new EnemyStats(RC_BOMBER_SPRITE, 50, 2000, 1, WALK_CAR, NORMAL);
     EnemyStats ROBOT_MONOWHEEL_STATS = new EnemyStats(ROBOT_MONOWHEEL_SPRITE, 190, 100, 1, WALK_NORMAL, NORMAL);
     EnemyStats TANK_STATS = new EnemyStats(TANK_SPRITE, 2200, 100, 0.1, WALK_SLOW, NORMAL);
-    EnemyStats SONG_CHIN_WU_STATS = new EnemyStats(SONG_CHIN_WU_SPRITE, 99999, 200, 1, WALK_SLOW, NORMAL); // <-------- SongChinWu beta
-    EnemyStats THE_RED_SWORD = new EnemyStats(THE_RED_SWORD_SPRITE, 2000, 0, 0, 0, NORMAL);
-    EnemyStats THE_BLUE_SWORD = new EnemyStats(The_BLUE_SWORD_SPRITE, 2000, 0, 0, 0, NORMAL);
+    EnemyStats SONG_CHIN_WU_STATS = new EnemyStats(SONG_CHIN_WU_SPRITE, 36969, 100, 1, WALK_SLOW, NORMAL); // <-------- SongChinWu beta
+    EnemyStats THE_RED_SWORD = new EnemyStats(THE_RED_SWORD_SPRITE, 6900, 0, 1, 0, NORMAL);
+    EnemyStats THE_BLUE_SWORD = new EnemyStats(The_BLUE_SWORD_SPRITE, 6900, 0, 1, 0, NORMAL);
 }

@@ -73,6 +73,10 @@ public abstract class Enemy extends Entity {
     public int getRow() {
         return row;
     }
+    
+    public void setRow(int row) {
+        this.row = row;
+    }
 
     public double getSpeed() {
         return speed;

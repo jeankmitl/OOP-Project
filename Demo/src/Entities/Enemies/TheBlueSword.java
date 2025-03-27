@@ -10,7 +10,7 @@ package Entities.Enemies;
  */
 public class TheBlueSword extends Enemy {
     
-    public TheBlueSword(double x, int row, EnemyStats enemyStats) {
+    public TheBlueSword(double x, int row) {
         super(x, row, getENEMY_STATS());
     }
     

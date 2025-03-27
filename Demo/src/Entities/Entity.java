@@ -60,6 +60,10 @@ public abstract class Entity {
     }
     
     public void takeDamage(int damage) {
+        if (health - damage < 0) {
+            health = 0;
+            return;
+        }
         health -= damage;
     }
 
