@@ -166,6 +166,7 @@ public class GamePanel extends JPanel {
     }
     
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
+        count_kill = 0;
         victory = false;
         stopGameLoop();
         GameLoop.clearListener();
@@ -272,7 +273,7 @@ public class GamePanel extends JPanel {
                 @Override
                 protected Void doInBackground() throws Exception {
                     stopGameLoop();
-                    Thread.sleep(1500);
+                    Thread.sleep(3000);
                     return null;
                 }
 

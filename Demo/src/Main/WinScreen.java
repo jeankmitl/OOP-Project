@@ -29,7 +29,6 @@ public class WinScreen extends JFrame {
         setLocationRelativeTo(null);
         setUndecorated(true);
         setVisible(true);
-        new Timer(5000, e -> dispose()).start();
     }
 
 }
