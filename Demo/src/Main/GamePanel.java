@@ -182,7 +182,7 @@ public class GamePanel extends JPanel {
         vfxs.clear();
         unitTypes.clear();
         
-        remainMana = 0;
+        remainMana = 50;
         selectUnitBefore();
     }
     
@@ -717,10 +717,12 @@ public class GamePanel extends JPanel {
         g.fillRect(BAR_X + 740, BAR_Y - 5, (int)(manaRegenPct * (116.0 / 100.0)), 5);
         ///show mana system
         g.setColor(new Color(0,0,0,180));
-        g.fillRect(550, 0, 150, 30);
+        g.fillRect(550, 0, 180, 50);
         g.setColor(Color.WHITE);
-        g.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
-        g.drawString(count_kill+" / "+target, 600, 20); // Display at top-left
+        g.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+        g.drawString(count_kill+" / "+target, 600, 35); // Display at top-left
+        iconImage = ImgManager.loadIcon("target");
+        g.drawImage(iconImage, 550, 5,40,40, null);
         /////Count Enemy
         // frame operator
         for (int i = 0; i < COLS; i++) {
