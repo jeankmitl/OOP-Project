@@ -1,12 +1,8 @@
 package Asset;
 
-import java.io.File;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
+import java.io.*;
+import java.util.concurrent.*;
+import javax.sound.sampled.*;
 
 public abstract class Audio {
 
@@ -15,13 +11,15 @@ public abstract class Audio {
     private static boolean isMusicEnable = true;
     private static Clip musicClip;
     private static String musicFile = "";
+    private static FloatControl musicVolumeControl;
+    public static float musicVolume = 0.5f;
     
     public static void play(String name) {
         if (!isSoundEnable) return;
         if (!name.contains(".wav")) {
             name += ".wav";
         }
-        
+
         String nname = name;
         try {
             soundPool.execute(() -> {
@@ -32,16 +30,14 @@ public abstract class Audio {
                     clip.start();
                     clip.addLineListener(event -> {
                         if (event.getType() == LineEvent.Type.STOP) {
-                            clip.close(); // Close to reduce Thread
+                            clip.close();
                         }
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-        } catch (Exception e) {
-            //Ignore because after shutdown Game
-        }
+        } catch (Exception e) {}
     }
 
     public static void playMusic(String name) {
@@ -61,6 +57,8 @@ public abstract class Audio {
             musicClip.open(sound);
             musicClip.start();
             musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+            musicVolumeControl = (FloatControl) musicClip.getControl(FloatControl.Type.MASTER_GAIN);
+            setMusicVolume(musicVolume);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,5 +86,13 @@ public abstract class Audio {
 
     public static void setMusicEnable(boolean isMusicEnable) {
         Audio.isMusicEnable = isMusicEnable;
+    }
+
+    public static void setMusicVolume(float volume) {
+        if (musicVolumeControl != null) {
+            float dB = 20f * (float) Math.log10(volume);
+            musicVolumeControl.setValue(dB);
+            musicVolume = volume;
+        }
     }
 }
