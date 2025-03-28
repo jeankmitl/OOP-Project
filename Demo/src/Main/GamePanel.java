@@ -252,23 +252,6 @@ public class GamePanel extends JPanel {
             if (summoner instanceof stage8){save_Progress(8);}
             if (summoner instanceof StageBossFight){save_Progress(9);}
             if (summoner instanceof stage_beta){save_Progress(10);}
-        }
-
-        showWinScreen();
-        // update: animation every 2s
-        updateAnimation(deltaTime);
-        
-        if (enemiesIsComingWait3.tick(deltaTime)) {
-            System.out.println("Show Text: Ready. Set. Go!");
-//            enemiesIsComingWait3.reset();  // like OTimer but use OTimer better
-        }
-        updateCooldown(deltaTime);
-        updateLogic(deltaTime);
-
-    }
-
-    public void showWinScreen() {
-        if (this.victory) {
             WinScreen winScreen = new WinScreen();
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
@@ -287,6 +270,16 @@ public class GamePanel extends JPanel {
             };
             worker.execute();
         }
+        // update: animation every 2s
+        updateAnimation(deltaTime);
+
+        if (enemiesIsComingWait3.tick(deltaTime)) {
+            System.out.println("Show Text: Ready. Set. Go!");
+//            enemiesIsComingWait3.reset();  // like OTimer but use OTimer better
+        }
+        updateCooldown(deltaTime);
+        updateLogic(deltaTime);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="All Reuse method">
@@ -500,8 +493,24 @@ public class GamePanel extends JPanel {
             }
 
             if (enemy.getX() + GRID_OFFSET_X <= 50) {
-                System.out.println("Game Over!!! NOOB");
-                System.exit(0);
+                LoadingScreen loadingScreen = new LoadingScreen();
+                SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        System.out.println("Game Over!!! NOOB");
+                        stopGameLoop();
+                        Thread.sleep(3000);
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        loadingScreen.dispose();
+                        stage.loadStage("Back");
+                        Audio.playMusic("mainMenu");
+                    }
+                };
+                worker.execute();
             }
 
             if (enemy.isDead()) {
