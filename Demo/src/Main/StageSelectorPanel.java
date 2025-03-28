@@ -100,7 +100,6 @@ public class StageSelectorPanel extends JPanel{
                         JOptionPane.showMessageDialog(frame, "You have no Save Progress.");
                     }
                 }
-                save();
             }
         });
 
