@@ -116,14 +116,14 @@ public class BossFightGamePanel extends GamePanel {
     
     public Enemy getRandomEnemy() {
         List<Class<? extends Enemy>> enemyTypes = Arrays.asList(
-//                RCBomber.class,
-//                Bandit.class,
-//                BanditV2.class,
-//                BanditV3.class,
-//                Ninja.class,
-//                LittleRedHood.class,
-//                RobotMonoWheel.class,
-//                Sorcerer.class,
+                RCBomber.class,
+                Bandit.class,
+                BanditV2.class,
+                BanditV3.class,
+                Ninja.class,
+                LittleRedHood.class,
+                RobotMonoWheel.class,
+                Sorcerer.class,
                 IShowSpeed.class
         );
 
