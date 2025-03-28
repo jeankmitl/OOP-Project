@@ -199,7 +199,7 @@ public class StageSelectorPanel extends JPanel{
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
-        BufferedImage unitIcon = unitIcon("/Asset/Img/SpriteSheets/explosive_tutle_Idle.png", 0, 4);
+        BufferedImage unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/explosive_tutle_Idle.png", 4);
         Image stageLayout = ImgManager.loadIcon("frame_op1");
         BufferedImage background = spriteSlicer("/Asset/Img/Background/defense_of_dungeon_wallpaper.png", 1);
         
