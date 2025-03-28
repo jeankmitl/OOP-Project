@@ -1,9 +1,11 @@
 package Main;
 
 import Asset.Audio;
+import CoOpSystem.CoKeys;
 import CoOpSystem.CoOpFrame;
 import Main.Stages.*;
 import java.awt.HeadlessException;
+import java.awt.Rectangle;
 import java.io.File;
 import javax.swing.*;
 
@@ -24,12 +26,14 @@ public class StageSelector extends JFrame {
     public StageSelector(String type, CoOpFrame cof) {
         this.type = type;
         this.cof = cof;
-        panel = new StageSelectorPanel(this, type);
+        panel = new StageSelectorPanel(this, type, cof);
         add(panel);
         setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
     
         if (type.equals("2p")) {
-            setTitle("Select stage - 2 Players");
+            setTitle("Stage 2 Players" + ((cof != null) ? ": Server":""));
+        } else if (type.equals("cli")) {
+            setTitle("Stage 2 Players: Client");
         } else {
             setTitle("Select stage");
         }
@@ -65,9 +69,11 @@ public class StageSelector extends JFrame {
         }
         getContentPane().removeAll();
         final EnemySummoner summoner;
-        System.out.println(stageName);
+        if (cof != null && !type.equals("cli")) {
+            cof.sendOne(CoKeys.STAGE_NAME, stageName);
+        }
         if (stageName.equals("St9")) { // Boss
-            if (type.equals("2p")) {
+            if (type.equals("2p") || type.equals("cli")) {
                 game = BossFightGamePanel2PlayerRough.getInstance(this, new StageBossFight());
             } else {
                 game = BossFightGamePanel.getInstance(this, new StageBossFight());
@@ -85,8 +91,8 @@ public class StageSelector extends JFrame {
                 case "St8" -> summoner = new stage8();
                 default -> throw new AssertionError();
             }
-            if (type.equals("2p")) {
-                game = GamePanel2Player.getInstance(this, summoner);
+            if (type.equals("2p") || type.equals("cli")) {
+                game = GamePanel2Player.getInstance(this, summoner, type, cof);
             } else {
                 game = GamePanel.getInstance(this, summoner);
             }
@@ -95,5 +101,13 @@ public class StageSelector extends JFrame {
 
         revalidate();
         repaint();
+    }
+    
+    public void setHover(int x, int y) {
+        panel.setHover(x, y);
+    }
+    
+    public void setP2Hover(int x, int y) {
+        panel.setP2Hover(x, y);
     }
 }

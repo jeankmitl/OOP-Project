@@ -7,6 +7,7 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import CoOpSystem.CoOpFrame;
 import DSystem.OTimer;
 import Entities.Units.Nike;
 import static Main.GamePanel.BAR_X;
@@ -56,6 +57,9 @@ public class GamePanel2Player extends GamePanel {
     
     protected static int remainManaP2 = 50;
     
+    private String type;
+    private CoOpFrame cof;
+    
     private GamePanel2Player(StageSelector stage, EnemySummoner summoner) {
         super(stage, summoner);
         unitTypesP2 = new ArrayList<>();
@@ -67,28 +71,38 @@ public class GamePanel2Player extends GamePanel {
     @Override
     protected void selectUnitBefore() {
         SwingUtilities.invokeLater(() -> {
-            UnitSelector unitSelector = new UnitSelector(stage, "p1");
-            unitSelector.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent e) {
-                    unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
-                    
-                    UnitSelector unitSelector2P = new UnitSelector(stage, "p2");
-                    unitSelector2P.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosed(WindowEvent e) {
-                            unitTypesP2 = ((UnitSelector)e.getSource()).getResultUnits();
-                            startGameLoop(); // Always call on last GamePanel
-                            summonEnemies(); // spawn Enermy in this insted
-                        }
-                    });
+            if (cof == null) {
+                UnitSelector unitSelector = new UnitSelector(stage, "p1");
+                unitSelector.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
+
+                        UnitSelector unitSelector2P = new UnitSelector(stage, "p2");
+                        unitSelector2P.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                unitTypesP2 = ((UnitSelector)e.getSource()).getResultUnits();
+                                startGameLoop(); // Always call on last GamePanel
+                                summonEnemies(); // spawn Enermy in this insted
+                            }
+                        });
+                    }
+                });
+            } else {
+                if (type.equals("cli")) {
+                    UnitSelector unitSelector = new UnitSelector(stage, "cli");
+                } else {
+                    UnitSelector unitSelector = new UnitSelector(stage, "server");
                 }
-            });
+            }
         });
     }
     
-    public static GamePanel getInstance(StageSelector stage, EnemySummoner summoner) {
+    public static GamePanel getInstance(StageSelector stage, EnemySummoner summoner, String type, CoOpFrame cof) {
         if (instance == null) instance = new GamePanel2Player(stage, summoner);
+        instance.type = type;
+        instance.cof = cof;
         instance.resetGamePanel(stage, summoner);
         return instance;
     }
@@ -145,11 +159,17 @@ public class GamePanel2Player extends GamePanel {
     }
 
     @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
+    protected boolean isAllowOn2Player() {
+        if (cof != null) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    @Override
+    public void paint2PComp(Graphics g) {
         int BAR_Y2 = BAR_Y - CEMI_HEIGHT;
-        
         
         //Mana P2
         g.setColor(new Color(0, 0, 0, 150));

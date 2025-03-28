@@ -3,6 +3,8 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import CoOpSystem.CoKeys;
+import CoOpSystem.CoOpFrame;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -17,9 +19,13 @@ public class StageSelectorPanel extends JPanel{
     private StageSelector stageSelector;
     private String type;
     private SaveGame progress;
+    private boolean isAnim = false;
+    private Rectangle animRect, animP2Rect;
+    private CoOpFrame cof;
 
-    public StageSelectorPanel(StageSelector frame, String type) {
+    public StageSelectorPanel(StageSelector frame, String type, CoOpFrame cof) {
         this.type = type;
+        this.cof = cof;
         this.stageSelector = frame;
         setLayout(null);
 
@@ -46,45 +52,38 @@ public class StageSelectorPanel extends JPanel{
         st10 = new Rectangle(950, 425, 150, 150);
         homeBtn = new Rectangle(1170,15,75,75);
         resetBtn = new Rectangle(1170,110,75,75);
-
+        
+        final Rectangle[] st = {st1, st2, st3, st4, st5, st6, st7, st8, st9, st10};
+        
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (st1.contains(e.getPoint())) {
-                    selectStage("St1");
-                    progress.set_Stage_Num(0);
-                }if (st2 != null && progress.get_Stage_Num(1) && st2.contains(e.getPoint())) {
-                    selectStage("St2");
-                    progress.set_Stage_Num(1);
-                }if (st3 != null && progress.get_Stage_Num(2) && st3.contains(e.getPoint())) {
-                    selectStage("St3");
-                    progress.set_Stage_Num(2);
-                }if (st4 != null && progress.get_Stage_Num(3) && st4.contains(e.getPoint())) {
-                    selectStage("St4");
-                    progress.set_Stage_Num(3);
-                }if (st5 != null && progress.get_Stage_Num(4) && st5.contains(e.getPoint())) {
-                    selectStage("St5");
-                    progress.set_Stage_Num(4);
-                }if (st6 != null && progress.get_Stage_Num(5) && st6.contains(e.getPoint())) {
-                    selectStage("St6");
-                    progress.set_Stage_Num(5);
-                }if(st7 != null && progress.get_Stage_Num(6) && st7.contains(e.getPoint())) {
-                    selectStage("St7");
-                    progress.set_Stage_Num(6);
-                }if (st8 != null && progress.get_Stage_Num(7) && st8.contains(e.getPoint())) {
-                    selectStage("St8");
-                    progress.set_Stage_Num(7);
-                }if (st9 != null && progress.get_Stage_Num(8) && st9.contains(e.getPoint())) {
-                    selectStage("St9");
-                    progress.set_Stage_Num(8);
-                }if (st10 != null && progress.get_Stage_Num(9) && st10.contains(e.getPoint())) {
-                    selectStage("St10");
-                    progress.set_Stage_Num(9);
-                } 
+                if (type.equals("cli")) return;
+                for (int i=0; i<st.length; i++) {
+                    if (st[i] == null) continue;
+                    if (st[i].contains(e.getPoint())) {
+                        if (st[i].equals(st1) || progress.get_Stage_Num(i)) {
+                            selectStage("St" + (i+1));
+                            progress.set_Stage_Num(i);
+                            save();
+                            break;
+                        }
+                    }
+                }
                 if (homeBtn.contains(e.getPoint())) {
+                    if (cof != null) {
+                        JOptionPane.showMessageDialog(frame, 
+                                "Sorry, you can't return go back in Socket Mode", "Socket Mode", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
                     stageSelector.dispose();
                     selectStage("Main");
-                }if (resetBtn.contains(e.getPoint())){
+                } else if (resetBtn.contains(e.getPoint())){
+                    if (cof != null) {
+                        JOptionPane.showMessageDialog(frame, 
+                                "Sorry, you can't return go back in Socket Mode", "Socket Mode", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
                     File saveFile = new File("Save.bat");
                     if (saveFile.exists()) {
                         int res = JOptionPane.showConfirmDialog(frame, "Do you want to reset level? This can't be undo.",
@@ -108,30 +107,52 @@ public class StageSelectorPanel extends JPanel{
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                if (st1.contains(e.getPoint()) ||
-                    (progress.get_Stage_Num(1) && st2.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(2) && st3.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(3) && st4.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(4) && st5.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(5) && st6.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(6) && st7.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(7) && st8.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(8) && st9.contains(e.getPoint())) ||
-                    (progress.get_Stage_Num(9) && st10.contains(e.getPoint()))||
-                     homeBtn.contains(e.getPoint())||
-                     resetBtn.contains(e.getPoint())) 
-                {
-                    setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                boolean isAnySelect = false;
+                for (int i=0; i<st.length; i++) {
+                    if (st[i] == null) continue;
+                    if (st[i].contains(e.getPoint())) {
+                        if (st[i].equals(st1) || progress.get_Stage_Num(i)) {
+                            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                            if (!isAnySelect) {
+                                if (type.equals("cli")) {
+                                    animRect = st[i];
+                                    cof.sendOne(CoKeys.HOVER_XY, animRect.x + " " + animRect.y);
+                                } else {
+                                    animRect = st[i];
+                                    if (cof != null) {
+                                        cof.sendOne(CoKeys.HOVER_XY, animRect.x + " " + animRect.y);
+                                    }
+                                }
+                            }
+                            isAnySelect = true;
+                            break;
+                        }
+                    }
+                }
+                if (isAnySelect) {
                     if (!isButtonHovered) {
                         isButtonHovered = true;
                         Audio.play(AudioName.BUTTON_HOVER);
+                        revalidate();
+                        repaint();
                     }
                 } else {
                     setCursor(Cursor.getDefaultCursor());
                     isButtonHovered = false;
+                    animRect = null;
+                    revalidate();
+                    repaint();
                 }
             }
-        });    
+        }); 
+        
+        new Timer(500, e -> animate()).start();
+    }
+    
+    private void animate() {
+        isAnim = !isAnim;
+        revalidate();
+        repaint();
     }
     
     private void save() {
@@ -177,14 +198,8 @@ public class StageSelectorPanel extends JPanel{
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-        if (type.equals("2p")) {
-            g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
-            g2d.setColor(Color.black);
-            g2d.drawString("2-Player Mode", 200, 200);
-        }
-
-        BufferedImage unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/explosive_tutle_Idle.png", 4);
+        
+        BufferedImage unitIcon = unitIcon("/Asset/Img/SpriteSheets/explosive_tutle_Idle.png", 0, 4);
         Image stageLayout = ImgManager.loadIcon("frame_op1");
         BufferedImage background = spriteSlicer("/Asset/Img/Background/defense_of_dungeon_wallpaper.png", 1);
         
@@ -192,12 +207,21 @@ public class StageSelectorPanel extends JPanel{
         g2d.drawImage(stageLayout, st1.x, st1.y, st1.width, st1.height, this);
         g2d.drawImage(unitIcon, st1.x, st1.y, st1.width, st1.height, this);
         
+        
+        g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+        g2d.setColor(Color.white);
+        if (type.equals("2p")) {
+            g2d.drawString("2-Player Mode" + ((cof != null) ? ": Server Host":""), 200, 170);
+        } else if (type.equals("cli")) {
+            g2d.drawString("2-Player Mode: Client (Can't select Level)", 200, 170);
+        }
         g2d.setFont(new Font("Algerian", Font.BOLD, 100));
         g2d.setPaint(Color.RED);
         g2d.drawString("Select the stage", 150, 135);
         g2d.setFont(new Font("Algerian", Font.BOLD, 40));
         g2d.drawString("Stage 1", 145, 400);
-
+        
+        
         if (progress.get_Stage_Num(1)){
             unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/mini_lazer_idle.png", 4);
             g2d.drawImage(stageLayout, st2.x, st2.y, st2.width, st2.height, this);
@@ -252,10 +276,38 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawImage(unitIcon, st10.x, st10.y, st10.width, st10.height, this);
             g2d.drawString("INFINITE", 945, 625);
         }
-
-        Image homeIcon = ImgManager.loadIcon("home_Btn");
-        g2d.drawImage(homeIcon, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
-        Image resetLvlIcon = ImgManager.loadIcon("del_save_btn");
-        g2d.drawImage(resetLvlIcon, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
+        if (cof != null && animP2Rect != null) {
+            Image hover = ImgManager.loadIcon("blue_p2_place_hover");
+            g2d.drawImage(hover, animP2Rect.x,animP2Rect.y, animP2Rect.width, animP2Rect.height,this);
+        } 
+        if (animRect != null) {
+            Image hover;
+            if (type.equals("cli")) {
+                hover = ImgManager.loadIcon("white_less_place_hover");
+            } else {
+                hover = ImgManager.loadIcon("stage_select_hover_" + (isAnim ? "0":"1"));
+            }
+            g2d.drawImage(hover, animRect.x,animRect.y, animRect.width, animRect.height,this);
         }
+        
+        if (!type.equals("cli")) {
+            Image homeIcon = ImgManager.loadIcon("home_Btn");
+            g2d.drawImage(homeIcon, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
+            Image resetLvlIcon = ImgManager.loadIcon("del_save_btn");
+            g2d.drawImage(resetLvlIcon, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
+        }
+        
+        }
+    
+    public void setHover(int x, int y) {
+        animRect = new Rectangle(x, y, 150, 150);
+        revalidate();
+        repaint();
     }
+    
+    public void setP2Hover(int x, int y) {
+        animP2Rect = new Rectangle(x, y, 150, 150);
+        revalidate();
+        repaint();
+    }
+}

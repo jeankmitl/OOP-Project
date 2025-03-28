@@ -89,8 +89,9 @@ public class GamePanel extends JPanel {
     
     private boolean isAnyUnitDragging = false;
     
-    protected int target,count_kill=0;
+    protected int target, count_kill=0;
     private boolean victory = false;
+    private String title = "";
     
     private final Rectangle homeBtn = new Rectangle(1180,15,75,75);
     private final Rectangle speedBtn = new Rectangle(BAR_X + CELL_WIDTH * COLS + 20, BAR_Y + 20, 
@@ -176,7 +177,7 @@ public class GamePanel extends JPanel {
         StageStats ss = summoner.getSTAGE_STATS();
         target = ss.getTarget();
         backgroundImage = ss.getBackground();
-        stage.setTitle(ss.getTitle());
+        title = ss.getTitle();
         
         units.clear();
         enemies.clear();
@@ -727,6 +728,8 @@ public class GamePanel extends JPanel {
         g.drawString(count_kill+" / "+target, 600, 35); // Display at top-left
         iconImage = ImgManager.loadIcon("target");
         g.drawImage(iconImage, 550, 5,40,40, null);
+        g.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
+        g.drawString(title, 400, 35);
         /////Count Enemy
         // frame operator
         for (int i = 0; i < COLS; i++) {
@@ -803,6 +806,8 @@ public class GamePanel extends JPanel {
         }
         isAnyUnitDragging = countDragging > 0;
         
+        // Here is 2-Player Bar
+        paint2PComp(g);
         // about information for unit_operator
         if (!isAnyUnitDragging) {
             g.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
@@ -850,14 +855,16 @@ public class GamePanel extends JPanel {
             }
         }
         //Back button
-        iconImage = ImgManager.loadIcon("blackLowOpacityBG");
-        g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
-        iconImage = ImgManager.loadIcon("exit_btn");
-        g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
-        
-        BufferedImage speedBtns = ImgManager.loadSprite("speed_123btn");
-        BufferedImage speedBtnImg = speedBtns.getSubimage(32 * GameLoop.getSpeedMode(), 0, 32, 32);
-        g.drawImage(speedBtnImg, speedBtn.x, speedBtn.y, speedBtn.width, speedBtn.height, null);
+        if (isAllowOn2Player()) {
+            iconImage = ImgManager.loadIcon("blackLowOpacityBG");
+            g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
+            iconImage = ImgManager.loadIcon("exit_btn");
+            g.drawImage(iconImage,homeBtn.x,homeBtn.y,homeBtn.width,homeBtn.height,this);
+
+            BufferedImage speedBtns = ImgManager.loadSprite("speed_123btn");
+            BufferedImage speedBtnImg = speedBtns.getSubimage(32 * GameLoop.getSpeedMode(), 0, 32, 32);
+            g.drawImage(speedBtnImg, speedBtn.x, speedBtn.y, speedBtn.width, speedBtn.height, null);
+        }
         
         
         if (DEBUG_MODE) {
@@ -866,6 +873,12 @@ public class GamePanel extends JPanel {
             g.drawString("FPS: " + GameLoop.getFps(), 10, 20);
             g.drawString("Thread: " + (Thread.activeCount() - OTHER_THREAD) + " else: " + OTHER_THREAD , 10, 45);
         }
+    }
+    
+    protected void paint2PComp(Graphics g) {}
+    
+    protected boolean isAllowOn2Player() {
+        return true;
     }
     
     public void addMouseListeners() {
@@ -884,7 +897,7 @@ public class GamePanel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (gameTimer.isRunning()) {
+                if (gameTimer.isRunning() && isAllowOn2Player()) {
                     if(homeBtn.contains(e.getPoint())){
                         int res = JOptionPane.showConfirmDialog(stage, "Do you want to leave during the game?",
                         "Leave Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);

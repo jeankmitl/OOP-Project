@@ -8,7 +8,6 @@ import Asset.ImgManager;
 import Main.GamePanel;
 import Main.LoadingScreen;
 import Main.StageSelector;
-import Main.VirtualStageSelector;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,6 +36,8 @@ import javax.swing.*;
  * @author anawi
  */
 public class CoOpFrame extends JFrame implements ActionListener {
+    
+    private final boolean isJoinNoConfirm = true;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
     private Socket socket;
@@ -226,6 +227,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                             startButton.setText("<Start>");
                             startButton.setEnabled(false);
                         });
+                        if (isJoinNoConfirm) startGame();
                     } catch (SocketException ex) {
                         System.out.println("Server stopped accepting connections.");
                         SwingUtilities.invokeLater(() -> {
@@ -258,7 +260,6 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     responseMsg(allMsg.toString());
                     allMsg.setLength(0);
                 } else {
-                    System.out.println("append");
                     allMsg.append(msg);
                     allMsg.append('\n');
                 }
@@ -308,6 +309,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     msgTextArea.append("---connected---\n");
                     setTestMsgEnabled(true);
                 });
+                if (isJoinNoConfirm) startGame();
             } catch (IOException ex) {
                 System.out.println("Cannot connect to server or server closed.");
                 SwingUtilities.invokeLater(() -> {
@@ -324,7 +326,17 @@ public class CoOpFrame extends JFrame implements ActionListener {
         return isServer;
     }
     
-    public void requestMsg(Properties properties) {
+    public void sendOne(String key, String str) {
+        Properties prop = new Properties();
+        prop.setProperty(key, str);
+        requestMsg(prop);
+    }
+    
+    public void send(Properties prop) {
+        requestMsg(prop);
+    }
+    
+    private void requestMsg(Properties properties) {
         StringWriter writer = new StringWriter();
         try {
             properties.store(writer, null);
@@ -345,11 +357,12 @@ public class CoOpFrame extends JFrame implements ActionListener {
         }
     }
     
-    private VirtualStageSelector vtStage;
-    private StageSelector stage;
+    private StageSelector stageServer;
+    private StageSelector stageClient;
     private GamePanel gamePanel;
     
     private void startGame() {
+        
         LoadingScreen loadingScreen = new LoadingScreen();
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
@@ -363,10 +376,9 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     System.out.println("Finished loading.");
                     loadingScreen.dispose();
                     if (isServer) {
-//                        stage = new StageSelector(CoOpFrame.this);
-                        stage.loadStage("St10");
+                        stageServer = new StageSelector("2p", CoOpFrame.this);
                     } else {
-//                        vtStage = new VirtualStageSelector(CoOpFrame.this);
+                        stageClient = new StageSelector("cli", CoOpFrame.this);
                     }
             }
         };
@@ -377,6 +389,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         String msgTest = properties.getProperty(CoKeys.MSG_TEST);
         String isReadyPlay = properties.getProperty(CoKeys.IS_READY_PLAY);
         String stageName = properties.getProperty(CoKeys.STAGE_NAME);
+        String hoverXY = properties.getProperty(CoKeys.HOVER_XY);
         
         SwingUtilities.invokeLater(() -> {
             if (msgTest != null) {
@@ -400,6 +413,27 @@ public class CoOpFrame extends JFrame implements ActionListener {
 //                } else {
 //                    vtStage.loadStage(stageName);
 //                }
+            }
+            if (hoverXY != null) {
+                String hoverXYs[] = hoverXY.split(" ");
+                int x = Integer.parseInt(hoverXYs[0]);
+                int y = Integer.parseInt(hoverXYs[1]);
+                if (isServer) {
+                    if (isYou) {
+                        stageServer.setHover(x, y);
+                    } else {
+                        stageServer.setP2Hover(x, y);
+                    }
+                } else {
+                    if (isYou) {
+                        stageClient.setHover(x, y);
+                    } else {
+                        stageClient.setP2Hover(x, y);
+                    }
+                }
+            }
+            if (stageName != null) {
+                stageClient.loadStage(stageName);
             }
         });
     }
