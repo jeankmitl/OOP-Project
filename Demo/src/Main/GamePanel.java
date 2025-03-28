@@ -155,9 +155,6 @@ public class GamePanel extends JPanel {
         repaint();
     }
     
-    private void runDebugMode() {
-        remainMana = 500;
-    }
     // </editor-fold>
     
     public static GamePanel getInstance(StageSelector stage, EnemySummoner summoner) {
@@ -185,14 +182,13 @@ public class GamePanel extends JPanel {
         vfxs.clear();
         unitTypes.clear();
         
-        remainMana = 50;
+        remainMana = (DEBUG_MODE) ? 500:50;
         selectUnitBefore();
         enemiesIsComingWait3.reset();
     }
     
     //run after setup GameLoop
     private void start() {
-        if (DEBUG_MODE) runDebugMode();
         
         new DWait(3, e -> {
             System.out.println("Enemies is coming!");
@@ -201,7 +197,7 @@ public class GamePanel extends JPanel {
         for (int i=0; i<ROWS; i++) {
             units.add(new Candles6(i, -1));
         }
-        if (getClass() != BossFightGamePanel.class) {
+        if (getClass() != BossFightGamePanel.class && getClass() != BossFightGamePanel2PlayerRough.class) {
             Audio.playMusic("dungeon_song_raid.wav");
         }
     }
@@ -720,7 +716,6 @@ public class GamePanel extends JPanel {
             g.drawImage(img, vfx.getX(), vfx.getY(), vfx.getWidth(), vfx.getHeight(), null);
         }
 
-
         ///
         g.setColor(new Color(0, 0, 0, 150));
         g.fillRect(BAR_X + 740, BAR_Y - 50, 116, 50);
@@ -778,6 +773,9 @@ public class GamePanel extends JPanel {
         iconImage = ImgManager.loadIcon("Recall");
         g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
         
+        // Here is 2-Player Bar
+        paint2PComp(g);
+
         int countDragging = 0;
         int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
         int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
@@ -843,8 +841,6 @@ public class GamePanel extends JPanel {
         }
         isAnyUnitDragging = countDragging > 0;
         
-        // Here is 2-Player Bar
-        paint2PComp(g);
         // about information for unit_operator
         if (!isAnyUnitDragging) {
             g.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));

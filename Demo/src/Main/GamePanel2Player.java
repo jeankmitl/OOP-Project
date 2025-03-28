@@ -77,7 +77,6 @@ public class GamePanel2Player extends GamePanel {
                     @Override
                     public void windowClosed(WindowEvent e) {
                         unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
-
                         UnitSelector unitSelector2P = new UnitSelector(stage, "p2");
                         unitSelector2P.addWindowListener(new WindowAdapter() {
                             @Override
@@ -110,8 +109,8 @@ public class GamePanel2Player extends GamePanel {
     @Override
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
         unitTypesP2.clear();
-        remainManaP2 = 500;
         super.resetGamePanel(stage, summoner);
+        remainManaP2 = remainMana;
     }
 
     @Override
@@ -165,7 +164,6 @@ public class GamePanel2Player extends GamePanel {
         }
         return true;
     }
-    
     
     @Override
     public void paint2PComp(Graphics g) {

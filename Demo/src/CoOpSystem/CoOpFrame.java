@@ -309,6 +309,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     msgTextArea.append("---connected---\n");
                     setTestMsgEnabled(true);
                 });
+                
                 if (isJoinNoConfirm) startGame();
             } catch (IOException ex) {
                 System.out.println("Cannot connect to server or server closed.");
