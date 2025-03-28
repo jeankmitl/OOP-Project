@@ -3,19 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Entities.Enemies;
-
-import DSystem.DWait;
 import DSystem.OTimer;
-import DSystem.OWait;
 import Main.BossFightGamePanel;
-import static Main.GamePanel.CELL_HEIGHT;
-import static Main.GamePanel.CELL_WIDTH;
-import static Main.GamePanel.GRID_OFFSET_X;
-import static Main.GamePanel.GRID_OFFSET_Y;
-import Main.Stages.StageBossFight;
-import static Main.UnitSelector.COLS;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,7 +16,7 @@ public class SongChinWu extends Enemy {
     private OTimer teleportTimer = new OTimer(5);
     private OTimer summonTimer = new OTimer(10);
     
-    public static enum State { WALK, STAND_WITH_SWORD, DROP_SWORD, STAND_NO_SWORD_MOTIVATED, STAND_NO_SWORD, SUMMON_ENEMY, SHOOT, FINAL_ATTACK }
+    public static enum State { WALK, STAND_WITH_SWORD, DROP_SWORD, STAND_NO_SWORD_MOTIVATED, STAND_NO_SWORD}
     private State state;
     private long stateStartTime;
     private final int targetX = 857; // Position for Stop walking
@@ -110,33 +99,9 @@ public class SongChinWu extends Enemy {
                 if (!game.theBlueSwordIsAlive && !game.theRedSwordIsAlive)
                     setState(State.STAND_NO_SWORD, game);
                     isDebuffed = true;
-                
-//                // Enemy Summon Logic (Every 10s)
-//                if (summonTimer.tick(10)) {
-//                    summonEnemies(game);
-//                }
-//
-//                // Teleportation Logic (Every 5s)
-//                if (teleportTimer.tick(5)) {
-//                    teleport();
-//                }
                 break;
                 
             case STAND_NO_SWORD:
-                // Do the same as STAND_NO_SWORD_MOTIVATED state
-//                if (summonTimer.tick(10)) {
-//                    summonEnemies(game);
-//                }
-//
-//                if (teleportTimer.tick(5)) {
-//                    teleport();
-//                }
-                break;
-                
-            case SHOOT:
-                break;
-                
-            case FINAL_ATTACK:
                 break;
         }
     }
@@ -159,12 +124,6 @@ public class SongChinWu extends Enemy {
                 break;
             case STAND_NO_SWORD:
                 actionIdle = spriteSheets.getActionIdleNoSword();
-                break;
-            case SHOOT:
-                actionIdle = spriteSheets.getActionIdleNoSwordMotivated();
-                break;
-            case FINAL_ATTACK:
-                actionIdle = spriteSheets.getActionFinalAtk();
                 break;
         }
     }

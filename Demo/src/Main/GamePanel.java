@@ -448,6 +448,10 @@ public class GamePanel extends JPanel {
         while (enemyIterator.hasNext()) {
             Enemy enemy = enemyIterator.next();
             
+            if (enemy instanceof IShowSpeed) {
+                ((IShowSpeed) enemy).update();
+            }
+            
             boolean stop = false;
             for (Unit unit : units) {
                 if (unit.getBounds().intersects(enemy.getBounds())) {
@@ -467,7 +471,7 @@ public class GamePanel extends JPanel {
                                 if (redHood.getHealth() + 10 > 181) {
                                     redHood.setHealth(181);
                                 } else {
-                                    redHood.setHealth(redHood.getHealth()+5);
+                                    redHood.setHealth(redHood.getHealth()+10);
                                 }
                             // -----------------------------------------------------------
                             }

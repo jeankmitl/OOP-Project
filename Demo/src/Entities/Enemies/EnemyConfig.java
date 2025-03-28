@@ -30,6 +30,7 @@ public interface EnemyConfig {
     EnemySpriteSheets SONG_CHIN_WU_SPRITE = new SongChinWuSpriteSheets("SongChinWu_idle_no_sword", "SongChinWu_idle", "SongChinWu_idle_no_sword_motivated", "ninja-att", "ninja-att", "SongChinWu_DropSword", "SongChinWu_walk");  // <--------- SongChinWu beta
     EnemySpriteSheets THE_RED_SWORD_SPRITE = new EnemySpriteSheets("SongChinWu_TheRedSword", "SongChinWu_TheRedSword");
     EnemySpriteSheets The_BLUE_SWORD_SPRITE = new EnemySpriteSheets("SongChinWu_TheBlueSword", "SongChinWu_TheBlueSword");
+    EnemySpriteSheets ISHOWSPEED_SPRITE = new IShowSpeedSpriteSheets("IShowSpeed_normal_walk", "IShowSpeed_normal_atk", "IShowSpeed_rage_walk", "IShowSpeed_rage_atk");
     
 
     // All Unit stats 💡
@@ -45,4 +46,5 @@ public interface EnemyConfig {
     EnemyStats SONG_CHIN_WU_STATS = new EnemyStats(SONG_CHIN_WU_SPRITE, 36969, 100, 1, WALK_SLOW, NORMAL); // <-------- SongChinWu beta
     EnemyStats THE_RED_SWORD = new EnemyStats(THE_RED_SWORD_SPRITE, 6900, 0, 1, 0, NORMAL);
     EnemyStats THE_BLUE_SWORD = new EnemyStats(The_BLUE_SWORD_SPRITE, 6900, 0, 1, 0, NORMAL);
+    EnemyStats ISHOWSPEED_STATS = new EnemyStats(ISHOWSPEED_SPRITE, 340, 100, 1, WALK_SLOW, NORMAL);
 }

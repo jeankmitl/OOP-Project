@@ -19,6 +19,7 @@ import Entities.Enemies.Bandit;
 import Entities.Enemies.BanditV2;
 import Entities.Enemies.BanditV3;
 import Entities.Enemies.Enemy;
+import Entities.Enemies.IShowSpeed;
 import Entities.Enemies.LittleRedHood;
 import Entities.Enemies.Ninja;
 import Entities.Enemies.RCBomber;
@@ -115,14 +116,15 @@ public class BossFightGamePanel extends GamePanel {
     
     public Enemy getRandomEnemy() {
         List<Class<? extends Enemy>> enemyTypes = Arrays.asList(
-                RCBomber.class,
-                Bandit.class,
-                BanditV2.class,
-                BanditV3.class,
-                Ninja.class,
-                LittleRedHood.class,
-                RobotMonoWheel.class,
-                Sorcerer.class
+//                RCBomber.class,
+//                Bandit.class,
+//                BanditV2.class,
+//                BanditV3.class,
+//                Ninja.class,
+//                LittleRedHood.class,
+//                RobotMonoWheel.class,
+//                Sorcerer.class,
+                IShowSpeed.class
         );
 
         Random random = new Random();
@@ -147,9 +149,6 @@ public class BossFightGamePanel extends GamePanel {
         int currentRow = boss.getRow();
         int[] rows = {currentRow - 1, currentRow, currentRow + 1};
         for (int row : rows) {
-            if (row < 0 || row > 4) {
-                continue; // Prevent out-of-bounds
-            }
             Enemy summonedEnemy = getRandomEnemy();
             if (summonedEnemy != null) {
                 spawnOneEnemyFixedPos(summonedEnemy, summonCol, row);
@@ -170,7 +169,11 @@ public class BossFightGamePanel extends GamePanel {
         Iterator<Enemy> enemyIterator = enemies.iterator();
         while (enemyIterator.hasNext()) {
             Enemy enemy = enemyIterator.next();
-
+            
+            if (enemy instanceof IShowSpeed) {
+                ((IShowSpeed) enemy).update();
+            }
+            
             // ----------------- SongChinWu Logic --------------------------
             if (enemy instanceof SongChinWu) {
                 ((SongChinWu) enemy).update(this);
@@ -349,6 +352,5 @@ public class BossFightGamePanel extends GamePanel {
         hasUsedSummonSwords = true;
         theRedSwordIsAlive = false;
         theBlueSwordIsAlive = false;
-        remainMana = 500;
     }
 }
