@@ -90,7 +90,7 @@ public class GamePanel extends JPanel {
     private boolean isAnyUnitDragging = false;
     
     protected int target, count_kill=0;
-    private boolean victory = false;
+    private boolean victory = false,Ready = false,Set = false,Go = false;
     private String title = "";
     
     private final Rectangle homeBtn = new Rectangle(1180,15,75,75);
@@ -187,6 +187,7 @@ public class GamePanel extends JPanel {
         
         remainMana = 50;
         selectUnitBefore();
+        enemiesIsComingWait3.reset();
     }
     
     //run after setup GameLoop
@@ -275,6 +276,7 @@ public class GamePanel extends JPanel {
 
         if (enemiesIsComingWait3.tick(deltaTime)) {
             System.out.println("Show Text: Ready. Set. Go!");
+            Ready = true;
 //            enemiesIsComingWait3.reset();  // like OTimer but use OTimer better
         }
         updateCooldown(deltaTime);
@@ -620,7 +622,7 @@ public class GamePanel extends JPanel {
             g.fillRect(x, y, (int)(((double)et.getHealth()/et.getMaxHealth())*CELL_WIDTH), barHeight);
         }
     }
-    
+        
     private void runDynamicHover(int row, int col, double leap) {
         int gridX = col * CELL_WIDTH + GRID_OFFSET_X;
         int gridY = row * CELL_HEIGHT + GRID_OFFSET_Y;
@@ -740,6 +742,32 @@ public class GamePanel extends JPanel {
         g.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
         g.drawString(title, 400, 35);
         /////Count Enemy
+        if(Ready){
+            iconImage = ImgManager.loadIcon("ready");
+            g.drawImage(iconImage, 380, 220,380,200, null);
+            DWait time = new DWait(1, e->{
+                Ready = false;
+                Set = true;
+            });
+            time.start();
+        }
+        if(Set){
+            iconImage = ImgManager.loadIcon("set");
+            g.drawImage(iconImage, 380, 220,380,200, null);
+            DWait time = new DWait(1, e->{
+                Set = false;
+                Go = true;
+            });
+            time.start();
+        }
+        if(Go){
+            iconImage = ImgManager.loadIcon("go");
+            g.drawImage(iconImage, 380, 220,380,200, null);
+            DWait time = new DWait(1, e->{
+                Go = false;
+            });
+            time.start();
+        }
         // frame operator
         for (int i = 0; i < COLS; i++) {
             iconImage = ImgManager.loadIcon("frame_op1");
