@@ -11,8 +11,8 @@ public abstract class Audio {
     private static boolean isMusicEnable = true;
     private static Clip musicClip;
     private static String musicFile = "";
-    private static FloatControl musicVolumeControl;
-    public static float musicVolume = 0.5f;
+    private static FloatControl musicVolumeControl, soundVolumeControl;
+    public static float musicVolume = 0.5f, soundVolume = 0.5f;
     
     public static void play(String name) {
         if (!isSoundEnable) return;
@@ -28,6 +28,8 @@ public abstract class Audio {
                     Clip clip = AudioSystem.getClip();
                     clip.open(sound);
                     clip.start();
+                    soundVolumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    setSoundVolume(soundVolume);
                     clip.addLineListener(event -> {
                         if (event.getType() == LineEvent.Type.STOP) {
                             clip.close();
@@ -63,7 +65,7 @@ public abstract class Audio {
             e.printStackTrace();
         }
     }
-    
+
     public static void stopMusic() {
         if (musicClip != null && musicClip.isRunning()) {
             musicFile = "";
@@ -93,6 +95,14 @@ public abstract class Audio {
             float dB = 20f * (float) Math.log10(volume);
             musicVolumeControl.setValue(dB);
             musicVolume = volume;
+        }
+    }
+
+    public static void setSoundVolume(float volume) {
+        if (soundVolumeControl != null) {
+            float dB = 20f * (float) Math.log10(volume);
+            soundVolumeControl.setValue(dB);
+            soundVolume = volume;
         }
     }
 }
