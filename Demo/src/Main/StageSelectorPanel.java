@@ -130,6 +130,7 @@ public class StageSelectorPanel extends JPanel{
                     }
                     if (homeBtn.contains(e.getPoint())||resetBtn.contains(e.getPoint())) {
                         isAnySelect = true;
+                        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     }
                 }
                 if (isAnySelect) {
