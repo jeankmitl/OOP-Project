@@ -1,13 +1,12 @@
 package Main;
 
-import Asset.Audio;
-import Asset.AudioName;
-import Asset.ImgManager;
+import Asset.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
+import java.io.IOException;
 import javax.imageio.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 public class ConfigScreen extends JFrame {
 
@@ -15,12 +14,13 @@ public class ConfigScreen extends JFrame {
     private Image background, musicImg, soundImg;
     private boolean isButtonHovered = false;
     private ConfigScreenPanel configScreenPanel;
+    private JSlider volumeSlider;
 
     public ConfigScreen() {
 
         homeBtn = new Rectangle(1170, 15, 75, 75);
-        musicBtn = new Rectangle(462, 180, 160, 160);
-        soundBtn = new Rectangle(652, 180, 160, 160);
+        musicBtn = new Rectangle(462, 220, 160, 160);
+        soundBtn = new Rectangle(652, 220, 160, 160);
         configScreenPanel = new ConfigScreenPanel();
 
         try {
@@ -34,7 +34,21 @@ public class ConfigScreen extends JFrame {
             System.out.println("Wrong image path.");
         }
 
+        configScreenPanel.setLayout(null);
         add(configScreenPanel);
+
+        volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int) (Audio.musicVolume * 100));
+        int sliderY = musicBtn.y + musicBtn.height + 10;
+        volumeSlider.setBounds(musicBtn.x, sliderY, musicBtn.width, 30);
+        configScreenPanel.add(volumeSlider);
+
+        volumeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                float volume = volumeSlider.getValue() / 100f;
+                Audio.setMusicVolume(volume);
+            }
+        });
 
         setTitle("Config");
         setSize(1264, 681);
