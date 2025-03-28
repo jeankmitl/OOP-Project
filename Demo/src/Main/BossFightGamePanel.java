@@ -120,7 +120,6 @@ public class BossFightGamePanel extends GamePanel {
                 Bandit.class,
                 BanditV2.class,
                 BanditV3.class,
-                Ninja.class,
                 LittleRedHood.class,
                 RobotMonoWheel.class,
                 Sorcerer.class,

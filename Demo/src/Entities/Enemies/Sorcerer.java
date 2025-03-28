@@ -9,7 +9,7 @@ public class Sorcerer extends Enemy {
 
     public Sorcerer(double x, int row) {
         super(x, row, getENEMY_STATS());
-        abilityTimer = new OTimer(20); // Steal mana every 20 seconds
+        abilityTimer = new OTimer(30); // Steal mana every 20 seconds
     }
 
     public static EnemyStats getENEMY_STATS() {

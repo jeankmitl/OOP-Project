@@ -17,6 +17,6 @@ public class KnightWalker extends Enemy {
     public static EnemyStats getENEMY_STATS() {
         return EnemyConfig.SONG_CHIN_WU_STATS;
     }
-
     
+        
 }
