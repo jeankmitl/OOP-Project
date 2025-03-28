@@ -127,6 +127,9 @@ public class StageSelectorPanel extends JPanel{
                             break;
                         }
                     }
+                    if (homeBtn.contains(e.getPoint())||resetBtn.contains(e.getPoint())) {
+                        isAnySelect = true;
+                    }
                 }
                 if (isAnySelect) {
                     if (!isButtonHovered) {
