@@ -79,6 +79,7 @@ public class StageSelectorPanel extends JPanel{
                     stageSelector.dispose();
                     selectStage("Main");
                 } else if (resetBtn.contains(e.getPoint())){
+                    Audio.play(AudioName.BUTTON_CLICK);
                     if (cof != null) {
                         JOptionPane.showMessageDialog(frame, 
                                 "Sorry, you can't return go back in Socket Mode", "Socket Mode", JOptionPane.WARNING_MESSAGE);

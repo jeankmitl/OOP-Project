@@ -1,13 +1,10 @@
 package Main;
 
-import Asset.Audio;
-import Asset.AudioName;
 import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        Audio.play(AudioName.BUTTON_CLICK);
         LoadingScreen loadingScreen = new LoadingScreen();
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
             @Override

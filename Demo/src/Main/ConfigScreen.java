@@ -66,6 +66,7 @@ public class ConfigScreen extends JFrame {
                     worker.execute();
                 }
                 else if (musicBtn.contains(e.getPoint())) {
+                    Audio.play(AudioName.BUTTON_CLICK);
                     if (Audio.isMusicEnable()) {
                         Audio.setMusicEnable(false);
                         Audio.stopMusic();
@@ -79,6 +80,7 @@ public class ConfigScreen extends JFrame {
                     configScreenPanel.repaint();
                 }
                 else if (soundBtn.contains(e.getPoint())) {
+                    Audio.play(AudioName.BUTTON_CLICK);
                     if (Audio.isSoundEnable()) {
                         Audio.setSoundEnable(false);
                         soundImg = ImgManager.loadIcon("mute_sound");

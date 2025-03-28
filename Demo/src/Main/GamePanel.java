@@ -100,8 +100,6 @@ public class GamePanel extends JPanel {
     private EnemySummoner summoner;
     //same as: public awake()
 
-    private GamePanel game;
-
     protected GamePanel(StageSelector stage, EnemySummoner summoner) {
         /**
          * Awake. = for create Object w/ 'new'
@@ -115,7 +113,7 @@ public class GamePanel extends JPanel {
         bullets = new ArrayList<>();
         vfxs = new ArrayList<>();
         unitTypes = new ArrayList<>();
-        
+
         addMouseListeners();
         GameLoop.setLateListener((d) -> lateUpdate());
         gameLoop = GameLoop.getInstance();
@@ -249,6 +247,7 @@ public class GamePanel extends JPanel {
             if (summoner instanceof stage8){save_Progress(8);}
             if (summoner instanceof StageBossFight){save_Progress(9);}
             if (summoner instanceof stage_beta){save_Progress(10);}
+            Audio.play(AudioName.BUTTON_CLICK);
             WinScreen winScreen = new WinScreen();
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
@@ -495,6 +494,7 @@ public class GamePanel extends JPanel {
             }
 
             if (enemy.getX() + GRID_OFFSET_X <= 50) {
+                Audio.play(AudioName.BUTTON_CLICK);
                 LoadingScreen loadingScreen = new LoadingScreen();
                 SwingWorker<Void, Void> worker = new SwingWorker<>() {
                     @Override
@@ -935,7 +935,8 @@ public class GamePanel extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (gameTimer.isRunning() && isAllowOn2Player()) {
-                    if(homeBtn.contains(e.getPoint())){
+                    if (homeBtn.contains(e.getPoint())) {
+                        Audio.play(AudioName.BUTTON_CLICK);
                         int res = JOptionPane.showConfirmDialog(stage, "Do you want to leave during the game?",
                         "Leave Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (res == JOptionPane.YES_OPTION) {
@@ -958,7 +959,8 @@ public class GamePanel extends JPanel {
                             worker.execute();
                         }
                         return;
-                    } else if (speedBtn.contains(e.getPoint())) {
+                    }
+                    else if (speedBtn.contains(e.getPoint())) {
                         if (GameLoop.getSpeedMode() >= 2) {
                             GameLoop.setSpeedMode(0);
                         } else {
