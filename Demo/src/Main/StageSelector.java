@@ -12,6 +12,7 @@ import javax.swing.*;
 public class StageSelector extends JFrame {
     private StageSelectorPanel panel;
     private GamePanel game;
+    private GamePanel2Player game2P;
     private String type;
     private CoOpFrame cof;
 
@@ -41,7 +42,7 @@ public class StageSelector extends JFrame {
         setSize(1264, 681);
         setResizable(false);
         setLocationRelativeTo(null);
-        setUndecorated(true);
+//        setUndecorated(true);
         setVisible(true);
         
         Audio.playMusic("mainMenu");
@@ -92,7 +93,9 @@ public class StageSelector extends JFrame {
                 default -> throw new AssertionError();
             }
             if (type.equals("2p") || type.equals("cli")) {
-                game = GamePanel2Player.getInstance(this, summoner, type, cof);
+                game2P = GamePanel2Player.getInstance(this, summoner, type, cof);
+                game = game2P;
+                if (cof != null) cof.invoke(CoKeys.GET_GAME_PANEL);
             } else {
                 game = GamePanel.getInstance(this, summoner);
             }
@@ -101,6 +104,11 @@ public class StageSelector extends JFrame {
 
         revalidate();
         repaint();
+    }
+    
+    // All of this is for Socket
+    public GamePanel2Player getGamePanel2Player() {
+        return game2P;
     }
     
     public void setHover(int x, int y) {

@@ -96,7 +96,7 @@ public class GamePanel extends JPanel {
     private final Rectangle homeBtn = new Rectangle(1180,15,75,75);
     private final Rectangle speedBtn = new Rectangle(BAR_X + CELL_WIDTH * COLS + 20, BAR_Y + 20, 
                 CELL_WIDTH / 2 + 10, CELL_HEIGHT / 2 + 10);
-    private StageSelector stage;
+    protected StageSelector stage;
     private EnemySummoner summoner;
     //same as: public awake()
 
@@ -186,7 +186,7 @@ public class GamePanel extends JPanel {
     }
     
     //run after setup GameLoop
-    private void start() {
+    protected void start() {
         
         new DWait(3, e -> {
             System.out.println("Enemies is coming!");
@@ -362,7 +362,7 @@ public class GamePanel extends JPanel {
            }
     }
     
-    public void spawnEnemy(Enemy enemy, int delay) {
+    public void spawnBossOnly(Enemy enemy, int delay) {
         new DWait(delay, e->{
             enemies.add(enemy);
         }).start();
@@ -696,7 +696,11 @@ public class GamePanel extends JPanel {
         for (int i=0; i<enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
             BufferedImage img = enemy.getBufferedImage();
-            g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            if (!(enemy instanceof KnightWalker)) {
+                g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
+            } else {
+                g.drawImage(img, enemy.getX() + GRID_OFFSET_X-69, enemy.getY() + GRID_OFFSET_Y-69, GamePanel.CELL_HEIGHT + 70, GamePanel.CELL_WIDTH + 70, null);
+            }
             if (mouseX >= enemy.getX() + GRID_OFFSET_X && mouseX <= enemy.getX() + RENDER_X
                     && mouseY >= enemy.getY() + GRID_OFFSET_Y && mouseY <= enemy.getY() + RENDER_Y) {
                 paintHealthBar(g, enemy);
@@ -710,7 +714,12 @@ public class GamePanel extends JPanel {
             Bullet bullet = bullets.get(i);
             BufferedImage img = bullet.getBufferedImage();
             if (img != null) {
-                g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, 64, 64, null);
+                if (bullet instanceof Slash) {
+                    g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, CELL_HEIGHT+30, CELL_HEIGHT+30, null);
+                } else {
+                    g.drawImage(img, bullet.getX() - 40, bullet.getY() - 20, 64, 64, null);
+
+                }
             }
         }
         
@@ -781,8 +790,8 @@ public class GamePanel extends JPanel {
         paint2PComp(g);
 
         int countDragging = 0;
-        int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
-        int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
+        int col = getPlaceCol();
+        int row = getPlaceRow();
         if (draggingRecall) {
             runDynamicHover(row, col, 0.3);
             if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
@@ -912,6 +921,15 @@ public class GamePanel extends JPanel {
         }
     }
     
+    public int getPlaceCol() {
+        return (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
+    }
+    
+    public int getPlaceRow() {
+        return (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
+    }
+    
+    // fore 2-Players
     protected void paint2PComp(Graphics g) {}
     
     protected boolean isAllowOn2Player() {

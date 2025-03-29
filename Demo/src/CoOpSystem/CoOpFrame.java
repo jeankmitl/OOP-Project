@@ -4,16 +4,15 @@
  */
 package CoOpSystem;
 
-import Asset.ImgManager;
-import Main.GamePanel;
+import Main.GamePanel2Player;
 import Main.LoadingScreen;
 import Main.StageSelector;
+import Main.UnitSelector;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -38,6 +37,7 @@ import javax.swing.*;
 public class CoOpFrame extends JFrame implements ActionListener {
     
     private final boolean isJoinNoConfirm = true;
+    private final boolean DEBUG_PRINT = true;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
     private Socket socket;
@@ -197,6 +197,12 @@ public class CoOpFrame extends JFrame implements ActionListener {
         msgTextField.setEnabled(enabled);
         startButton.setEnabled(enabled);
     }
+    
+    private void debugPrint(boolean isYou, String msg) {
+        if (DEBUG_PRINT) {
+            System.out.println(((isServer) ? "Server":"Client") + ((isYou) ? " (You)":"")  + ": " + msg);
+        }
+    }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Backend Server/Client">
@@ -327,6 +333,10 @@ public class CoOpFrame extends JFrame implements ActionListener {
         return isServer;
     }
     
+    public void invoke(String key) {
+        this.sendOne(key, "");
+    }
+    
     public void sendOne(String key, String str) {
         Properties prop = new Properties();
         prop.setProperty(key, str);
@@ -358,9 +368,9 @@ public class CoOpFrame extends JFrame implements ActionListener {
         }
     }
     
-    private StageSelector stageServer;
-    private StageSelector stageClient;
-    private GamePanel gamePanel;
+    private StageSelector stage;
+    private GamePanel2Player gamePanel;
+    private UnitSelector unitSelector;
     
     private void startGame() {
         
@@ -377,20 +387,31 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     System.out.println("Finished loading.");
                     loadingScreen.dispose();
                     if (isServer) {
-                        stageServer = new StageSelector("2p", CoOpFrame.this);
+                        stage = new StageSelector("2p", CoOpFrame.this);
                     } else {
-                        stageClient = new StageSelector("cli", CoOpFrame.this);
+                        stage = new StageSelector("cli", CoOpFrame.this);
                     }
             }
         };
         worker.execute();
     }
     
-    private void processMsg(Properties properties, boolean isYou) {
-        String msgTest = properties.getProperty(CoKeys.MSG_TEST);
-        String isReadyPlay = properties.getProperty(CoKeys.IS_READY_PLAY);
-        String stageName = properties.getProperty(CoKeys.STAGE_NAME);
-        String hoverXY = properties.getProperty(CoKeys.HOVER_XY);
+    private void processMsg(Properties prop, boolean isYou) {
+        boolean isForCli= !isServer && !isYou;
+        boolean isForSvr = isServer && !isYou;
+        
+        String msgTest = prop.getProperty(CoKeys.MSG_TEST);
+        String isReadyPlay = prop.getProperty(CoKeys.IS_READY_PLAY);
+        String stageName = prop.getProperty(CoKeys.STAGE_NAME);
+        String hoverXY = prop.getProperty(CoKeys.HOVER_XY);
+        
+        String getGamePanel = prop.getProperty(CoKeys.GET_GAME_PANEL);
+        String getUnitSelector = prop.getProperty(CoKeys.GET_UNIT_SELECTOR);
+        
+        String readyUnitSelector = prop.getProperty(CoKeys.READY_UNIT_SELECTOR);
+        String setP2Unit = prop.getProperty(CoKeys.SET_P2_UNIT);
+        String startGame = prop.getProperty(CoKeys.START_GAME);
+        
         
         SwingUtilities.invokeLater(() -> {
             if (msgTest != null) {
@@ -407,34 +428,73 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     }
                 }
             }
-            if (stageName != null) {
-                System.out.println("Hellooosadfpja");
-//                if (isServer) {
-//                    gamePanel = stage.getGamePanel();
-//                } else {
-//                    vtStage.loadStage(stageName);
-//                }
-            }
             if (hoverXY != null) {
                 String hoverXYs[] = hoverXY.split(" ");
                 int x = Integer.parseInt(hoverXYs[0]);
                 int y = Integer.parseInt(hoverXYs[1]);
-                if (isServer) {
-                    if (isYou) {
-                        stageServer.setHover(x, y);
-                    } else {
-                        stageServer.setP2Hover(x, y);
-                    }
+                if (isYou) {
+                    stage.setHover(x, y);
                 } else {
-                    if (isYou) {
-                        stageClient.setHover(x, y);
-                    } else {
-                        stageClient.setP2Hover(x, y);
-                    }
+                    stage.setP2Hover(x, y);
+                }
+            }
+            if (getGamePanel != null) {
+                if (isYou) {
+                    gamePanel = stage.getGamePanel2Player();
+                    if (gamePanel != null) debugPrint(isYou, "getGamePanel!");
                 }
             }
             if (stageName != null) {
-                stageClient.loadStage(stageName);
+                if (!isServer) {
+                    stage.loadStage(stageName);
+                }
+            }
+            // UnitSelector
+            if (getUnitSelector != null) {
+                if (isYou) {
+                    unitSelector = gamePanel.getUnitSelectorSocket();
+                    if (unitSelector != null) debugPrint(isYou, "getStageSelector!");
+                }
+            }
+            if (readyUnitSelector != null) {
+                if (isForSvr) {
+                    unitSelector.cliReady();
+                }
+            } 
+            if (setP2Unit != null) {
+                debugPrint(isYou, "Should set P2 for Server");
+                debugPrint(isYou, setP2Unit);
+                if (!isYou) {
+                    gamePanel.setP2Unit(setP2Unit);
+                }
+            }
+            if (startGame != null) {
+                debugPrint(isYou, "Start Game");
+                gamePanel.startGameLoop();
+                if (isServer) {
+                    gamePanel.summonEnemies();
+                }
+            }
+            // GamePanel2Player
+            final String placeXYStr;
+            if ((placeXYStr = prop.getProperty(CoKeys.BOTH_PLACE_XY)) != null) {
+                String[] placeXYStrSplit = placeXYStr.split(",");
+                int placeX = Integer.parseInt(placeXYStrSplit[0]);
+                int placeY = Integer.parseInt(placeXYStrSplit[1]);
+                
+                if (!isYou) {
+                    gamePanel.coOp.updateP2PlaceXY(placeX, placeY);
+                }
+            }
+            final String allUnitsName;
+            final String allUnitsRowCol;
+            final String allUnitsHealth;
+            if ((allUnitsName = prop.getProperty(CoKeys.ALL_UNITS_NAME)) != null
+                    && (allUnitsRowCol = prop.getProperty(CoKeys.ALL_UNITS_ROWCOL)) != null
+                    && (allUnitsHealth = prop.getProperty(CoKeys.ALL_UNITS_HEALTH)) != null) {
+                if (isForCli) {
+                    gamePanel.coOp.setUnits(allUnitsName, allUnitsRowCol, allUnitsHealth);
+                }
             }
         });
     }

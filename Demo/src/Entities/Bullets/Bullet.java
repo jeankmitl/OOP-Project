@@ -48,8 +48,14 @@ public abstract class Bullet {
     }
 
     public BufferedImage getBufferedImage() {
-        if (spriteSheet == null) return null;
-        return spriteSheet.getSubimage(currentFrame * frame_Width, 0, frame_Width, frame_Hight);
+        if (spriteSheet == null) {
+            return null;
+        }
+
+        int maxFrames = spriteSheet.getWidth() / frame_Width;  // Total frames in sheet
+        int safeFrame = Math.min(currentFrame, maxFrames - 1); // Ensure valid frame index
+
+        return spriteSheet.getSubimage(safeFrame * frame_Width, 0, frame_Width, frame_Hight);
     }
 
     public void updateFrame() {
@@ -62,6 +68,14 @@ public abstract class Bullet {
     
     public VFX getHitVfx() {
         return new VFX(getX() - GRID_OFFSET_X, getY() - GRID_OFFSET_Y - 40, "bone_hit");
+    }
+
+    public void setFrame_Width(int frame_Width) {
+        this.frame_Width = frame_Width;
+    }
+
+    public void setFrame_Hight(int frame_Hight) {
+        this.frame_Hight = frame_Hight;
     }
 
 }

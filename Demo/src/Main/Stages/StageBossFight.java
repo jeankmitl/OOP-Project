@@ -33,7 +33,7 @@ public class StageBossFight implements EnemySummoner {
         start = new DWait(7, e -> {//2
             System.out.println("The Last Fight is BEGIN!");
             boss = new SongChinWu(1300-GRID_OFFSET_X, 2);
-            game.spawnEnemy(boss, 2); //1
+            game.spawnBossOnly(boss, 2); //1
             
             Audio.playMusic(AudioName.BOSS_THEME);
         });

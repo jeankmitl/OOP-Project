@@ -8,6 +8,7 @@ import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
 import Asset.StringFormatter;
+import CoOpSystem.CoOpFrame;
 import Entities.Units.*;
 import Main.SaveGame;
 import Main.UnitType;
@@ -37,14 +38,14 @@ import javax.swing.border.BevelBorder;
  * @author anawi
  */
 public class UnitSelector extends JDialog {
-    private final List<UnitType> unitTypes = new ArrayList<>();
+    private static final List<UnitType> unitTypes = new ArrayList<>();
     private final List<UnitLabelBox> unitChosens = new ArrayList<>();
     private final JPanel unitPanelList, unitChosenPanelList, operatorPanel, unitStatsPanel, optionsPanel;
     private final JPanel leftRightPanel, upDownPanel;
     private final BGPreviewLabel bgPreviewLabel;
     private final UnitStatLabel healthStatLabel, atkStatLabel, atkSpeedLabel, cooldownLabel;
     private final UnitDescription unitDescription;
-    private final JLabel unitNameLabel, roleLabel, selectorTypeLabel, warnLabel;
+    private final JLabel unitNameLabel, roleLabel, selectorTypeLabel, warnLabel, warnNotReadyLabel;
     private final JButton goButton;
     
     public static final int CELL_WIDTH = 95;
@@ -58,13 +59,21 @@ public class UnitSelector extends JDialog {
     private SaveGame progress = null;
     protected final boolean DEBUG_MODE = true; //<----- Open on this
 
+    private CoOpFrame cof;
+    private boolean isCliReady = false;
+    
     
     public UnitSelector(JFrame parent) {
-        this(parent, "");
+        this(parent, "", null);
+    }
+    
+    public UnitSelector(JFrame parent, String type) {
+        this(parent, type, null);
     }
 
-    public UnitSelector(JFrame parent, String type) {
+    public UnitSelector(JFrame parent, String type, CoOpFrame cof) {
         super(parent);
+        this.cof = cof;
         this.type = type;
 
         ImageIcon bgPreviewImg = new ImageIcon(ImgManager.loadIcon("bg_for_preview"));
@@ -107,6 +116,7 @@ public class UnitSelector extends JDialog {
         roleLabel = new JLabel("role: ");
         selectorTypeLabel = new JLabel();
         warnLabel = new JLabel("Need at least 3 units");
+        warnNotReadyLabel = new JLabel(" / Client is not Ready");
         goButton = new JButton("Go!");
         healthStatLabel = new UnitStatLabel("Health", 1000);
         atkStatLabel = new UnitStatLabel("Atk", 200);
@@ -135,15 +145,25 @@ public class UnitSelector extends JDialog {
         goButton.setEnabled(false);
         goButton.setPreferredSize(new Dimension(100, 50));
         goButton.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));
+        
         selectorTypeLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
         selectorTypeLabel.setForeground(Color.white);
         warnLabel.setForeground(Color.lightGray);
+        warnNotReadyLabel.setForeground(Color.lightGray);
         switch (type) {
             case "p1":
                 selectorTypeLabel.setText("Player 1: ");
                 break;
             case "p2":
                 selectorTypeLabel.setText("Player 2: ");
+                break;
+            case "cli":
+                selectorTypeLabel.setText("Client");
+                goButton.setText("Ready!");
+                break;
+            case "server":
+                selectorTypeLabel.setText("Server");
+                goButton.setText("<Go>");
                 break;
         }
 
@@ -192,7 +212,9 @@ public class UnitSelector extends JDialog {
         
         optionsPanel.add(selectorTypeLabel);
         optionsPanel.add(goButton);
+//        optionsPanel.add((type.equals("cli"))? readyCliButton : goButton);
         optionsPanel.add(warnLabel);
+        if (type.equals("server")) optionsPanel.add(warnNotReadyLabel);
         goButton.addActionListener(new ButtonListener());
         
         setTitle("Select Unit");
@@ -211,6 +233,7 @@ public class UnitSelector extends JDialog {
 //        new UnitSelector();
 //    }
     private void loader(SaveGame progress){
+        unitTypes.clear();
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
@@ -244,12 +267,11 @@ public class UnitSelector extends JDialog {
             unitTypes.add(new UnitType(Ghost.class));
         }
     }
+    
 
     private void updateAnimation() {
-
         bgPreviewLabel.updateFrame();
         repaint();
-
     }
 
     private void updateFPS() {
@@ -269,8 +291,16 @@ public class UnitSelector extends JDialog {
         }
         if (unitChosens.size() >= 3) {
             goButton.setBackground(Color.gray);
-            goButton.setEnabled(true);
-            warnLabel.setText("                                   ");
+            if (cof != null && type.equals("server")) {
+                if (isCliReady) {
+                    goButton.setEnabled(true);
+                }
+            } else {
+                goButton.setEnabled(true);
+            }
+            
+            warnLabel.setText(type.equals("server") ? 
+                    "     ":"                                   ");
         } else {
             goButton.setEnabled(false);
             warnLabel.setText("Need at least 3 units");
@@ -284,9 +314,13 @@ public class UnitSelector extends JDialog {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource().equals(goButton)) {
                 if (unitChosens.size() >= 3) {
-                    System.out.println("Let's go");
-//                    getResultUnits();
-                    dispose();
+                    if (cof != null && type.equals("server")) {
+                        if (isCliReady) {
+                            dispose();
+                        }
+                    } else {
+                        dispose();
+                    }
                 } else {
                     System.out.println("You need to have Units at least 3");
                 }
@@ -294,12 +328,44 @@ public class UnitSelector extends JDialog {
         }
     }
     
+    // PUBLIC use
     public List<UnitType> getResultUnits() {
         List<UnitType> unitTypes = new ArrayList<>();
         for (UnitLabelBox ulb: unitChosens) {
             unitTypes.add(ulb.getUnitType());
         }
         return unitTypes;
+    }
+    
+    //for Socket
+    public static List<UnitType> getAllUnitTypes() {
+        return unitTypes;
+    }
+    
+    public static UnitType getUnitTypeFromName(String name) {
+        for (UnitType unitType: unitTypes) {
+            if (unitType.getClassName().equals(name)) {
+                return unitType;
+            }
+        }
+        return null;
+    }
+    
+    public static String toUnitTypesStr(List<UnitType> unitTypes1) {
+        StringBuilder sb = new StringBuilder();
+        boolean isFirst = true;
+        for (UnitType unitType: unitTypes1) {
+            String msg = (isFirst ? "":" ") + unitType.getClassName();
+            sb.append(msg);
+            isFirst = false;
+        }
+        return sb.toString();
+    }
+
+    public void cliReady() {
+        isCliReady = true;
+        warnNotReadyLabel.setVisible(false);
+        updateUnitInsertBox();
     }
     
     private class BGPreviewLabel extends JLabel {

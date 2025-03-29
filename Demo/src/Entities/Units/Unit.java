@@ -9,8 +9,9 @@ import Entities.Units.Roles.*;
 import java.awt.Rectangle;
 import java.util.List;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public abstract class Unit extends Entity {
+public abstract class Unit extends Entity implements Serializable {
 
     //Stats
     protected int cost;

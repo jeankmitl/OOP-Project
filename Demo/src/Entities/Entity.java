@@ -31,7 +31,7 @@ public abstract class Entity {
     
     //Animation
     protected int frame_Width = 32, frame_Hight = 32;
-    protected int currentFrame = 0;
+    protected int currentFrame = 0;    
     protected int total_Frame_Idle;
     protected int total_Frame_ATK;
     
@@ -186,4 +186,11 @@ public abstract class Entity {
    
     }
     
+    public void setFrame_Width(int frame_Width) {
+        this.frame_Width = frame_Width;
+    }
+
+    public void setFrame_Hight(int frame_Hight) {
+        this.frame_Hight = frame_Hight;
+    }
 }
