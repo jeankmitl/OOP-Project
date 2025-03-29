@@ -265,6 +265,7 @@ public class UnitSelector extends JDialog {
         }if(progress.get_Stage_Num(10)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Nike.class));
             unitTypes.add(new UnitType(Ghost.class));
+            unitTypes.add(new UnitType(JavaSkeleton.class));
         }
     }
     

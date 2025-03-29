@@ -570,11 +570,23 @@ public class GamePanel extends JPanel {
                         Audio.play(AudioName.HIT);
                     }
                 }
+            } else if (bullet instanceof JavaPush) { //Mimic Beta test
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        enemy.takeDamage(bullet.getAtk());
+                        if (enemy.getMaxHealth() <= 1000) {
+                            enemy.move(-5);
+                        }
+                        getVfxs().add(bullet.getHitVfx());
+                        bulletIterator.remove();
+                        Audio.play(AudioName.HIT);
+                        break;
+                    }
+                }
             } 
             else { //Keep same stat with this here
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
-//                        enemy.debuff_stun();
                         enemy.takeDamage(bullet.getAtk());
                         getVfxs().add(bullet.getHitVfx());
                         bulletIterator.remove();

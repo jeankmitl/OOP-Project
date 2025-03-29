@@ -59,6 +59,10 @@ public abstract class Enemy extends Entity {
     public void move() {
         x -= speed;
     }
+    
+    public void move(double speed) {
+        x -= speed;
+    }
 
     @Override
     public int getX() {

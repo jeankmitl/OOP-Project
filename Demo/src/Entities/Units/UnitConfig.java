@@ -39,6 +39,7 @@ public interface UnitConfig {
     String BLOCK_FIELD_DESC = "Betray unit, why are you use this?";
     String NIKE_DESC = "Make screen clean w/o enemy";
     String GHOST_DESC = "don't TOUCH mep, I shy. UwU";
+    String JAVA_SKELETON_DESC = "git add *\n git commit\n git push git PUSH";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -49,8 +50,8 @@ public interface UnitConfig {
     UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic_1", "Mimic-att");
     UnitSpriteSheets CANDLES6_SPRITE = new UnitSpriteSheets("Candles6", "Candles6_activate2");
     UnitSpriteSheets EXPLOSION_SPRITE = new UnitSpriteSheets("Explosion", "Explosion_atk"); //BETA
-    UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("Golem_idle", null);
-    UnitSpriteSheets CANNON_SPRITE = new UnitSpriteSheets("Explosion", "Explosion_atk");
+    UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("Golem_idle", "Golem_idle");
+    UnitSpriteSheets CANNON_SPRITE = new UnitSpriteSheets("Cannon-Idle", "Cannon-Charge");
     UnitSpriteSheets BIGBALL_SPRITE = new UnitSpriteSheets("bigball_idle", "bigball_shoot");
     UnitSpriteSheets EXPLOSIVE_TURTLE_SPRITE = new UnitSpriteSheets("explosive_tutle_idle", "explosive_tutle_atk");
     UnitSpriteSheets NIKE_SPRITE = new UnitSpriteSheets("nike", "nike");
@@ -63,7 +64,8 @@ public interface UnitConfig {
     UnitSpriteSheets ALPHA_WOLF_SPRITE = new UnitSpriteSheets("alpha_wolf_idle", "alpha_wolf_atk");
     UnitSpriteSheets WEREWOLF_SPRITE = new UnitSpriteSheets("werewolf_idle", "wolf-att");
     UnitSpriteSheets VAMPIRE_SPRITE = new UnitSpriteSheets("vampire_idle", "vampire_atk");
-    UnitSpriteSheets GHOST_SPRITE = new UnitSpriteSheets("Ghost", null);
+    UnitSpriteSheets GHOST_SPRITE = new UnitSpriteSheets("Ghost", "Ghost");
+    UnitSpriteSheets JAVA_SKELETON_SPRITE = new UnitSpriteSheets("java_skeleton_idle", "java_skeleton_atk");
     
     // All Unit stats 💡
     UnitStats SKELETON_STATS = new UnitStats(SKELETON_SRITE, 300, 20, 1.5, 100, 7, ATTACKER, SKELETON_DESC);
@@ -79,6 +81,7 @@ public interface UnitConfig {
     UnitStats MIPYA_STATS = new UnitStats(MIPYA_SPRITE, 50, 10, 1.5, 100, 30, ATTACKER, MIPYA_DESC);
     UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE, 400, 35, 0.75, 200, 30, GUARD, SNAKE_DESC);
     UnitStats PYTHON_STATS = new UnitStats(PYTHON_SPRITE, 500, 20, 1.5, 300, 30, ATTACKER, PYTHON_DESC);
+    UnitStats JAVA_SKELETON_STATS = new UnitStats(JAVA_SKELETON_SPRITE, 300, 20, 1.5, 200, 30, ATTACKER, JAVA_SKELETON_DESC);
     //TEST ONLY//
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 10, 300, 50, SUPPORT, GOLEM_DESC);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 400, 10, 400, 30, ATTACKER, BIGBALL);

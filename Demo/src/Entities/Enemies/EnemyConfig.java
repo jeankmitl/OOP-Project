@@ -23,7 +23,7 @@ public interface EnemyConfig {
     EnemySpriteSheets BANDIT_SPRITE = new EnemySpriteSheets("hum-walk", "hum-att");
     EnemySpriteSheets BANDIT_SPRITEV2 = new EnemySpriteSheets("hum2-walk", "hum2-att");
     EnemySpriteSheets BANDIT_SPRITEV3 = new EnemySpriteSheets("hum3-walk", "hum3-att");
-    EnemySpriteSheets SORCERER_SPRITE = new EnemySpriteSheets("Sorcerer_walk", "Sorcerer_atk");
+    EnemySpriteSheets SORCERER_SPRITE = new EnemySpriteSheets("respritemagic-Sheet", "respritemagic_-_atk-Sheet");
     EnemySpriteSheets LITTLE_RED_HOOD_SPRITE = new EnemySpriteSheets("little_Red_Hood_Idle", "little_Red_Hood_ATK");
     EnemySpriteSheets RC_BOMBER_SPRITE = new EnemySpriteSheets("rc_bomber", "rc_bomber");
     EnemySpriteSheets ROBOT_MONOWHEEL_SPRITE = new EnemySpriteSheets("robot_monowheel_idle", "robot_monowheel_atk");
