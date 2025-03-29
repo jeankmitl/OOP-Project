@@ -43,7 +43,7 @@ public class stage7 implements EnemySummoner {
             w2.start();
         });
         
-        w2 = new DWait(35, e->{ //8
+        w2 = new DWait(40, e->{ //8
             System.out.println("Wave 2");
             game.Spawn_Enemy(new Bandit(0,0), 2,8);
             game.Spawn_Enemy(new BanditV2(0,0), 3);
@@ -52,7 +52,7 @@ public class stage7 implements EnemySummoner {
             w3.start();
         });
         
-        w3 = new DWait(35, e->{ //11
+        w3 = new DWait(40, e->{ //11
             System.out.println("Wave 3");
             game.Spawn_Enemy(new Bandit(0,0), 2,8);
             game.Spawn_Enemy(new BanditV2(0,0), 2,8);
