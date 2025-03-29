@@ -6,53 +6,40 @@ package Main;
 
 import Asset.Audio;
 import Asset.AudioName;
-import Asset.ImgManager;
 import Asset.VFX;
-import DSystem.DTimer;
 import DSystem.DWait;
 import DSystem.OTimer;
-import DSystem.OWait;
 import Entities.Bullets.BeamCleanRow;
 import Entities.Bullets.Bullet;
 import Entities.Bullets.ExplosionBullet;
+import Entities.Bullets.Slash;
 import Entities.Enemies.Bandit;
 import Entities.Enemies.BanditV2;
 import Entities.Enemies.BanditV3;
 import Entities.Enemies.Enemy;
 import Entities.Enemies.IShowSpeed;
+import Entities.Enemies.KnightWalker;
 import Entities.Enemies.LittleRedHood;
 import Entities.Enemies.Ninja;
 import Entities.Enemies.RCBomber;
 import Entities.Enemies.RobotMonoWheel;
 import Entities.Enemies.SongChinWu;
 import Entities.Enemies.Sorcerer;
-import Entities.Enemies.Tank;
 import Entities.Enemies.TheBlueSword;
 import Entities.Enemies.TheRedSword;
 import Entities.Units.Candles6;
 import Entities.Units.Roles.UnitInvisible;
 import Entities.Units.Roles.UnitReflectable;
 import Entities.Units.Unit;
-import Main.EnemySummoner;
-import Main.GamePanel;
-import Main.StageConfig;
-import Main.StageStats;
 import static Main.GamePanel.CELL_HEIGHT;
 import static Main.GamePanel.CELL_WIDTH;
 import static Main.GamePanel.GRID_OFFSET_X;
-import static Main.GamePanel.SPF;
-//import static Main.GamePanel.bullets;
-//import static Main.GamePanel.enemies;
 import static Main.GamePanel.getVfxs;
-//import static Main.GamePanel.units;
-//import static Main.GamePanel.vfxs;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -62,12 +49,17 @@ public class BossFightGamePanel extends GamePanel {
     private static BossFightGamePanel instance;
     
     // ---------------- ChinWu stuff ---------------------------
-    public boolean hasUsedSummonSwords = true;
+    public boolean hasUsedSummonSwords = false;
+    public boolean hasSummonKnightWalker = false;
     public boolean theRedSwordIsAlive = false;
     public boolean theBlueSwordIsAlive = false;
+    
     private OTimer damageTimer = new OTimer(1);
     private OTimer teleportTimer = new OTimer(7);
     private OTimer summonTimer = new OTimer(16);
+    private OTimer teleportKnightTimer = new OTimer(9);
+    private OTimer slashTimer = new OTimer(10);
+
 
 
     protected BossFightGamePanel(StageSelector stage, EnemySummoner summoner) {
@@ -83,6 +75,23 @@ public class BossFightGamePanel extends GamePanel {
         instance.resetGamePanel(stage, summoner);
         return instance;
     }
+    
+    //run after setup GameLoop
+    @Override
+    protected void start() {
+        increaseMana(450);
+        
+        new DWait(3, e -> {
+            System.out.println("Enemies is coming!");
+        }).start();
+        
+        for (int i=0; i<ROWS; i++) {
+            units.add(new Candles6(i, -1));
+        }
+        if (getClass() != BossFightGamePanel.class && getClass() != BossFightGamePanel2PlayerRough.class) {
+            Audio.playMusic("dungeon_song_raid.wav");
+        }
+    }
 
     public static List<Enemy> getEnemies() {
         return enemies;
@@ -93,7 +102,7 @@ public class BossFightGamePanel extends GamePanel {
         int xPos = col * CELL_WIDTH; // Convert column to X position
 
         Random random = new Random();
-        int row1 = random.nextInt(5); // Random row for BlueSword
+        int row1 = random.nextInt(5);
         int row2;
 
         // Ensure different rows for RedSword and BlueSword
@@ -106,6 +115,12 @@ public class BossFightGamePanel extends GamePanel {
 
         System.out.println("Summoned TheBlueSword at (" + xPos + "," + row1 + ")");
         System.out.println("Summoned TheRedSword at (" + xPos + "," + row2 + ")");
+    }
+    
+    public void summonKnightWalker(Enemy boss) {
+        int xPos = 8 * CELL_WIDTH + 20; // Spawn one column to the left
+        int yPos = boss.getRow();
+        spawnOneEnemyFixedPos(new KnightWalker(0, 0), xPos, yPos);
     }
 
     public void spawnOneEnemyFixedPos(Enemy enemy, int xPos, int yPos) {
@@ -137,10 +152,15 @@ public class BossFightGamePanel extends GamePanel {
         }
     }
     
-    public void teleport(Enemy boss) {
+    public void teleport(SongChinWu boss) {
         int newRow = random.nextInt(3) + 1; // Random row (2, 3, 4)
         boss.setRow(newRow);
         System.out.println("SongChinWu teleported to row: " + newRow);
+    }
+    
+    public void teleport(KnightWalker eliteBoss) {
+        int newRow = random.nextInt(5);
+        eliteBoss.setRow(newRow);
     }
     
     public void summonRandomThreeEnemies(Enemy boss) {
@@ -173,18 +193,24 @@ public class BossFightGamePanel extends GamePanel {
                 ((IShowSpeed) enemy).update();
             }
             
+            if (enemy instanceof KnightWalker) {
+                if (teleportKnightTimer.tick(deltaTime)) {
+                    teleport((KnightWalker)enemy);
+                }
+            }
+            
             // ----------------- SongChinWu Logic --------------------------
             if (enemy instanceof SongChinWu) {
                 ((SongChinWu) enemy).update(this);
                 if (((SongChinWu) enemy).getState() == SongChinWu.State.STAND_NO_SWORD_MOTIVATED) {
-                    if (hasUsedSummonSwords) {
+                    if (!hasUsedSummonSwords) {
                         summonSwords();
-                        hasUsedSummonSwords = false;
+                        hasUsedSummonSwords = true;
                         theRedSwordIsAlive = true;
                         theBlueSwordIsAlive = true;
                     }
                     
-                    // Damage units every 1 second
+                    // DOT every 1 second
                     if (damageTimer.tick(deltaTime)) { 
                         for (Unit currUnit : units) {
                             if (!(currUnit instanceof Candles6)) {
@@ -195,11 +221,16 @@ public class BossFightGamePanel extends GamePanel {
                 }
                 if (((SongChinWu) enemy).getState() == SongChinWu.State.STAND_NO_SWORD_MOTIVATED || ((SongChinWu) enemy).getState()== SongChinWu.State.STAND_NO_SWORD) {
                     if (teleportTimer.tick(deltaTime)) {
-                        teleport(enemy);
+                        teleport((SongChinWu)enemy);
                         
                     }
                     if (summonTimer.tick(deltaTime)) {
                         summonRandomThreeEnemies(enemy);
+                    }
+                    
+                    if (enemy.getHealth() <= enemy.getMaxHealth()*0.5 && !hasSummonKnightWalker) {
+                        summonKnightWalker(enemy);
+                        hasSummonKnightWalker = true;
                     }
                 }
             }
@@ -244,14 +275,37 @@ public class BossFightGamePanel extends GamePanel {
 
             if (!stop) {
                 if (!(enemy instanceof SongChinWu) && !(enemy instanceof TheBlueSword)
-                        && !(enemy instanceof TheRedSword)) {
+                        && !(enemy instanceof TheRedSword) && !(enemy instanceof KnightWalker)) {
                     enemy.move();
+                } else {
+                    if (enemy instanceof KnightWalker) {
+                        if (slashTimer.tick(deltaTime)) {
+                            ((KnightWalker)enemy).slash(bullets);
+                        }
+                    }
                 }
             }
 
             if (enemy.getX() + GRID_OFFSET_X <= 50) {
-                System.out.println("Game Over!!! NOOB");
-                System.exit(0);
+                Audio.play(AudioName.BUTTON_CLICK);
+                LoadingScreen loadingScreen = new LoadingScreen();
+                SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        System.out.println("Game Over!!! NOOB");
+                        stopGameLoop();
+                        Thread.sleep(3000);
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        loadingScreen.dispose();
+                        stage.loadStage("Back");
+                        Audio.playMusic("mainMenu");
+                    }
+                };
+                worker.execute();
             }
 
             if (enemy.isDead()) {
@@ -271,6 +325,13 @@ public class BossFightGamePanel extends GamePanel {
                         theRedSwordIsAlive = false;
                     }
                 }
+                if (enemy instanceof KnightWalker) {
+                    for (Enemy curEnemy : enemies) {
+                        if (curEnemy instanceof SongChinWu) {
+                            curEnemy.takeDamage((int) (curEnemy.getHealth()*0.5));
+                        }
+                    }
+                }
                 
                 enemyIterator.remove();
                 Audio.play(AudioName.KILL2);
@@ -283,7 +344,22 @@ public class BossFightGamePanel extends GamePanel {
             Bullet bullet = bulletIterator.next();
             bullet.move();
 
-            if (bullet instanceof BeamCleanRow) {
+            // slash bullet (from Knight Walker))
+            if (bullet instanceof Slash) {
+                for (Unit unit : units) {
+                    if (!(unit instanceof Candles6)) {
+                        if (bullet.getBounds().intersects(unit.getBounds())) {
+                            unit.takeDamage(4);
+                            break;
+                        }
+                    }
+                }
+                if (bullet.getX() <= 0) {
+                    bulletIterator.remove();
+                }
+            }
+
+            else if (bullet instanceof BeamCleanRow) {
                 BeamCleanRow bcr = (BeamCleanRow) bullet;
                 int cleanRow = bcr.getRow();
                 Audio.play(AudioName.BEAM_CLEAN_ROW);
@@ -341,15 +417,15 @@ public class BossFightGamePanel extends GamePanel {
                 }
             }
         }
-
         units.removeIf(Unit::isDead);
     }
     
     @Override
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
         super.resetGamePanel(stage, summoner);
-        hasUsedSummonSwords = true;
+        hasUsedSummonSwords = false;
         theRedSwordIsAlive = false;
         theBlueSwordIsAlive = false;
+        hasSummonKnightWalker = false;
     }
 }

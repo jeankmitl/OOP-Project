@@ -11,7 +11,7 @@ import Main.GamePanel;
  * @author sarin
  */
 public class IShowSpeed extends Enemy {
-    public static enum State { NORMAL, RAGE, TEMP }; 
+    public static enum State { NORMAL, RAGE }
     private State state;
     private IShowSpeedSpriteSheets spriteSheets;
     

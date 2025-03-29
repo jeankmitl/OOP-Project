@@ -16,7 +16,7 @@ public class SongChinWu extends Enemy {
     private OTimer teleportTimer = new OTimer(5);
     private OTimer summonTimer = new OTimer(10);
     
-    public static enum State { WALK, STAND_WITH_SWORD, DROP_SWORD, STAND_NO_SWORD_MOTIVATED, STAND_NO_SWORD}
+    public static enum State { WALK, STAND_WITH_SWORD, DROP_SWORD, STAND_NO_SWORD_MOTIVATED, STAND_NO_SWORD }
     private State state;
     private long stateStartTime;
     private final int targetX = 857; // Position for Stop walking
