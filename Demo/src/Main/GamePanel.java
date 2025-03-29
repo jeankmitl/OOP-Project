@@ -708,10 +708,14 @@ public class GamePanel extends JPanel {
         for (int i=0; i<enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
             BufferedImage img = enemy.getBufferedImage();
-            if (!(enemy instanceof KnightWalker)) {
+            if (!(enemy instanceof KnightWalker) && !(enemy instanceof AntKing)) {
                 g.drawImage(img, enemy.getX() + GRID_OFFSET_X, enemy.getY() + GRID_OFFSET_Y, GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH, null);
             } else {
-                g.drawImage(img, enemy.getX() + GRID_OFFSET_X-69, enemy.getY() + GRID_OFFSET_Y-69, GamePanel.CELL_HEIGHT + 70, GamePanel.CELL_WIDTH + 70, null);
+                if (enemy instanceof KnightWalker) {
+                    g.drawImage(img, enemy.getX() + GRID_OFFSET_X - 69, enemy.getY() + GRID_OFFSET_Y - 69, GamePanel.CELL_HEIGHT + 70, GamePanel.CELL_WIDTH + 70, null);
+                } else {
+                    g.drawImage(img, enemy.getX() + GRID_OFFSET_X - 39, enemy.getY() + GRID_OFFSET_Y - 39, GamePanel.CELL_HEIGHT + 40, GamePanel.CELL_WIDTH + 40, null);
+                }
             }
             if (mouseX >= enemy.getX() + GRID_OFFSET_X && mouseX <= enemy.getX() + RENDER_X
                     && mouseY >= enemy.getY() + GRID_OFFSET_Y && mouseY <= enemy.getY() + RENDER_Y) {

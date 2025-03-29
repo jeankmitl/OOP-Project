@@ -50,7 +50,7 @@ public abstract class Enemy extends Entity {
         this.currentFrame = 0;
         setStatus("ATK");
         unit.takeDamage(atk);
-        new DWait(0.8, (e) -> {
+        new DWait(total_Frame_ATK * 0.1, (e) -> {
             this.currentFrame = 0;
             setStatus("idle");
         }).start();

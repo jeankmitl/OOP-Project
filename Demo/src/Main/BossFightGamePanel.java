@@ -13,6 +13,7 @@ import Entities.Bullets.BeamCleanRow;
 import Entities.Bullets.Bullet;
 import Entities.Bullets.ExplosionBullet;
 import Entities.Bullets.Slash;
+import Entities.Enemies.AntKing;
 import Entities.Enemies.Bandit;
 import Entities.Enemies.BanditV2;
 import Entities.Enemies.BanditV3;
@@ -53,6 +54,7 @@ public class BossFightGamePanel extends GamePanel {
     public boolean hasSummonKnightWalker = false;
     public boolean theRedSwordIsAlive = false;
     public boolean theBlueSwordIsAlive = false;
+    private boolean isHalfHealh = false;
     
     private OTimer damageTimer = new OTimer(1);
     private OTimer teleportTimer = new OTimer(7);
@@ -138,7 +140,8 @@ public class BossFightGamePanel extends GamePanel {
                 LittleRedHood.class,
                 RobotMonoWheel.class,
                 Sorcerer.class,
-                IShowSpeed.class
+                IShowSpeed.class,
+                Ninja.class
         );
 
         Random random = new Random();
@@ -173,8 +176,15 @@ public class BossFightGamePanel extends GamePanel {
                 spawnOneEnemyFixedPos(summonedEnemy, summonCol, row);
             }
         }
-
-        System.out.println("SongChinWu summoned 3 enemies at column " + summonCol);
+    }
+    
+    public void summonThreeAntKing(Enemy boss) {
+        int summonCol = 8 * CELL_WIDTH + 30;
+        int currentRow = boss.getRow();
+        int[] rows = {currentRow - 1, currentRow, currentRow + 1};
+        for (int row : rows) {
+            spawnOneEnemyFixedPos(new AntKing(0, 0), summonCol, row);
+        }
     }
 
     @Override
@@ -225,12 +235,19 @@ public class BossFightGamePanel extends GamePanel {
                         
                     }
                     if (summonTimer.tick(deltaTime)) {
-                        summonRandomThreeEnemies(enemy);
+                        if (!isHalfHealh) {
+                            summonRandomThreeEnemies(enemy);
+                            
+                        } else {
+                            summonThreeAntKing(enemy);
+                        }
                     }
                     
                     if (enemy.getHealth() <= enemy.getMaxHealth()*0.5 && !hasSummonKnightWalker) {
                         summonKnightWalker(enemy);
                         hasSummonKnightWalker = true;
+                        isHalfHealh = true;
+                        
                     }
                 }
             }
@@ -244,6 +261,8 @@ public class BossFightGamePanel extends GamePanel {
                     } else {
                         if (enemy instanceof Ninja) {
                             ((Ninja) enemy).ability();
+                        } else if (enemy instanceof AntKing) {
+                            ((AntKing) enemy).ability();
                         }
                         stop = true;
                         long currentTime = System.currentTimeMillis();
@@ -252,12 +271,21 @@ public class BossFightGamePanel extends GamePanel {
                             // --------------- RedHood Sustain Skill ----------------------
                             if (enemy instanceof LittleRedHood) {
                                 LittleRedHood redHood = (LittleRedHood) enemy;
-                                if (redHood.getHealth() + 10 > 181) {
-                                    redHood.setHealth(181);
+                                if (redHood.getHealth() + 10 > redHood.getMaxHealth()) {
+                                    redHood.setHealth(redHood.getMaxHealth());
                                 } else {
                                     redHood.setHealth(redHood.getHealth() + 10);
                                 }
                                 // -----------------------------------------------------------
+                            } else if (enemy instanceof AntKing) {
+                                AntKing antKing = (AntKing) enemy;
+                                int hp = antKing.getHealth();
+                                int lifeSteal = (int)(hp + ((antKing.getMaxHealth()-hp)*0.03));
+                                if (hp + lifeSteal > antKing.getMaxHealth()) {
+                                    antKing.setHealth(antKing.getMaxHealth());
+                                } else {
+                                    antKing.setHealth(hp + lifeSteal);
+                                }
                             }
                             if (unit.isDead()) {
                                 Audio.play(AudioName.KILL2);
@@ -349,7 +377,7 @@ public class BossFightGamePanel extends GamePanel {
                 for (Unit unit : units) {
                     if (!(unit instanceof Candles6)) {
                         if (bullet.getBounds().intersects(unit.getBounds())) {
-                            unit.takeDamage(4);
+                            unit.takeDamage(5);
                             break;
                         }
                     }
@@ -427,5 +455,6 @@ public class BossFightGamePanel extends GamePanel {
         theRedSwordIsAlive = false;
         theBlueSwordIsAlive = false;
         hasSummonKnightWalker = false;
+        isHalfHealh = false;
     }
 }
