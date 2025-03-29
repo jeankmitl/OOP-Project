@@ -15,7 +15,7 @@ public interface StageConfig {
     int BOSS = 3;
     int INFINITY = 4;
     
-    StageStats STAGE_BETA = new StageStats("Stage Beta", INFINITY, 901, "bg_dark_greek"); // <- Endless future
+    StageStats STAGE_BETA = new StageStats("Stage Beta", INFINITY, 891, "bg_dark_greek"); // <- Endless future
     StageStats STAGE_TUTORIAL = new StageStats("Stage Tutorial", EASY, 14, "bg_dark_zone");
    // StageStats STAGE_TUTORIAL = new StageStats("Stage Tutorial", EASY, 1, "bg_dark_zone"); // test ver
     StageStats STAGE_2 = new StageStats("Stage 2", EASY, 31, "bg_dark_zone");//31

@@ -67,12 +67,6 @@ public class stage_beta implements EnemySummoner {
         w8 = new DWait(40, e->{
             Audio.play(AudioName.NEXT_SUMMON);
             game.Spawn_Enemy(new IShowSpeed(0, 0),99,20);
-            w9.start();
-        });
-        w9 = new DWait(40, e->{
-            System.out.println("Wow How You Do That??");
-            Audio.play(AudioName.NEXT_SUMMON);
-            game.Spawn_Enemy(new Tank(0, 0),10,20);
         });
         start.start();
     }
