@@ -260,7 +260,7 @@ public class GamePanel extends JPanel {
                 @Override
                 protected void done() {
                     winScreen.dispose();
-                    stage.loadStage("Back");
+                    stage.loadStage("win");
                     Audio.playMusic("mainMenu");
                 }
             };

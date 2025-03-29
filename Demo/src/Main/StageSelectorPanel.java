@@ -22,6 +22,7 @@ public class StageSelectorPanel extends JPanel{
     private boolean isAnim = false;
     private Rectangle animRect, animP2Rect;
     private CoOpFrame cof;
+    private int unlock = 0, passCheck;
 
     public StageSelectorPanel(StageSelector frame, String type, CoOpFrame cof) {
         this.type = type;
@@ -64,8 +65,8 @@ public class StageSelectorPanel extends JPanel{
                     if (st[i].contains(e.getPoint())) {
                         if (st[i].equals(st1) || progress.get_Stage_Num(i)) {
                             selectStage("St" + (i+1));
-                            progress.set_Stage_Num(i);
-                            save();
+                            passCheck = i+1;
+                            System.out.println("pass ="+passCheck);
                             break;
                         }
                     }
@@ -90,6 +91,7 @@ public class StageSelectorPanel extends JPanel{
                         int res = JOptionPane.showConfirmDialog(frame, "Do you want to reset level? This can't be undo.",
                             "Reset Save Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (res == JOptionPane.YES_OPTION) {
+                            unlock = 0;
                             boolean deleted = saveFile.delete();
                             if (deleted) {
                                 System.out.println("Save file deleted successfully");
@@ -159,13 +161,19 @@ public class StageSelectorPanel extends JPanel{
         repaint();
     }
     
-    private void save() {
+    public void save() {
+        unlock = progress.getMaxUnlockedStage()-1;
+        System.out.println("unlock is"+unlock);
+        if(passCheck-1 == unlock){
+            progress.set_Stage_Num(unlock);
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Save.bat"))) {
                 out.writeObject(progress);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
+            unlock++; 
         }
+    }
     
     private void selectStage(String stageName) {
         Audio.play(AudioName.BUTTON_CLICK);

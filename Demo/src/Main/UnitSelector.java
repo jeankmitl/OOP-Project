@@ -237,8 +237,8 @@ public class UnitSelector extends JDialog {
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
+        unitTypes.add(new UnitType(Explosive_turtle.class));
         if (progress.get_Stage_Num(1) || DEBUG_MODE){
-            unitTypes.add(new UnitType(Explosive_turtle.class));
             unitTypes.add(new UnitType(Mimic.class));
         }if(progress.get_Stage_Num(2)|| DEBUG_MODE){
             unitTypes.add(new UnitType(SemiAutoBot.class));
