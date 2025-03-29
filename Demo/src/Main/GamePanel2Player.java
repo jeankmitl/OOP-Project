@@ -54,6 +54,7 @@ public class GamePanel2Player extends GamePanel {
     
     private Image iconImage;
     private static List<UnitType> unitTypesP2;
+//    private S<Unit> unitID;
     private StageSelector stage;
     
     //Player2 Controller
