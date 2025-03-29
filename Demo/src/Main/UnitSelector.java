@@ -57,7 +57,7 @@ public class UnitSelector extends JDialog {
     
     private final String type;
     private SaveGame progress = null;
-    protected final boolean DEBUG_MODE = false; //<----- Open on this
+    protected final boolean DEBUG_MODE = true; //<----- Open on this
 
     private CoOpFrame cof;
     private boolean isCliReady = false;
@@ -245,6 +245,8 @@ public class UnitSelector extends JDialog {
             unitTypes.add(new UnitType(BigBall.class));
         }if(progress.get_Stage_Num(3)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Vampire.class));
+            unitTypes.add(new UnitType(FlatSlime.class));
+            unitTypes.add(new UnitType(Cannon.class));
         }if(progress.get_Stage_Num(4)|| DEBUG_MODE){
             unitTypes.add(new UnitType(GolemSupport.class));
             unitTypes.add(new UnitType(GiveawaySlime.class));

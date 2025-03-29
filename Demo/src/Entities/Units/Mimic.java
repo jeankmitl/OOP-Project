@@ -9,7 +9,7 @@ import DSystem.DTimer;
 import Asset.AudioName;
 import DSystem.DWait;
 //import DSystem.OWait;
-import Entities.Bullets.Beta_bullet;
+import Entities.Bullets.BigBallBullet;
 import Entities.Bullets.Bite;
 import Entities.Units.Roles.UnitChargeShootable;
 import Entities.Units.Roles.UnitShootable;

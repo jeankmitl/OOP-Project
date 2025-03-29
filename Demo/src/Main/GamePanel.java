@@ -37,7 +37,7 @@ import java.util.Random;
 public class GamePanel extends JPanel {
     
     //TURN OFF IF NOT DEBUG: set mana, show status, etc...
-    protected final boolean DEBUG_MODE = false;
+    protected final boolean DEBUG_MODE = true;
     
     private static GamePanel instance;
     private Image backgroundImage;
@@ -195,8 +195,9 @@ public class GamePanel extends JPanel {
         for (int i=0; i<ROWS; i++) {
             units.add(new Candles6(i, -1));
         }
-        if (getClass() != BossFightGamePanel.class && getClass() != BossFightGamePanel2PlayerRough.class) {
-            Audio.playMusic("dungeon_song_raid.wav");
+        String bgMusicName = summoner.getSTAGE_STATS().getBgMusicName();
+        if (bgMusicName != null) {
+            Audio.playMusic(bgMusicName);
         }
     }
     
@@ -283,6 +284,9 @@ public class GamePanel extends JPanel {
     public boolean isFieldAvailable(int col, int row) {
         for (Unit unit : units) {
             if (unit.getRow() == row && unit.getCol() == col) {
+                if (unit instanceof UnitIgnoreFieldAvailable) {
+                    return getUnitCountFromField(col, row) < 1;
+                }
                 return false;
             }
         }
@@ -290,6 +294,11 @@ public class GamePanel extends JPanel {
     }
     
     public boolean isFieldExtraAvailable(UnitType unit, int row, int col) {
+        if (getUnitCountFromField(col, row) == 1) {
+            if (getUnitFromField(col, row) instanceof UnitIgnoreFieldAvailable) {
+                return !UnitIgnoreFieldAvailable.class.isAssignableFrom(unit.unitClass);
+            }
+        }
         if (UnitCommensalism.class.isAssignableFrom(unit.unitClass)) {
             return getUnitCountFromField(col, row) == 1;
         } else if (UnitExtraFieldAvailable.class.isAssignableFrom(unit.unitClass)) {
@@ -568,26 +577,43 @@ public class GamePanel extends JPanel {
                         getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
                         bulletIterator.remove();
                         Audio.play(AudioName.HIT);
-                    }
-                }
-            } else if (bullet instanceof JavaPush) { //Mimic Beta test
-                for (Enemy enemy : enemies) {
-                    if (bullet.getBounds().intersects(enemy.getBounds())) {
-                        enemy.takeDamage(bullet.getAtk());
-                        if (enemy.getMaxHealth() <= 1000) {
-                            enemy.move(-5);
-                        }
-                        getVfxs().add(bullet.getHitVfx());
-                        bulletIterator.remove();
-                        Audio.play(AudioName.HIT);
                         break;
                     }
                 }
-            } 
+            } else if (bullet instanceof CannonBullet) {
+                CannonBullet cb = (CannonBullet)bullet;
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        for (Enemy enemyBadLuck: enemies) {
+                            if (enemy.getRow() == enemyBadLuck.getRow() && 
+                                    (enemy.getX() - CELL_WIDTH < enemyBadLuck.getX()) && (enemy.getX() + CELL_WIDTH > enemyBadLuck.getX())) {
+                                enemyBadLuck.takeDamage(bullet.getAtk());
+                            }
+                        }
+                        Audio.play(AudioName.BEAM_CLEAN_ROW);
+                        VFX vfx = new VFX(enemy.getX(), enemy.getY(), "explosion_vfx");
+                        vfx.setWidth(CELL_WIDTH + 60);
+                        vfx.setHeight(CELL_HEIGHT + 20);
+                        GamePanel.getVfxs().add(vfx);
+                        getVfxs().add(vfx);
+                        
+                        cb.useBulletLife();
+                        if (cb.getBulletLife() <= 0) {
+                            bulletIterator.remove();
+                        }
+                        break;
+                    }
+                }
+            }
             else { //Keep same stat with this here
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
                         enemy.takeDamage(bullet.getAtk());
+                        if (enemy.getMaxHealth() <= 1300) {
+                            if (bullet instanceof JavaPush) enemy.move(-5);
+                            if (bullet instanceof BigBallBullet) enemy.move(-20);
+                        }
+                        
                         getVfxs().add(bullet.getHitVfx());
                         bulletIterator.remove();
                         Audio.play(AudioName.HIT);
@@ -1082,7 +1108,13 @@ public class GamePanel extends JPanel {
 
             if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
                 Unit unitIns = (Unit)UnitFactory.createEntity(unit.unitClass, row, col);
-                units.add(unitIns);
+                if (unitIns instanceof OnBack) {
+                    units.add(0, unitIns);
+                } else if (getUnitFromField(col, row) instanceof OnFront) {
+                    units.add(units.size() - 2, unitIns);
+                } else {
+                    units.add(unitIns);
+                }
                 remainMana -= unit.getManaCost();
                 unit.startCooldown();
                 if (unitIns instanceof UnitTriggerable) {

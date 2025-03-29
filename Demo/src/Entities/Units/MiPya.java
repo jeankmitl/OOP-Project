@@ -9,6 +9,7 @@ import Asset.AudioName;
 import Entities.Bullets.Bone;
 import Entities.Bullets.Bullet;
 import Entities.Bullets.PistolBullet;
+import Entities.Units.Roles.OnFront;
 import Entities.Units.Roles.UnitCommensalism;
 import Entities.Units.Roles.UnitExtraFieldAvailable;
 import Entities.Units.Roles.UnitShootable;
@@ -19,7 +20,7 @@ import java.util.List;
  *
  * @author anawi
  */
-public class MiPya extends Unit implements UnitShootable, UnitCommensalism {
+public class MiPya extends Unit implements UnitShootable, UnitExtraFieldAvailable, OnFront {
     public MiPya(int row, int col) {
         super(row, col, getUNIT_STATS());
     }

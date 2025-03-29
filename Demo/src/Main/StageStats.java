@@ -16,15 +16,17 @@ public class StageStats {
     private int difficult;
     private int target;
     private Image background;
+    private String bgMusicName;
 
     public StageStats() {
     }
 
-    public StageStats(String title, int difficult, int target, String background) {
+    public StageStats(String title, int difficult, int target, String background, String bgMusicName) {
         this.title = title;
         this.difficult = difficult;
         this.target = target;
         this.background = ImgManager.loadBG(background);
+        this.bgMusicName = bgMusicName;
     }
 
     public String getTitle() {
@@ -41,5 +43,9 @@ public class StageStats {
 
     public Image getBackground() {
         return background;
+    }
+
+    public String getBgMusicName() {
+        return bgMusicName;
     }
 }

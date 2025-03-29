@@ -15,12 +15,14 @@ import DSystem.DWait;
 import DSystem.OWait;
 import Entities.Bullets.BeamCleanRow;
 import Entities.Bullets.ExplosionBullet;
+import Entities.Units.Roles.OnBack;
+import Entities.Units.Roles.UnitExtraFieldAvailable;
 import Entities.Units.Roles.UnitInvisible;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public class Explosion extends Unit implements UnitInvisible {
+public class Explosion extends Unit implements UnitInvisible, UnitExtraFieldAvailable, OnBack {
     
     private OWait waitBeforeActivate;
     private boolean isActivating = false; 
@@ -52,6 +54,10 @@ public class Explosion extends Unit implements UnitInvisible {
                 }).start();
             }
         }
+    }
+
+    @Override
+    public void getUnitFromField(Unit unit) {
     }
 
     

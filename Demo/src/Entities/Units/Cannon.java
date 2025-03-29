@@ -8,8 +8,11 @@ import Asset.Audio;
 import Asset.AudioName;
 import DSystem.DTimer;
 import DSystem.DWait;
+import Entities.Bullets.BigBallBullet;
 import Entities.Bullets.Bullet;
+import Entities.Bullets.CannonBullet;
 import Entities.Enemies.Enemy;
+import Entities.Units.Roles.UnitChargeShootable;
 import Main.GamePanel;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -19,64 +22,19 @@ import java.util.List;
  *
  * @author USER
  */
-public class Cannon extends Skeleton{
-    
-    private DWait reload_speed; // cd time when eat again
-    private boolean ammo = true;//check when eat enermy
-    private DTimer attackTimer;
-    
+public class Cannon extends Unit implements UnitChargeShootable {
     public Cannon(int row, int col) {
-        super(row, col);
-        
-        attackTimer = new DTimer(1,e->{
-            if(isEnemyInfront(GamePanel.getEnemies())){
-                attack(GamePanel.getBullets());
-                if (isDead()) {
-                    attackTimer.stop();
-                    return;
-                }
-                attack(GamePanel.getBullets());
-                Audio.play(AudioName.FIRE_TINY);
-            }
-            });
-        attackTimer.start();
+        super(row, col, getUNIT_STATS());
     }
 
-    public void cd_stage() {
-        reload_speed = new DWait(15,e->{
-            ammo = true;
-        });
-        reload_speed.start();
-    }
-
-    public void attack(List<Bullet> bullets) { // wait for bullet
-    }
-
-    @Override
-    public boolean isEnemyInfront(List<Enemy> enermies) {
-        return super.isEnemyInfront(enermies); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public Rectangle getBounds() {
-        return super.getBounds(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public BufferedImage getBufferedImage() {
-        return super.getBufferedImage(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-
-    @Override
-    public void updateFrame() {
-        super.updateFrame(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-    }
-    
     public static UnitStats getUNIT_STATS() {
         return UnitConfig.CANNON_STATS;
     }
     
-    
-    
-    
+    @Override
+    public void shoot(List<Bullet> bullets) {
+        Audio.play(AudioName.FIRE_TINY);
+        bullets.add(new CannonBullet(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
+        new DWait(1, e -> setStatus("idle")).start();
+    }
 }

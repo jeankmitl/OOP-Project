@@ -10,11 +10,11 @@ import Asset.ImgManager;
  *
  * @author USER
  */
-public class Beta_bullet extends Bullet{
+public class BigBallBullet extends Bullet{
 
-    public Beta_bullet (int x ,int y) {
-        super(x, y, 0);
-        spriteSheet = ImgManager.loadSprite("BetaBullet");
+    public BigBallBullet (int x ,int y, int atk) {
+        super(x, y, atk);
+        spriteSheet = ImgManager.loadSprite("BigBallBullet");
     }
 
     @Override
