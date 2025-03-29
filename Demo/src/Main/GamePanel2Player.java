@@ -7,7 +7,9 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import CoOpSystem.CoKeys;
 import CoOpSystem.CoOpFrame;
+import CoOpSystem.WrongCoOpException;
 import DSystem.OTimer;
 import Entities.Units.Nike;
 import static Main.GamePanel.BAR_X;
@@ -29,8 +31,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 /**
@@ -60,6 +65,8 @@ public class GamePanel2Player extends GamePanel {
     private String type;
     private CoOpFrame cof;
     
+    private UnitSelector unitSelectorSocket;
+    
     private GamePanel2Player(StageSelector stage, EnemySummoner summoner) {
         super(stage, summoner);
         unitTypesP2 = new ArrayList<>();
@@ -82,23 +89,80 @@ public class GamePanel2Player extends GamePanel {
                             @Override
                             public void windowClosed(WindowEvent e) {
                                 unitTypesP2 = ((UnitSelector)e.getSource()).getResultUnits();
-                                startGameLoop(); // Always call on last GamePanel
-                                summonEnemies(); // spawn Enermy in this insted
+                                startGame();
                             }
                         });
                     }
                 });
             } else {
                 if (type.equals("cli")) {
-                    UnitSelector unitSelector = new UnitSelector(stage, "cli");
+                    unitSelectorSocket = new UnitSelector(stage, "cli", cof);
+                    cof.invoke(CoKeys.GET_UNIT_SELECTOR);
+                    unitSelectorSocket.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
+                                String unitTypesStr =  UnitSelector.toUnitTypesStr(unitTypes);
+                                cof.sendOne(CoKeys.SET_P2_UNIT, unitTypesStr);
+                                cof.invoke(CoKeys.READY_UNIT_SELECTOR);
+                            }
+                    });
                 } else {
-                    UnitSelector unitSelector = new UnitSelector(stage, "server");
+                    unitSelectorSocket = new UnitSelector(stage, "server", cof);
+                    cof.invoke(CoKeys.GET_UNIT_SELECTOR);
+                    unitSelectorSocket.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                unitTypes = ((UnitSelector)e.getSource()).getResultUnits();
+                                String unitTypesStr =  UnitSelector.toUnitTypesStr(unitTypes);
+                                cof.sendOne(CoKeys.SET_P2_UNIT, unitTypesStr);
+                                
+                                new Thread(() -> {
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(GamePanel2Player.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                    if (!unitTypes.isEmpty() && !unitTypesP2.isEmpty()) {
+                                        cof.invoke(CoKeys.START_GAME);
+                                    } else {
+                                        try {
+                                            throw new WrongCoOpException("Should have both unitTypes P1 & p2");
+                                        } catch (WrongCoOpException ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+                                }).start();
+                            }
+                    });
                 }
             }
         });
     }
     
-    public static GamePanel getInstance(StageSelector stage, EnemySummoner summoner, String type, CoOpFrame cof) {
+    //for Socket
+    public void startGame() {
+        startGameLoop();
+        summonEnemies();
+    }
+    
+    public void setP2Unit(String unitTypesStr) {
+        String[] unitTypesStrSplit = unitTypesStr.split(" ");
+        List<UnitType> tempUnitTypes = new ArrayList<>();
+        for (String unitTypeStr: unitTypesStrSplit) {
+            UnitType unitType = UnitSelector.getUnitTypeFromName(unitTypeStr);
+            if (unitType != null) {
+                tempUnitTypes.add(unitType);
+            }
+        }
+        unitTypesP2 = tempUnitTypes;
+    }
+
+    public UnitSelector getUnitSelectorSocket() {
+        return unitSelectorSocket;
+    }
+    
+    public static GamePanel2Player getInstance(StageSelector stage, EnemySummoner summoner, String type, CoOpFrame cof) {
         if (instance == null) instance = new GamePanel2Player(stage, summoner);
         instance.type = type;
         instance.cof = cof;

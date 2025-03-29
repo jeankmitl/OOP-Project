@@ -6,8 +6,10 @@ package CoOpSystem;
 
 import Asset.ImgManager;
 import Main.GamePanel;
+import Main.GamePanel2Player;
 import Main.LoadingScreen;
 import Main.StageSelector;
+import Main.UnitSelector;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -38,6 +40,7 @@ import javax.swing.*;
 public class CoOpFrame extends JFrame implements ActionListener {
     
     private final boolean isJoinNoConfirm = true;
+    private final boolean DEBUG_PRINT = true;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
     private Socket socket;
@@ -197,6 +200,12 @@ public class CoOpFrame extends JFrame implements ActionListener {
         msgTextField.setEnabled(enabled);
         startButton.setEnabled(enabled);
     }
+    
+    private void debugPrint(boolean isYou, String msg) {
+        if (DEBUG_PRINT) {
+            System.out.println(((isServer) ? "Server":"Client") + ((isYou) ? " (You)":"")  + ": " + msg);
+        }
+    }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Backend Server/Client">
@@ -327,6 +336,10 @@ public class CoOpFrame extends JFrame implements ActionListener {
         return isServer;
     }
     
+    public void invoke(String key) {
+        this.sendOne(key, "");
+    }
+    
     public void sendOne(String key, String str) {
         Properties prop = new Properties();
         prop.setProperty(key, str);
@@ -358,9 +371,9 @@ public class CoOpFrame extends JFrame implements ActionListener {
         }
     }
     
-    private StageSelector stageServer;
-    private StageSelector stageClient;
-    private GamePanel gamePanel;
+    private StageSelector stage;
+    private GamePanel2Player gamePanel;
+    private UnitSelector unitSelector;
     
     private void startGame() {
         
@@ -377,9 +390,9 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     System.out.println("Finished loading.");
                     loadingScreen.dispose();
                     if (isServer) {
-                        stageServer = new StageSelector("2p", CoOpFrame.this);
+                        stage = new StageSelector("2p", CoOpFrame.this);
                     } else {
-                        stageClient = new StageSelector("cli", CoOpFrame.this);
+                        stage = new StageSelector("cli", CoOpFrame.this);
                     }
             }
         };
@@ -387,10 +400,24 @@ public class CoOpFrame extends JFrame implements ActionListener {
     }
     
     private void processMsg(Properties properties, boolean isYou) {
+        boolean isForCli= !isServer && !isYou;
+        boolean isForSvr = isServer && !isYou;
+        boolean isOpposite = isServer && isYou || !isServer && !isYou;
+//        boolean isOpposite2 = !isServer && !isYou || isServer && !isYou; // is same !isYou
+        
         String msgTest = properties.getProperty(CoKeys.MSG_TEST);
         String isReadyPlay = properties.getProperty(CoKeys.IS_READY_PLAY);
         String stageName = properties.getProperty(CoKeys.STAGE_NAME);
         String hoverXY = properties.getProperty(CoKeys.HOVER_XY);
+        
+        String getGamePanel = properties.getProperty(CoKeys.GET_GAME_PANEL);
+        String getUnitSelector = properties.getProperty(CoKeys.GET_UNIT_SELECTOR);
+        
+        String readyUnitSelector = properties.getProperty(CoKeys.READY_UNIT_SELECTOR);
+        
+        String startGame = properties.getProperty(CoKeys.START_GAME);
+        String setP2Unit = properties.getProperty(CoKeys.SET_P2_UNIT);
+        
         
         SwingUtilities.invokeLater(() -> {
             if (msgTest != null) {
@@ -407,35 +434,52 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     }
                 }
             }
-            if (stageName != null) {
-                System.out.println("Hellooosadfpja");
-//                if (isServer) {
-//                    gamePanel = stage.getGamePanel();
-//                } else {
-//                    vtStage.loadStage(stageName);
-//                }
-            }
             if (hoverXY != null) {
                 String hoverXYs[] = hoverXY.split(" ");
                 int x = Integer.parseInt(hoverXYs[0]);
                 int y = Integer.parseInt(hoverXYs[1]);
-                if (isServer) {
-                    if (isYou) {
-                        stageServer.setHover(x, y);
-                    } else {
-                        stageServer.setP2Hover(x, y);
-                    }
+                if (isYou) {
+                    stage.setHover(x, y);
                 } else {
-                    if (isYou) {
-                        stageClient.setHover(x, y);
-                    } else {
-                        stageClient.setP2Hover(x, y);
-                    }
+                    stage.setP2Hover(x, y);
+                }
+            }
+            if (getGamePanel != null) {
+                if (isYou) {
+                    gamePanel = stage.getGamePanel2Player();
+                    if (gamePanel != null) debugPrint(isYou, "getGamePanel!");
                 }
             }
             if (stageName != null) {
-                stageClient.loadStage(stageName);
+                if (!isServer) {
+                    stage.loadStage(stageName);
+                }
             }
+            // UnitSelector
+            if (getUnitSelector != null) {
+                if (isYou) {
+                    unitSelector = gamePanel.getUnitSelectorSocket();
+                    if (unitSelector != null) debugPrint(isYou, "getStageSelector!");
+                }
+            }
+            if (readyUnitSelector != null) {
+                if (isForSvr) {
+                    unitSelector.cliReady();
+                }
+            } 
+            if (setP2Unit != null) {
+                debugPrint(isYou, "Should set P2 for Server");
+                debugPrint(isYou, setP2Unit);
+                if (isOpposite) {
+                    gamePanel.setP2Unit(setP2Unit);
+                }
+            }
+            if (startGame != null) {
+                debugPrint(isYou, "Start Game");
+                gamePanel.startGame();
+            }
+            // GamePanel2Player
+            
         });
     }
 }
