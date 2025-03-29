@@ -14,7 +14,7 @@ import Main.StageConfig;
 import Main.StageStats;
 
 public class stage_beta implements EnemySummoner {
-    protected DWait start;
+    protected DWait start,w1,w2,w3,w4,w5,w6,w7,w8,w9,w10;
     
     @Override
     public StageStats getSTAGE_STATS() {
@@ -23,18 +23,56 @@ public class stage_beta implements EnemySummoner {
     
     @Override
     public void summonEnemies(GamePanel game) {
-        start = new DWait(2, e->{
+        start = new DWait(10, e->{
             System.out.println("Endless Wave");
             Audio.play(AudioName.NEXT_SUMMON);
-            game.Spawn_Enemy(new Bandit(0, 0),99);
+            game.Spawn_Enemy(new Bandit(0, 0),99,8);
+            w1.start();
+        });
+        w1 = new DWait(20, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
             game.Spawn_Enemy(new BanditV2(0, 0),99);
-            game.Spawn_Enemy(new BanditV3(0, 0),99);
-            game.Spawn_Enemy(new Ninja(0, 0),99);
+            w2.start();
+        });
+        w2 = new DWait(30, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
+            game.Spawn_Enemy(new BanditV3(0, 0),99,12);
+            w3.start();
+        });
+        w3 = new DWait(30, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
+            game.Spawn_Enemy(new Ninja(0, 0),99,14);
+            w4.start();
+        });
+        w4 = new DWait(40, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
             game.Spawn_Enemy(new LittleRedHood(0, 0),99);
-            game.Spawn_Enemy(new Sorcerer(0, 0),99);
+            w5.start();
+        });
+        w5 = new DWait(40, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
+            game.Spawn_Enemy(new RobotMonoWheel(0, 0),99,18);
+            w6.start();
+        });
+        w6 = new DWait(40, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
+            game.Spawn_Enemy(new Sorcerer(0, 0),99,20);
+            w7.start();
+        });
+        w7 = new DWait(40, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
             game.Spawn_Enemy(new RCBomber(0, 0),99);
-            game.Spawn_Enemy(new RobotMonoWheel(0, 0),99);
-            game.Spawn_Enemy(new Tank(0, 0),99);
+            w8.start();
+        });
+        w8 = new DWait(40, e->{
+            Audio.play(AudioName.NEXT_SUMMON);
+            game.Spawn_Enemy(new IShowSpeed(0, 0),99,20);
+            w9.start();
+        });
+        w9 = new DWait(40, e->{
+            System.out.println("Wow How You Do That??");
+            Audio.play(AudioName.NEXT_SUMMON);
+            game.Spawn_Enemy(new Tank(0, 0),10,20);
         });
         start.start();
     }
