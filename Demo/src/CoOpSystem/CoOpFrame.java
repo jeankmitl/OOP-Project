@@ -4,8 +4,6 @@
  */
 package CoOpSystem;
 
-import Asset.ImgManager;
-import Main.GamePanel;
 import Main.GamePanel2Player;
 import Main.LoadingScreen;
 import Main.StageSelector;
@@ -15,7 +13,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -399,24 +396,21 @@ public class CoOpFrame extends JFrame implements ActionListener {
         worker.execute();
     }
     
-    private void processMsg(Properties properties, boolean isYou) {
+    private void processMsg(Properties prop, boolean isYou) {
         boolean isForCli= !isServer && !isYou;
         boolean isForSvr = isServer && !isYou;
-        boolean isOpposite = isServer && isYou || !isServer && !isYou;
-//        boolean isOpposite2 = !isServer && !isYou || isServer && !isYou; // is same !isYou
         
-        String msgTest = properties.getProperty(CoKeys.MSG_TEST);
-        String isReadyPlay = properties.getProperty(CoKeys.IS_READY_PLAY);
-        String stageName = properties.getProperty(CoKeys.STAGE_NAME);
-        String hoverXY = properties.getProperty(CoKeys.HOVER_XY);
+        String msgTest = prop.getProperty(CoKeys.MSG_TEST);
+        String isReadyPlay = prop.getProperty(CoKeys.IS_READY_PLAY);
+        String stageName = prop.getProperty(CoKeys.STAGE_NAME);
+        String hoverXY = prop.getProperty(CoKeys.HOVER_XY);
         
-        String getGamePanel = properties.getProperty(CoKeys.GET_GAME_PANEL);
-        String getUnitSelector = properties.getProperty(CoKeys.GET_UNIT_SELECTOR);
+        String getGamePanel = prop.getProperty(CoKeys.GET_GAME_PANEL);
+        String getUnitSelector = prop.getProperty(CoKeys.GET_UNIT_SELECTOR);
         
-        String readyUnitSelector = properties.getProperty(CoKeys.READY_UNIT_SELECTOR);
-        
-        String startGame = properties.getProperty(CoKeys.START_GAME);
-        String setP2Unit = properties.getProperty(CoKeys.SET_P2_UNIT);
+        String readyUnitSelector = prop.getProperty(CoKeys.READY_UNIT_SELECTOR);
+        String setP2Unit = prop.getProperty(CoKeys.SET_P2_UNIT);
+        String startGame = prop.getProperty(CoKeys.START_GAME);
         
         
         SwingUtilities.invokeLater(() -> {
@@ -470,16 +464,38 @@ public class CoOpFrame extends JFrame implements ActionListener {
             if (setP2Unit != null) {
                 debugPrint(isYou, "Should set P2 for Server");
                 debugPrint(isYou, setP2Unit);
-                if (isOpposite) {
+                if (!isYou) {
                     gamePanel.setP2Unit(setP2Unit);
                 }
             }
             if (startGame != null) {
                 debugPrint(isYou, "Start Game");
-                gamePanel.startGame();
+                gamePanel.startGameLoop();
+                if (isServer) {
+                    gamePanel.summonEnemies();
+                }
             }
             // GamePanel2Player
-            
+            final String placeXYStr;
+            if ((placeXYStr = prop.getProperty(CoKeys.BOTH_PLACE_XY)) != null) {
+                String[] placeXYStrSplit = placeXYStr.split(",");
+                int placeX = Integer.parseInt(placeXYStrSplit[0]);
+                int placeY = Integer.parseInt(placeXYStrSplit[1]);
+                
+                if (!isYou) {
+                    gamePanel.coOp.updateP2PlaceXY(placeX, placeY);
+                }
+            }
+            final String allUnitsName;
+            final String allUnitsRowCol;
+            final String allUnitsHealth;
+            if ((allUnitsName = prop.getProperty(CoKeys.ALL_UNITS_NAME)) != null
+                    && (allUnitsRowCol = prop.getProperty(CoKeys.ALL_UNITS_ROWCOL)) != null
+                    && (allUnitsHealth = prop.getProperty(CoKeys.ALL_UNITS_HEALTH)) != null) {
+                if (isForCli) {
+                    gamePanel.coOp.setUnits(allUnitsName, allUnitsRowCol, allUnitsHealth);
+                }
+            }
         });
     }
 }

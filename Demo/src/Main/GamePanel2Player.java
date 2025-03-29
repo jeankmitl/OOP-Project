@@ -11,7 +11,9 @@ import CoOpSystem.CoKeys;
 import CoOpSystem.CoOpFrame;
 import CoOpSystem.WrongCoOpException;
 import DSystem.OTimer;
+import Entities.UnitFactory;
 import Entities.Units.Nike;
+import Entities.Units.Unit;
 import static Main.GamePanel.BAR_X;
 import static Main.GamePanel.BAR_Y;
 import static Main.GamePanel.CELL_HEIGHT;
@@ -20,6 +22,7 @@ import static Main.GamePanel.COLS;
 import static Main.GamePanel.ROWS;
 import static Main.GamePanel.remainMana;
 import static Main.GamePanel.unitTypes;
+import static Main.GamePanel.units;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -34,6 +37,7 @@ import java.awt.event.WindowEvent;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -57,6 +61,7 @@ public class GamePanel2Player extends GamePanel {
     private int p2PlaceX = 0;
     private int p2PlaceY = 0;
     
+    
     private boolean confirmPlace = false;
     private boolean confirmRecall = false;
     
@@ -64,6 +69,7 @@ public class GamePanel2Player extends GamePanel {
     
     private String type;
     private CoOpFrame cof;
+    public CoOp coOp;
     
     private UnitSelector unitSelectorSocket;
     
@@ -73,6 +79,7 @@ public class GamePanel2Player extends GamePanel {
         
         this.stage = stage;
         stage.addKeyListener(new P2KeyboardListener());
+        coOp = new CoOp();
     }
 
     @Override
@@ -89,7 +96,8 @@ public class GamePanel2Player extends GamePanel {
                             @Override
                             public void windowClosed(WindowEvent e) {
                                 unitTypesP2 = ((UnitSelector)e.getSource()).getResultUnits();
-                                startGame();
+                                startGameLoop();
+                                summonEnemies();
                             }
                         });
                     }
@@ -141,10 +149,7 @@ public class GamePanel2Player extends GamePanel {
     }
     
     //for Socket
-    public void startGame() {
-        startGameLoop();
-        summonEnemies();
-    }
+    // <editor-fold defaultstate="collapsed" desc="Socket Setup">
     
     public void setP2Unit(String unitTypesStr) {
         String[] unitTypesStrSplit = unitTypesStr.split(" ");
@@ -161,7 +166,9 @@ public class GamePanel2Player extends GamePanel {
     public UnitSelector getUnitSelectorSocket() {
         return unitSelectorSocket;
     }
+    // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="(Ignore) Game Loop, Late Update, Debug Setup">
     public static GamePanel2Player getInstance(StageSelector stage, EnemySummoner summoner, String type, CoOpFrame cof) {
         if (instance == null) instance = new GamePanel2Player(stage, summoner);
         instance.type = type;
@@ -169,7 +176,7 @@ public class GamePanel2Player extends GamePanel {
         instance.resetGamePanel(stage, summoner);
         return instance;
     }
-
+    
     @Override
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
         unitTypesP2.clear();
@@ -199,15 +206,19 @@ public class GamePanel2Player extends GamePanel {
             remainManaP2 -= mana;
         }
     }
+    // </editor-fold>
 
+    
+    private final OTimer updateSocketTimer = new OTimer(0.25);
     @Override
     protected void fixedUpdate(double deltaTime) {
         super.fixedUpdate(deltaTime);
+        if (cof != null && updateSocketTimer.tick(deltaTime)) {
+            updateSocket();
+        }
     }
     
-    
-    
-    private int hoverSelectP2X, hoverSelectP2Y;
+    private int hoverSelectP2X;
     private int hoverPlaceP2X, hoverPlaceP2Y;
     private void runDynamicSelectP2(int col, double leap) {
         int gridX = col * CEMI_WIDTH + GRID_OFFSET_X;
@@ -220,6 +231,117 @@ public class GamePanel2Player extends GamePanel {
         hoverPlaceP2X = (int)(hoverPlaceP2X + leap * (gridX - hoverPlaceP2X));
         hoverPlaceP2Y = (int)(hoverPlaceP2Y + leap * (gridY - hoverPlaceP2Y));
     }
+    
+    
+    // Main Socket!!!
+    private void updateSocket() {
+        boolean isFirst;
+        int p1PlaceX = getPlaceCol();
+        int p1PlaceY = getPlaceRow();
+        Properties prop = new Properties();
+        prop.setProperty(CoKeys.BOTH_PLACE_XY, p1PlaceX + "," + p1PlaceY);
+        
+        StringBuilder allUnits = new StringBuilder();
+        StringBuilder allUnitsRowCol = new StringBuilder();
+        StringBuilder allUnitsHealth = new StringBuilder();
+        isFirst = true;
+        for (int i=0; i<units.size(); i++) {
+            Unit unit = units.get(i);
+            
+            //name
+            String name = ((isFirst) ? "":" ") + unit.getClass().getSimpleName();
+            allUnits.append(name);
+            //row, col
+            
+            int row = unit.getRow();
+            int col = unit.getCol();
+            String rowColStr = ((isFirst) ? "":" ") + row + "," + col;
+            allUnitsRowCol.append(rowColStr);
+            //health
+            
+            String health = ((isFirst) ? "":" ") + unit.getHealth();
+            allUnitsHealth.append(health);
+            isFirst = false;
+        }
+        prop.setProperty(CoKeys.ALL_UNITS_NAME, allUnits.toString());
+        prop.setProperty(CoKeys.ALL_UNITS_ROWCOL, allUnitsRowCol.toString());
+        prop.setProperty(CoKeys.ALL_UNITS_HEALTH, allUnitsHealth.toString());
+        cof.send(prop);
+    }
+    
+    public class CoOp {
+        public void updateP2PlaceXY(int x, int y) {
+            p2PlaceX = x;
+            p2PlaceY = y;
+        }
+        
+        public void setUnits(String allUnitsName, String allUnitsRowCol, String allUnitsHealth) {
+            String[] unitsStrSplit = allUnitsName.split(" ");
+            String[] unitRowColStr = allUnitsRowCol.split(" ");
+            String[] unitHealthStr = allUnitsHealth.split(" ");
+            int unitLen = unitsStrSplit.length;
+            if (unitsStrSplit.length == 0) return;
+            
+            System.out.println("len: SERVER=" + unitLen + " cli=" + units.size());
+            
+            boolean isNewUnit = unitLen > units.size();
+            boolean isSameUnit = unitLen == units.size();
+            boolean isDeleteUnit = unitLen < units.size();
+
+            if (isNewUnit) {
+                for (int i=units.size(); i<unitLen; i++) {
+                    
+                    System.out.println("NEW!!!!!!!!!!!!!!!!!!!");
+                    String rowColStr = unitRowColStr[unitLen - 1];
+                    String[] rowColStrSplit = rowColStr.split(",");
+                    int row = Integer.parseInt(rowColStrSplit[0]);
+                    int col = Integer.parseInt(rowColStrSplit[1]);
+
+                    String unitStr = unitsStrSplit[unitLen - 1];
+                    UnitType unitType = UnitSelector.getUnitTypeFromName(unitStr);
+                }
+                
+                
+
+            } else if (isSameUnit) {
+                System.out.println("noice");
+            } else if (isDeleteUnit) {
+                System.out.println("DELL!!!!!!!!!!!");
+            }
+            
+            
+            for (int i=0; i<unitsStrSplit.length; i++) {
+                
+                
+//                String rowColStr = unitRowColStr[i];
+//                String[] rowColStrSplit = rowColStr.split(",");
+//                int row = Integer.parseInt(rowColStrSplit[0]);
+//                int col = Integer.parseInt(rowColStrSplit[1]);
+//
+//                //name
+//                String unitStr = unitsStrSplit[i];
+//                UnitType unitType = UnitSelector.getUnitTypeFromName(unitStr);
+//                if (unitType != null) {
+//                    if (isFieldAvailable(col, row)) {
+//                        Unit unit = (Unit)UnitFactory.createEntity(unitType.unitClass, row, col);
+//                        if (unitsStrSplit.length > units.size() - 1) {
+//                            units.add(unit);
+//                        } else {
+//                            units.set(i, unit);
+//                        }
+//                        System.out.println(unitType.getClassName() + ": " + col + "x" + row);
+//                    }
+//                }
+//                //health
+//                int unitHealth = Integer.parseInt(unitHealthStr[i]);
+//                if (unitsStrSplit.length > units.size() - 1) {
+//                    units.get(i).setHealth(unitHealth);
+//                }
+            }
+        }
+        
+    }
+    // END Main Socket
 
     @Override
     protected boolean isAllowOn2Player() {
@@ -245,8 +367,10 @@ public class GamePanel2Player extends GamePanel {
         
         
         //Player 2
-        iconImage = ImgManager.loadIcon("p2_control");
-        g.drawImage(iconImage, BAR_X - CELL_WIDTH, BAR_Y, CELL_WIDTH - 30, CELL_HEIGHT - 30, this);
+        if (cof == null) {
+            iconImage = ImgManager.loadIcon("p2_control");
+            g.drawImage(iconImage, BAR_X - CELL_WIDTH, BAR_Y, CELL_WIDTH - 30, CELL_HEIGHT - 30, this);
+        }
         
         for (int i = 0; i < COLS - 1; i++) {
             iconImage = ImgManager.loadIcon("frame_op1");
@@ -328,6 +452,7 @@ public class GamePanel2Player extends GamePanel {
     private class P2KeyboardListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
+            if (cof != null) return;
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_S:
                     p2PlaceY = (p2PlaceY + 1) % ROWS;

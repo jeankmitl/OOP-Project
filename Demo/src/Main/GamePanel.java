@@ -790,8 +790,8 @@ public class GamePanel extends JPanel {
         paint2PComp(g);
 
         int countDragging = 0;
-        int col = (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
-        int row = (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
+        int col = getPlaceCol();
+        int row = getPlaceRow();
         if (draggingRecall) {
             runDynamicHover(row, col, 0.3);
             if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
@@ -921,6 +921,15 @@ public class GamePanel extends JPanel {
         }
     }
     
+    public int getPlaceCol() {
+        return (mouseX - GRID_OFFSET_X) / CELL_WIDTH;
+    }
+    
+    public int getPlaceRow() {
+        return (mouseY - GRID_OFFSET_Y) / CELL_HEIGHT;
+    }
+    
+    // fore 2-Players
     protected void paint2PComp(Graphics g) {}
     
     protected boolean isAllowOn2Player() {

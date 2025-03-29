@@ -22,7 +22,14 @@ public interface CoKeys {
     String READY_UNIT_SELECTOR = "readyUnitSelector";
     
     // on GamePanel2Players
-    String START_GAME = "startGame";
     String SET_P2_UNIT = "cliUnit";
+    String START_GAME = "startGame";
     
+    String BOTH_SELCT_XY = "bothSelectXY";
+    String BOTH_PLACE_XY = "bothPlaceXY";
+    
+    String PLACE_UNIT_XY = "";
+    String ALL_UNITS_NAME = "allUnitsName";
+    String ALL_UNITS_ROWCOL = "allUnitsRowCol";
+    String ALL_UNITS_HEALTH = "allUnitsHealth";
 }
