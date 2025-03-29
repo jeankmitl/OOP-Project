@@ -65,7 +65,7 @@ public class StageSelectorPanel extends JPanel{
                     if (st[i].contains(e.getPoint())) {
                         if (st[i].equals(st1) || progress.get_Stage_Num(i)) {
                             selectStage("St" + (i+1));
-                            passCheck = i+1;
+                            passCheck = i;
                             System.out.println("pass ="+passCheck);
                             break;
                         }
@@ -164,7 +164,7 @@ public class StageSelectorPanel extends JPanel{
     public void save() {
         unlock = progress.getMaxUnlockedStage()-1;
         System.out.println("unlock is"+unlock);
-        if(passCheck-1 == unlock){
+        if(passCheck == unlock){
             progress.set_Stage_Num(unlock);
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Save.bat"))) {
                 out.writeObject(progress);

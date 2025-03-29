@@ -258,11 +258,7 @@ public class UnitSelector extends JDialog {
         }if(progress.get_Stage_Num(7)|| DEBUG_MODE){
             unitTypes.add(new UnitType(AlphaWolf.class));
             unitTypes.add(new UnitType(Werewolf.class));
-        }if(progress.get_Stage_Num(8)|| DEBUG_MODE){
-            
         }if(progress.get_Stage_Num(9)|| DEBUG_MODE){
-            // No reward
-        }if(progress.get_Stage_Num(10)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Nike.class));
             unitTypes.add(new UnitType(Ghost.class));
             unitTypes.add(new UnitType(JavaSkeleton.class));
