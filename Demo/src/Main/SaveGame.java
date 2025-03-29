@@ -27,4 +27,12 @@ public class SaveGame implements Serializable{
         return stage_clear[index-1];
     }
     
+    public int getMaxUnlockedStage() {
+        for (int i = 1; i <=10; i++) {
+            if (get_Stage_Num(i) == false) {
+                return i;
+            }
+        }
+        return 10;
+    }
 }

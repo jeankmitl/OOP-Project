@@ -68,6 +68,16 @@ public class StageSelector extends JFrame {
             repaint();
             return;
         }
+        if (stageName.equals("win")) {
+            game.stopGameLoop();
+            panel.save();
+            getContentPane().removeAll();
+            getContentPane().add(panel);
+            setTitle("Select stage");
+            revalidate();
+            repaint();
+            return;
+        }
         getContentPane().removeAll();
         final EnemySummoner summoner;
         if (cof != null && !type.equals("cli")) {

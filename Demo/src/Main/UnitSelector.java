@@ -237,8 +237,8 @@ public class UnitSelector extends JDialog {
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
+        unitTypes.add(new UnitType(Explosive_turtle.class));
         if (progress.get_Stage_Num(1) || DEBUG_MODE){
-            unitTypes.add(new UnitType(Explosive_turtle.class));
             unitTypes.add(new UnitType(Mimic.class));
         }if(progress.get_Stage_Num(2)|| DEBUG_MODE){
             unitTypes.add(new UnitType(SemiAutoBot.class));
@@ -258,11 +258,7 @@ public class UnitSelector extends JDialog {
         }if(progress.get_Stage_Num(7)|| DEBUG_MODE){
             unitTypes.add(new UnitType(AlphaWolf.class));
             unitTypes.add(new UnitType(Werewolf.class));
-        }if(progress.get_Stage_Num(8)|| DEBUG_MODE){
-            
         }if(progress.get_Stage_Num(9)|| DEBUG_MODE){
-            // No reward
-        }if(progress.get_Stage_Num(10)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Nike.class));
             unitTypes.add(new UnitType(Ghost.class));
             unitTypes.add(new UnitType(JavaSkeleton.class));
