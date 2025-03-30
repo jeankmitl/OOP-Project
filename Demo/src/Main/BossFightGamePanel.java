@@ -10,9 +10,15 @@ import Asset.VFX;
 import DSystem.DWait;
 import DSystem.OTimer;
 import Entities.Bullets.BeamCleanRow;
+import Entities.Bullets.BeamCleanRowPurple;
+import Entities.Bullets.BigBallBullet;
+import Entities.Bullets.Bite;
 import Entities.Bullets.Bullet;
+import Entities.Bullets.CannonBullet;
 import Entities.Bullets.ExplosionBullet;
+import Entities.Bullets.JavaPush;
 import Entities.Bullets.Slash;
+import Entities.Bullets.TurtleBullet;
 import Entities.Enemies.AntKing;
 import Entities.Enemies.Bandit;
 import Entities.Enemies.BanditV2;
@@ -29,12 +35,16 @@ import Entities.Enemies.Sorcerer;
 import Entities.Enemies.TheBlueSword;
 import Entities.Enemies.TheRedSword;
 import Entities.Units.Candles6;
+import Entities.Units.CandlesExplosion;
+import Entities.Units.Mimic;
 import Entities.Units.Roles.UnitInvisible;
 import Entities.Units.Roles.UnitReflectable;
 import Entities.Units.Unit;
 import static Main.GamePanel.CELL_HEIGHT;
 import static Main.GamePanel.CELL_WIDTH;
 import static Main.GamePanel.GRID_OFFSET_X;
+import static Main.GamePanel.GRID_OFFSET_Y;
+import static Main.GamePanel.enemies;
 import static Main.GamePanel.getVfxs;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -390,7 +400,7 @@ public class BossFightGamePanel extends GamePanel {
             }
 
             else if (bullet instanceof BeamCleanRow) {
-                BeamCleanRow bcr = (BeamCleanRow) bullet;
+                BeamCleanRow bcr = (BeamCleanRow)bullet;
                 int cleanRow = bcr.getRow();
                 Audio.play(AudioName.BEAM_CLEAN_ROW);
                 bulletIterator.remove();
@@ -402,49 +412,106 @@ public class BossFightGamePanel extends GamePanel {
                 VFX vfx = new VFX((bcr.getCol() + 1) * CELL_WIDTH, bcr.getRow() * CELL_HEIGHT, "Beam2");
                 vfx.setWidth(1280);
                 getVfxs().add(vfx);
-            } else if (bullet instanceof ExplosionBullet) {
-                ExplosionBullet exp = (ExplosionBullet) bullet;
+            } else if (bullet instanceof BeamCleanRowPurple) {
+                BeamCleanRowPurple bcr = (BeamCleanRowPurple)bullet;
+                    int cleanRow = bcr.getRow();
+                    Audio.play(AudioName.BEAM_CLEAN_ROW);
+                    bulletIterator.remove();
+                    for (Enemy enemy : enemies) {
+                        if (enemy.getRow() == cleanRow) {
+                            enemy.takeDamage(CandlesExplosion.getUNIT_STATS().getAtk());
+                            enemy.debuff_chill();
+                        }
+                    }
+                    VFX vfx = new VFX(-GRID_OFFSET_X, bcr.getRow() * CELL_HEIGHT, "beam_purple");
+                    vfx.setWidth(1280);
+                    getVfxs().add(vfx);
+            } else if (bullet instanceof TurtleBullet) {
+                TurtleBullet exp = (TurtleBullet)bullet;
                 int cleanRow = exp.getRow();
                 Audio.play(AudioName.BEAM_CLEAN_ROW);
                 bulletIterator.remove();
                 for (Enemy enemy : enemies) {
-                    System.out.println(enemy.getX());
-                    System.out.println((exp.getCol() * CELL_WIDTH < enemy.getX()) + " / "
-                            + ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX()));
-                    if (enemy.getRow() == cleanRow && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX())
-                            && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
-                        System.out.println("hit");
+                    if (cleanRow == enemy.getRow() && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
                         enemy.takeDamage(exp.getAtk());
                     }
                 }
                 VFX vfx = new VFX(exp.getCol() * CELL_WIDTH - 30, exp.getRow() * CELL_HEIGHT - 20, "explosion_vfx");
                 vfx.setWidth(CELL_WIDTH + 60);
                 vfx.setHeight(CELL_HEIGHT + 20);
-                GamePanel.getVfxs().add(vfx);
                 getVfxs().add(vfx);
-            } // else if (bullet instanceof Bite) { //Mimic Beta test
-              // for (Enemy enemy : enemies) {
-              // if (bullet.getBounds().intersects(enemy.getBounds())) {
-              // enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
-              // getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() -
-              // GRID_OFFSET_Y - 40, "bone_hit"));
-              // bulletIterator.remove();
-              // Audio.play(AudioName.HIT);
-              // break;
-              // }
-              // }
-              // }
-            else { // Keep same stat with this here
+                
+            }  else if (bullet instanceof ExplosionBullet) {
+                ExplosionBullet exp = (ExplosionBullet)bullet;
+                int cleanRow = exp.getRow();
+                Audio.play(AudioName.BEAM_CLEAN_ROW);
+                bulletIterator.remove();
+                for (Enemy enemy : enemies) {
+                    if ((cleanRow == enemy.getRow() || cleanRow + 1 == enemy.getRow() || cleanRow - 1 == enemy.getRow())
+                            && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
+                        enemy.takeDamage(exp.getAtk());
+                    }
+                }
+                VFX vfx2 = new VFX(exp.getCol() * CELL_WIDTH, (exp.getRow() * CELL_HEIGHT) - (500 - CELL_HEIGHT), "explosion_beam_vfx");
+                vfx2.setHeight(500);
+                getVfxs().add(vfx2);
+                
+                VFX vfx = new VFX(exp.getCol() * CELL_WIDTH - 50, exp.getRow() * CELL_HEIGHT - 40, "explosion_vfx");
+                vfx.setWidth(CELL_WIDTH + 100);
+                vfx.setHeight(CELL_HEIGHT + 40);
+                getVfxs().add(vfx);
+                
+            } 
+            else if (bullet instanceof Bite) { //Mimic Beta test
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
-                        // enemy.debuff_stun();
-                        enemy.takeDamage(bullet.getAtk());
-                        getVfxs().add(bullet.getHitVfx());
+                        enemy.takeDamage(Mimic.getUNIT_STATS().getAtk());
+                        getVfxs().add(new VFX(bullet.getX() - GRID_OFFSET_X, bullet.getY() - GRID_OFFSET_Y - 40, "bone_hit"));
                         bulletIterator.remove();
                         Audio.play(AudioName.HIT);
                         break;
                     }
                 }
+            } else if (bullet instanceof CannonBullet) {
+                CannonBullet cb = (CannonBullet)bullet;
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        for (Enemy enemyBadLuck: enemies) {
+                            if (enemy.getRow() == enemyBadLuck.getRow() && 
+                                    (enemy.getX() - CELL_WIDTH < enemyBadLuck.getX()) && (enemy.getX() + CELL_WIDTH > enemyBadLuck.getX())) {
+                                enemyBadLuck.takeDamage(bullet.getAtk());
+                            }
+                        }
+                        Audio.play(AudioName.BEAM_CLEAN_ROW);
+                        VFX vfx = new VFX(enemy.getX(), enemy.getY(), "explosion_vfx");
+                        vfx.setWidth(CELL_WIDTH + 60);
+                        vfx.setHeight(CELL_HEIGHT + 20);
+                        GamePanel.getVfxs().add(vfx);
+                        getVfxs().add(vfx);
+                        
+                        cb.useBulletLife();
+                        if (cb.getBulletLife() <= 0) {
+                            bulletIterator.remove();
+                        }
+                        break;
+                    }
+                }
+            }
+            else { //Keep same stat with this here
+                for (Enemy enemy : enemies) {
+                    if (bullet.getBounds().intersects(enemy.getBounds())) {
+                        enemy.takeDamage(bullet.getAtk());
+                        if (enemy.getMaxHealth() <= 1300) {
+                            if (bullet instanceof JavaPush) enemy.move(-5);
+                            if (bullet instanceof BigBallBullet) enemy.move(-20);
+                        }
+                        
+                        getVfxs().add(bullet.getHitVfx());
+                        bulletIterator.remove();
+                        Audio.play(AudioName.HIT);
+                        break;
+                    }
+                }  
             }
         }
         units.removeIf(Unit::isDead);
