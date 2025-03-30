@@ -19,7 +19,6 @@ import java.util.List;
  * @author anawi
  */
 public class Tofu extends Unit implements UnitChargeShootable {
-    private boolean isHitUp = false;
     
     public Tofu(int row, int col) {
         super(row, col, getUNIT_STATS());
@@ -35,13 +34,12 @@ public class Tofu extends Unit implements UnitChargeShootable {
             if ((enemy.getRow() - 1 == this.getRow() || enemy.getRow() == this.getRow() || enemy.getRow() + 1 == this.getRow())
                     && enemy.getX() < this.getX()+200) {
                 enemy.takeDamage(atk);
-                System.out.println(enemy.getClass().getName());
-                getVfxs().add(new VFX(enemy.getX(), enemy.getY(), "wolf_scratch_hit"));
             }
         }
-        getVfxs().add(new VFX(col * GamePanel.CELL_WIDTH + 200, (row - 1) * GamePanel.CELL_HEIGHT, isHitUp ? "werewolf_up_scratch" : "werewolf_down_scratch"));
-        getVfxs().add(new VFX(col * GamePanel.CELL_WIDTH + 200, row * GamePanel.CELL_HEIGHT, isHitUp ? "werewolf_up_scratch" : "werewolf_down_scratch"));
-        getVfxs().add(new VFX(col * GamePanel.CELL_WIDTH + 200, (row + 1) * GamePanel.CELL_HEIGHT, isHitUp ? "werewolf_up_scratch" : "werewolf_down_scratch"));
+        getVfxs().add(new VFX((col + 1) * GamePanel.CELL_WIDTH, (row - 1) * GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH * 2 - 50, GamePanel.CELL_HEIGHT, "tofu_fire"));
+        getVfxs().add(new VFX((col + 1) * GamePanel.CELL_WIDTH, row * GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH * 2 - 50, GamePanel.CELL_HEIGHT, "tofu_fire"));
+        getVfxs().add(new VFX((col + 1) * GamePanel.CELL_WIDTH, (row + 1) * GamePanel.CELL_HEIGHT, GamePanel.CELL_WIDTH * 2 - 50, GamePanel.CELL_HEIGHT, "tofu_fire"));
+        
     }
     
     @Override

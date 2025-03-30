@@ -261,12 +261,12 @@ public class UnitSelector extends JDialog {
         }if(progress.get_Stage_Num(8)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Python.class));
             unitTypes.add(new UnitType(Cannon.class));
+            unitTypes.add(new UnitType(Tofu.class));
         }if(progress.get_Stage_Num(9)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Nike.class));
             unitTypes.add(new UnitType(Ghost.class));
             unitTypes.add(new UnitType(JavaSkeleton.class));
             unitTypes.add(new UnitType(CandlesExplosion.class));
-            unitTypes.add(new UnitType(Tofu.class));
         }
     }
     

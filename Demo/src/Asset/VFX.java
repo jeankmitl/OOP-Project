@@ -13,8 +13,14 @@ public class VFX {
     protected int width = 95, height = 95;
 
     public VFX(int x, int y, String name) {
+        this(x, y, 95, 95, name);
+    }
+    
+    public VFX(int x, int y, int w, int h, String name) {
         this.x = x;
         this.y = y;
+        this.width = w;
+        this.height = h;
         spriteSheet = ImgManager.loadVFX(name);
     }
     

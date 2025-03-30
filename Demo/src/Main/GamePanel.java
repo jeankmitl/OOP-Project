@@ -37,7 +37,7 @@ import java.util.Random;
 public class GamePanel extends JPanel {
     
     //TURN OFF IF NOT DEBUG: set mana, show status, etc...
-    public static boolean DEBUG_MODE = false;
+    public static boolean DEBUG_MODE = NoDebug.getDEBUG_MODE();
     
     private static GamePanel instance;
     private Image backgroundImage;
