@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class LoadingScreen extends JFrame {
     public LoadingScreen() {
-
+        System.out.println("i'm here");
         try {
             JPanel pr = new JPanel();
             pr.setBackground(new Color(55, 55, 71));

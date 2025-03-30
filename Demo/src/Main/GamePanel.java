@@ -37,7 +37,7 @@ import java.util.Random;
 public class GamePanel extends JPanel {
     
     //TURN OFF IF NOT DEBUG: set mana, show status, etc...
-    protected final boolean DEBUG_MODE = true;
+    public static final boolean DEBUG_MODE = true;
     
     private static GamePanel instance;
     private Image backgroundImage;
@@ -251,6 +251,7 @@ public class GamePanel extends JPanel {
             WinScreen winScreen = new WinScreen();
             Audio.stopMusic();
             Audio.play("you_win.wav");
+            stage.loadStage("win");
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -262,7 +263,7 @@ public class GamePanel extends JPanel {
                 @Override
                 protected void done() {
                     winScreen.dispose();
-                    stage.loadStage("win");
+                    
                     Audio.playMusic("mainMenu");
                 }
             };
@@ -520,6 +521,7 @@ public class GamePanel extends JPanel {
                             System.out.println("Game Over!!! NOOB");
                             stopGameLoop();
                             Thread.sleep(1500);
+                            stage.loadStage("Back");
                             loseScreen.dispose();
                             Thread.sleep(1500);
                             return null;
@@ -528,7 +530,6 @@ public class GamePanel extends JPanel {
                         @Override
                         protected void done() {
                             loadingScreen.dispose();
-                            stage.loadStage("Back");
                             Audio.playMusic("mainMenu");
                         }
                     };
@@ -1038,18 +1039,18 @@ public class GamePanel extends JPanel {
                         "Leave Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                         if (res == JOptionPane.YES_OPTION) {
                             Audio.play(AudioName.BUTTON_CLICK);
+                            stage.loadStage("Back");
                             LoadingScreen loadingScreen = new LoadingScreen();
                             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                                 @Override
                                 protected Void doInBackground() throws Exception {
-                                    Thread.sleep(1500);
+                                    Thread.sleep(500);
                                     return null;
                                 }
 
                                 @Override
                                 protected void done() {
                                     loadingScreen.dispose();
-                                    stage.loadStage("Back");
                                     Audio.playMusic("mainMenu");
                                 }
                             };

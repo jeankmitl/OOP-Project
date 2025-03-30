@@ -78,20 +78,21 @@ public class ConfigScreen extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (homeBtn.contains(e.getPoint())) {
-                    dispose();
                     Audio.play(AudioName.BUTTON_CLICK);
-                    LoadingScreen loadingScreen = new LoadingScreen();
                     SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        LoadingScreen loadingScreen = new LoadingScreen();
+                        
                         @Override
                         protected Void doInBackground() throws Exception {
-                            Thread.sleep(1500);
+                            Thread.sleep(500);
+                            new MainMenu();
+                            dispose();
                             return null;
                         }
 
                         @Override
                         protected void done() {
                             loadingScreen.dispose();
-                            new MainMenu();
                         }
                     };
                     worker.execute();

@@ -77,7 +77,6 @@ public class StageSelectorPanel extends JPanel{
                                 "Sorry, you can't return go back in Socket Mode", "Socket Mode", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-                    stageSelector.dispose();
                     selectStage("Main");
                 } else if (resetBtn.contains(e.getPoint())){
                     Audio.play(AudioName.BUTTON_CLICK);
@@ -95,7 +94,6 @@ public class StageSelectorPanel extends JPanel{
                             boolean deleted = saveFile.delete();
                             if (deleted) {
                                 System.out.println("Save file deleted successfully");
-                                stageSelector.dispose();
                                 selectStage("StageSelector");
                             }
                         }
@@ -177,21 +175,7 @@ public class StageSelectorPanel extends JPanel{
     
     private void selectStage(String stageName) {
         Audio.play(AudioName.BUTTON_CLICK);
-        LoadingScreen loadingScreen = new LoadingScreen();
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                Thread.sleep(1500);
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                loadingScreen.dispose();
-                stageSelector.loadStage(stageName);
-            }
-        };
-        worker.execute();
+        stageSelector.loadStage(stageName); 
     }
     
     public BufferedImage spriteSlicer(String path, int frame) {

@@ -1,6 +1,7 @@
 package Main;
 
 import Asset.Audio;
+import Asset.AudioName;
 import CoOpSystem.CoKeys;
 import CoOpSystem.CoOpFrame;
 import Main.Stages.*;
@@ -50,15 +51,47 @@ public class StageSelector extends JFrame {
 
     public void loadStage(String stageName) {
         if (stageName.equals("Main")){
-            dispose();
-            new MainMenu();
+            SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                LoadingScreen loadingScreen = new LoadingScreen();
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    Thread.sleep(500);
+                    new MainMenu();
+                    dispose();
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    loadingScreen.dispose();
+                }
+            };
+            worker.execute();
             return;
         }
         if (stageName.equals("StageSelector")){
-            dispose();
-            new StageSelector();
+            LoadingScreen loadingScreen = new LoadingScreen();
+            SwingWorker<Void, Void> worker = new SwingWorker<>() {
+
+                @Override
+                protected Void doInBackground() throws Exception {
+                    Thread.sleep(500);
+                    new StageSelector();
+                    dispose();
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    loadingScreen.dispose();
+                }
+            };
+            worker.execute();
             return;
         }
+        System.out.println("who close");
+
         if (stageName.equals("Back")) {
             game.stopGameLoop();
             getContentPane().removeAll();
@@ -110,10 +143,25 @@ public class StageSelector extends JFrame {
                 game = GamePanel.getInstance(this, summoner);
             }
         }
-        getContentPane().add(game);
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            LoadingScreen loadingScreen = new LoadingScreen();
+            
+            @Override
+            protected Void doInBackground() throws Exception {
+                loadingScreen.toFront();
+                getContentPane().add(game);
+                Thread.sleep(500);
+                revalidate();
+                repaint();
+                return null;
+            }
 
-        revalidate();
-        repaint();
+            @Override
+            protected void done() {
+                loadingScreen.dispose();
+            }
+        };
+        worker.execute();
     }
     
     // All of this is for Socket

@@ -51,90 +51,69 @@ public class MainMenu extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (start.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
-                    System.out.println("Choose the stage you want");
 
-                    LoadingScreen loadingScreen = new LoadingScreen();
                     SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        LoadingScreen loadingScreen = new LoadingScreen();
+                        
                         @Override
                         protected Void doInBackground() throws Exception {
+                            Thread.sleep(1000);
+                            new StageSelector();
                             dispose();
-                            Thread.sleep(1500);
                             return null;
                         }
 
                         @Override
                         protected void done() {
-                            System.out.println("Finished loading.");
                             loadingScreen.dispose();
-                            new StageSelector();
                         }
                     };
                     worker.execute();
                 }
                 else if (twoP.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
-                    System.out.println("Choose the stage you want");
 
-                    LoadingScreen loadingScreen = new LoadingScreen();
                     SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        LoadingScreen loadingScreen = new LoadingScreen();
+                        
                         @Override
                         protected Void doInBackground() throws Exception {
+                            Thread.sleep(1000);
+                            new StageSelector("2p");
                             dispose();
-                            Thread.sleep(1500);
                             return null;
                         }
 
                         @Override
                         protected void done() {
-                            System.out.println("Finished loading.");
                             loadingScreen.dispose();
-                            new StageSelector("2p");
                         }
                     };
                     worker.execute();
                 }
                 else if (config.contains(e.getPoint())) {
                     Audio.play(AudioName.BUTTON_CLICK);
-                    LoadingScreen loadingScreen = new LoadingScreen();
+                    
                     SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        LoadingScreen loadingScreen = new LoadingScreen();
+                        
                         @Override
                         protected Void doInBackground() throws Exception {
+                            Thread.sleep(200);
+                            new ConfigScreen();
                             dispose();
-                            Thread.sleep(1500);
                             return null;
                         }
 
                         @Override
                         protected void done() {
-                            System.out.println("Finished loading.");
                             loadingScreen.dispose();
-                            new ConfigScreen();
                         }
                     };
                     worker.execute();
                 }
                 else if (exit.contains(e.getPoint())) {
-                    int res = JOptionPane.showConfirmDialog(mainMenuPanel, "Do you want to exit the game?", "Exit game", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (res == JOptionPane.YES_OPTION) {
-                        Audio.play(AudioName.BUTTON_CLICK);
-                        LoadingScreen loadingScreen = new LoadingScreen();
-                        SwingWorker<Void, Void> worker = new SwingWorker<>() {
-                            @Override
-                            protected Void doInBackground() throws Exception {
-                                dispose();
-                                Thread.sleep(1500);
-                                return null;
-                            }
-
-                            @Override
-                            protected void done() {
-                                System.out.println("Bye Bye Bro");
-                                loadingScreen.dispose();
-                                System.exit(0);
-                            }
-                        };
-                        worker.execute();
-                    }
+                    System.exit(0);
                 }
             }
         });
@@ -159,13 +138,14 @@ public class MainMenu extends JFrame {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(KeyEvent e) {
-                System.out.println(e.getKeyChar());
-                switch (e.getKeyChar()) {
-                    case 'p':
-                        dispose();
-                        StageSelector stage = new StageSelector();
-                        stage.loadStage("St10");
-                        break;
+                if (GamePanel.DEBUG_MODE) {
+                    switch (e.getKeyChar()) {
+                        case 'p':
+                            dispose();
+                            StageSelector stage = new StageSelector();
+                            stage.loadStage("St10");
+                            break;
+                    }
                 }
             }
         });
