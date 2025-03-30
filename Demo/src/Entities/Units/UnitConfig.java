@@ -51,7 +51,7 @@ public interface UnitConfig {
     UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic_1", "Mimic-att");
     UnitSpriteSheets CANDLES6_SPRITE = new UnitSpriteSheets("Candles6", "Candles6_activate2");
     UnitSpriteSheets EXPLOSION_SPRITE = new UnitSpriteSheets("Explosion", "Explosion_atk"); //BETA
-    UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("moai-Idle", "Moai-att");
+    UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("moai32-Idle", "moai32-att-Sheet");
     UnitSpriteSheets CANNON_SPRITE = new UnitSpriteSheets("Cannon-Idle", "Cannon-Charge");
     UnitSpriteSheets BIGBALL_SPRITE = new UnitSpriteSheets("bigball_idle", "bigball_shoot");
     UnitSpriteSheets EXPLOSIVE_TURTLE_SPRITE = new UnitSpriteSheets("explosive_tutle_idle", "explosive_tutle_atk");
@@ -81,14 +81,14 @@ public interface UnitConfig {
     UnitStats BLACK_SKELETON_STATS = new UnitStats(BLACK_SKELETON_SRITE, 300, 25, 1.5, 300, 14, ATTACKER, BLACK_SKELETON_DESC);
     UnitStats JAVA_SKELETON_STATS = new UnitStats(JAVA_SKELETON_SPRITE, 300, 20, 1.5, 200, 30, ATTACKER, JAVA_SKELETON_DESC);
     UnitStats CANNON_STATS = new UnitStats(CANNON_SPRITE,300,900,15,400, 7,ATTACKER, CANNON_DESC);
-    UnitStats MIPYA_STATS = new UnitStats(MIPYA_SPRITE, 50, 10, 1.5, 100, 30, ATTACKER, MIPYA_DESC);
-    UnitStats PYTHON_STATS = new UnitStats(PYTHON_SPRITE, 500, 20, 1.5, 300, 30, ATTACKER, PYTHON_DESC);
+    UnitStats MIPYA_STATS = new UnitStats(MIPYA_SPRITE, 50, 10, 1.5, 50, 30, ATTACKER, MIPYA_DESC);
+    UnitStats PYTHON_STATS = new UnitStats(PYTHON_SPRITE, 500, 30, 1.5, 270, 30, ATTACKER, PYTHON_DESC);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 400, 5, 250, 30, ATTACKER, BIGBALL);
     UnitStats SEMI_AUTO_BOT_STATS = new UnitStats(SEMI_AUTO_BOT_SPRITE, 300, 20, 3, 200, 7, ATTACKER, SEMI_AUTO_BOT_DESC);
     
     // Guard
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 1800, 42, 150, 12, GUARD, MIMIC_DESC);
-    UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE, 400, 35, 0.75, 200, 30, GUARD, SNAKE_DESC);
+    UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE,500, 35, 0.6, 200, 20, GUARD, SNAKE_DESC);
     UnitStats ALPHA_WOLF_STATS = new UnitStats(ALPHA_WOLF_SPRITE, 300, 90, 5, 200, 50, GUARD, ALPHA_WOLF_DESC);
     UnitStats WEREWOLF_STATS = new UnitStats(WEREWOLF_SPRITE, 500, 30, 1, 300, 50, GUARD, WEREWOLF_DESC);
     UnitStats TOFU_STATS = new UnitStats(TOFU_SPRITE, 500, 50, 1.5, 300, 50, GUARD, TOFU_DESC);
