@@ -3,4 +3,4 @@
 Demo/build/classes/
 Demo/nbproject/
 *.bat
-/Demo/src/Main/NoDebug.java
+Demo/src/Main/NoDebug.java
