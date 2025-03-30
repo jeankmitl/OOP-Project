@@ -20,8 +20,8 @@ import java.util.List;
  *
  * @author anawi
  */
-public class GolemSupport extends Unit implements UnitGeneratable {
-    public GolemSupport(int row, int col) {
+public class Moai extends Unit implements UnitGeneratable {
+    public Moai(int row, int col) {
         super(row, col, getUNIT_STATS());
     }
 

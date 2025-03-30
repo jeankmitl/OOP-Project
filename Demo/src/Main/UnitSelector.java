@@ -247,7 +247,7 @@ public class UnitSelector extends JDialog {
             unitTypes.add(new UnitType(Vampire.class));
             unitTypes.add(new UnitType(FlatSlime.class));
         }if(progress.get_Stage_Num(4)|| DEBUG_MODE){
-            unitTypes.add(new UnitType(GolemSupport.class));
+            unitTypes.add(new UnitType(Moai.class));
             unitTypes.add(new UnitType(GiveawaySlime.class));
         }if(progress.get_Stage_Num(5)|| DEBUG_MODE){
             unitTypes.add(new UnitType(MiPya.class));
