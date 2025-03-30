@@ -42,6 +42,7 @@ public interface UnitConfig {
     String JAVA_SKELETON_DESC = "git add *\n git commit\n git push git PUSH";
     String FLAT_SLIME_DESC = "don't have enough space, this can help you Generate mana!";
     String TOFU_DESC = "Dragon can fire 3 row";
+    String BARRIER_DESC = "sci-fi barrier, can place on Unit";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -70,6 +71,7 @@ public interface UnitConfig {
     UnitSpriteSheets FLAT_SLIME_SPRITE = new UnitSpriteSheets("flat_slime_idle", "flat_slime_gen_mana");
     UnitSpriteSheets CANDLES_EXPLOSION_SPRITE = new UnitSpriteSheets("candles_activate_purple", "candles_activate_purple");
     UnitSpriteSheets TOFU_SPRITE = new UnitSpriteSheets("Tofu_Idle", "Tofu_Atk");
+    UnitSpriteSheets BARRIER_SPRITE = new UnitSpriteSheets("barrier_good", "barrier_med", "barrier_bad");
     
     /**
      * All Unit stats 💡
@@ -101,6 +103,7 @@ public interface UnitConfig {
     
     // Defender
     UnitStats KANIWALL_STATS = new UnitStats(KANIWALL_SPRITE, 4000, 0, 0, 50, 30, DEFENDER, KANIWALL_DESC);
+    UnitStats BARRIER_STATS = new UnitStats(BARRIER_SPRITE, 2000, 0, 0, 50, 30, DEFENDER, BARRIER_DESC);
     UnitStats GHOST_STATS = new UnitStats(GHOST_SPRITE, 1, 1290, 0, 300, 30, DEFENDER, GHOST_DESC);
     
     // Cost-Gen
