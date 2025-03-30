@@ -58,7 +58,7 @@ public class BossFightGamePanel extends GamePanel {
     
     private OTimer damageTimer = new OTimer(1);
     private OTimer teleportTimer = new OTimer(7);
-    private OTimer summonTimer = new OTimer(16);
+    private OTimer summonTimer = new OTimer(12);
     private OTimer teleportKnightTimer = new OTimer(9);
     private OTimer slashTimer = new OTimer(10);
 
