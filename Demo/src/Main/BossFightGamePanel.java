@@ -59,6 +59,7 @@ public class BossFightGamePanel extends GamePanel {
     private OTimer damageTimer = new OTimer(1);
     private OTimer teleportTimer = new OTimer(7);
     private OTimer summonTimer = new OTimer(12);
+    private OTimer summonPhaseTwoTimer = new OTimer(18);
     private OTimer teleportKnightTimer = new OTimer(9);
     private OTimer slashTimer = new OTimer(10);
 
@@ -234,11 +235,12 @@ public class BossFightGamePanel extends GamePanel {
                         teleport((SongChinWu)enemy);
                         
                     }
-                    if (summonTimer.tick(deltaTime)) {
-                        if (!isHalfHealh) {
+                    if (!isHalfHealh) {
+                        if (summonTimer.tick(deltaTime)) {
                             summonRandomThreeEnemies(enemy);
-                            
-                        } else {
+                        }
+                    } else {
+                        if(summonPhaseTwoTimer.tick(deltaTime)) {
                             summonThreeAntKing(enemy);
                         }
                     }

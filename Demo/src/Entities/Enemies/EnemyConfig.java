@@ -51,5 +51,5 @@ public interface EnemyConfig {
     EnemyStats THE_BLUE_SWORD = new EnemyStats(The_BLUE_SWORD_SPRITE, 6900, 0, 1, 0, NORMAL);
     EnemyStats ISHOWSPEED_STATS = new EnemyStats(ISHOWSPEED_SPRITE, 340, 100, 1, WALK_SLOW, NORMAL);
     EnemyStats KNIGHT_WALKER_STATS = new EnemyStats(KNIGHT_WALKER_SPRITE, 8600, 1000, 1.5, WALK_VERY_SLOW, NORMAL);
-    EnemyStats BERU_STATS = new EnemyStats(BERU_SPRITE, 1290, 250, 3, WALK_FAST, NORMAL);
+    EnemyStats BERU_STATS = new EnemyStats(BERU_SPRITE, 1290, 300, 3, WALK_FAST, NORMAL);
 }
