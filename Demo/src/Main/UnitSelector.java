@@ -57,7 +57,7 @@ public class UnitSelector extends JDialog {
     
     private final String type;
     private SaveGame progress = null;
-    protected final boolean DEBUG_MODE = false; //<----- Open on this
+    protected final boolean DEBUG_MODE = GamePanel.DEBUG_MODE; //go to GamePanel to set DEBUG
 
     private CoOpFrame cof;
     private boolean isCliReady = false;
@@ -266,6 +266,7 @@ public class UnitSelector extends JDialog {
             unitTypes.add(new UnitType(Ghost.class));
             unitTypes.add(new UnitType(JavaSkeleton.class));
             unitTypes.add(new UnitType(CandlesExplosion.class));
+            unitTypes.add(new UnitType(Tofu.class));
         }
     }
     
