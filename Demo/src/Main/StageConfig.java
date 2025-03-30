@@ -26,5 +26,5 @@ public interface StageConfig {
     StageStats STAGE_7 = new StageStats("Stage 7", HARD, 73, "cave", "dungeon_song_raid_nightRemix.wav");
     StageStats STAGE_8 = new StageStats("Stage 8", HARD, 85, "cave", "dungeon_song_raid_nightRemix.wav");
     
-    StageStats STAGE_BOSS = new StageStats("Together Unto Death", BOSS, 1, "bg_dark_greek", null);//stage 9
+    StageStats STAGE_BOSS = new StageStats("Together Unto Death", BOSS, 1, "cave", null);//stage 9
 }
