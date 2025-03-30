@@ -102,7 +102,7 @@ public interface UnitConfig {
     
     // Cost-Gen
     UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 30, 25, 50, 7, COST_GEN, SLIME_DESC);
-    UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 30, 0.5, 0, 75, COST_GEN);
+    UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 40, 0.5, 0, 75, COST_GEN);
     UnitStats FLAT_SLIME_STATS = new UnitStats(FLAT_SLIME_SPRITE, 300, 30, 25, 70, 7, COST_GEN, FLAT_SLIME_DESC); 
     
     // Support
