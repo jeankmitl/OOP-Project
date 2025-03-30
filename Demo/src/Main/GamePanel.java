@@ -79,8 +79,6 @@ public class GamePanel extends JPanel {
     private final DTimer gameTimer;
     
     private final OTimer manaRecoverTimer10 = new OTimer(5);
-    private final OTimer spawnEnemiesTimer10 = new OTimer(10);
-    private final OTimer delayNidNoyTimer1 = new OTimer(0.1235);
     
     private final OTimer slowAnimTimer = new OTimer(0.15);
     private final OTimer mediumAnimTimer = new OTimer(0.25);
@@ -486,6 +484,7 @@ public class GamePanel extends JPanel {
                             if (unit.isDead()) {
                                 Audio.play(AudioName.KILL2);
                                 getVfxs().add(new VFX(unit.getX(), unit.getY(), "dead_ghost_vfx"));
+                                removeUnitID(unit);
                             }
                             if (unit instanceof UnitReflectable) {
                                 ((UnitReflectable)unit).reflectDamage(enemy);
@@ -528,6 +527,7 @@ public class GamePanel extends JPanel {
                 count_kill += 1;
                 System.out.println(count_kill);
                 enemyIterator.remove();
+                removeEnemyID(enemy);
                 Audio.play(AudioName.KILL2);
                 getVfxs().add(new VFX(enemy.getX(), enemy.getY(), "dead_ghost_vfx"));
             }
@@ -551,6 +551,20 @@ public class GamePanel extends JPanel {
                 VFX vfx = new VFX((bcr.getCol() + 1) * CELL_WIDTH, bcr.getRow() * CELL_HEIGHT, "Beam2");
                 vfx.setWidth(1280);
                 getVfxs().add(vfx);
+            } else if (bullet instanceof BeamCleanRowPurple) {
+                BeamCleanRowPurple bcr = (BeamCleanRowPurple)bullet;
+                    int cleanRow = bcr.getRow();
+                    Audio.play(AudioName.BEAM_CLEAN_ROW);
+                    bulletIterator.remove();
+                    for (Enemy enemy : enemies) {
+                        if (enemy.getRow() == cleanRow) {
+                            enemy.takeDamage(CandlesExplosion.getUNIT_STATS().getAtk());
+                            enemy.debuff_chill();
+                        }
+                    }
+                    VFX vfx = new VFX(-GRID_OFFSET_X, bcr.getRow() * CELL_HEIGHT, "beam_purple");
+                    vfx.setWidth(1280);
+                    getVfxs().add(vfx);
             } else if (bullet instanceof ExplosionBullet) {
                 ExplosionBullet exp = (ExplosionBullet)bullet;
                 int cleanRow = exp.getRow();
@@ -559,16 +573,21 @@ public class GamePanel extends JPanel {
                 for (Enemy enemy : enemies) {
                         System.out.println(enemy.getX());
                         System.out.println((exp.getCol() * CELL_WIDTH < enemy.getX()) + " / " + ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX()));
-                    if (enemy.getRow() == cleanRow && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
+                    if ((cleanRow == enemy.getRow() || cleanRow + 1 == enemy.getRow() || cleanRow - 1 == enemy.getRow())
+                            && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
                         System.out.println("hit");
                         enemy.takeDamage(exp.getAtk());
                     }
                 }
-                VFX vfx = new VFX(exp.getCol() * CELL_WIDTH - 30, exp.getRow() * CELL_HEIGHT - 20, "explosion_vfx");
-                vfx.setWidth(CELL_WIDTH + 60);
-                vfx.setHeight(CELL_HEIGHT + 20);
-                GamePanel.getVfxs().add(vfx);
+                VFX vfx2 = new VFX(exp.getCol() * CELL_WIDTH, (exp.getRow() * CELL_HEIGHT) - (500 - CELL_HEIGHT), "explosion_beam_vfx");
+                vfx2.setHeight(500);
+                getVfxs().add(vfx2);
+                
+                VFX vfx = new VFX(exp.getCol() * CELL_WIDTH - 50, exp.getRow() * CELL_HEIGHT - 40, "explosion_vfx");
+                vfx.setWidth(CELL_WIDTH + 100);
+                vfx.setHeight(CELL_HEIGHT + 40);
                 getVfxs().add(vfx);
+                
             } 
             else if (bullet instanceof Bite) { //Mimic Beta test
                 for (Enemy enemy : enemies) {
@@ -1115,6 +1134,7 @@ public class GamePanel extends JPanel {
                 } else {
                     units.add(unitIns);
                 }
+                addUnitID(unitIns);
                 remainMana -= unit.getManaCost();
                 unit.startCooldown();
                 if (unitIns instanceof UnitTriggerable) {
@@ -1141,10 +1161,20 @@ public class GamePanel extends JPanel {
                 if (unit.getRow() == row && unit.getCol() == col) {
                     unitIterator.remove();
                     unit.setHealth(0);
+                    removeUnitID(unit);
                     getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
                     Audio.play(AudioName.PLANT_DELETE);
                 }
             }
         }
     }
+    
+    protected void addUnitID(Unit unit) {}
+    
+    protected void addEnemyID(Enemy enemy) {}
+    
+    protected void removeUnitID(Unit unit) {}
+    
+    protected void removeEnemyID(Enemy enemy) {}
+    
 }

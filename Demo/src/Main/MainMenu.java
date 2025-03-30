@@ -38,7 +38,7 @@ public class MainMenu extends JFrame {
         }
 
         add(mainMenuPanel);
-
+        setDefaultCloseOperation(EXIT_ON_CLOSE); // when Alt+F4
         setTitle("Defense of the Dungeon");
         setSize(1264, 681);
         setResizable(false);

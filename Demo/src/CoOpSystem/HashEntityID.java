@@ -6,26 +6,43 @@ package CoOpSystem;
 
 import Entities.Entity;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
  * @author anawi
+ * @param <T>
  */
-public class HashEntityID {
+public class HashEntityID<T> {
     private int counter = 0;
-    private final HashMap<Integer, Entity> dataStore = new HashMap<>();
+    private final HashMap<Integer, T> dataStore = new HashMap<>();
 
-    public int insert(Entity entity) {
+    
+    public int add(T entity) {
         int hash = generateHash();
         dataStore.put(hash, entity);
         return hash;
+    }
+    
+    public void remove(T entity) {
+        dataStore.values().remove(entity);
     }
 
     private int generateHash() {
         return counter++;
     }
 
-    public Entity get(int hash) {
+    public T get(int hash) {
         return dataStore.get(hash);
+    }
+    
+    public void clear() {
+        dataStore.clear();
+    }
+    
+    public Set<Integer> getAllID() {
+        return dataStore.keySet();
     }
 }

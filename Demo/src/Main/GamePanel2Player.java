@@ -9,8 +9,10 @@ import Asset.AudioName;
 import Asset.ImgManager;
 import CoOpSystem.CoKeys;
 import CoOpSystem.CoOpFrame;
+import CoOpSystem.HashEntityID;
 import CoOpSystem.WrongCoOpException;
 import DSystem.OTimer;
+import Entities.Enemies.Enemy;
 import Entities.UnitFactory;
 import Entities.Units.Nike;
 import Entities.Units.Unit;
@@ -38,6 +40,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -54,7 +57,8 @@ public class GamePanel2Player extends GamePanel {
     
     private Image iconImage;
     private static List<UnitType> unitTypesP2;
-//    private S<Unit> unitID;
+    private HashEntityID<Unit> unitID;
+    private HashEntityID<Enemy> enemyID;
     private StageSelector stage;
     
     //Player2 Controller
@@ -81,6 +85,8 @@ public class GamePanel2Player extends GamePanel {
         this.stage = stage;
         stage.addKeyListener(new P2KeyboardListener());
         coOp = new CoOp();
+        unitID = new HashEntityID<>();
+        enemyID = new HashEntityID<>();
     }
 
     @Override
@@ -181,6 +187,8 @@ public class GamePanel2Player extends GamePanel {
     @Override
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
         unitTypesP2.clear();
+        unitID.clear();
+        enemyID.clear();
         super.resetGamePanel(stage, summoner);
         remainManaP2 = remainMana;
     }
@@ -242,31 +250,11 @@ public class GamePanel2Player extends GamePanel {
         Properties prop = new Properties();
         prop.setProperty(CoKeys.BOTH_PLACE_XY, p1PlaceX + "," + p1PlaceY);
         
-        StringBuilder allUnits = new StringBuilder();
-        StringBuilder allUnitsRowCol = new StringBuilder();
-        StringBuilder allUnitsHealth = new StringBuilder();
-        isFirst = true;
-        for (int i=0; i<units.size(); i++) {
-            Unit unit = units.get(i);
-            
-            //name
-            String name = ((isFirst) ? "":" ") + unit.getClass().getSimpleName();
-            allUnits.append(name);
-            //row, col
-            
-            int row = unit.getRow();
-            int col = unit.getCol();
-            String rowColStr = ((isFirst) ? "":" ") + row + "," + col;
-            allUnitsRowCol.append(rowColStr);
-            //health
-            
-            String health = ((isFirst) ? "":" ") + unit.getHealth();
-            allUnitsHealth.append(health);
-            isFirst = false;
-        }
-        prop.setProperty(CoKeys.ALL_UNITS_NAME, allUnits.toString());
-        prop.setProperty(CoKeys.ALL_UNITS_ROWCOL, allUnitsRowCol.toString());
-        prop.setProperty(CoKeys.ALL_UNITS_HEALTH, allUnitsHealth.toString());
+//        Set setId = unitID.getAllID();
+//        for (int i=0; i<setId.size(); i++) {
+//            
+//        }
+        
         cof.send(prop);
     }
     
@@ -274,71 +262,6 @@ public class GamePanel2Player extends GamePanel {
         public void updateP2PlaceXY(int x, int y) {
             p2PlaceX = x;
             p2PlaceY = y;
-        }
-        
-        public void setUnits(String allUnitsName, String allUnitsRowCol, String allUnitsHealth) {
-            String[] unitsStrSplit = allUnitsName.split(" ");
-            String[] unitRowColStr = allUnitsRowCol.split(" ");
-            String[] unitHealthStr = allUnitsHealth.split(" ");
-            int unitLen = unitsStrSplit.length;
-            if (unitsStrSplit.length == 0) return;
-            
-            System.out.println("len: SERVER=" + unitLen + " cli=" + units.size());
-            
-            boolean isNewUnit = unitLen > units.size();
-            boolean isSameUnit = unitLen == units.size();
-            boolean isDeleteUnit = unitLen < units.size();
-
-            if (isNewUnit) {
-                for (int i=units.size(); i<unitLen; i++) {
-                    
-                    System.out.println("NEW!!!!!!!!!!!!!!!!!!!");
-                    String rowColStr = unitRowColStr[unitLen - 1];
-                    String[] rowColStrSplit = rowColStr.split(",");
-                    int row = Integer.parseInt(rowColStrSplit[0]);
-                    int col = Integer.parseInt(rowColStrSplit[1]);
-
-                    String unitStr = unitsStrSplit[unitLen - 1];
-                    UnitType unitType = UnitSelector.getUnitTypeFromName(unitStr);
-                }
-                
-                
-
-            } else if (isSameUnit) {
-                System.out.println("noice");
-            } else if (isDeleteUnit) {
-                System.out.println("DELL!!!!!!!!!!!");
-            }
-            
-            
-            for (int i=0; i<unitsStrSplit.length; i++) {
-                
-                
-//                String rowColStr = unitRowColStr[i];
-//                String[] rowColStrSplit = rowColStr.split(",");
-//                int row = Integer.parseInt(rowColStrSplit[0]);
-//                int col = Integer.parseInt(rowColStrSplit[1]);
-//
-//                //name
-//                String unitStr = unitsStrSplit[i];
-//                UnitType unitType = UnitSelector.getUnitTypeFromName(unitStr);
-//                if (unitType != null) {
-//                    if (isFieldAvailable(col, row)) {
-//                        Unit unit = (Unit)UnitFactory.createEntity(unitType.unitClass, row, col);
-//                        if (unitsStrSplit.length > units.size() - 1) {
-//                            units.add(unit);
-//                        } else {
-//                            units.set(i, unit);
-//                        }
-//                        System.out.println(unitType.getClassName() + ": " + col + "x" + row);
-//                    }
-//                }
-//                //health
-//                int unitHealth = Integer.parseInt(unitHealthStr[i]);
-//                if (unitsStrSplit.length > units.size() - 1) {
-//                    units.get(i).setHealth(unitHealth);
-//                }
-            }
         }
         
     }
@@ -505,4 +428,25 @@ public class GamePanel2Player extends GamePanel {
             }
         }
     }
+
+    @Override
+    protected void removeUnitID(Unit unit) {
+        unitID.remove(unit);
+    }
+    
+    @Override
+    protected void removeEnemyID(Enemy enemy) {
+        enemyID.remove(enemy);
+    }
+
+    @Override
+    protected void addUnitID(Unit unit) {
+        unitID.add(unit);
+    }
+
+    @Override
+    protected void addEnemyID(Enemy enemy) {
+        enemyID.add(enemy);
+    }
+
 }

@@ -486,16 +486,6 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     gamePanel.coOp.updateP2PlaceXY(placeX, placeY);
                 }
             }
-            final String allUnitsName;
-            final String allUnitsRowCol;
-            final String allUnitsHealth;
-            if ((allUnitsName = prop.getProperty(CoKeys.ALL_UNITS_NAME)) != null
-                    && (allUnitsRowCol = prop.getProperty(CoKeys.ALL_UNITS_ROWCOL)) != null
-                    && (allUnitsHealth = prop.getProperty(CoKeys.ALL_UNITS_HEALTH)) != null) {
-                if (isForCli) {
-                    gamePanel.coOp.setUnits(allUnitsName, allUnitsRowCol, allUnitsHealth);
-                }
-            }
         });
     }
 }
