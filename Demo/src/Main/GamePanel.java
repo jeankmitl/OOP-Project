@@ -735,18 +735,18 @@ public class GamePanel extends JPanel {
         //g: for Smooth ex. picture
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         
-        // RED LINE
-        g.setColor(Color.RED);
-        g.drawLine(50, 0, 50, 850);
-
-        //GRID
-        g.setColor(Color.LIGHT_GRAY);
-        for (int i = 0; i <= ROWS; i++) {
-            g.drawLine(GRID_OFFSET_X, GRID_OFFSET_Y + i * CELL_HEIGHT, GRID_OFFSET_X + COLS * CELL_WIDTH, GRID_OFFSET_Y + i * CELL_HEIGHT);
-        }
-        for (int i = 0; i <= COLS; i++) {
-            g.drawLine(GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y, GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y + ROWS * CELL_HEIGHT);
-        }
+//        // RED LINE
+//        g.setColor(Color.RED);
+//        g.drawLine(50, 0, 50, 850);
+//
+//        //GRID
+//        g.setColor(Color.LIGHT_GRAY);
+//        for (int i = 0; i <= ROWS; i++) {
+//            g.drawLine(GRID_OFFSET_X, GRID_OFFSET_Y + i * CELL_HEIGHT, GRID_OFFSET_X + COLS * CELL_WIDTH, GRID_OFFSET_Y + i * CELL_HEIGHT);
+//        }
+//        for (int i = 0; i <= COLS; i++) {
+//            g.drawLine(GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y, GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y + ROWS * CELL_HEIGHT);
+//        }
 
         //g2d: for Pixel Art ex. SpriteSheet
         Graphics2D g2d = (Graphics2D) g;
