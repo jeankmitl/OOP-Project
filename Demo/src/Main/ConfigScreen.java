@@ -10,17 +10,19 @@ import javax.swing.event.*;
 
 public class ConfigScreen extends JFrame {
 
-    private Rectangle homeBtn, musicBtn, soundBtn;
-    private Image background, musicImg, soundImg;
+    private Rectangle homeBtn, musicBtn, soundBtn, hardMode;
+    private Image background, musicImg, soundImg, hardModeImg;
     private boolean isButtonHovered = false;
     private ConfigScreenPanel configScreenPanel;
     private JSlider musicSld, soundSld;
+    private int defSize = 160;
 
     public ConfigScreen() {
 
         homeBtn = new Rectangle(1170, 15, 75, 75);
-        musicBtn = new Rectangle(462, 240, 160, 160);
-        soundBtn = new Rectangle(652, 240, 160, 160);
+        musicBtn = new Rectangle(400, 240, defSize, defSize);
+        soundBtn = new Rectangle(600, 240, defSize, defSize);
+        hardMode = new Rectangle(800, 240, defSize, defSize);
         configScreenPanel = new ConfigScreenPanel();
 
         try {
@@ -28,6 +30,7 @@ public class ConfigScreen extends JFrame {
             background = ImageIO.read(getClass().getResource("/Asset/Img/Background/defense_of_dungeon_wallpaper.png"));
             soundImg = ImgManager.loadIcon((Audio.isSoundEnable()) ? "unmute_sound" : "mute_sound");
             musicImg = ImgManager.loadIcon((Audio.isMusicEnable()) ? "unmute_music" : "mute_music");
+            hardModeImg = ImgManager.loadIcon((GamePanel.isHardMode) ? "hard_mode_on" : "hard_mode_off");
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -63,6 +66,7 @@ public class ConfigScreen extends JFrame {
             }
         });
 
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("Config");
         setSize(1264, 681);
         setResizable(false);
@@ -117,6 +121,17 @@ public class ConfigScreen extends JFrame {
                         soundImg = ImgManager.loadIcon("unmute_sound");
                     }
                     configScreenPanel.repaint();
+                } else if (hardMode.contains(e.getPoint())) {
+                    Audio.play(AudioName.BUTTON_CLICK);
+                    if (GamePanel.isHardMode) {
+                        GamePanel.isHardMode = false;
+                        hardModeImg = ImgManager.loadIcon("hard_mode_off");
+                    }
+                    else {
+                        GamePanel.isHardMode = true;
+                        hardModeImg = ImgManager.loadIcon("hard_mode_on");
+                    }
+                    configScreenPanel.repaint();
                 }
             }
         });
@@ -124,7 +139,8 @@ public class ConfigScreen extends JFrame {
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                if (homeBtn.contains(e.getPoint()) || musicBtn.contains(e.getPoint()) || soundBtn.contains(e.getPoint())) {
+                if (homeBtn.contains(e.getPoint()) || musicBtn.contains(e.getPoint()) || soundBtn.contains(e.getPoint())
+                        || hardMode.contains(e.getPoint())) {
                     setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     if (!isButtonHovered) {
                         isButtonHovered = true;
@@ -150,6 +166,7 @@ public class ConfigScreen extends JFrame {
             g2d.drawImage(homeIcon, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);
             g2d.drawImage(musicImg, musicBtn.x, musicBtn.y, musicBtn.width, musicBtn.height, this);
             g2d.drawImage(soundImg, soundBtn.x, soundBtn.y, soundBtn.width, soundBtn.height, this);
+            g2d.drawImage(hardModeImg, hardMode.x, hardMode.y, hardMode.width, hardMode.height, this);
         }
     }
 }

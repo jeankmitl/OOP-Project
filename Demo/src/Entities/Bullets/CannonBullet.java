@@ -16,7 +16,7 @@ public class CannonBullet extends Bullet {
     public CannonBullet(int x ,int y, int atk) {
         super(x, y, atk);
         spriteSheet = ImgManager.loadSprite("cannon_bullet");
-        speed = 5;
+        speed = 8;
     }
 
     @Override

@@ -60,6 +60,7 @@ public class GamePanel extends JPanel {
     protected static int remainMana = 50;
     public static final int MAX_MANA = 9999;
     public int manaRegenPct = 0; //test mana
+    public static boolean isHardMode = false;
         
     protected static List<Unit> units;
     protected static List<Enemy> enemies;
@@ -88,7 +89,8 @@ public class GamePanel extends JPanel {
     private boolean isAnyUnitDragging = false;
     
     protected int target, count_kill=0;
-    private boolean victory = false,Ready = false,Set = false,Go = false;
+    private boolean victory = false,Ready = false,Set = false,Go = false, fail=false;
+    
     private String title = "";
     
     private final Rectangle homeBtn = new Rectangle(1180,15,75,75);
@@ -186,12 +188,10 @@ public class GamePanel extends JPanel {
     //run after setup GameLoop
     protected void start() {
         
-        new DWait(3, e -> {
-            System.out.println("Enemies is coming!");
-        }).start();
-        
-        for (int i=0; i<ROWS; i++) {
-            units.add(new Candles6(i, -1));
+        if (!isHardMode) {
+            for (int i=0; i<ROWS; i++) {
+                units.add(new Candles6(i, -1));
+            }
         }
         String bgMusicName = summoner.getSTAGE_STATS().getBgMusicName();
         if (bgMusicName != null) {
@@ -246,8 +246,11 @@ public class GamePanel extends JPanel {
             if (summoner instanceof stage8){save_Progress(8);}
             if (summoner instanceof StageBossFight){save_Progress(9);}
             if (summoner instanceof stage_beta){save_Progress(10);}
+            GameLoop.clearListener();
             Audio.play(AudioName.BUTTON_CLICK);
             WinScreen winScreen = new WinScreen();
+            Audio.stopMusic();
+            Audio.play("you_win.wav");
             SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -499,28 +502,38 @@ public class GamePanel extends JPanel {
 
             if (!stop) {
                 enemy.move();
+                if (isHardMode) enemy.move();
             }
 
             if (enemy.getX() + GRID_OFFSET_X <= 50) {
                 Audio.play(AudioName.BUTTON_CLICK);
-                LoadingScreen loadingScreen = new LoadingScreen();
-                SwingWorker<Void, Void> worker = new SwingWorker<>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        System.out.println("Game Over!!! NOOB");
-                        stopGameLoop();
-                        Thread.sleep(3000);
-                        return null;
-                    }
+                if (!fail) {
+                    fail = true;
+                    GameLoop.clearListener();
+                    Audio.stopMusic();
+                    Audio.play("you_lose.wav");
+                    LoadingScreen loadingScreen = new LoadingScreen();
+                    LoseScreen loseScreen = new LoseScreen();
+                    SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            System.out.println("Game Over!!! NOOB");
+                            stopGameLoop();
+                            Thread.sleep(1500);
+                            loseScreen.dispose();
+                            Thread.sleep(1500);
+                            return null;
+                        }
 
-                    @Override
-                    protected void done() {
-                        loadingScreen.dispose();
-                        stage.loadStage("Back");
-                        Audio.playMusic("mainMenu");
-                    }
-                };
-                worker.execute();
+                        @Override
+                        protected void done() {
+                            loadingScreen.dispose();
+                            stage.loadStage("Back");
+                            Audio.playMusic("mainMenu");
+                        }
+                    };
+                    worker.execute();
+                }
             }
 
             if (enemy.isDead()) {
@@ -809,7 +822,12 @@ public class GamePanel extends JPanel {
         iconImage = ImgManager.loadIcon("target");
         g.drawImage(iconImage, 550, 5,40,40, null);
         g.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
-        g.drawString(title, 400, 35);
+        //title
+        g.drawString(title, 750, 35);
+        if (isHardMode) {
+            iconImage = ImgManager.loadIcon("hard_mode_on");
+            g.drawImage(iconImage, 470, 0,50,50, null);
+        }
         /////Count Enemy
         if(Ready){
             iconImage = ImgManager.loadIcon("ready");

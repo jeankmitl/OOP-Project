@@ -1,6 +1,7 @@
 package DSystem;
 
 
+import Main.GamePanel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,7 @@ public class GameLoop extends Thread {
                 listener.onUpdate(deltaTime);
                 if (speedMode >= 1) listener.onUpdate(deltaTime);
                 if (speedMode >= 2) listener.onUpdate(deltaTime);
+                if (GamePanel.isHardMode) listener.onUpdate(deltaTime);
             }
         } catch (Exception e) {
             e.printStackTrace();
