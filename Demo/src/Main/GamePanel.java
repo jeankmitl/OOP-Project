@@ -579,17 +579,29 @@ public class GamePanel extends JPanel {
                     VFX vfx = new VFX(-GRID_OFFSET_X, bcr.getRow() * CELL_HEIGHT, "beam_purple");
                     vfx.setWidth(1280);
                     getVfxs().add(vfx);
-            } else if (bullet instanceof ExplosionBullet) {
+            } else if (bullet instanceof TurtleBullet) {
+                TurtleBullet exp = (TurtleBullet)bullet;
+                int cleanRow = exp.getRow();
+                Audio.play(AudioName.BEAM_CLEAN_ROW);
+                bulletIterator.remove();
+                for (Enemy enemy : enemies) {
+                    if (cleanRow == enemy.getRow() && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
+                        enemy.takeDamage(exp.getAtk());
+                    }
+                }
+                VFX vfx = new VFX(exp.getCol() * CELL_WIDTH - 30, exp.getRow() * CELL_HEIGHT - 20, "explosion_vfx");
+                vfx.setWidth(CELL_WIDTH + 60);
+                vfx.setHeight(CELL_HEIGHT + 20);
+                getVfxs().add(vfx);
+                
+            }  else if (bullet instanceof ExplosionBullet) {
                 ExplosionBullet exp = (ExplosionBullet)bullet;
                 int cleanRow = exp.getRow();
                 Audio.play(AudioName.BEAM_CLEAN_ROW);
                 bulletIterator.remove();
                 for (Enemy enemy : enemies) {
-                        System.out.println(enemy.getX());
-                        System.out.println((exp.getCol() * CELL_WIDTH < enemy.getX()) + " / " + ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX()));
                     if ((cleanRow == enemy.getRow() || cleanRow + 1 == enemy.getRow() || cleanRow - 1 == enemy.getRow())
                             && ((exp.getCol() - 1) * CELL_WIDTH < enemy.getX()) && ((exp.getCol() + 1) * CELL_WIDTH > enemy.getX())) {
-                        System.out.println("hit");
                         enemy.takeDamage(exp.getAtk());
                     }
                 }

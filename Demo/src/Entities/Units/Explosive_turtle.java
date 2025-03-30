@@ -10,6 +10,7 @@ import DSystem.DWait;
 import DSystem.OWait;
 import Entities.Bullets.Bullet;
 import Entities.Bullets.ExplosionBullet;
+import Entities.Bullets.TurtleBullet;
 import Entities.Enemies.Enemy;
 import static Entities.Units.Explosion.getUNIT_STATS;
 import Entities.Units.Roles.UnitInvisible;
@@ -35,7 +36,7 @@ public class Explosive_turtle extends Unit implements UnitInvisible {
     
     public void attack(List<Bullet> bullets) {
         System.out.println("attack");
-        bullets.add(new ExplosionBullet(col * GamePanel.CELL_WIDTH, row * GamePanel.CELL_HEIGHT + 30, atk, row, col));
+        bullets.add(new TurtleBullet(col * GamePanel.CELL_WIDTH, row * GamePanel.CELL_HEIGHT + 30, atk, row, col));
     }
 
     @Override
