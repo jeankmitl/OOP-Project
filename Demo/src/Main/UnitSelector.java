@@ -237,8 +237,8 @@ public class UnitSelector extends JDialog {
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
         unitTypes.add(new UnitType(Kaniwall.class));
-        unitTypes.add(new UnitType(Explosive_turtle.class));
         if (progress.get_Stage_Num(1) || DEBUG_MODE){
+            unitTypes.add(new UnitType(Explosive_turtle.class));
             unitTypes.add(new UnitType(Mimic.class));
         }if(progress.get_Stage_Num(2)|| DEBUG_MODE){
             unitTypes.add(new UnitType(SemiAutoBot.class));
@@ -246,7 +246,6 @@ public class UnitSelector extends JDialog {
         }if(progress.get_Stage_Num(3)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Vampire.class));
             unitTypes.add(new UnitType(FlatSlime.class));
-            unitTypes.add(new UnitType(Cannon.class));
         }if(progress.get_Stage_Num(4)|| DEBUG_MODE){
             unitTypes.add(new UnitType(GolemSupport.class));
             unitTypes.add(new UnitType(GiveawaySlime.class));
@@ -254,12 +253,14 @@ public class UnitSelector extends JDialog {
             unitTypes.add(new UnitType(MiPya.class));
             unitTypes.add(new UnitType(BlackSkeleton.class));
         }if(progress.get_Stage_Num(6)|| DEBUG_MODE){
-            unitTypes.add(new UnitType(Python.class));
             unitTypes.add(new UnitType(Explosion.class));
             unitTypes.add(new UnitType(Snake.class));
         }if(progress.get_Stage_Num(7)|| DEBUG_MODE){
             unitTypes.add(new UnitType(AlphaWolf.class));
             unitTypes.add(new UnitType(Werewolf.class));
+        }if(progress.get_Stage_Num(8)|| DEBUG_MODE){
+            unitTypes.add(new UnitType(Python.class));
+            unitTypes.add(new UnitType(Cannon.class));
         }if(progress.get_Stage_Num(9)|| DEBUG_MODE){
             unitTypes.add(new UnitType(Nike.class));
             unitTypes.add(new UnitType(Ghost.class));
