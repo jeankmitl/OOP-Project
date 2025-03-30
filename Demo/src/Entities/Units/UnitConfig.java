@@ -50,7 +50,7 @@ public interface UnitConfig {
     UnitSpriteSheets MIMIC_SPRITE = new UnitSpriteSheets("Mimic_1", "Mimic-att");
     UnitSpriteSheets CANDLES6_SPRITE = new UnitSpriteSheets("Candles6", "Candles6_activate2");
     UnitSpriteSheets EXPLOSION_SPRITE = new UnitSpriteSheets("Explosion", "Explosion_atk"); //BETA
-    UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("Golem_idle", "Golem_idle");
+    UnitSpriteSheets GOLEM_SUPPORT_SPRITE = new UnitSpriteSheets("moai-Idle", "Moai-att");
     UnitSpriteSheets CANNON_SPRITE = new UnitSpriteSheets("Cannon-Idle", "Cannon-Charge");
     UnitSpriteSheets BIGBALL_SPRITE = new UnitSpriteSheets("bigball_idle", "bigball_shoot");
     UnitSpriteSheets EXPLOSIVE_TURTLE_SPRITE = new UnitSpriteSheets("explosive_tutle_idle", "explosive_tutle_atk");
