@@ -48,7 +48,7 @@ public class Tofu extends Unit implements UnitChargeShootable {
     public boolean isEnemyInfront(List<Enemy> enermies) {
         for (Enemy enemy : enermies) {
             if ((enemy.getRow() - 1 == this.getRow() || enemy.getRow() == this.getRow() || enemy.getRow() + 1 == this.getRow())
-                    && enemy.getRow() == this.getRow() && enemy.getX() < this.getX()+200) {
+                    && enemy.getX() < this.getX()+200) {
                 setStatus(ATK_STATUS);
                 return true;
             } else {

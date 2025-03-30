@@ -37,7 +37,7 @@ import java.util.Random;
 public class GamePanel extends JPanel {
     
     //TURN OFF IF NOT DEBUG: set mana, show status, etc...
-    public static boolean DEBUG_MODE = false;
+    public static boolean DEBUG_MODE = true;
     
     private static GamePanel instance;
     private Image backgroundImage;
@@ -162,8 +162,7 @@ public class GamePanel extends JPanel {
     }
     
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
-        DEBUG_MODE = false; //comment if you REALLY DEBUG
-        DEBUG_MODE = false; //really!?
+        DEBUG_MODE = true; //comment if you REALLY DEBUG
         count_kill = 0;
         victory = false;
         stopGameLoop();

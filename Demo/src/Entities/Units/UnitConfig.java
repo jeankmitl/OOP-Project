@@ -41,6 +41,7 @@ public interface UnitConfig {
     String GHOST_DESC = "don't TOUCH mep, I shy. UwU";
     String JAVA_SKELETON_DESC = "git add *\n git commit\n git push git PUSH";
     String FLAT_SLIME_DESC = "don't have enough space, this can help you Generate mana!";
+    String TOFU_DESC = "Dragon can fire 3 row";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -68,6 +69,7 @@ public interface UnitConfig {
     UnitSpriteSheets JAVA_SKELETON_SPRITE = new UnitSpriteSheets("java_skeleton_idle", "java_skeleton_atk");
     UnitSpriteSheets FLAT_SLIME_SPRITE = new UnitSpriteSheets("flat_slime_idle", "flat_slime_gen_mana");
     UnitSpriteSheets CANDLES_EXPLOSION_SPRITE = new UnitSpriteSheets("candles_activate_purple", "candles_activate_purple");
+    UnitSpriteSheets TOFU_SPRITE = new UnitSpriteSheets("Tofu_Idle", "Tofu_Atk");
     
     /**
      * All Unit stats 💡
@@ -89,6 +91,7 @@ public interface UnitConfig {
     UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE, 400, 35, 0.75, 200, 30, GUARD, SNAKE_DESC);
     UnitStats ALPHA_WOLF_STATS = new UnitStats(ALPHA_WOLF_SPRITE, 300, 90, 5, 200, 50, GUARD, ALPHA_WOLF_DESC);
     UnitStats WEREWOLF_STATS = new UnitStats(WEREWOLF_SPRITE, 500, 30, 1, 300, 50, GUARD, WEREWOLF_DESC);
+    UnitStats TOFU_STATS = new UnitStats(TOFU_SPRITE, 500, 50, 1.5, 300, 50, GUARD, TOFU_DESC);
     
     // Explosion
     UnitStats EXPLOSION_STATS = new UnitStats(EXPLOSION_SPRITE, 300, 1800, 50, 150, 30, EXPLOTION, EXPLOSION_DESC);
