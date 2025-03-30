@@ -66,7 +66,7 @@ public class StageSelectorPanel extends JPanel{
                         if (st[i].equals(st1) || progress.get_Stage_Num(i)) {
                             selectStage("St" + (i+1));
                             passCheck = i;
-                            System.out.println("pass ="+passCheck);
+                            System.out.println("Pass = "+passCheck);
                             break;
                         }
                     }
@@ -161,7 +161,7 @@ public class StageSelectorPanel extends JPanel{
     
     public void save() {
         unlock = progress.getMaxUnlockedStage()-1;
-        System.out.println("unlock is"+unlock);
+        System.out.println("Unlock is "+unlock);
         if(passCheck == unlock){
             progress.set_Stage_Num(unlock);
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Save.bat"))) {
@@ -231,9 +231,9 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawString("Stage 3", 545, 400);
         }
         if (progress.get_Stage_Num(3)) {
-            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/Golem_idle.png", 4);
+            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/Moai-att.png", 12);
             g2d.drawImage(stageLayout, st4.x, st4.y, st4.width, st4.height, this);
-            g2d.drawImage(unitIcon, st4.x, st4.y, st4.width, st4.height, this);
+            g2d.drawImage(unitIcon, st4.x, st4.y-35, st4.width, st4.height+30, this);
             g2d.drawString("Stage 4", 745, 400);
         }
         if (progress.get_Stage_Num(4)) {
