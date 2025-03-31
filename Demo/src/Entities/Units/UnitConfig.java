@@ -91,7 +91,7 @@ public interface UnitConfig {
     // Guard
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 1800, 42, 150, 12, GUARD, MIMIC_DESC);
     UnitStats SNAKE_STATS = new UnitStats(SNAKE_SPRITE,500, 35, 0.6, 200, 20, GUARD, SNAKE_DESC);
-    UnitStats ALPHA_WOLF_STATS = new UnitStats(ALPHA_WOLF_SPRITE, 300, 90, 5, 200, 50, GUARD, ALPHA_WOLF_DESC);
+    UnitStats ALPHA_WOLF_STATS = new UnitStats(ALPHA_WOLF_SPRITE, 300, 200, 5, 200, 50, GUARD, ALPHA_WOLF_DESC);
     UnitStats WEREWOLF_STATS = new UnitStats(WEREWOLF_SPRITE, 500, 30, 1, 300, 50, GUARD, WEREWOLF_DESC);
     UnitStats TOFU_STATS = new UnitStats(TOFU_SPRITE, 500, 50, 1.5, 300, 50, GUARD, TOFU_DESC);
     
