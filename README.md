@@ -59,6 +59,9 @@ If it not found, visit [this link](https://www.oracle.com/java/technologies/down
 ### Download Executable JAR File
 Download ```Defense of the Dungeon.jar``` from ```Releases``` section
 
+### Download as Development step
+Go to ```Demo``` > ```src``` > ```Main``` > ```Main.java``` and run file
+
 ## 🧑‍💻 Contributors
 
 * ```Programming``` & ```Graphic Design``` : Sea
