@@ -69,6 +69,11 @@ public abstract class Enemy extends Entity {
         return (int) x;
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+    
+
     @Override
     public int getY() {
         return row * GamePanel.CELL_HEIGHT;

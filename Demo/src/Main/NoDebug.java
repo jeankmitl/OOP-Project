@@ -10,6 +10,6 @@ package Main;
  */
 public class NoDebug {
     public static boolean getDEBUG_MODE() {
-        return false;
+        return true;
     }
 }

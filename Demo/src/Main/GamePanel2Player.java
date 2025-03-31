@@ -7,6 +7,7 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import CoOpSystem.AllEntityTypes;
 import CoOpSystem.CoKeys;
 import CoOpSystem.CoOpFrame;
 import CoOpSystem.HashEntityID;
@@ -162,7 +163,7 @@ public class GamePanel2Player extends GamePanel {
         String[] unitTypesStrSplit = unitTypesStr.split(" ");
         List<UnitType> tempUnitTypes = new ArrayList<>();
         for (String unitTypeStr: unitTypesStrSplit) {
-            UnitType unitType = UnitSelector.getUnitTypeFromName(unitTypeStr);
+            UnitType unitType = AllEntityTypes.getUnitTypeFromName(unitTypeStr);
             if (unitType != null) {
                 tempUnitTypes.add(unitType);
             }
@@ -186,6 +187,7 @@ public class GamePanel2Player extends GamePanel {
     
     @Override
     protected void resetGamePanel(StageSelector stage, EnemySummoner summoner) {
+        if (cof != null) isHardMode = false;
         unitTypesP2.clear();
         unitID.clear();
         enemyID.clear();
@@ -218,11 +220,11 @@ public class GamePanel2Player extends GamePanel {
     // </editor-fold>
 
     
-    private final OTimer updateSocketTimer = new OTimer(0.25);
+    private final OTimer updateSocketTimer = new OTimer(0.5);
     @Override
     protected void fixedUpdate(double deltaTime) {
         super.fixedUpdate(deltaTime);
-        if (cof != null && updateSocketTimer.tick(deltaTime)) {
+        if (cof != null && type.equals("2p") && updateSocketTimer.tick(deltaTime)) {
             updateSocket();
         }
     }
@@ -250,19 +252,90 @@ public class GamePanel2Player extends GamePanel {
         Properties prop = new Properties();
         prop.setProperty(CoKeys.BOTH_PLACE_XY, p1PlaceX + "," + p1PlaceY);
         
-//        Set setId = unitID.getAllID();
-//        for (int i=0; i<setId.size(); i++) {
-//            
-//        }
         
+        Set<Integer> setUnitId = unitID.getAllID();
+        if (!setUnitId.isEmpty()) {
+            StringBuilder sbUnit = new StringBuilder();
+            isFirst = true;
+            for (int id: setUnitId) {
+                String idFormat = ((isFirst) ? "" : " ") + id;
+                sbUnit.append(idFormat);
+
+                Unit unit = unitID.get(id);
+                String name = unit.getClass().getSimpleName();
+                int row = unit.getRow();
+                int col = unit.getCol();
+                int health = unit.getHealth();
+
+                String format = name + " " + row + " " + col + " " + health;
+                System.out.println("UNIT_" + id + ": " + format);
+                prop.setProperty(CoKeys.UNIT_ + id, format);
+
+                isFirst = false;
+            }
+            prop.setProperty(CoKeys.ALL_UNIT_ID, sbUnit.toString());
+        }
+        
+        Set<Integer> setEnemyId = enemyID.getAllID();
+        if (!setEnemyId.isEmpty()) {
+            StringBuilder sbEnemy = new StringBuilder();
+            isFirst = true;
+            for (int id: setEnemyId) {
+                String idFormat = ((isFirst) ? "" : " ") + id;
+                sbEnemy.append(idFormat);
+
+                Enemy unit = enemyID.get(id);
+                String name = unit.getClass().getSimpleName();
+                int row = unit.getRow();
+                int x = unit.getX();
+                int health = unit.getHealth();
+
+                String format = name + " " + row + " " + x + " " + health;
+                System.out.println("ENEMY_" + id + ": " + format);
+                prop.setProperty(CoKeys.ENEMY_ + id, format);
+
+                isFirst = false;
+            }
+            prop.setProperty(CoKeys.ALL_ENEMY_ID, sbEnemy.toString());
+        }
+        
+        
+        
+        prop.setProperty(CoKeys.UPDATE_CLI, "");
         cof.send(prop);
     }
     
     public class CoOp {
+        // for Client
         public void updateP2PlaceXY(int x, int y) {
             p2PlaceX = x;
             p2PlaceY = y;
         }
+        
+        public void updateUnitAt(int id, String name, int row, int col, int health) {
+            if (unitID.containID(id)) { // server == client
+                Unit unit = unitID.get(id);
+                unit.setHealth(health);
+            } else { //server > client
+                UnitType unitType = AllEntityTypes.getUnitTypeFromName(name);
+                Unit unit = placeUnit(unitType, row, col, false);
+                insertUnitID(id, unit);
+            }
+        }
+        
+        public void updateEnemyAt(int id, String name, int row, int x, int health) {
+            if (enemyID.containID(id)) { // server == client
+                Enemy enemy = enemyID.get(id);
+                enemy.setHealth(health);
+                enemy.setX(x);
+            } else { //server > client
+                Enemy enemy = AllEntityTypes.getEnemyFromName(name);
+                Audio.play(AudioName.BUTTON_CLICK);
+                Enemy newEnemy = Spawn_Cli_Enemy(enemy, row);
+                insertEnemyID(id, newEnemy);
+            }
+        }
+        
         
     }
     // END Main Socket
@@ -368,6 +441,26 @@ public class GamePanel2Player extends GamePanel {
         //END Player 2
     }
 
+    @Override
+    public Unit placeUnit(UnitType unit, int row, int col, boolean isOwner) {
+        if (type.equals("2p") || !isOwner) {
+            return super.placeUnit(unit, row, col, isOwner); 
+        } else if (type.equals("cli")) {
+            String format = unit.getClassName() + " " + row + " " + col;
+            cof.sendOne(CoKeys.REQ_PLACE_UNIT, format);
+        }
+        return null;
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private void resetConfirm() {
         confirmPlace = false;
         confirmRecall = false;
@@ -405,7 +498,7 @@ public class GamePanel2Player extends GamePanel {
                     UnitType unit = unitTypesP2.get(p2Select);
                     if (unit.isNoCoolDown() && remainManaP2 >= unit.getManaCost()) {
                         if (confirmPlace) {
-                            placeUnit(unit, p2PlaceY, p2PlaceX);
+                            placeUnit(unit, p2PlaceY, p2PlaceX, true);
                             remainMana += unit.getManaCost();
                             remainManaP2 -= unit.getManaCost();
                             resetConfirm();
@@ -430,23 +523,33 @@ public class GamePanel2Player extends GamePanel {
     }
 
     @Override
-    protected void removeUnitID(Unit unit) {
-        unitID.remove(unit);
-    }
-    
-    @Override
-    protected void removeEnemyID(Enemy enemy) {
-        enemyID.remove(enemy);
-    }
-
-    @Override
     protected void addUnitID(Unit unit) {
-        unitID.add(unit);
+        if (cof == null) return;
+        if (type.equals("2p")) {
+            unitID.add(unit);
+        }
     }
 
     @Override
     protected void addEnemyID(Enemy enemy) {
-        enemyID.add(enemy);
+        if (cof == null) return;
+        if (type.equals("2p")) {
+            enemyID.add(enemy);
+        }
     }
-
+    
+    private void insertUnitID(int id, Unit unit) {
+        if (cof == null) return;
+        if (type.equals("cli")) {
+            unitID.insert(id, unit);
+        }
+    }
+    
+    private void insertEnemyID(int id, Enemy enemy) {
+        if (cof == null) return;
+        if (type.equals("cli")) {
+            enemyID.insert(id, enemy);
+        }
+    }
+    
 }

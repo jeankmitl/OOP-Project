@@ -21,6 +21,7 @@ import Asset.VFX;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import CoOpSystem.CoKeys;
 import Main.Stages.*;
 
 import java.awt.image.BufferedImage;
@@ -363,19 +364,27 @@ public class GamePanel extends JPanel {
         this.Spawn_Enemy(enemy, num, 10);
     }
     public void Spawn_Enemy(Enemy enemy,int num,int delay){
-        Random random = new Random();
         for (int i=0;i<num;i++){
             new DWait(i*delay, e->{
-               int randomBandit = random.nextInt(5);
-                    enemies.add(enemy.createNew(1280 - GRID_OFFSET_X + random.nextInt(10) * 10, randomBandit));
-                    System.out.println("Spawn Sucess");
-                }).start();
+                int randomBandit = random.nextInt(5);
+                Enemy newEnemy = enemy.createNew(1280 - GRID_OFFSET_X + random.nextInt(10) * 10, randomBandit);
+                enemies.add(newEnemy);
+                addEnemyID(newEnemy);
+                System.out.println("Spawn Sucess");
+            }).start();
            }
+    }
+    
+    public Enemy Spawn_Cli_Enemy(Enemy enemy, int row) {
+        Enemy newEnemy = enemy.createNew(1280 - GRID_OFFSET_X + random.nextInt(10) * 10, row);
+        enemies.add(newEnemy);
+        return newEnemy;
     }
     
     public void spawnBossOnly(Enemy enemy, int delay) {
         new DWait(delay, e->{
             enemies.add(enemy);
+            addEnemyID(enemy);
         }).start();
     }
     
@@ -488,7 +497,6 @@ public class GamePanel extends JPanel {
                             if (unit.isDead()) {
                                 Audio.play(AudioName.KILL2);
                                 getVfxs().add(new VFX(unit.getX(), unit.getY(), "dead_ghost_vfx"));
-                                removeUnitID(unit);
                             }
                             if (unit instanceof UnitReflectable) {
                                 ((UnitReflectable)unit).reflectDamage(enemy);
@@ -541,7 +549,6 @@ public class GamePanel extends JPanel {
                 count_kill += 1;
                 System.out.println(count_kill);
                 enemyIterator.remove();
-                removeEnemyID(enemy);
                 Audio.play(AudioName.KILL2);
                 getVfxs().add(new VFX(enemy.getX(), enemy.getY(), "dead_ghost_vfx"));
             }
@@ -667,8 +674,15 @@ public class GamePanel extends JPanel {
                 }  
             }
         }
-
-        units.removeIf(Unit::isDead);
+        
+        Iterator<Unit> unitIter =  units.iterator();
+        while (unitIter.hasNext()) {
+            Unit unit = unitIter.next();
+            if (unit.isDead()) {
+                unitIter.remove();
+            }
+        }
+//        units.removeIf(Unit::isDead);
     }
 
     private void paintHealthBar(Graphics g, Entity et) {
@@ -1121,7 +1135,7 @@ public class GamePanel extends JPanel {
                 }
                 for (UnitType unit: unitTypes) {
                     if (unit.isDragging()) {
-                        placeUnit(unit, row, col);
+                        placeUnit(unit, row, col, true);
                         unit.setDragging(false);
                     }
                 }
@@ -1153,9 +1167,8 @@ public class GamePanel extends JPanel {
         });
     }
     
-    public void placeUnit(UnitType unit, int row, int col) {
+    public Unit placeUnit(UnitType unit, int row, int col, boolean isOwner) {
         if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
-
             if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
                 Unit unitIns = (Unit)UnitFactory.createEntity(unit.unitClass, row, col);
                 if (unitIns instanceof OnBack) {
@@ -1165,9 +1178,10 @@ public class GamePanel extends JPanel {
                 } else {
                     units.add(unitIns);
                 }
-                addUnitID(unitIns);
-                remainMana -= unit.getManaCost();
-                unit.startCooldown();
+                if (isOwner) {
+                    remainMana -= unit.getManaCost();
+                    unit.startCooldown();
+                }
                 if (unitIns instanceof UnitTriggerable) {
                     ((UnitTriggerable)unitIns).triggerWhenPlace();
                 }
@@ -1177,11 +1191,14 @@ public class GamePanel extends JPanel {
                 Audio.play(AudioName.PLANT_PLACE);
                 getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "select_vfx"));
                 getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "spawn_vfx"));
+                System.out.println("okay");
+                addUnitID(unitIns);
+                return unitIns;
             } else {
                 getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "cross_NOT_vfx"));
-//                      System.out.println("***Field is Not available***");
             }
         }
+        return null;
     }
 
     public void recallUnit(int col, int row) {
@@ -1190,9 +1207,7 @@ public class GamePanel extends JPanel {
             while (unitIterator.hasNext()) {
                 Unit unit = unitIterator.next();
                 if (unit.getRow() == row && unit.getCol() == col) {
-                    unitIterator.remove();
                     unit.setHealth(0);
-                    removeUnitID(unit);
                     getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
                     Audio.play(AudioName.PLANT_DELETE);
                 }

@@ -8,6 +8,7 @@ import Main.GamePanel2Player;
 import Main.LoadingScreen;
 import Main.StageSelector;
 import Main.UnitSelector;
+import Main.UnitType;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,7 +26,9 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.*;
@@ -484,6 +487,67 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 
                 if (!isYou) {
                     gamePanel.coOp.updateP2PlaceXY(placeX, placeY);
+                }
+            }
+            final String updateCli = prop.getProperty(CoKeys.UPDATE_CLI);
+            if (updateCli != null && isForCli) {
+                String allUnitID = prop.getProperty(CoKeys.ALL_UNIT_ID);
+                if (allUnitID != null) {
+                    String[] allUnitIdSplit = allUnitID.split(" ");
+                    Set<Integer> buildID = new HashSet<>();
+                    try {
+                        for (String unitId: allUnitIdSplit) {
+                            String unit = prop.getProperty(CoKeys.UNIT_ + unitId);
+                            debugPrint(isYou, unit);
+                            // set data
+                            String[] unitSplit = unit.split(" ");
+                            int id = Integer.parseInt(unitId);
+                            String name = unitSplit[0];
+                            int row = Integer.parseInt(unitSplit[1]);
+                            int col = Integer.parseInt(unitSplit[2]);
+                            int health = Integer.parseInt(unitSplit[3]);
+                            gamePanel.coOp.updateUnitAt(id, name, row, col, health);
+                            buildID.add(id);
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+                String allEnemyID = prop.getProperty(CoKeys.ALL_ENEMY_ID);
+                if (allEnemyID != null) {
+                    String[] allEnemyIdSplit = allEnemyID.split(" ");
+                    try {
+                        for (String enemyId: allEnemyIdSplit) {
+                            String enemy = prop.getProperty(CoKeys.ENEMY_ + enemyId);
+                            debugPrint(isYou, enemy);
+                            // set data
+                            String[] enemySplit = enemy.split(" ");
+                            int id = Integer.parseInt(enemyId);
+                            String name = enemySplit[0];
+                            int row = Integer.parseInt(enemySplit[1]);
+                            int x = Integer.parseInt(enemySplit[2]);
+                            int health = Integer.parseInt(enemySplit[3]);
+                            gamePanel.coOp.updateEnemyAt(id, name, row, x, health);
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            final String reqPlaceUnit;
+            if ((reqPlaceUnit = prop.getProperty(CoKeys.REQ_PLACE_UNIT)) != null) {
+                String[] unitSplit = reqPlaceUnit.split(" ");
+                try {
+                    String name = unitSplit[0];
+                    int row = Integer.parseInt(unitSplit[1]);
+                    int col = Integer.parseInt(unitSplit[2]);
+                    if (isForSvr) {
+                        UnitType unitType = AllEntityTypes.getUnitTypeFromName(name);
+                        gamePanel.placeUnit(unitType, row, col, false);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
             }
         });

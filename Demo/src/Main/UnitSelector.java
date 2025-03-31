@@ -8,6 +8,7 @@ import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
 import Asset.StringFormatter;
+import CoOpSystem.AllEntityTypes;
 import CoOpSystem.CoOpFrame;
 import Entities.Units.*;
 import Main.SaveGame;
@@ -38,7 +39,7 @@ import javax.swing.border.BevelBorder;
  * @author anawi
  */
 public class UnitSelector extends JDialog {
-    private static final List<UnitType> unitTypes = new ArrayList<>();
+    private final List<UnitType> unitTypes = new ArrayList<>();
     private final List<UnitLabelBox> unitChosens = new ArrayList<>();
     private final JPanel unitPanelList, unitChosenPanelList, operatorPanel, unitStatsPanel, optionsPanel;
     private final JPanel leftRightPanel, upDownPanel;
@@ -233,6 +234,7 @@ public class UnitSelector extends JDialog {
 //        new UnitSelector();
 //    }
     private void loader(SaveGame progress){
+//        UnitType[] allUnitTypes = AllEntityTypes.getUNIT_TYPES();
         unitTypes.clear();
         unitTypes.add(new UnitType(Skeleton.class));
         unitTypes.add(new UnitType(Slime.class));
@@ -341,19 +343,6 @@ public class UnitSelector extends JDialog {
     }
     
     //for Socket
-    public static List<UnitType> getAllUnitTypes() {
-        return unitTypes;
-    }
-    
-    public static UnitType getUnitTypeFromName(String name) {
-        for (UnitType unitType: unitTypes) {
-            if (unitType.getClassName().equals(name)) {
-                return unitType;
-            }
-        }
-        return null;
-    }
-    
     public static String toUnitTypesStr(List<UnitType> unitTypes1) {
         StringBuilder sb = new StringBuilder();
         boolean isFirst = true;
