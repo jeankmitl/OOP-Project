@@ -80,7 +80,7 @@ public class GamePanel extends JPanel {
     private final GameLoop gameLoop;
     private final DTimer gameTimer;
     
-    private final OTimer manaRecoverTimer10 = new OTimer(5);
+    protected final OTimer manaRecoverTimer10 = new OTimer(5);
     
     private final OTimer slowAnimTimer = new OTimer(0.15);
     private final OTimer mediumAnimTimer = new OTimer(0.25);
@@ -223,13 +223,17 @@ public class GamePanel extends JPanel {
             ex.printStackTrace();
         }
     }
+    
+    protected void manaRecover() {
+        increaseMana(10);
+    }
 
     // SPF = 0.016666666666666666 (99% 60fps)
     protected void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
 //        if (summoner instanceof stage_Tutorial){}
         if (manaRecoverTimer10.tick(deltaTime)) {
-            increaseMana(10);
+            manaRecover();
         }
         manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
         
@@ -753,14 +757,6 @@ public class GamePanel extends JPanel {
 //        g.setColor(Color.RED);
 //        g.drawLine(50, 0, 50, 850);
 //
-//        //GRID
-//        g.setColor(Color.LIGHT_GRAY);
-//        for (int i = 0; i <= ROWS; i++) {
-//            g.drawLine(GRID_OFFSET_X, GRID_OFFSET_Y + i * CELL_HEIGHT, GRID_OFFSET_X + COLS * CELL_WIDTH, GRID_OFFSET_Y + i * CELL_HEIGHT);
-//        }
-//        for (int i = 0; i <= COLS; i++) {
-//            g.drawLine(GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y, GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y + ROWS * CELL_HEIGHT);
-//        }
 
         //g2d: for Pixel Art ex. SpriteSheet
         Graphics2D g2d = (Graphics2D) g;
@@ -891,6 +887,19 @@ public class GamePanel extends JPanel {
         }
         iconImage = ImgManager.loadIcon("Recall");
         g.drawImage(iconImage, BAR_X + CELL_WIDTH * (COLS - 1) + 10, BAR_Y + 10, CELL_WIDTH - 20, CELL_HEIGHT - 20, this);
+        
+        
+        //GRID When Dragging
+        if (isAnyUnitDragging) {
+            g2d.setColor(new Color(255, 255, 255, 40));
+            g2d.setStroke(new BasicStroke(1));
+            for (int i = 0; i <= ROWS; i++) {
+                g2d.drawLine(GRID_OFFSET_X, GRID_OFFSET_Y + i * CELL_HEIGHT, GRID_OFFSET_X + COLS * CELL_WIDTH, GRID_OFFSET_Y + i * CELL_HEIGHT);
+            }
+            for (int i = 0; i <= COLS; i++) {
+                g2d.drawLine(GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y, GRID_OFFSET_X + i * CELL_WIDTH, GRID_OFFSET_Y + ROWS * CELL_HEIGHT);
+            }
+        }
         
         // Here is 2-Player Bar
         paint2PComp(g);

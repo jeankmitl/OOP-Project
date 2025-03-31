@@ -219,7 +219,14 @@ public class GamePanel2Player extends GamePanel {
     }
     // </editor-fold>
 
-    
+    @Override
+    protected void manaRecover() {
+        if (cof != null) {
+            cof.invoke(CoKeys.RESET_MANA_RECOVER);
+        }
+        super.manaRecover();
+    }
+
     private final OTimer updateSocketTimer = new OTimer(0.5);
     @Override
     protected void fixedUpdate(double deltaTime) {
@@ -299,6 +306,10 @@ public class GamePanel2Player extends GamePanel {
             prop.setProperty(CoKeys.ALL_ENEMY_ID, sbEnemy.toString());
         }
         
+        prop.setProperty(CoKeys.MANA_SVR, remainMana + "");
+        prop.setProperty(CoKeys.MANA_CLI, remainManaP2 + "");
+        
+        
         
         
         prop.setProperty(CoKeys.UPDATE_CLI, "");
@@ -336,6 +347,18 @@ public class GamePanel2Player extends GamePanel {
             }
         }
         
+        public void setRemainMana(int newRemainMana) {
+            remainMana = newRemainMana;
+            
+        }
+        
+        public void setRemainManaP2(int newRemainMana) {
+            remainManaP2 = newRemainMana;
+        }
+        
+        public void resetManaRecover() {
+            manaRecoverTimer10.reset();
+        }
         
     }
     // END Main Socket

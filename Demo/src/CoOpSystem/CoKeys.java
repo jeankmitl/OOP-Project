@@ -34,6 +34,10 @@ public interface CoKeys {
     
     //send to Client 
     String UPDATE_CLI = "updateCli";
+    String MANA_CLI = "manaCli";
+    String MANA_SVR = "manaSvr";
+    String RESET_MANA_RECOVER = "resetManaRecover";
+    
     // use Big Data (to Client)
     String ALL_UNIT_ID = "allUnitID";
     String ALL_ENEMY_ID = "allEnemyID";
