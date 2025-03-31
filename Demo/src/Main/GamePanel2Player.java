@@ -7,6 +7,7 @@ package Main;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Asset.VFX;
 import CoOpSystem.AllEntityTypes;
 import CoOpSystem.CoKeys;
 import CoOpSystem.CoOpFrame;
@@ -23,6 +24,7 @@ import static Main.GamePanel.CELL_HEIGHT;
 import static Main.GamePanel.CELL_WIDTH;
 import static Main.GamePanel.COLS;
 import static Main.GamePanel.ROWS;
+import static Main.GamePanel.getVfxs;
 import static Main.GamePanel.remainMana;
 import static Main.GamePanel.unitTypes;
 import static Main.GamePanel.units;
@@ -231,7 +233,7 @@ public class GamePanel2Player extends GamePanel {
     @Override
     protected void fixedUpdate(double deltaTime) {
         super.fixedUpdate(deltaTime);
-        if (cof != null && type.equals("2p") && updateSocketTimer.tick(deltaTime)) {
+        if (cof != null && updateSocketTimer.tick(deltaTime)) {
             updateSocket();
         }
     }
@@ -257,62 +259,78 @@ public class GamePanel2Player extends GamePanel {
         int p1PlaceX = getPlaceCol();
         int p1PlaceY = getPlaceRow();
         Properties prop = new Properties();
-        prop.setProperty(CoKeys.BOTH_PLACE_XY, p1PlaceX + "," + p1PlaceY);
+        prop.setProperty(CoKeys.BOTH_PLACE_XY, p1PlaceX + "," + p1PlaceY); //Both
         
-        
-        Set<Integer> setUnitId = unitID.getAllID();
-        if (!setUnitId.isEmpty()) {
-            StringBuilder sbUnit = new StringBuilder();
+        if (type.equals("2p")) { //Server
+            Set<Integer> setUnitId = unitID.getAllID();
+            if (!setUnitId.isEmpty()) {
+                StringBuilder sbUnit = new StringBuilder();
+                isFirst = true;
+                for (int id: setUnitId) {
+                    String idFormat = ((isFirst) ? "" : " ") + id;
+                    sbUnit.append(idFormat);
+
+                    Unit unit = unitID.get(id);
+                    String name = unit.getClass().getSimpleName();
+                    int row = unit.getRow();
+                    int col = unit.getCol();
+                    int health = unit.getHealth();
+
+                    String format = name + " " + row + " " + col + " " + health;
+                    System.out.println("UNIT_" + id + ": " + format);
+                    prop.setProperty(CoKeys.UNIT_ + id, format);
+
+                    isFirst = false;
+                }
+                prop.setProperty(CoKeys.ALL_UNIT_ID, sbUnit.toString());
+            }
+
+            Set<Integer> setEnemyId = enemyID.getAllID();
+            if (!setEnemyId.isEmpty()) {
+                StringBuilder sbEnemy = new StringBuilder();
+                isFirst = true;
+                for (int id: setEnemyId) {
+                    String idFormat = ((isFirst) ? "" : " ") + id;
+                    sbEnemy.append(idFormat);
+
+                    Enemy unit = enemyID.get(id);
+                    String name = unit.getClass().getSimpleName();
+                    int row = unit.getRow();
+                    int x = unit.getX();
+                    int health = unit.getHealth();
+
+                    String format = name + " " + row + " " + x + " " + health;
+                    System.out.println("ENEMY_" + id + ": " + format);
+                    prop.setProperty(CoKeys.ENEMY_ + id, format);
+
+                    isFirst = false;
+                }
+                prop.setProperty(CoKeys.ALL_ENEMY_ID, sbEnemy.toString());
+            }
+            prop.setProperty(CoKeys.MANA_SVR, remainMana + "");
+            prop.setProperty(CoKeys.MANA_CLI, remainManaP2 + "");
+
+
+            StringBuilder sbCdP2 = new StringBuilder();
             isFirst = true;
-            for (int id: setUnitId) {
-                String idFormat = ((isFirst) ? "" : " ") + id;
-                sbUnit.append(idFormat);
-
-                Unit unit = unitID.get(id);
-                String name = unit.getClass().getSimpleName();
-                int row = unit.getRow();
-                int col = unit.getCol();
-                int health = unit.getHealth();
-
-                String format = name + " " + row + " " + col + " " + health;
-                System.out.println("UNIT_" + id + ": " + format);
-                prop.setProperty(CoKeys.UNIT_ + id, format);
-
+            for (UnitType unitType: unitTypesP2) {
+                String format = ((isFirst) ? "" : " ") + unitType.getCoolDownElapsed();
+                sbCdP2.append(format);
                 isFirst = false;
             }
-            prop.setProperty(CoKeys.ALL_UNIT_ID, sbUnit.toString());
-        }
-        
-        Set<Integer> setEnemyId = enemyID.getAllID();
-        if (!setEnemyId.isEmpty()) {
-            StringBuilder sbEnemy = new StringBuilder();
+            prop.setProperty(CoKeys.COOLDOWN_CLI, sbCdP2.toString());
+
+            StringBuilder sbCd = new StringBuilder();
             isFirst = true;
-            for (int id: setEnemyId) {
-                String idFormat = ((isFirst) ? "" : " ") + id;
-                sbEnemy.append(idFormat);
-
-                Enemy unit = enemyID.get(id);
-                String name = unit.getClass().getSimpleName();
-                int row = unit.getRow();
-                int x = unit.getX();
-                int health = unit.getHealth();
-
-                String format = name + " " + row + " " + x + " " + health;
-                System.out.println("ENEMY_" + id + ": " + format);
-                prop.setProperty(CoKeys.ENEMY_ + id, format);
-
+            for (UnitType unitType: unitTypes) {
+                String format = ((isFirst) ? "" : " ") + unitType.getCoolDownElapsed();
+                sbCd.append(format);
                 isFirst = false;
             }
-            prop.setProperty(CoKeys.ALL_ENEMY_ID, sbEnemy.toString());
+            prop.setProperty(CoKeys.COOLDOWN_SVR, sbCd.toString());
+
+            prop.setProperty(CoKeys.UPDATE_CLI, "");
         }
-        
-        prop.setProperty(CoKeys.MANA_SVR, remainMana + "");
-        prop.setProperty(CoKeys.MANA_CLI, remainManaP2 + "");
-        
-        
-        
-        
-        prop.setProperty(CoKeys.UPDATE_CLI, "");
         cof.send(prop);
     }
     
@@ -358,6 +376,45 @@ public class GamePanel2Player extends GamePanel {
         
         public void resetManaRecover() {
             manaRecoverTimer10.reset();
+        }
+        
+        public void placeUnitClient(UnitType unitType, int row, int col) {
+            UnitType p2UnitType = null;
+            for (UnitType ut: unitTypesP2) {
+                if (ut.getClassName().equals(unitType.getClassName())) {
+                    p2UnitType = ut;
+                    break;
+                }
+            }
+            if (p2UnitType != null) {
+                if (p2UnitType.isNoCoolDown() && remainManaP2 >= p2UnitType.getManaCost()) {
+                    placeUnit(p2UnitType, row, col, true);
+                    remainMana += p2UnitType.getManaCost();
+                    remainManaP2 -= p2UnitType.getManaCost();
+                }
+            }
+        }
+        
+        public void recallUnitClient(int row, int col) {
+            recallUnit(col, row);
+        }
+        
+        public void setCooldown(String cdStr) {
+            String[] cdStrSplit = cdStr.split(" ");
+            for (int i=0; i<cdStrSplit.length; i++) {
+                String cdStr1 = cdStrSplit[i];
+                double cd = Double.parseDouble(cdStr1);
+                unitTypes.get(i).setCoolDownElapsed(cd);
+            }
+        }
+        
+        public void setCooldown2(String cdStr) {
+            String[] cdStrSplit = cdStr.split(" ");
+            for (int i=0; i<cdStrSplit.length; i++) {
+                String cdStr1 = cdStrSplit[i];
+                double cd = Double.parseDouble(cdStr1);
+                unitTypesP2.get(i).setCoolDownElapsed(cd);
+            }
         }
         
     }
@@ -427,28 +484,34 @@ public class GamePanel2Player extends GamePanel {
             int row = p2PlaceY;
             int col = p2PlaceX;
             runDynamicHoverP2(row, col, 0.3);
-            if (confirmPlace) {
-                if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
-                    iconImage = ImgManager.loadIcon("green_p2_place_hover");
+            if (cof == null) {
+                if (confirmPlace) {
+                    if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
+                        iconImage = ImgManager.loadIcon("green_p2_place_hover");
+                    } else {
+                        iconImage = ImgManager.loadIcon("red_p2_place_hover");
+                    }
+                } else if (confirmRecall) {
+                    if (!isFieldAvailable(col, row)) {
+                        iconImage = ImgManager.loadIcon("recall_p2_place_hover");
+                    } else {
+                        iconImage = ImgManager.loadIcon("red_p2_place_hover");
+                    }
                 } else {
-                    iconImage = ImgManager.loadIcon("red_p2_place_hover");
+                    if (!unit.isNoCoolDown()) {
+                        iconImage = ImgManager.loadIcon("blue_wait_p2_place_hover");
+                    } else if (remainManaP2 < unit.getManaCost()) {
+                        iconImage = ImgManager.loadIcon("blue_not_enough_p2_place_hover");
+                    } else {
+                        iconImage = ImgManager.loadIcon("blue_p2_place_hover");
+                    }
                 }
-            } else if (confirmRecall) {
-                if (!isFieldAvailable(col, row)) {
-                    iconImage = ImgManager.loadIcon("recall_p2_place_hover");
-                } else {
-                    iconImage = ImgManager.loadIcon("red_p2_place_hover");
-                }
-            } else {
-                if (!unit.isNoCoolDown()) {
-                    iconImage = ImgManager.loadIcon("blue_wait_p2_place_hover");
-                } else if (remainManaP2 < unit.getManaCost()) {
-                    iconImage = ImgManager.loadIcon("blue_not_enough_p2_place_hover");
-                } else {
-                    iconImage = ImgManager.loadIcon("blue_p2_place_hover");
-                }
+            } else { // Socket
+                iconImage = ImgManager.loadIcon("blue_p2_place_hover");
             }
-            g.drawImage(iconImage, hoverPlaceP2X, hoverPlaceP2Y, CELL_WIDTH, CELL_HEIGHT, this);
+            if (cof == null || p2PlaceY < ROWS) {
+                g.drawImage(iconImage, hoverPlaceP2X, hoverPlaceP2Y, CELL_WIDTH, CELL_HEIGHT, this);
+            }
             
             runDynamicSelectP2(p2Select, 0.5);
             if (!unit.isNoCoolDown()) {
@@ -469,11 +532,34 @@ public class GamePanel2Player extends GamePanel {
         if (type.equals("2p") || !isOwner) {
             return super.placeUnit(unit, row, col, isOwner); 
         } else if (type.equals("cli")) {
-            String format = unit.getClassName() + " " + row + " " + col;
-            cof.sendOne(CoKeys.REQ_PLACE_UNIT, format);
+            if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
+                if ((isFieldAvailable(col, row) || isFieldExtraAvailable(unit, row, col)) && !isFieldRestricted(unit, row, col)) {
+                    String format = unit.getClassName() + " " + row + " " + col;
+                    cof.sendOne(CoKeys.REQ_PLACE_UNIT, format);
+                }
+            }
         }
         return null;
     }
+
+    @Override
+    public void recallUnit(int col, int row) {
+        if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
+            if (type.equals("2p")) {
+                if (cof != null) {
+                    cof.sendOne(CoKeys.SOUND_CLI, AudioName.PLANT_DELETE);
+                }
+                super.recallUnit(col, row);
+            } else if (type.equals("cli")) {
+                String format = row + " " + col;
+                cof.sendOne(CoKeys.REQ_RECALL_UNIT, format);
+                getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
+                Audio.play(AudioName.PLANT_DELETE);
+            }
+        }
+    }
+    
+    
 
     
     

@@ -46,7 +46,7 @@ import javax.swing.border.EtchedBorder;
  */
 public class CoOpFrame extends JFrame implements ActionListener {
     
-    private final boolean isJoinNoConfirm = false;
+    private final boolean isJoinNoConfirm = true;
     private final boolean DEBUG_PRINT = true;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
@@ -491,6 +491,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
+                    dispose();
                     Thread.sleep(1500);
                     return null;
                 }
@@ -654,7 +655,20 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     int col = Integer.parseInt(unitSplit[2]);
                     if (isForSvr) {
                         UnitType unitType = AllEntityTypes.getUnitTypeFromName(name);
-                        gamePanel.placeUnit(unitType, row, col, false);
+                        gamePanel.coOp.placeUnitClient(unitType, row, col);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+            final String reqRecallUnit;
+            if ((reqRecallUnit = prop.getProperty(CoKeys.REQ_RECALL_UNIT)) != null) {
+                String[] splited = reqRecallUnit.split(" ");
+                try {
+                    int row = Integer.parseInt(splited[0]);
+                    int col = Integer.parseInt(splited[1]);
+                    if (isForSvr) {
+                        gamePanel.coOp.recallUnitClient(row, col);
                     }
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
@@ -678,6 +692,20 @@ public class CoOpFrame extends JFrame implements ActionListener {
             if (resetManaRecover != null) {
                 if (isForCli) {
                     gamePanel.coOp.resetManaRecover();
+                }
+            }
+            final String cooldownCli, cooldownSvr;
+            if ((cooldownCli = prop.getProperty(CoKeys.COOLDOWN_CLI)) != null
+                && (cooldownSvr = prop.getProperty(CoKeys.COOLDOWN_SVR)) != null) {
+                if (isForCli) {
+                    gamePanel.coOp.setCooldown(cooldownCli);
+                    gamePanel.coOp.setCooldown2(cooldownSvr);
+                }
+            }
+            final String soundCli;
+            if ((soundCli = prop.getProperty(CoKeys.SOUND_CLI)) != null) {
+                if (isForCli) {
+                    Audio.play(soundCli);
                 }
             }
         });

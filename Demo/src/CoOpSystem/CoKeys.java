@@ -31,19 +31,22 @@ public interface CoKeys {
     
     //send to Server
     String REQ_PLACE_UNIT = "reqPlaceUnit";
+    String REQ_RECALL_UNIT = "reqRecallUnit";
     
     //send to Client 
     String UPDATE_CLI = "updateCli";
     String MANA_CLI = "manaCli";
     String MANA_SVR = "manaSvr";
     String RESET_MANA_RECOVER = "resetManaRecover";
+    String COOLDOWN_CLI = "cooldownCli";
+    String COOLDOWN_SVR = "cooldownSvr";
+    String VFX_CLI = "vfxCli";
+    String SOUND_CLI = "soundCli";
     
     // use Big Data (to Client)
     String ALL_UNIT_ID = "allUnitID";
     String ALL_ENEMY_ID = "allEnemyID";
     String UNIT_ = "unit";
-    String UNIT_TYPE_SVR_ = "unitTypeSvr";
-    String UNIT_TYPE_CLI_ = "unitTypeCli";
     String ENEMY_ = "enemy";
     
 }
