@@ -9,6 +9,7 @@ import Asset.AudioName;
 import Entities.Bullets.Bite;
 import Entities.Bullets.Bone;
 import Entities.Bullets.Bullet;
+import Entities.Bullets.SnakeBite;
 import Entities.Enemies.Enemy;
 import static Entities.Entity.ATK_STATUS;
 import static Entities.Entity.IDLE_STATUS;
@@ -32,7 +33,7 @@ public class Snake extends Unit implements UnitChargeShootable {
     @Override
     public void shoot(List<Bullet> bullets) {
         Audio.play(AudioName.FIRE_TINY);
-        bullets.add(new Bite(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
+        bullets.add(new SnakeBite(col * GamePanel.CELL_WIDTH + 100, row * GamePanel.CELL_HEIGHT + 30, atk));
     }
     
     @Override
