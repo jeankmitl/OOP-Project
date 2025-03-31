@@ -37,4 +37,8 @@ public class OTimer {
     public double getElapsedTime() {
         return elapsedTime;
     }
+    
+    public void reset() {
+        elapsedTime = 0;
+    }
 }

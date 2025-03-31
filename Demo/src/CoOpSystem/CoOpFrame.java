@@ -550,6 +550,26 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     e.printStackTrace();
                 }
             }
+            final String manaCli;
+            if ((manaCli = prop.getProperty(CoKeys.MANA_CLI)) != null) {
+                int mana = Integer.parseInt(manaCli);
+                if (isForCli) {
+                    gamePanel.coOp.setRemainMana(mana);
+                }
+            }
+            final String manaSvr;
+            if ((manaSvr = prop.getProperty(CoKeys.MANA_SVR)) != null) {
+                int mana = Integer.parseInt(manaSvr);
+                if (isForCli) {
+                    gamePanel.coOp.setRemainManaP2(mana);
+                }
+            }
+            final String resetManaRecover = prop.getProperty(CoKeys.RESET_MANA_RECOVER);
+            if (resetManaRecover != null) {
+                if (isForCli) {
+                    gamePanel.coOp.resetManaRecover();
+                }
+            }
         });
     }
 }

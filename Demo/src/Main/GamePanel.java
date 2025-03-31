@@ -80,7 +80,7 @@ public class GamePanel extends JPanel {
     private final GameLoop gameLoop;
     private final DTimer gameTimer;
     
-    private final OTimer manaRecoverTimer10 = new OTimer(5);
+    protected final OTimer manaRecoverTimer10 = new OTimer(5);
     
     private final OTimer slowAnimTimer = new OTimer(0.15);
     private final OTimer mediumAnimTimer = new OTimer(0.25);
@@ -223,13 +223,17 @@ public class GamePanel extends JPanel {
             ex.printStackTrace();
         }
     }
+    
+    protected void manaRecover() {
+        increaseMana(10);
+    }
 
     // SPF = 0.016666666666666666 (99% 60fps)
     protected void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
 //        if (summoner instanceof stage_Tutorial){}
         if (manaRecoverTimer10.tick(deltaTime)) {
-            increaseMana(10);
+            manaRecover();
         }
         manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
         
