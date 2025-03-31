@@ -112,7 +112,7 @@ public interface UnitConfig {
     UnitStats FLAT_SLIME_STATS = new UnitStats(FLAT_SLIME_SPRITE, 300, 30, 25, 70, 7, COST_GEN, FLAT_SLIME_DESC); 
     
     // Support
-    UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 20, 300, 60, SUPPORT, GOLEM_DESC);
+    UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 15, 300, 60, SUPPORT, GOLEM_DESC);
     UnitStats VAMPIRE_STATS = new UnitStats(VAMPIRE_SPRITE, 300, -50, 4, 100, 7, SUPPORT, VAMPIRE_DESC);
     
     // *Not for Operator*
