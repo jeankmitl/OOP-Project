@@ -4,8 +4,12 @@
  */
 package CoOpSystem;
 
+import Asset.Audio;
+import Asset.AudioName;
+import Asset.ImgManager;
 import Main.GamePanel2Player;
 import Main.LoadingScreen;
+import Main.MainMenu;
 import Main.StageSelector;
 import Main.UnitSelector;
 import Main.UnitType;
@@ -13,7 +17,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -32,6 +38,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 
 /**
  *
@@ -39,7 +46,7 @@ import javax.swing.*;
  */
 public class CoOpFrame extends JFrame implements ActionListener {
     
-    private final boolean isJoinNoConfirm = true;
+    private final boolean isJoinNoConfirm = false;
     private final boolean DEBUG_PRINT = true;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
@@ -48,61 +55,133 @@ public class CoOpFrame extends JFrame implements ActionListener {
     private PrintWriter out;
     private boolean isServer = false;
     
-    private JPanel inputPanel, mainPanel, middlePanel, downPanel, msgPanel;
+    private JPanel inputPanel, leftPanel, mainPanel, topPanel, downPanel, msgPanel, bgPanel;
     private JTextField ipTextField, portTextField;
     private JLabel ipLabel, portLabel, responseLabel;
-    private JButton startButton, createServerButton, joinServerButton, sendButton;
+    private JButton startButton, createServerButton, joinServerButton, sendButton, homeButton;
     private JTextArea msgTextArea;
     private JTextField msgTextField;
     private boolean isServerListening;
     private JScrollPane msgScrollPane;
     
     private StageSelector stageSelector;
-    
+    private ImageIcon serverImg, serverListeningImg, clientImg;
     
     public CoOpFrame() {
-        setTitle("Co-op room");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(360, 360);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(1264, 681);
         setResizable(false);
         setLocationRelativeTo(null);
+        setUndecorated(true);
+        setVisible(true);
         
-        inputPanel = new JPanel();
+        serverImg = new ImageIcon(getClass().getResource("/Asset/Img/Icons/svr_icon.png"));
+        serverListeningImg = new ImageIcon(getClass().getResource("/Asset/Img/Icons/svr_icon_listen.png"));
+        clientImg = new ImageIcon(getClass().getResource("/Asset/Img/Icons/cli_icon.png"));
+        
+        
+        inputPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image img = ImgManager.loadIcon("bg_for_status");
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        bgPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image img = ImgManager.loadBG("defense_of_dungeon_wallpaper");
+                g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+            }
+        };
+        leftPanel = new JPanel();
         mainPanel = new JPanel();
         downPanel = new JPanel();
-        middlePanel = new JPanel();
+        topPanel = new JPanel();
         msgPanel = new JPanel();
         ipTextField = new JTextField("localhost");
         portTextField = new JTextField("12345");
-        ipLabel = new JLabel("IP");
-        portLabel = new JLabel("Port");
+        ipLabel = new JLabel("   IP");
+        portLabel = new JLabel("   Port");
         responseLabel = new JLabel("Not connect");
         startButton = new JButton("Start");
         createServerButton = new JButton("Create Server");
         joinServerButton = new JButton("Join Server");
+        homeButton = new JButton("X");
         sendButton = new JButton("Send");
         msgTextArea = new JTextArea();
         msgTextField = new JTextField();
         msgScrollPane = new JScrollPane();
         
+        Font defFont = new Font("Helvetica", Font.BOLD, 20);
+        Font defBigFont = new Font("Helvetica", Font.BOLD, 28);
+        Font defFieldFont = new Font("Arial", Font.PLAIN, 18);
+        
         mainPanel.setLayout(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        inputPanel.setLayout(new GridLayout(3, 2, 5, 5));
+        topPanel.setLayout(new BorderLayout());
+        topPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        topPanel.setBackground(new Color(0x2f2e35));
+        downPanel.setBackground(new Color(0x2f2e35));
+//        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        inputPanel.setLayout(new GridLayout(3, 2, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        leftPanel.setLayout(new GridLayout(2, 1, 10, 10));
+        leftPanel.setPreferredSize(new Dimension(500, 0));
         startButton.setEnabled(false);
-        responseLabel.setFont(new Font("Helvetica", Font.BOLD, 15));
+        responseLabel.setFont(new Font("Helvetica", Font.BOLD, 30));
+        responseLabel.setHorizontalAlignment(JLabel.CENTER);
+        ipLabel.setFont(defBigFont);
+        ipLabel.setForeground(Color.white);
+        portLabel.setFont(defBigFont);
+        portLabel.setForeground(Color.white);
+        ipTextField.setFont(defFieldFont);
+        portTextField.setFont(defFieldFont);
         createServerButton.setMultiClickThreshhold(500);
         joinServerButton.setMultiClickThreshhold(500);
         msgTextArea.setEditable(false);
         msgTextArea.setLineWrap(true);
         msgTextArea.setWrapStyleWord(true);
+        msgTextArea.setFont(defFieldFont);
+        msgTextField.setFont(defFieldFont);
         msgPanel.setPreferredSize(new Dimension(0, 150));
         msgPanel.setLayout(new BorderLayout());
         msgScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        homeButton.setFocusable(false);
         setTestMsgEnabled(false);
+        bgPanel.setOpaque(true);
+        // Style
+        createServerButton.setForeground(Color.white);
+        createServerButton.setBackground(new Color(0x27548A));
+        createServerButton.setBorder(BorderFactory.createMatteBorder(3, 3, 5, 3, new Color(0x183B4E)));
+        createServerButton.setIcon(serverImg);
+        createServerButton.setHorizontalTextPosition(JButton.LEFT);
+        createServerButton.setIconTextGap(20);
+        createServerButton.setFont(defFont);
+        joinServerButton.setForeground(Color.white);
+        joinServerButton.setBackground(new Color(0xDDA853));
+        joinServerButton.setBorder(BorderFactory.createMatteBorder(3, 3, 5, 3, new Color(0xB17F59)));
+        joinServerButton.setFont(defFont);
+        joinServerButton.setIcon(clientImg);
+        joinServerButton.setHorizontalTextPosition(JButton.LEFT);
+        joinServerButton.setIconTextGap(20);
+        startButton.setForeground(Color.black);
+        startButton.setBackground(Color.gray);
+        startButton.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.lightGray, Color.darkGray));
+        startButton.setFont(defBigFont);
+        startButton.setPreferredSize(new Dimension(200, 50));
+        homeButton.setForeground(Color.black);
+        homeButton.setBackground(Color.gray);
+        homeButton.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.lightGray, Color.darkGray));
+        homeButton.setFont(defFont);
+        homeButton.setPreferredSize(new Dimension(40, 30));
         
+        bgPanel.setBackground(Color.red);
         
         add(mainPanel);
-        mainPanel.add(inputPanel, BorderLayout.NORTH);
+        mainPanel.add(leftPanel, BorderLayout.WEST);
+        leftPanel.add(inputPanel);
         inputPanel.add(ipLabel);
         inputPanel.add(ipTextField);
         inputPanel.add(portLabel);
@@ -110,12 +189,15 @@ public class CoOpFrame extends JFrame implements ActionListener {
         inputPanel.add(createServerButton);
         inputPanel.add(joinServerButton);
         
-        mainPanel.add(middlePanel);
-        middlePanel.add(responseLabel);
-        
-        mainPanel.add(msgPanel, BorderLayout.SOUTH);
+        leftPanel.add(msgPanel);
         msgPanel.add(new JScrollPane(msgTextArea));
         msgPanel.add(msgTextField, BorderLayout.SOUTH);
+        
+        mainPanel.add(bgPanel);
+        
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+        topPanel.add(responseLabel);
+        topPanel.add(homeButton, BorderLayout.EAST);
         
         add(downPanel, BorderLayout.SOUTH);
         downPanel.add(startButton);
@@ -124,6 +206,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         joinServerButton.addActionListener(this);
         msgTextField.addActionListener(this);
         startButton.addActionListener(this);
+        homeButton.addActionListener(this);
         
         setVisible(true);
     }
@@ -140,6 +223,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 setinputEnabled(false);
                 stopServer();
                 createServerButton.setText("Create Server");
+                createServerButton.setIcon(serverImg);
                 isServerListening = false;
             } else {
                 if (ipTextField.getText().isBlank() || portTextField.getText().isBlank()) {
@@ -156,6 +240,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     return;
                 }
                 createServerButton.setText("Cancel");
+                createServerButton.setIcon(serverListeningImg);
                 isServerListening = true;
             }
         } else if (e.getSource().equals(joinServerButton)) {
@@ -172,7 +257,31 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Port Should be Integer.");
                 return;
             }
-        } 
+        } else if (e.getSource().equals(homeButton)) {
+            Audio.play(AudioName.BUTTON_CLICK);
+            int res = JOptionPane.showConfirmDialog(stage, "Do you want to disconnect and leave from CoOp?",
+            "Leave Level", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (res == JOptionPane.YES_OPTION) {
+                Audio.play(AudioName.BUTTON_CLICK);
+                SwingWorker<Void, Void> worker = new SwingWorker<>() {
+                    LoadingScreen loadingScreen = new LoadingScreen();
+                    
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Thread.sleep(500);
+                        dispose();
+                        new MainMenu();
+                        return null;
+                    }
+
+                    @Override
+                    protected void done() {
+                        loadingScreen.dispose();
+                    }
+                };
+                worker.execute();
+            }
+        }
         if (socket != null && out != null) {
             Properties properties = new Properties();
             if (e.getSource().equals(msgTextField) && !msgTextField.getText().isBlank()) {
