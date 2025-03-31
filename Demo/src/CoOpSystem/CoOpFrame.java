@@ -132,6 +132,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         startButton.setEnabled(false);
         responseLabel.setFont(new Font("Helvetica", Font.BOLD, 30));
         responseLabel.setHorizontalAlignment(JLabel.CENTER);
+        responseLabel.setForeground(Color.white);
         ipLabel.setFont(defBigFont);
         ipLabel.setForeground(Color.white);
         portLabel.setFont(defBigFont);
@@ -325,7 +326,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 System.out.println("Server started on port 12345...");
                 SwingUtilities.invokeLater(() -> {
                     responseLabel.setText("Server: Started on port " + port + "...");
-                    responseLabel.setForeground(new Color(0x143D60));
+                    responseLabel.setForeground(new Color(0x3b82d6));
                     createServerButton.setEnabled(true);
                 });
                 while (!serverSocket.isClosed()) {
@@ -338,7 +339,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                         isServer = true;
                         SwingUtilities.invokeLater(() -> {
                             responseLabel.setText("Server: Client connected!");
-                            responseLabel.setForeground(new Color(0x2973B2));
+                            responseLabel.setForeground(new Color(0x00cbff));
                             setTitle("Co-op room - Server");
                             msgTextArea.append("---connected---\n");
                             setTestMsgEnabled(true);
@@ -421,7 +422,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 isServer = false;
                 SwingUtilities.invokeLater(() -> {
                     responseLabel.setText("Client: Connected to server!");
-                    responseLabel.setForeground(new Color(0x2973B2));
+                    responseLabel.setForeground(new Color(0x00cbff));
                     setTitle("Co-op room - Client");
                     startButton.setText("Ready!");
                     msgTextArea.append("---connected---\n");
