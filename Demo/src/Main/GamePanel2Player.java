@@ -221,7 +221,9 @@ public class GamePanel2Player extends GamePanel {
 
     @Override
     protected void manaRecover() {
-        cof.invoke(CoKeys.RESET_MANA_RECOVER);
+        if (cof != null) {
+            cof.invoke(CoKeys.RESET_MANA_RECOVER);
+        }
         super.manaRecover();
     }
 
