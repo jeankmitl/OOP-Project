@@ -15,8 +15,6 @@ import CoOpSystem.HashEntityID;
 import CoOpSystem.WrongCoOpException;
 import DSystem.OTimer;
 import Entities.Enemies.Enemy;
-import Entities.UnitFactory;
-import Entities.Units.Nike;
 import Entities.Units.Unit;
 import static Main.GamePanel.BAR_X;
 import static Main.GamePanel.BAR_Y;
@@ -27,19 +25,14 @@ import static Main.GamePanel.ROWS;
 import static Main.GamePanel.getVfxs;
 import static Main.GamePanel.remainMana;
 import static Main.GamePanel.unitTypes;
-import static Main.GamePanel.units;
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -217,6 +210,14 @@ public class GamePanel2Player extends GamePanel {
             remainManaP2 = 0;
         } else {
             remainManaP2 -= mana;
+        }
+    }
+    
+    public static void reduceCooldownP2(int cd) {
+        if (unitTypesP2 != null) {
+            for (UnitType unitType: unitTypesP2) {
+                unitType.setCoolDownElapsed(unitType.getCoolDownElapsed() - cd);
+            }
         }
     }
     // </editor-fold>

@@ -32,9 +32,7 @@ public class Moai extends Unit implements UnitGeneratable {
     @Override
     public void generateByAtkSpeed() {
         setStatus(ATK_STATUS);
-        for (UnitType unitType: GamePanel.getUnitTypes()) {
-            unitType.setCoolDownElapsed(unitType.getCoolDownElapsed() - 10);
-        }
+        GamePanel.reduceCooldown(10);
         new DWait(1.5, (e) -> {
             setStatus(IDLE_STATUS);
             GamePanel.getVfxs().add(new VFX(getX(), getY() - 50, "dec_cooldown_vfx"));

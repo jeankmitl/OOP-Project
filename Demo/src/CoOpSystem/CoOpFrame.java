@@ -7,6 +7,7 @@ package CoOpSystem;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Main.BossFightGamePanel2PlayerRough;
 import Main.GamePanel2Player;
 import Main.LoadingScreen;
 import Main.MainMenu;
@@ -46,8 +47,8 @@ import javax.swing.border.EtchedBorder;
  */
 public class CoOpFrame extends JFrame implements ActionListener {
     
-    private final boolean isJoinNoConfirm = true;
-    private final boolean DEBUG_PRINT = true;
+    private final boolean isJoinNoConfirm = false;
+    private final boolean DEBUG_PRINT = false;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
     private Socket socket;

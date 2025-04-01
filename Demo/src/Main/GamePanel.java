@@ -345,6 +345,7 @@ public class GamePanel extends JPanel {
     
     public static void increaseMana(int mana) {
         GamePanel2Player.increaseMana(mana);
+        BossFightGamePanel2PlayerRough.increaseMana(mana);
         remainMana += mana;
         if (remainMana > MAX_MANA) {
             remainMana = MAX_MANA;
@@ -353,6 +354,7 @@ public class GamePanel extends JPanel {
     
     public static void reduceMana(int mana) {
         GamePanel2Player.reduceMana(mana);
+        BossFightGamePanel2PlayerRough.increaseMana(mana);
         if (remainMana - mana < 0) {
             remainMana = 0;
         } else {
@@ -450,6 +452,14 @@ public class GamePanel extends JPanel {
     public void updateCooldown(double deltaTime) {
         for (UnitType unit: unitTypes) {
             unit.coolDownTick(deltaTime);
+        }
+    }
+    
+    public static void reduceCooldown(int cd) {
+        GamePanel2Player.reduceCooldownP2(cd);
+        BossFightGamePanel2PlayerRough.reduceCooldownP2(cd);
+        for (UnitType unitType: unitTypes) {
+            unitType.setCoolDownElapsed(unitType.getCoolDownElapsed() - cd);
         }
     }
     
@@ -678,15 +688,8 @@ public class GamePanel extends JPanel {
                 }  
             }
         }
-        
-        Iterator<Unit> unitIter =  units.iterator();
-        while (unitIter.hasNext()) {
-            Unit unit = unitIter.next();
-            if (unit.isDead()) {
-                unitIter.remove();
-            }
-        }
-//        units.removeIf(Unit::isDead);
+
+        units.removeIf(Unit::isDead);
     }
 
     private void paintHealthBar(Graphics g, Entity et) {

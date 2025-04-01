@@ -118,7 +118,7 @@ public class StageSelector extends JFrame {
         }
         if (stageName.equals("St9")) { // Boss
             if (type.equals("2p") || type.equals("cli")) {
-                game = BossFightGamePanel2PlayerRough.getInstance(this, new StageBossFight());
+                game = BossFightGamePanel2PlayerRough.getInstance(this, new StageBossFight(), type, cof);
             } else {
                 game = BossFightGamePanel.getInstance(this, new StageBossFight());
             }
