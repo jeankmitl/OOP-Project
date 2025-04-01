@@ -17,32 +17,33 @@ public interface UnitConfig {
     int SUPPORT = 5;
     
     
-    String SKELETON_DESC = "A few damage but good for starting";
-    String BLACK_SKELETON_DESC = "triple shots";
-    String SLIME_DESC = "Generate mana every atkSpeed, this is enough to balance mana before empty";
-    String KANIWALL_DESC = "Defend";
-    String CANNON_DESC = "IDK. When finish";
-    String MIMIC_DESC = "CRUNCHHHHHHHHHYYYYYYYYYYYYYYYYYYYYYYYYYY!!Y!";
-    String EXPLOSION_DESC = "It's a trap!";
-    String MIPYA_DESC = "(mini pyanak) help us, without use more field";
-    String SNAKE_DESC = "The snake is fall from tree & jumpscare";
-    String PYTHON_DESC = "print(\"Hello Python!\")";
-    String GOLEM_DESC = "Long wait? Let me check";
-    String BIGBALL = "BIG BALL O, BALLER";
-    String EXPLOSIVE_TURTLE_DESC = "I want to use it";
-    String SEMI_AUTO_BOT_DESC = "3 strike";
-    String ALPHA_WOLF_DESC = "Baby, I'm preyin' on you tonight ~ Just like animals-mals";
-    String WEREWOLF_DESC = "Big furry once a full moon";
-    String VAMPIRE_DESC = "Drink blood means ++health in your body";
-    String CANDLES6_DESC = "6 candles. Summon beam to kill all enemy in that row";
-    String CANDLES_EXPLOSION_DESC = "Portable candles, make them chill";
-    String BLOCK_FIELD_DESC = "Betray unit, why are you use this?";
-    String NIKE_DESC = "Make screen clean w/o enemy";
-    String GHOST_DESC = "don't TOUCH mep, I shy. UwU";
-    String JAVA_SKELETON_DESC = "git add *\n git commit\n git push git PUSH";
-    String FLAT_SLIME_DESC = "don't have enough space, this can help you Generate mana!";
-    String TOFU_DESC = "Dragon can fire 3 row";
-    String BARRIER_DESC = "sci-fi barrier, can place on Unit";
+    String SKELETON_DESC = "do you know, this skeleton can dance.\n---\nStarter Unit. Shoot with *Basic atk*";
+    String BLACK_SKELETON_DESC = "opposite to skeleton\n---\nLike skeleton but shoot *3 rows*";
+    String SLIME_DESC = "cute slime\n---\nStarter Unit. Increase Mana every atkSpeed";
+    String KANIWALL_DESC = "no cap he strong\n---\nStarter Unit. no atk but *high health*";
+    String CANNON_DESC = "Take the shot cheeseeeeee\n---\nLong delay but shoot bullet that can atk *though 3 times* and *explode around enemy*";
+    String MIMIC_DESC = "CRUNCHHHHHHHHHYYYYYYYYYYYYYYYYYYYYYYYYYY!!Y!\n---\nShort range and delay but can *kill enemy in 1 atk* ";
+    String EXPLOSION_DESC = "It's a trap!\n---\nWhen placed, *explode around enemy* in *high atk*";
+    String MIPYA_DESC = "(mini pyanak) help us, without use more field\n---\nCan place on Unit. *shoot less atk than skeleton*";
+    String SNAKE_DESC = "The snake is fall from tree & jumpscare\n---\nShort range *atk with high speed*";
+    String PYTHON_DESC = "print(\"Hello Python!\")\n---\n*Shoot 2 bullet-types* with higher atk";
+    String GOLEM_DESC = "Long wait? Let me check\n---\n*Reduce cooldown* all Unit-types";
+    String GIVEAWAY_SLIME_DESC = "You may love it because you take him everywhere.\n---\nWhen placed, *give you a free mana*";
+    String BIGBALL = "BIG BALL O, BALLER\n---\nSmall delay, atk with bullet that can *push enemy back* with *high atk*";
+    String EXPLOSIVE_TURTLE_DESC = "I want to use it\n---\nCheap but can *explode enemy only its block* when enemy touch it";
+    String SEMI_AUTO_BOT_DESC = "3 strike\n---\nLike skelton but shoot *3 times* per atkSpeed";
+    String ALPHA_WOLF_DESC = "Baby, I'm preyin' on you tonight ~ Just like animals-mals\n---\nBig delay but can *hit all enemy in short range* with *high atk* and *stun effect*";
+    String WEREWOLF_DESC = "Big furry once a full moon\n---\nMedium atk & high speed *to all enemy in short range* and get *chill effect*";
+    String VAMPIRE_DESC = "Drink blood means ++health in your body\n---\n*Heal less health unit in their row*\n(but vampire must have full health, else health itself)";
+    String CANDLES6_DESC = "6 candles. Summon beam to kill all enemy in that row\n---\n   ***IF YOU SEE THIS, YOU ARE HACKING UNIT*";
+    String CANDLES_EXPLOSION_DESC = "Portable candles, make them chill\n---\nWhen placed, *hit all enemy in their row* and *get all medium atk with  chill effect*";
+    String BLOCK_FIELD_DESC = "Betray unit, why are you use this?\n---\n      USELESS UNIT  ";
+    String NIKE_DESC = "Make screen clean w/o enemy\n---\nWhen placed, kill all in the screen with very high atk (but you can use only 1 time)";
+    String GHOST_DESC = "don't TOUCH mep, I shy. UwU\n---\nIf more atk than enemy's health, Haunt enemy to be unit (unit with same health and atk from enemy) and *atk short range*";
+    String JAVA_SKELETON_DESC = "git add *; git commit; git push git PUSH\n---\nLike skeleton but shoot bullet that can *push enemy back*";
+    String FLAT_SLIME_DESC = "don't have enough space, this can help you Generate mana!\n---\nNot only like Slime, but also *can place on unit*";
+    String TOFU_DESC = "Dragon can fire 3 row\n---\nBlack Skeleton + Werewolf, medium atk *to all enemy on 3 rows in short range*";
+    String BARRIER_DESC = "sci-fi barrier, can place on Unit\n---\n*Can place on unit*, no atk but medium-high health";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -108,7 +109,7 @@ public interface UnitConfig {
     
     // Cost-Gen
     UnitStats SLIME_STATS = new UnitStats(SLIME_SPRITE, 300, 30, 25, 50, 7, COST_GEN, SLIME_DESC);
-    UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 40, 0.5, 0, 75, COST_GEN);
+    UnitStats GIVEAWAY_SLIME_STATS = new UnitStats(GIVEAWAY_SLIME_SPRITE, 1, 40, 0.5, 0, 75, COST_GEN, GIVEAWAY_SLIME_DESC);
     UnitStats FLAT_SLIME_STATS = new UnitStats(FLAT_SLIME_SPRITE, 300, 30, 25, 70, 7, COST_GEN, FLAT_SLIME_DESC); 
     
     // Support
