@@ -1,5 +1,5 @@
 <p align="center">
-  <img width=500 height=auto src="Demo/src/Asset/Img/Icons/defense_of_the_dungeon_no_s.png">
+  <img width=1000 height=auto src="Demo/src/Asset/Img/Icons/defense_of_the_dungeon_no_s.png">
 </p>
 
 # Defense of the Dungeon
@@ -8,7 +8,7 @@ This project is part of Object-Oriented Programming course @ School of Informati
 
 ## 📓 Description
 
-A Tower Defense video game in 2025, developed and published by Game Name. It was first released on GitHub, where players take on the role of a Dungeon Master, defending against the invasion of the Tomb Raider. When a Tomb Raider enters a dungeon, players must defend their dungeon by placing monsters that will attack the Tomb Raider or block the Tomb Raider from passing. The Tomb Raider can also defeat monsters. Players must also gather energy called Mana to summon monsters. If the Tomb Raider reaches the entrance of the dungeon, the player loses the game
+A Tower Defense game that will allow players to think, plan, and adjust strategies to overcome obstacles that players will encounter, which was inspired by the games Plants vs Zombies and Arknights. The main gameplay will be placing units to protect our base from waves of enemies that invade. We will have to manage Mana to place units and study the capabilities of units and the abilities of each enemy to overcome various levels and get new units to use to challenge the next level
 
 ## 💻 Development
 
@@ -55,9 +55,6 @@ If it not found, visit [this link](https://www.oracle.com/java/technologies/down
 2. Go to ```Tools``` > ```Java Platforms``` and add your JDK if it's not already detected 
 
 ## ⬇️ Installation
-
-### Download Executable JAR File
-Download ```Defense of the Dungeon.jar``` from ```Releases``` section
 
 ### Download as Development step
 Go to ```Demo``` > ```src``` > ```Main``` > ```Main.java``` and run file
