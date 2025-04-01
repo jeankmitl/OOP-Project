@@ -37,6 +37,10 @@ public class OWait {
     public void reset() {
         stop = false;
     }
+    
+    public void fill() {
+        elapsedTime = delay;
+    }
 
     public double getElapsedTime() {
         return elapsedTime;

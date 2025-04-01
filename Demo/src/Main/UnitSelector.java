@@ -270,6 +270,7 @@ public class UnitSelector extends JDialog {
             unitTypes.add(new UnitType(JavaSkeleton.class));
             unitTypes.add(new UnitType(CandlesExplosion.class));
             unitTypes.add(new UnitType(Barrier.class));
+            unitTypes.add(new UnitType(Deathlocked.class));
         }
     }
     

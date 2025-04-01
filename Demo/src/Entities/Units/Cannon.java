@@ -25,6 +25,7 @@ import java.util.List;
 public class Cannon extends Unit implements UnitChargeShootable {
     public Cannon(int row, int col) {
         super(row, col, getUNIT_STATS());
+        attackWait.fill();
     }
 
     public static UnitStats getUNIT_STATS() {

@@ -44,6 +44,7 @@ public interface UnitConfig {
     String FLAT_SLIME_DESC = "don't have enough space, this can help you Generate mana!\n---\nNot only like Slime, but also *can place on unit*";
     String TOFU_DESC = "Dragon can fire 3 row\n---\nBlack Skeleton + Werewolf, medium atk *to all enemy on 3 rows in short range*";
     String BARRIER_DESC = "sci-fi barrier, can place on Unit\n---\n*Can place on unit*, no atk but medium-high health";
+    String DEATHLOCKED_DESC = "since you are enemy, I can send you to the hell\n---\nFind the most health and *explode them with around atk*";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -73,6 +74,7 @@ public interface UnitConfig {
     UnitSpriteSheets CANDLES_EXPLOSION_SPRITE = new UnitSpriteSheets("candles_activate_purple", "candles_activate_purple");
     UnitSpriteSheets TOFU_SPRITE = new UnitSpriteSheets("Tofu_Idle", "Tofu_Atk");
     UnitSpriteSheets BARRIER_SPRITE = new UnitSpriteSheets("barrier_good", "barrier_med", "barrier_bad");
+    UnitSpriteSheets DEATHLOCKED_SPRITE = new UnitSpriteSheets("deathlocked_charge", "deathlocked_atk", "deathlocked_cd");
     
     /**
      * All Unit stats 💡
@@ -88,6 +90,7 @@ public interface UnitConfig {
     UnitStats PYTHON_STATS = new UnitStats(PYTHON_SPRITE, 500, 30, 1.5, 270, 30, ATTACKER, PYTHON_DESC);
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 400, 5, 250, 30, ATTACKER, BIGBALL);
     UnitStats SEMI_AUTO_BOT_STATS = new UnitStats(SEMI_AUTO_BOT_SPRITE, 300, 20, 3, 200, 7, ATTACKER, SEMI_AUTO_BOT_DESC);
+    UnitStats DEATHLOCKED_STATS = new UnitStats(DEATHLOCKED_SPRITE, 500, 1800, 15, 500, 60, GUARD);
     
     // Guard
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 1800, 42, 150, 12, GUARD, MIMIC_DESC);
