@@ -261,10 +261,11 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawString("Stage 8", 545, 625);
         }
         if (progress.get_Stage_Num(8)) {
-            unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/SongChinWu_idle.png", 4);
+            g2d.setFont(new Font("Algerian", Font.BOLD, 60));
+            unitIcon = spriteSlicer("/Asset/Img/Icons/mogging_Song.png", 1);
             g2d.drawImage(stageLayout, st9.x, st9.y, st9.width, st9.height, this);
-            g2d.drawImage(unitIcon, st9.x, st9.y, st9.width, st9.height, this);
-            g2d.drawString("BOSS", 775, 625);
+            g2d.drawImage(unitIcon, st9.x+5, st9.y+5, st9.width-10, st9.height-10, this);
+            g2d.drawString("???", 780, 625);
         }
         if (progress.get_Stage_Num(9)) {
             unitIcon = spriteSlicer("/Asset/Img/SpriteSheets/nike.png", 1);
