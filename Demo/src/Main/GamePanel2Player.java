@@ -376,7 +376,7 @@ public class GamePanel2Player extends GamePanel {
         }
         
         public void resetManaRecover() {
-            manaRecoverTimer10.reset();
+            manaRecoverTimer5.reset();
         }
         
         public void placeUnitClient(UnitType unitType, int row, int col) {

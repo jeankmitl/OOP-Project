@@ -80,7 +80,7 @@ public class GamePanel extends JPanel {
     private final GameLoop gameLoop;
     private final DTimer gameTimer;
     
-    protected final OTimer manaRecoverTimer10 = new OTimer(5);
+    protected final OTimer manaRecoverTimer5 = new OTimer(5);
     
     private final OTimer slowAnimTimer = new OTimer(0.15);
     private final OTimer mediumAnimTimer = new OTimer(0.25);
@@ -232,10 +232,10 @@ public class GamePanel extends JPanel {
     protected void fixedUpdate(double deltaTime) {
         // Add 50 cost every 15 seconds
 //        if (summoner instanceof stage_Tutorial){}
-        if (manaRecoverTimer10.tick(deltaTime)) {
+        if (manaRecoverTimer5.tick(deltaTime)) {
             manaRecover();
         }
-        manaRegenPct = (int)((manaRecoverTimer10.getElapsedTime() / manaRecoverTimer10.getDelay()) * 100);
+        manaRegenPct = (int)((manaRecoverTimer5.getElapsedTime() / manaRecoverTimer5.getDelay()) * 100);
         
         // spawn: enemies every 10s ➕
         if (this.target == this.count_kill && !this.victory) {

@@ -380,7 +380,7 @@ public class BossFightGamePanel2PlayerRough extends BossFightGamePanel {
         }
         
         public void resetManaRecover() {
-            manaRecoverTimer10.reset();
+            manaRecoverTimer5.reset();
         }
         
         public void placeUnitClient(UnitType unitType, int row, int col) {
