@@ -38,7 +38,9 @@ public class AllEntityTypes {
         new UnitType(Ghost.class),
         new UnitType(JavaSkeleton.class),
         new UnitType(CandlesExplosion.class),
-        new UnitType(Barrier.class)
+        new UnitType(Barrier.class),
+        new UnitType(Deathlocked.class),
+        new UnitType(Kitsune.class)
     };
 
     public static UnitType[] getUNIT_TYPES() {
@@ -70,6 +72,7 @@ public class AllEntityTypes {
         new TheBlueSword(0, 0),
         new TheRedSword(0, 0),
         new AntKing(0, 0),
+        new Billionaire(0, 0)
     };
 
     public static Enemy[] getENEMIES() {

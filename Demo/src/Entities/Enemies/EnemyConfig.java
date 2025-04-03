@@ -34,7 +34,7 @@ public interface EnemyConfig {
     EnemySpriteSheets ISHOWSPEED_SPRITE = new IShowSpeedSpriteSheets("IShowSpeed_normal_walk", "IShowSpeed_normal_atk", "IShowSpeed_rage_walk", "IShowSpeed_rage_atk");
     EnemySpriteSheets KNIGHT_WALKER_SPRITE = new EnemySpriteSheets("KnightWalker_walking", "KnightWalker_atk");
     EnemySpriteSheets BERU_SPRITE = new EnemySpriteSheets("beru_walking", "beru_attacking");
-    
+    EnemySpriteSheets BILLIONAIRE_SPRITE = new EnemySpriteSheets("billionaire", "billionaire_atk_short");
 
     // All Unit stats 💡
     EnemyStats NINJA_STATS = new EnemyStats(NINJA_SPRITE, 340, 100, 1, WALK_NORMAL, NORMAL);
@@ -43,6 +43,7 @@ public interface EnemyConfig {
     EnemyStats BANDIT_STATSV3 = new EnemyStats(BANDIT_SPRITEV3, 1290, 100, 1, WALK_NORMAL, LONG_RANGE);
     EnemyStats SORCERER_STATS = new EnemyStats(SORCERER_SPRITE, 190, 100, 1, WALK_SLOW, NORMAL);
     EnemyStats LITTLE_RED_HOOD_STATS = new EnemyStats(LITTLE_RED_HOOD_SPRITE, 550, 100, 1, WALK_FAST, NORMAL);
+    EnemyStats BILLIONAIRE_STATS = new EnemyStats(BILLIONAIRE_SPRITE, 500, 50, 1.5, WALK_NORMAL, NORMAL);
     EnemyStats RC_BOMBER_STATS = new EnemyStats(RC_BOMBER_SPRITE, 50, 2000, 1, WALK_CAR, NORMAL);
     EnemyStats ROBOT_MONOWHEEL_STATS = new EnemyStats(ROBOT_MONOWHEEL_SPRITE, 240, 100, 1, WALK_FAST, NORMAL);
     EnemyStats TANK_STATS = new EnemyStats(TANK_SPRITE, 2200, 100, 0.1, WALK_SLOW, NORMAL);

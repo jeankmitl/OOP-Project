@@ -506,8 +506,17 @@ public class GamePanel extends JPanel {
                                 } else {
                                     redHood.setHealth(redHood.getHealth()+10);
                                 }
-                            // -----------------------------------------------------------
                             }
+                            // -----------------------------------------------------------
+                            if (enemy instanceof Billionaire) {
+                                Unit unitBack = getUnitFromField(unit.getCol() - 1, unit.getRow());
+                                System.out.println(unit.getCol() + "x" + unit.getRow());
+                                if (unitBack != null) {
+                                    System.out.println("yes fight");
+                                    enemy.attack(unitBack);
+                                }
+                            }
+                            // -----------------------------------------------------------
                             if (unit.isDead()) {
                                 Audio.play(AudioName.KILL2);
                                 getVfxs().add(new VFX(unit.getX(), unit.getY(), "dead_ghost_vfx"));

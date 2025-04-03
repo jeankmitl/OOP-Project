@@ -64,7 +64,11 @@ public class stage_beta implements EnemySummoner {
             game.Spawn_Enemy(new RCBomber(0, 0),99);
             w8.start();
         });
-        w8 = new DWait(40, e->{
+        w8 = new DWait(40, e -> {
+            game.Spawn_Enemy(new Billionaire(0, 0), 99, 5);
+            w9.start();
+        });
+        w9 = new DWait(40, e->{
             Audio.play(AudioName.NEXT_SUMMON);
             game.Spawn_Enemy(new IShowSpeed(0, 0),99,20);
         });

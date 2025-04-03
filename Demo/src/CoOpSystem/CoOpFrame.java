@@ -56,7 +56,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
     private PrintWriter out;
     private boolean isServer = false;
     
-    private JPanel inputPanel, leftPanel, mainPanel, topPanel, downPanel, msgPanel, bgPanel;
+    private JPanel inputPanel, leftPanel, mainPanel, topPanel, downPanel, msgPanel, bgPanel, msgTextFieldPanel;
     private JTextField ipTextField, portTextField;
     private JLabel ipLabel, portLabel, responseLabel;
     private JButton startButton, createServerButton, joinServerButton, sendButton, homeButton;
@@ -95,6 +95,8 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 super.paintComponent(g);
                 Image img = ImgManager.loadBG("defense_of_dungeon_wallpaper");
                 g.drawImage(img, 0, 0, getWidth(), getHeight(), null);
+                img = ImgManager.loadIcon("HowToConnect");
+                g.drawImage(img, 100, 10, 600, 600, null);
             }
         };
         leftPanel = new JPanel();
@@ -102,6 +104,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         downPanel = new JPanel();
         topPanel = new JPanel();
         msgPanel = new JPanel();
+        msgTextFieldPanel = new JPanel();
         ipTextField = new JTextField("localhost");
         portTextField = new JTextField("12345");
         ipLabel = new JLabel("   IP");
@@ -122,10 +125,11 @@ public class CoOpFrame extends JFrame implements ActionListener {
         
         mainPanel.setLayout(new BorderLayout());
         topPanel.setLayout(new BorderLayout());
+        msgTextFieldPanel.setLayout(new BorderLayout());
+        msgTextFieldPanel.setPreferredSize(new Dimension(0, 30));
         topPanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         topPanel.setBackground(new Color(0x2f2e35));
         downPanel.setBackground(new Color(0x2f2e35));
-//        mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         inputPanel.setLayout(new GridLayout(3, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7));
         leftPanel.setLayout(new GridLayout(2, 1, 10, 10));
@@ -147,8 +151,10 @@ public class CoOpFrame extends JFrame implements ActionListener {
         msgTextArea.setWrapStyleWord(true);
         msgTextArea.setFont(defFieldFont);
         msgTextField.setFont(defFieldFont);
+        sendButton.setFont(defFont);
         msgPanel.setPreferredSize(new Dimension(0, 150));
         msgPanel.setLayout(new BorderLayout());
+        
         msgScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         homeButton.setFocusable(false);
         setTestMsgEnabled(false);
@@ -178,7 +184,11 @@ public class CoOpFrame extends JFrame implements ActionListener {
         homeButton.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED, Color.lightGray, Color.darkGray));
         homeButton.setFont(defFont);
         homeButton.setPreferredSize(new Dimension(40, 30));
-        
+//        sendButton.setForeground(Color.black);
+        sendButton.setBackground(Color.lightGray);
+        sendButton.setFocusable(false);
+        sendButton.setBorder(BorderFactory.createMatteBorder(2, 2, 3, 2, Color.darkGray));
+        sendButton.setPreferredSize(new Dimension(70, 0));
         bgPanel.setBackground(Color.red);
         
         add(mainPanel);
@@ -193,7 +203,9 @@ public class CoOpFrame extends JFrame implements ActionListener {
         
         leftPanel.add(msgPanel);
         msgPanel.add(new JScrollPane(msgTextArea));
-        msgPanel.add(msgTextField, BorderLayout.SOUTH);
+        msgPanel.add(msgTextFieldPanel, BorderLayout.SOUTH);
+        msgTextFieldPanel.add(msgTextField);
+        msgTextFieldPanel.add(sendButton, BorderLayout.EAST);
         
         mainPanel.add(bgPanel);
         
@@ -209,6 +221,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         msgTextField.addActionListener(this);
         startButton.addActionListener(this);
         homeButton.addActionListener(this);
+        sendButton.addActionListener(this);
         
         setVisible(true);
     }
@@ -310,6 +323,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         msgTextArea.setEnabled(enabled);
         msgTextField.setEnabled(enabled);
         startButton.setEnabled(enabled);
+        sendButton.setEnabled(enabled);
     }
     
     private void debugPrint(boolean isYou, String msg) {

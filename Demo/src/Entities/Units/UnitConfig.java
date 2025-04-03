@@ -45,6 +45,7 @@ public interface UnitConfig {
     String TOFU_DESC = "Dragon can fire 3 row\n---\nBlack Skeleton + Werewolf, medium atk *to all enemy on 3 rows in short range*";
     String BARRIER_DESC = "sci-fi barrier, can place on Unit\n---\n*Can place on unit*, no atk but medium-high health";
     String DEATHLOCKED_DESC = "since you are enemy, I can send you to the hell\n---\nFind the most health and *explode them with around atk*";
+    String KITSUNE_DESC = "everyone is important I need to help them all\n---\nHeal *all in their row*, shot a *little atk bullet*";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -75,6 +76,8 @@ public interface UnitConfig {
     UnitSpriteSheets TOFU_SPRITE = new UnitSpriteSheets("Tofu_Idle", "Tofu_Atk");
     UnitSpriteSheets BARRIER_SPRITE = new UnitSpriteSheets("barrier_good", "barrier_med", "barrier_bad");
     UnitSpriteSheets DEATHLOCKED_SPRITE = new UnitSpriteSheets("deathlocked_charge", "deathlocked_atk", "deathlocked_cd");
+    UnitSpriteSheets KITSUNE_SPRITE = new UnitSpriteSheets("kitsune", "kitsune_heal");
+    
     
     /**
      * All Unit stats 💡
@@ -117,7 +120,8 @@ public interface UnitConfig {
     
     // Support
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 15, 300, 60, SUPPORT, GOLEM_DESC);
-    UnitStats VAMPIRE_STATS = new UnitStats(VAMPIRE_SPRITE, 300, -50, 4, 100, 7, SUPPORT, VAMPIRE_DESC);
+    UnitStats VAMPIRE_STATS = new UnitStats(VAMPIRE_SPRITE, 300, -50, 3, 100, 7, SUPPORT, VAMPIRE_DESC);
+    UnitStats KITSUNE_STATS = new UnitStats(KITSUNE_SPRITE, 200, -30, 7, 150, 20, SUPPORT, KITSUNE_DESC);
     
     // *Not for Operator*
     UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 9999, 1800, 0, 125, 50, EXPLOTION, CANDLES6_DESC);
