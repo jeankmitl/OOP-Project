@@ -15,6 +15,7 @@ public interface CoKeys {
     // on StageSelector
     String STAGE_NAME = "stageName";
     String HOVER_XY = "hoverXY";
+    String WANT_THIS_STAGE = "wantThisStage";
     String GET_GAME_PANEL = "getGamePanel";
     
     // on UnitSelector
@@ -42,6 +43,9 @@ public interface CoKeys {
     String COOLDOWN_SVR = "cooldownSvr";
     String VFX_CLI = "vfxCli";
     String SOUND_CLI = "soundCli";
+    String FAKE_PLACE_CLI = "fakePlaceCli";
+    String FAKE_RECALL_CLI = "fakeRecallCli";
+    String WIN_CLI = "winCli";
     
     // use Big Data (to Client)
     String ALL_UNIT_ID = "allUnitID";

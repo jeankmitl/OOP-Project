@@ -65,6 +65,8 @@ public class GamePanel2Player extends GamePanel {
     
     private boolean confirmPlace = false;
     private boolean confirmRecall = false;
+    private boolean isWarnDisconnect = false;
+    private char p2PlaceStatus = 'n'; //n=normal, p=place, r=recall
     
     protected static int remainManaP2 = 50;
     
@@ -130,20 +132,15 @@ public class GamePanel2Player extends GamePanel {
                                 
                                 new Thread(() -> {
                                     try {
-                                        Thread.sleep(500);
+                                        do {
+                                            System.out.println("ready ping...");
+                                           Thread.sleep(500);
+                                        } while (!unitTypes.isEmpty() && !unitTypesP2.isEmpty());
                                     } catch (InterruptedException ex) {
                                         Logger.getLogger(GamePanel2Player.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                    if (!unitTypes.isEmpty() && !unitTypesP2.isEmpty()) {
-                                        cof.invoke(CoKeys.START_GAME);
-                                    } else {
-                                        try {
-                                            throw new WrongCoOpException("Should have both unitTypes P1 & p2");
-                                        } catch (WrongCoOpException ex) {
-                                            ex.printStackTrace();
-                                        }
-                                    }
                                 }).start();
+                                cof.invoke(CoKeys.START_GAME);
                             }
                     });
                 }
@@ -238,6 +235,14 @@ public class GamePanel2Player extends GamePanel {
             updateSocket();
         }
     }
+
+    @Override
+    protected void youWin() {
+        if (cof != null) {
+            cof.invoke(CoKeys.WIN_CLI);
+        }
+        super.youWin();
+    }
     
     private int hoverSelectP2X;
     private int hoverPlaceP2X, hoverPlaceP2Y;
@@ -257,10 +262,10 @@ public class GamePanel2Player extends GamePanel {
     // Main Socket!!!
     private void updateSocket() {
         boolean isFirst;
-        int p1PlaceX = getPlaceCol();
-        int p1PlaceY = getPlaceRow();
+        int p1PlaceCol = getPlaceCol();
+        int p1PlaceRow = getPlaceRow();
         Properties prop = new Properties();
-        prop.setProperty(CoKeys.BOTH_PLACE_XY, p1PlaceX + "," + p1PlaceY); //Both
+        prop.setProperty(CoKeys.BOTH_PLACE_XY, p1PlaceCol + "," + p1PlaceRow); //Both
         
         if (type.equals("2p")) { //Server
             Set<Integer> setUnitId = unitID.getAllID();
@@ -338,6 +343,13 @@ public class GamePanel2Player extends GamePanel {
     public class CoOp {
         // for Client
         public void updateP2PlaceXY(int x, int y) {
+            p2PlaceStatus = 'n';
+            p2PlaceX = x;
+            p2PlaceY = y;
+        }
+        
+        public void updateP2PlaceXY(int x, int y, char status) {
+            p2PlaceStatus = status;
             p2PlaceX = x;
             p2PlaceY = y;
         }
@@ -360,7 +372,6 @@ public class GamePanel2Player extends GamePanel {
                 enemy.setX(x);
             } else { //server > client
                 Enemy enemy = AllEntityTypes.getEnemyFromName(name);
-                Audio.play(AudioName.BUTTON_CLICK);
                 Enemy newEnemy = Spawn_Cli_Enemy(enemy, row);
                 insertEnemyID(id, newEnemy);
             }
@@ -392,12 +403,14 @@ public class GamePanel2Player extends GamePanel {
                     placeUnit(p2UnitType, row, col, true);
                     remainMana += p2UnitType.getManaCost();
                     remainManaP2 -= p2UnitType.getManaCost();
+                    updateP2PlaceXY(col, row, 'p');
                 }
             }
         }
         
         public void recallUnitClient(int row, int col) {
-            recallUnit(col, row);
+            recallUnit(col, row, false);
+            updateP2PlaceXY(col, row, 'r');
         }
         
         public void setCooldown(String cdStr) {
@@ -416,6 +429,14 @@ public class GamePanel2Player extends GamePanel {
                 double cd = Double.parseDouble(cdStr1);
                 unitTypesP2.get(i).setCoolDownElapsed(cd);
             }
+        }
+        
+        public void warnCliDisconnect() {
+            isWarnDisconnect = true;
+        }
+        
+        public void win() {
+            youWin();
         }
         
     }
@@ -442,6 +463,13 @@ public class GamePanel2Player extends GamePanel {
         g.setColor(new Color(162, 252, 255, 255));
         iconImage = ImgManager.loadIcon("Mana_icon");
         g.drawImage(iconImage, BAR_X+625, BAR_Y-45,50,50, null);
+        
+        //warning
+        if (isWarnDisconnect) {
+            g.setFont(new Font("Comic Sans MS", Font.BOLD, 24));
+            g.setColor(Color.red);
+            g.drawString("Disconnected.", BAR_X, BAR_Y2 - g.getFontMetrics().getHeight());
+        }
         
         
         //Player 2
@@ -508,21 +536,29 @@ public class GamePanel2Player extends GamePanel {
                     }
                 }
             } else { // Socket
-                iconImage = ImgManager.loadIcon("blue_p2_place_hover");
+                if (p2PlaceStatus == 'p') {
+                    iconImage = ImgManager.loadIcon("green_p2_place_hover");
+                } else if (p2PlaceStatus == 'r') {
+                    iconImage = ImgManager.loadIcon("recall_p2_place_hover");
+                } else {
+                    iconImage = ImgManager.loadIcon("blue_p2_place_hover");
+                }
+                
             }
             if (cof == null || p2PlaceY < ROWS) {
                 g.drawImage(iconImage, hoverPlaceP2X, hoverPlaceP2Y, CELL_WIDTH, CELL_HEIGHT, this);
             }
-            
-            runDynamicSelectP2(p2Select, 0.5);
-            if (!unit.isNoCoolDown()) {
-                iconImage = ImgManager.loadIcon("white_less_place_hover");
-            } else if (remainManaP2 < unit.getManaCost()) {
-                iconImage = ImgManager.loadIcon("red_not_enough_place_hover");
-            } else {
-                iconImage = ImgManager.loadIcon("white_place_hover");
+            if (cof == null) {
+                runDynamicSelectP2(p2Select, 0.5);
+                if (!unit.isNoCoolDown()) {
+                    iconImage = ImgManager.loadIcon("white_less_place_hover");
+                } else if (remainManaP2 < unit.getManaCost()) {
+                    iconImage = ImgManager.loadIcon("red_not_enough_place_hover");
+                } else {
+                    iconImage = ImgManager.loadIcon("white_place_hover");
+                }
+                g.drawImage(iconImage, hoverSelectP2X,  (CELL_HEIGHT * (ROWS + 1)) + 15 - CEMI_HEIGHT, CEMI_WIDTH, CEMI_HEIGHT , this);
             }
-            g.drawImage(iconImage, hoverSelectP2X,  (CELL_HEIGHT * (ROWS + 1)) + 15 - CEMI_HEIGHT, CEMI_WIDTH, CEMI_HEIGHT , this);
         }
 
         //END Player 2
@@ -531,6 +567,9 @@ public class GamePanel2Player extends GamePanel {
     @Override
     public Unit placeUnit(UnitType unit, int row, int col, boolean isOwner) {
         if (type.equals("2p") || !isOwner) {
+            if (cof != null && isOwner) {
+                    cof.sendOne(CoKeys.FAKE_PLACE_CLI, col + " " + row);
+                }
             return super.placeUnit(unit, row, col, isOwner); 
         } else if (type.equals("cli")) {
             if (col >= 0 && col < COLS && row >= 0 && row < ROWS) {
@@ -544,13 +583,13 @@ public class GamePanel2Player extends GamePanel {
     }
 
     @Override
-    public void recallUnit(int col, int row) {
+    public void recallUnit(int col, int row, boolean isOwner) {
         if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
             if (type.equals("2p")) {
-                if (cof != null) {
-                    cof.sendOne(CoKeys.SOUND_CLI, AudioName.PLANT_DELETE);
+                if (cof != null && isOwner) {
+                    cof.sendOne(CoKeys.FAKE_RECALL_CLI, col + " " + row);
                 }
-                super.recallUnit(col, row);
+                super.recallUnit(col, row, isOwner);
             } else if (type.equals("cli")) {
                 String format = row + " " + col;
                 cof.sendOne(CoKeys.REQ_RECALL_UNIT, format);
@@ -622,7 +661,7 @@ public class GamePanel2Player extends GamePanel {
                     break;
                 case KeyEvent.VK_R:
                     if (confirmRecall) {
-                        recallUnit(p2PlaceX, p2PlaceY);
+                        recallUnit(p2PlaceX, p2PlaceY, false);
                         resetConfirm();
                     } else {
                         confirmPlace = false;

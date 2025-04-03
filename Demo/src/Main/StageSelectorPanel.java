@@ -23,6 +23,7 @@ public class StageSelectorPanel extends JPanel{
     private Rectangle animRect, animP2Rect;
     private CoOpFrame cof;
     private int unlock = 0, passCheck;
+    private boolean isP2WantThis = false;
 
     public StageSelectorPanel(StageSelector frame, String type, CoOpFrame cof) {
         this.type = type;
@@ -59,18 +60,25 @@ public class StageSelectorPanel extends JPanel{
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (type.equals("cli")) return;
                 for (int i=0; i<st.length; i++) {
                     if (st[i] == null) continue;
                     if (st[i].contains(e.getPoint())) {
                         if (st[i].equals(st1) || progress.get_Stage_Num(i)) {
-                            selectStage("St" + (i+1));
+                            if (type.equals("cli")) {
+                                cof.sendOne(CoKeys.WANT_THIS_STAGE, "");
+                                Audio.play(AudioName.PLANT_PICK_UP);
+                                isP2WantThis = true;
+                                revalidate();
+                                repaint();
+                            } else {
+                                selectStage("St" + (i+1));
+                            }
                             passCheck = i;
-                            System.out.println("Pass = "+passCheck);
                             break;
                         }
                     }
                 }
+                if (type.equals("cli")) return;
                 if (homeBtn.contains(e.getPoint())) {
                     if (cof != null) {
                         JOptionPane.showMessageDialog(frame, 
@@ -114,13 +122,16 @@ public class StageSelectorPanel extends JPanel{
                         if (st[i].equals(st1) || progress.get_Stage_Num(i)) {
                             setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                             if (!isAnySelect) {
-                                if (type.equals("cli")) {
-                                    animRect = st[i];
-                                    cof.sendOne(CoKeys.HOVER_XY, animRect.x + " " + animRect.y);
-                                } else {
-                                    animRect = st[i];
-                                    if (cof != null) {
+                                if (animRect != st[i]) {
+                                    if (type.equals("cli")) {
+                                        animRect = st[i];
                                         cof.sendOne(CoKeys.HOVER_XY, animRect.x + " " + animRect.y);
+                                        isP2WantThis = false;
+                                    } else {
+                                        animRect = st[i];
+                                        if (cof != null) {
+                                            cof.sendOne(CoKeys.HOVER_XY, animRect.x + " " + animRect.y);
+                                        }
                                     }
                                 }
                             }
@@ -274,13 +285,23 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawString("INFINITE", 945, 625);
         }
         if (cof != null && animP2Rect != null) {
-            Image hover = ImgManager.loadIcon("blue_p2_place_hover");
+            Image hover;
+            if (!type.equals("cli") && isP2WantThis) {
+                System.out.println("correct");
+                hover = ImgManager.loadIcon("green_p2_place_hover");
+            } else {
+                hover = ImgManager.loadIcon("blue_p2_place_hover");
+            }
             g2d.drawImage(hover, animP2Rect.x,animP2Rect.y, animP2Rect.width, animP2Rect.height,this);
         } 
         if (animRect != null) {
             Image hover;
             if (type.equals("cli")) {
-                hover = ImgManager.loadIcon("white_less_place_hover");
+                if (isP2WantThis) {
+                    hover = ImgManager.loadIcon("green_registerable_hover");
+                } else {
+                    hover = ImgManager.loadIcon("white_less_place_hover");
+                }
             } else {
                 hover = ImgManager.loadIcon("stage_select_hover_" + (isAnim ? "0":"1"));
             }
@@ -294,16 +315,17 @@ public class StageSelectorPanel extends JPanel{
             g2d.drawImage(resetLvlIcon, resetBtn.x, resetBtn.y, resetBtn.width, resetBtn.height, this);
         }
         
-        }
+    }
     
-    public void setHover(int x, int y) {
-        animRect = new Rectangle(x, y, 150, 150);
+    public void setP2Hover(int x, int y) {
+        isP2WantThis = false;
+        animP2Rect = new Rectangle(x, y, 150, 150);
         revalidate();
         repaint();
     }
     
-    public void setP2Hover(int x, int y) {
-        animP2Rect = new Rectangle(x, y, 150, 150);
+    public void p2WantThisStage() {
+        isP2WantThis = true;
         revalidate();
         repaint();
     }

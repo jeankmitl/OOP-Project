@@ -7,7 +7,12 @@ package CoOpSystem;
 import Asset.Audio;
 import Asset.AudioName;
 import Asset.ImgManager;
+import Asset.VFX;
 import Main.BossFightGamePanel2PlayerRough;
+import Main.GamePanel;
+import static Main.GamePanel.CELL_HEIGHT;
+import static Main.GamePanel.CELL_WIDTH;
+import static Main.GamePanel.getVfxs;
 import Main.GamePanel2Player;
 import Main.LoadingScreen;
 import Main.MainMenu;
@@ -47,7 +52,7 @@ import javax.swing.border.EtchedBorder;
  */
 public class CoOpFrame extends JFrame implements ActionListener {
     
-    private final boolean isJoinNoConfirm = false;
+    private final boolean isJoinNoConfirm = true;
     private final boolean DEBUG_PRINT = false;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
@@ -224,6 +229,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         sendButton.addActionListener(this);
         
         setVisible(true);
+        
     }
     
     public static void main(String[] args) {
@@ -299,7 +305,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         }
         if (socket != null && out != null) {
             Properties properties = new Properties();
-            if (e.getSource().equals(msgTextField) && !msgTextField.getText().isBlank()) {
+            if ((e.getSource().equals(msgTextField) || e.getSource().equals(sendButton)) && !msgTextField.getText().isBlank()) {
                 String msgTest = msgTextField.getText();
                 properties.setProperty(CoKeys.MSG_TEST, msgTest);
                 msgTextField.setText("");
@@ -406,6 +412,9 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 responseLabel.setForeground(new Color(0xBE3144));
                 setTestMsgEnabled(false);
             });
+            if (gamePanel != null) {
+                gamePanel.coOp.warnCliDisconnect();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -501,7 +510,6 @@ public class CoOpFrame extends JFrame implements ActionListener {
     private UnitSelector unitSelector;
     
     private void startGame() {
-        
         LoadingScreen loadingScreen = new LoadingScreen();
         SwingWorker<Void, Void> worker = new SwingWorker<>() {
                 @Override
@@ -515,6 +523,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 protected void done() {
                     System.out.println("Finished loading.");
                     loadingScreen.dispose();
+                    GamePanel.DEBUG_MODE = false;
                     if (isServer) {
                         stage = new StageSelector("2p", CoOpFrame.this);
                     } else {
@@ -533,6 +542,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         String isReadyPlay = prop.getProperty(CoKeys.IS_READY_PLAY);
         String stageName = prop.getProperty(CoKeys.STAGE_NAME);
         String hoverXY = prop.getProperty(CoKeys.HOVER_XY);
+        String wantThisStage = prop.getProperty(CoKeys.WANT_THIS_STAGE);
         
         String getGamePanel = prop.getProperty(CoKeys.GET_GAME_PANEL);
         String getUnitSelector = prop.getProperty(CoKeys.GET_UNIT_SELECTOR);
@@ -561,10 +571,13 @@ public class CoOpFrame extends JFrame implements ActionListener {
                 String hoverXYs[] = hoverXY.split(" ");
                 int x = Integer.parseInt(hoverXYs[0]);
                 int y = Integer.parseInt(hoverXYs[1]);
-                if (isYou) {
-                    stage.setHover(x, y);
-                } else {
+                if (!isYou) {
                     stage.setP2Hover(x, y);
+                }
+            }
+            if (wantThisStage != null) {
+                if (isForSvr) {
+                    stage.p2WantThisStage();
                 }
             }
             if (getGamePanel != null) {
@@ -721,6 +734,56 @@ public class CoOpFrame extends JFrame implements ActionListener {
             if ((soundCli = prop.getProperty(CoKeys.SOUND_CLI)) != null) {
                 if (isForCli) {
                     Audio.play(soundCli);
+                }
+            }
+            final String vfxCli;
+            if ((vfxCli = prop.getProperty(CoKeys.VFX_CLI)) != null) {
+                String[] splited = vfxCli.split(" ");
+                try {
+                    int x = Integer.parseInt(splited[0]);
+                    int y = Integer.parseInt(splited[1]);
+                    String name = splited[2];
+                    if (isForCli) {
+                        GamePanel.getVfxs().add(new VFX(x, y, name));
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+                
+            }
+            final String winCli;
+            if ((winCli = prop.getProperty(CoKeys.WIN_CLI)) != null) {
+                if (isForCli) {
+                    System.out.println("cli win cli too!!!!!!");
+                    gamePanel.coOp.win();
+                }
+            }
+            final String fakePlaceCli;
+            final String fakeRecallCli;
+            if ((fakePlaceCli = prop.getProperty(CoKeys.FAKE_PLACE_CLI)) != null) {
+                if (isForCli) {
+                    String[] splited = fakePlaceCli.split(" ");
+                    try {
+                        int col = Integer.parseInt(splited[0]);
+                        int row = Integer.parseInt(splited[1]);
+                        gamePanel.coOp.updateP2PlaceXY(col, row, 'p');
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if ((fakeRecallCli = prop.getProperty(CoKeys.FAKE_RECALL_CLI)) != null) {
+                if (isForCli) {
+                    String[] splited = fakeRecallCli.split(" ");
+                    try {
+                        int col = Integer.parseInt(splited[0]);
+                        int row = Integer.parseInt(splited[1]);
+                        getVfxs().add(new VFX(col * CELL_WIDTH, row * CELL_HEIGHT, "recall_vfx"));
+                        Audio.play(AudioName.PLANT_DELETE);
+                        gamePanel.coOp.updateP2PlaceXY(col, row, 'r');
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

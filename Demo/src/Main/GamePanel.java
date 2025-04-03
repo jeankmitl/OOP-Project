@@ -239,40 +239,7 @@ public class GamePanel extends JPanel {
         
         // spawn: enemies every 10s ➕
         if (this.target == this.count_kill && !this.victory) {
-            System.out.println("You win");
-            this.victory = true;
-            if (summoner instanceof stage_Tutorial){save_Progress(1);}
-            if (summoner instanceof stage2){save_Progress(2);}
-            if (summoner instanceof stage3){save_Progress(3);}
-            if (summoner instanceof stage4){save_Progress(4);}
-            if (summoner instanceof stage5){save_Progress(5);}
-            if (summoner instanceof stage6){save_Progress(6);}
-            if (summoner instanceof stage7){save_Progress(7);}
-            if (summoner instanceof stage8){save_Progress(8);}
-            if (summoner instanceof StageBossFight){save_Progress(9);}
-            if (summoner instanceof stage_beta){save_Progress(10);}
-            GameLoop.clearListener();
-            Audio.play(AudioName.BUTTON_CLICK);
-            WinScreen winScreen = new WinScreen();
-            Audio.stopMusic();
-            Audio.play("you_win.wav");
-            stage.loadStage("win");
-            SwingWorker<Void, Void> worker = new SwingWorker<>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    stopGameLoop();
-                    Thread.sleep(3000);
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    winScreen.dispose();
-                    
-                    Audio.playMusic("mainMenu");
-                }
-            };
-            worker.execute();
+            youWin();
         }
         // update: animation every 2s
         updateAnimation(deltaTime);
@@ -284,7 +251,43 @@ public class GamePanel extends JPanel {
         }
         updateCooldown(deltaTime);
         updateLogic(deltaTime);
+    }
+    
+    protected void youWin() {
+        System.out.println("You win");
+        this.victory = true;
+        if (summoner instanceof stage_Tutorial){save_Progress(1);}
+        if (summoner instanceof stage2){save_Progress(2);}
+        if (summoner instanceof stage3){save_Progress(3);}
+        if (summoner instanceof stage4){save_Progress(4);}
+        if (summoner instanceof stage5){save_Progress(5);}
+        if (summoner instanceof stage6){save_Progress(6);}
+        if (summoner instanceof stage7){save_Progress(7);}
+        if (summoner instanceof stage8){save_Progress(8);}
+        if (summoner instanceof StageBossFight){save_Progress(9);}
+        if (summoner instanceof stage_beta){save_Progress(10);}
+        GameLoop.clearListener();
+        Audio.play(AudioName.BUTTON_CLICK);
+        WinScreen winScreen = new WinScreen();
+        Audio.stopMusic();
+        Audio.play("you_win.wav");
+        stage.loadStage("win");
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                stopGameLoop();
+                Thread.sleep(3000);
+                return null;
+            }
 
+            @Override
+            protected void done() {
+                winScreen.dispose();
+
+                Audio.playMusic("mainMenu");
+            }
+        };
+        worker.execute();
     }
 
     // <editor-fold defaultstate="collapsed" desc="All Reuse method">
@@ -1150,7 +1153,7 @@ public class GamePanel extends JPanel {
                 int row = (e.getY() - GRID_OFFSET_Y) / CELL_HEIGHT;
                 
                 if (draggingRecall) {
-                    recallUnit(col, row);
+                    recallUnit(col, row, true);
                     draggingRecall = false;
                     return;
                 }
@@ -1222,7 +1225,7 @@ public class GamePanel extends JPanel {
         return null;
     }
 
-    public void recallUnit(int col, int row) {
+    public void recallUnit(int col, int row, boolean isOwner) {
         if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
             Iterator<Unit> unitIterator = units.iterator();
             while (unitIterator.hasNext()) {

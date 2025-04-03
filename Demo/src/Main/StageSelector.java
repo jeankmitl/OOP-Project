@@ -43,7 +43,7 @@ public class StageSelector extends JFrame {
         setSize(1264, 681);
         setResizable(false);
         setLocationRelativeTo(null);
-        setUndecorated(true);
+//        setUndecorated(true);
         setVisible(true);
         
         Audio.playMusic("mainMenu");
@@ -169,11 +169,12 @@ public class StageSelector extends JFrame {
         return game2P;
     }
     
-    public void setHover(int x, int y) {
-        panel.setHover(x, y);
-    }
-    
     public void setP2Hover(int x, int y) {
         panel.setP2Hover(x, y);
+    }
+    
+    public void p2WantThisStage() {
+        panel.p2WantThisStage();
+        Audio.play(AudioName.PLANT_PICK_UP);
     }
 }

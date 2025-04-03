@@ -401,7 +401,7 @@ public class BossFightGamePanel2PlayerRough extends BossFightGamePanel {
         }
         
         public void recallUnitClient(int row, int col) {
-            recallUnit(col, row);
+            recallUnit(col, row, false);
         }
         
         public void setCooldown(String cdStr) {
@@ -548,13 +548,13 @@ public class BossFightGamePanel2PlayerRough extends BossFightGamePanel {
     }
 
     @Override
-    public void recallUnit(int col, int row) {
+    public void recallUnit(int col, int row, boolean isOwner) {
         if (col >= 0 && col < COLS && row >= 0 && row < ROWS && !isFieldAvailable(col, row)) {
             if (type.equals("2p")) {
                 if (cof != null) {
                     cof.sendOne(CoKeys.SOUND_CLI, AudioName.PLANT_DELETE);
                 }
-                super.recallUnit(col, row);
+                super.recallUnit(col, row, isOwner);
             } else if (type.equals("cli")) {
                 String format = row + " " + col;
                 cof.sendOne(CoKeys.REQ_RECALL_UNIT, format);
@@ -626,7 +626,7 @@ public class BossFightGamePanel2PlayerRough extends BossFightGamePanel {
                     break;
                 case KeyEvent.VK_R:
                     if (confirmRecall) {
-                        recallUnit(p2PlaceX, p2PlaceY);
+                        recallUnit(p2PlaceX, p2PlaceY, false);
                         resetConfirm();
                     } else {
                         confirmPlace = false;
