@@ -113,7 +113,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
         msgTextFieldPanel = new JPanel();
         ipTextField = new JTextField("localhost");
         portTextField = new JTextField("12345");
-        ipLabel = new JLabel("   IP");
+        ipLabel = new JLabel("   IP (Client)");
         portLabel = new JLabel("   Port");
         responseLabel = new JLabel("Not connect");
         startButton = new JButton("Start");
@@ -256,6 +256,7 @@ public class CoOpFrame extends JFrame implements ActionListener {
                     String ip = ipTextField.getText();
                     int port = Integer.parseInt(portTextField.getText());
                     setinputEnabled(false);
+                    ipTextField.setEnabled(true);
                     createServer(ip, port);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Port Should be Integer.");
