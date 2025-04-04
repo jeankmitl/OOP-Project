@@ -43,7 +43,7 @@ public class StageSelector extends JFrame {
         setSize(1264, 681);
         setResizable(false);
         setLocationRelativeTo(null);
-//        setUndecorated(true);
+        setUndecorated(true);
         setVisible(true);
         
         Audio.playMusic("mainMenu");
