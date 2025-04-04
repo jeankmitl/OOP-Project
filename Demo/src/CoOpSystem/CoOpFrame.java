@@ -16,6 +16,7 @@ import static Main.GamePanel.getVfxs;
 import Main.GamePanel2Player;
 import Main.LoadingScreen;
 import Main.MainMenu;
+import Main.NoDebug;
 import Main.StageSelector;
 import Main.UnitSelector;
 import Main.UnitType;
@@ -52,7 +53,7 @@ import javax.swing.border.EtchedBorder;
  */
 public class CoOpFrame extends JFrame implements ActionListener {
     
-    private final boolean isJoinNoConfirm = true;
+    private final boolean isJoinNoConfirm = NoDebug.getDEBUG_MODE();
     private final boolean DEBUG_PRINT = false;
     private ExecutorService connectHandlerPool = Executors.newCachedThreadPool();
     private ServerSocket serverSocket;
