@@ -46,6 +46,8 @@ public interface UnitConfig {
     String BARRIER_DESC = "sci-fi barrier, can place on Unit\n---\n*Can place on unit*, no atk but medium-high health";
     String DEATHLOCKED_DESC = "since you are enemy, I can send you to the hell\n---\nFind the most health and *explode them with around atk*";
     String KITSUNE_DESC = "everyone is important I need to help them all\n---\nHeal *all in their row*, shot a *little atk bullet*";
+    String ORBIP_DESC = "[OC by Zeth]\n---\n*Heal less health unit in their row* and *create barrier (500 health)* for them";
+    String ROMA_DESC = "[OC by M]\n---\n*attack with through bullet*";
     
     // All sprite sheet ️🎥
     UnitSpriteSheets SKELETON_SRITE = new UnitSpriteSheets("Skeleton", "SkeletonThrow");
@@ -77,7 +79,9 @@ public interface UnitConfig {
     UnitSpriteSheets BARRIER_SPRITE = new UnitSpriteSheets("barrier_good", "barrier_med", "barrier_bad");
     UnitSpriteSheets DEATHLOCKED_SPRITE = new UnitSpriteSheets("deathlocked_charge", "deathlocked_atk", "deathlocked_cd");
     UnitSpriteSheets KITSUNE_SPRITE = new UnitSpriteSheets("kitsune", "kitsune_heal");
-    
+    UnitSpriteSheets ORBIP_SPRITE = new UnitSpriteSheets("Orbip_idle", "Orbip_heal");
+    UnitSpriteSheets ORBIP_BARRIER_SPRITE = new UnitSpriteSheets("Orbip_shield", "Orbip_shield_vanishing");
+    UnitSpriteSheets ROMA_SPRITE = new UnitSpriteSheets("Roma_idle", "Roma_atk");
     
     /**
      * All Unit stats 💡
@@ -94,6 +98,7 @@ public interface UnitConfig {
     UnitStats BIGBALL_STATS = new UnitStats(BIGBALL_SPRITE, 300, 400, 5, 250, 30, ATTACKER, BIGBALL);
     UnitStats SEMI_AUTO_BOT_STATS = new UnitStats(SEMI_AUTO_BOT_SPRITE, 300, 20, 3, 200, 7, ATTACKER, SEMI_AUTO_BOT_DESC);
     UnitStats DEATHLOCKED_STATS = new UnitStats(DEATHLOCKED_SPRITE, 500, 1800, 15, 300, 60, GUARD, DEATHLOCKED_DESC);
+    UnitStats ROMA_STATS = new UnitStats(ROMA_SPRITE, 300, 20, 1.5, 200, 20, ATTACKER, ROMA_DESC);
     
     // Guard
     UnitStats MIMIC_STATS = new UnitStats(MIMIC_SPRITE, 300, 1800, 42, 150, 12, GUARD, MIMIC_DESC);
@@ -122,9 +127,11 @@ public interface UnitConfig {
     UnitStats GOLEM_SUPPORT_STATS = new UnitStats(GOLEM_SUPPORT_SPRITE, 300, 0, 15, 300, 60, SUPPORT, GOLEM_DESC);
     UnitStats VAMPIRE_STATS = new UnitStats(VAMPIRE_SPRITE, 300, -50, 3, 100, 7, SUPPORT, VAMPIRE_DESC);
     UnitStats KITSUNE_STATS = new UnitStats(KITSUNE_SPRITE, 200, -30, 7, 150, 20, SUPPORT, KITSUNE_DESC);
+    UnitStats ORBIP_STATS = new UnitStats(ORBIP_SPRITE, 100, -30, 15, 150, 30, SUPPORT, ORBIP_DESC);
+    
     
     // *Not for Operator*
     UnitStats CANDLES6_STATS = new UnitStats(CANDLES6_SPRITE, 9999, 1800, 0, 125, 50, EXPLOTION, CANDLES6_DESC);
     UnitStats BLOCK_FIELD_STATS = new UnitStats(BLOCK_FIELD_SPRITE, 1, 0, 0, 0, 0, -1, BLOCK_FIELD_DESC);
-    
+    UnitStats ORBIP_BARRIER_STATS = new UnitStats(ORBIP_BARRIER_SPRITE, 500, 0, 0, 0, 0, GUARD);
 }

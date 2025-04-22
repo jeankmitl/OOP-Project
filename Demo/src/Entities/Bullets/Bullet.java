@@ -78,4 +78,8 @@ public abstract class Bullet {
         this.frame_Hight = frame_Hight;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
 }

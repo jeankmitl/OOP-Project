@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -682,8 +683,21 @@ public class GamePanel extends JPanel {
                         break;
                     }
                 }
-            }
-            else { //Keep same stat with this here
+            } else if (bullet instanceof RomaBullet) {
+                RomaBullet romaBullet = (RomaBullet)bullet;
+                for (Enemy enemy : enemies) {
+                    if (!romaBullet.containHitEnemy(enemy) && bullet.getBounds().intersects(enemy.getBounds())) {
+                        enemy.takeDamage(bullet.getAtk());   
+                        romaBullet.addHitEnemy(enemy);
+                        getVfxs().add(bullet.getHitVfx());
+                        Audio.play(AudioName.HIT);
+                        break;
+                    }
+                } 
+                if (bullet.getSpeed() < 0) {
+                    bulletIterator.remove();
+                }
+            } else { //Keep same stat with this here
                 for (Enemy enemy : enemies) {
                     if (bullet.getBounds().intersects(enemy.getBounds())) {
                         enemy.takeDamage(bullet.getAtk());
@@ -701,7 +715,21 @@ public class GamePanel extends JPanel {
             }
         }
 
-        units.removeIf(Unit::isDead);
+//        units.removeIf(Unit::isDead);
+        for (Iterator<Unit> unitIterator = units.iterator(); unitIterator.hasNext();) {
+            try {
+                Unit unit = unitIterator.next();
+                if (unit.isDead()) {
+                    unitIterator.remove();
+                }
+            } catch (ConcurrentModificationException e) {
+                break;
+            }
+        }
+//        Iterator<Unit> unitIterator = units.iterator();
+//        while (unitIterator.hasNext()) {
+//            Unit unit = unitIterator.next();
+//        }
     }
 
     private void paintHealthBar(Graphics g, Entity et) {
@@ -1189,6 +1217,14 @@ public class GamePanel extends JPanel {
                 }
             }
         });
+    }
+    
+    public static void placeUnitByUnit(int i, Unit unit) {
+        units.add(i, unit);
+    }
+    
+    public static void placeUnitByUnit(Unit unit) {
+        units.add(unit);
     }
     
     public Unit placeUnit(UnitType unit, int row, int col, boolean isOwner) {

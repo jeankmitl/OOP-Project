@@ -272,6 +272,8 @@ public class UnitSelector extends JDialog {
             unitTypes.add(new UnitType(Barrier.class));
             unitTypes.add(new UnitType(Deathlocked.class));
             unitTypes.add(new UnitType(Kitsune.class));
+            unitTypes.add(new UnitType(Orbip.class));
+            unitTypes.add(new UnitType(Roma.class));
         }
     }
     
