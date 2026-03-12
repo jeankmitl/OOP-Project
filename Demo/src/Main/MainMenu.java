@@ -68,14 +68,19 @@ public class MainMenu extends JFrame {
                         @Override
                         protected Void doInBackground() throws Exception {
                             Thread.sleep(1000);
-                            new StageSelector();
-                            dispose();
                             return null;
                         }
 
                         @Override
                         protected void done() {
                             loadingScreen.dispose();
+                            try {
+                                new StageSelector();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                dispose();
+                            }
                         }
                     };
                     worker.execute();
@@ -95,14 +100,19 @@ public class MainMenu extends JFrame {
                         @Override
                         protected Void doInBackground() throws Exception {
                             Thread.sleep(200);
-                            new ConfigScreen();
-                            dispose();
                             return null;
                         }
 
                         @Override
                         protected void done() {
                             loadingScreen.dispose();
+                            try {
+                                new ConfigScreen();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            } finally {
+                                dispose();
+                            }
                         }
                     };
                     worker.execute();
@@ -119,14 +129,19 @@ public class MainMenu extends JFrame {
                             @Override
                             protected Void doInBackground() throws Exception {
                                 Thread.sleep(1000);
-                                new CoOpFrame();
-                                dispose();
                                 return null;
                             }
 
                             @Override
                             protected void done() {
                                 loadingScreen.dispose();
+                                try {
+                                    new CoOpFrame();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    dispose();
+                                }
                             }
                         };
                         worker.execute();
@@ -138,14 +153,19 @@ public class MainMenu extends JFrame {
                             @Override
                             protected Void doInBackground() throws Exception {
                                 Thread.sleep(1000);
-                                new StageSelector("2p");
-                                dispose();
                                 return null;
                             }
 
                             @Override
                             protected void done() {
                                 loadingScreen.dispose();
+                                try {
+                                    new StageSelector("2p");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                } finally {
+                                    dispose();
+                                }
                             }
                         };
                         worker.execute();

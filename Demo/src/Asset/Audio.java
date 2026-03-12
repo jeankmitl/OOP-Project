@@ -13,7 +13,7 @@ public abstract class Audio {
     private static String musicFile = "";
     private static FloatControl musicVolumeControl, soundVolumeControl;
     public static float musicVolume = 0.5f, soundVolume = 0.5f;
-    
+
     public static void play(String name) {
         if (!isSoundEnable) return;
         if (!name.contains(".wav")) {
@@ -23,23 +23,31 @@ public abstract class Audio {
         String nname = name;
         try {
             soundPool.execute(() -> {
-                File file = new File(Paths.SOUND_PATH, nname);
-                try (AudioInputStream sound = AudioSystem.getAudioInputStream(file)) {
-                    Clip clip = AudioSystem.getClip();
-                    clip.open(sound);
-                    clip.start();
-                    soundVolumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                    setSoundVolume(soundVolume);
-                    clip.addLineListener(event -> {
-                        if (event.getType() == LineEvent.Type.STOP) {
-                            clip.close();
-                        }
-                    });
+                try (InputStream raw = Audio.class.getResourceAsStream(Paths.SOUND_PATH + nname)) {
+                    if (raw == null) {
+                        System.out.println("Sound not found: " + Paths.SOUND_PATH + nname);
+                        return;
+                    }
+                    try (AudioInputStream sound = AudioSystem.getAudioInputStream(
+                            new BufferedInputStream(raw))) {
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(sound);
+                        clip.start();
+                        soundVolumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                        setSoundVolume(soundVolume);
+                        clip.addLineListener(event -> {
+                            if (event.getType() == LineEvent.Type.STOP) {
+                                clip.close();
+                            }
+                        });
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void playMusic(String name) {
@@ -53,14 +61,20 @@ public abstract class Audio {
             musicFile = name;
         }
         stopMusic();
-        File file = new File(Paths.SOUND_PATH, name);
-        try (AudioInputStream sound = AudioSystem.getAudioInputStream(file);) {
-            musicClip = AudioSystem.getClip();
-            musicClip.open(sound);
-            musicClip.start();
-            musicClip.loop(Clip.LOOP_CONTINUOUSLY);
-            musicVolumeControl = (FloatControl) musicClip.getControl(FloatControl.Type.MASTER_GAIN);
-            setMusicVolume(musicVolume);
+        try (InputStream raw = Audio.class.getResourceAsStream(Paths.SOUND_PATH + name)) {
+            if (raw == null) {
+                System.out.println("Music not found: " + Paths.SOUND_PATH + name);
+                return;
+            }
+            try (AudioInputStream sound = AudioSystem.getAudioInputStream(
+                    new BufferedInputStream(raw))) {
+                musicClip = AudioSystem.getClip();
+                musicClip.open(sound);
+                musicClip.start();
+                musicClip.loop(Clip.LOOP_CONTINUOUSLY);
+                musicVolumeControl = (FloatControl) musicClip.getControl(FloatControl.Type.MASTER_GAIN);
+                setMusicVolume(musicVolume);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

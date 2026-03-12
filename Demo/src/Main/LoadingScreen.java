@@ -13,7 +13,7 @@ public class LoadingScreen extends JFrame {
             add(pr);
 
             setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
-            ImageIcon load = new ImageIcon("src/Asset/Img/Icons/LoadingScreen.gif");
+            ImageIcon load = new ImageIcon(getClass().getResource("/Asset/Img/Icons/LoadingScreen.gif"));
             JLabel loadingscreen = new JLabel(load, SwingConstants.CENTER);
             loadingscreen.setHorizontalAlignment(SwingConstants.CENTER);
             loadingscreen.setVerticalAlignment(SwingConstants.CENTER);

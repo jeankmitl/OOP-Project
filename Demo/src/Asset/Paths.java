@@ -9,12 +9,9 @@ package Asset;
  * @author anawi
  */
 public interface Paths {
-    String ASSET_PATH = "src/Asset";
-    String SOUND_PATH = ASSET_PATH + "/Sound";
-    String IMG_PATH = ASSET_PATH + "/Img";
-    
-    String BG_PATH = IMG_PATH + "/Background";
-    String ICONS_PATH = IMG_PATH + "/Icons";
-    String SPRITE_SHEET_PATH = IMG_PATH + "/SpriteSheets";
-    String VFX_PATH = IMG_PATH + "/VFX";
+    String SOUND_PATH = "/Asset/Sound/";
+    String BG_PATH = "/Asset/Img/Background/";
+    String ICONS_PATH = "/Asset/Img/Icons/";
+    String SPRITE_SHEET_PATH = "/Asset/Img/SpriteSheets/";
+    String VFX_PATH = "/Asset/Img/VFX/";
 }

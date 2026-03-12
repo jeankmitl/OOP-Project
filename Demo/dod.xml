@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\dist\Demo.jar</jar>
+  <outfile>D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl></downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\src\dod-icon.ico</icon>
+  <jre>
+    <path>%JAVA_HOME%;%PATH%</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion>21</minVersion>
+    <maxVersion></maxVersion>
+    <opt>-server -Xmx512m -Xms256m</opt>
+  </jre>
+</launch4jConfig>

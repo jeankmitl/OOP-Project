@@ -14,7 +14,7 @@ public class WinScreen extends JFrame {
             add(pr);
 
             setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
-            ImageIcon win = new ImageIcon("src/Asset/Img/Icons/WinScreen.gif");
+            ImageIcon win = new ImageIcon(getClass().getResource("/Asset/Img/Icons/WinScreen.gif"));
             JLabel winScreen = new JLabel(win, SwingConstants.CENTER);
             winScreen.setHorizontalAlignment(SwingConstants.CENTER);
             winScreen.setVerticalAlignment(SwingConstants.CENTER);

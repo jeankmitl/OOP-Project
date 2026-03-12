@@ -57,14 +57,14 @@ public class StageSelector extends JFrame {
                 @Override
                 protected Void doInBackground() throws Exception {
                     Thread.sleep(500);
-                    new MainMenu();
-                    dispose();
                     return null;
                 }
 
                 @Override
                 protected void done() {
                     loadingScreen.dispose();
+                    new MainMenu();
+                    dispose();
                 }
             };
             worker.execute();
@@ -77,14 +77,14 @@ public class StageSelector extends JFrame {
                 @Override
                 protected Void doInBackground() throws Exception {
                     Thread.sleep(500);
-                    new StageSelector();
-                    dispose();
                     return null;
                 }
 
                 @Override
                 protected void done() {
                     loadingScreen.dispose();
+                    new StageSelector();
+                    dispose();
                 }
             };
             worker.execute();

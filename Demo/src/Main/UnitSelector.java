@@ -79,7 +79,7 @@ public class UnitSelector extends JDialog {
 
         ImageIcon bgPreviewImg = new ImageIcon(ImgManager.loadIcon("bg_for_preview"));
         
-        try(ObjectInputStream temp = new ObjectInputStream(new FileInputStream("Save.bat"))){
+        try(ObjectInputStream temp = new ObjectInputStream(new FileInputStream("Save.dat"))){
             progress = (SaveGame) temp.readObject();
             loader(progress);
             System.out.println("Load Done");

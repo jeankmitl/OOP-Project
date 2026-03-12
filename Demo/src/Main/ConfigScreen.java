@@ -11,7 +11,7 @@ import javax.swing.event.*;
 public class ConfigScreen extends JFrame {
 
     private Rectangle homeBtn, musicBtn, soundBtn, hardMode;
-    private Image background, musicImg, soundImg, hardModeImg;
+    private Image background, musicImg, soundImg, hardModeImg, homeIcon;
     private boolean isButtonHovered = false;
     private ConfigScreenPanel configScreenPanel;
     private JSlider musicSld, soundSld;
@@ -31,6 +31,7 @@ public class ConfigScreen extends JFrame {
             soundImg = ImgManager.loadIcon((Audio.isSoundEnable()) ? "unmute_sound" : "mute_sound");
             musicImg = ImgManager.loadIcon((Audio.isMusicEnable()) ? "unmute_music" : "mute_music");
             hardModeImg = ImgManager.loadIcon((GamePanel.isHardMode) ? "hard_mode_on" : "hard_mode_off");
+            homeIcon = ImgManager.loadIcon("home_btn");
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -85,14 +86,14 @@ public class ConfigScreen extends JFrame {
                         @Override
                         protected Void doInBackground() throws Exception {
                             Thread.sleep(500);
-                            new MainMenu();
-                            dispose();
                             return null;
                         }
 
                         @Override
                         protected void done() {
                             loadingScreen.dispose();
+                            new MainMenu();
+                            dispose();
                         }
                     };
                     worker.execute();
@@ -161,7 +162,6 @@ public class ConfigScreen extends JFrame {
         @Override
         public void paintComponent(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
-            Image homeIcon = ImgManager.loadIcon("home_Btn");
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.drawImage(background, 0, 0, 1264, 681, this);
             g2d.drawImage(homeIcon, homeBtn.x, homeBtn.y, homeBtn.width, homeBtn.height, this);

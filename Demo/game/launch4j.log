@@ -1,0 +1,185 @@
+
+
+Version:	3.50
+CmdLine:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.011.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-22
+Substitute:	PATH = D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+JRE paths:	C:\Program Files\Java\jdk-22;D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+Check launcher:	C:\Program Files\Java\jdk-22\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\VMware\VMware Workstation\bin\bin\javaw.exe (not found)
+Check launcher:	D:\OracleDB\dbhomeXE\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe (OK)
+Warning:	formatJavaVersion() too many parts added.
+Version string: 1.011.000_016 / 64-Bit (OK)
+Launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe
+Launcher args:	-server -Xmx512m -Xms256m -jar "D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe"
+Args length:	121/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.011.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-22
+Substitute:	PATH = D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+JRE paths:	C:\Program Files\Java\jdk-22;D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+Check launcher:	C:\Program Files\Java\jdk-22\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\VMware\VMware Workstation\bin\bin\javaw.exe (not found)
+Check launcher:	D:\OracleDB\dbhomeXE\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe (OK)
+Warning:	formatJavaVersion() too many parts added.
+Version string: 1.011.000_016 / 64-Bit (OK)
+Launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe
+Launcher args:	-server -Xmx512m -Xms256m -jar "D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe"
+Args length:	121/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-22
+Substitute:	PATH = D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+JRE paths:	C:\Program Files\Java\jdk-22;D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+Check launcher:	C:\Program Files\Java\jdk-22\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\VMware\VMware Workstation\bin\bin\javaw.exe (not found)
+Check launcher:	D:\OracleDB\dbhomeXE\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe (OK)
+Warning:	formatJavaVersion() too many parts added.
+Version string: 1.011.000_016 / 64-Bit (OK)
+Launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe
+Launcher args:	-server -Xmx512m -Xms256m -jar "D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe"
+Args length:	121/32768 chars
+Exit code:	0
+
+
+Version:	3.50
+CmdLine:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe --l4j-debug
+JNI:		No
+WOW64:		Yes
+Working dir:	D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\.
+Requires JDK:	No
+Requires 64-Bit: No
+Java min ver:	1.021.000
+Java max ver:	
+Substitute:	JAVA_HOME = C:\Program Files\Java\jdk-22
+Substitute:	PATH = D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+JRE paths:	C:\Program Files\Java\jdk-22;D:\Program Files D\VMware\VMware Workstation\bin\;D:\OracleDB\dbhomeXE\bin;C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin;C:\Windows\system32;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;D:\Program Files D\Go\bin;D:\Program Files D\lua-5.4.2_Win64_bin;D:\Program Files D\hugo_0.117.0;D:\Program Files D\php-8.2.9;C:\Program Files (x86)\Lua\5.1;C:\Users\anawi\AppData\Roaming\npm;C:\Program Files (x86)\Yarn\bin\;C:\Users\anawi\AppData\Roaming\npm\yarn;C:\Program Files\nodejs\yarn;C:\ProgramData\ComposerSetup\bin;D:\Program Files D\LuaWebGen\LuaWebGen;C:\Ruby32-x64\bin\ruby.exe;D:\Program Files D\sqlite-win32;C:\Ruby32-x64\bin\gem;C:\Program Files\Java\jdk-20\bin;C:\Program Files\kotlin\kotlinc\bin;D:\Program Files D\v;C:\ProgramData\chocolatey\lib\elixir\tools\bin;D:\Dev-Cpp\MinGW64\bin;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\dotnet\;D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe;D:\Program Files D\HaxeToolkit\haxe;D:\Program Files D\HaxeToolkit\neko;D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin;D:\Program Files D\QuickTime\QTSystem\;C:\Program Files\nodejs\;C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin;D:\Program Files D\Git\cmd;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\PuTTY\;D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin;C:\Program Files (x86)\sbt\bin;D:\Program Files D\Elm\0.19.1\bin;C:\Users\anawi\AppData\Local\Programs\Python\Launcher\;C:\Users\anawi\.cargo\bin;C:\Ruby32-x64\bin;D:\Program Files D\RailsInstaller\Git\cmd;D:\Program Files D\RailsInstaller\Ruby2.3.3\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\go\bin;C:\Users\anawi\AppData\Local\Yarn\bin;C:\Users\anawi\AppData\Roaming\Composer\vendor\bin;C:\Users\anawi\AppData\Local\Coursier\data\bin;C:\tools\neovim\nvim-win64\bin;C:\Users\anawi\.dotnet\tools;C:\Users\anawi\AppData\Local\GitHubDesktop\bin;C:\Users\anawi\AppData\Local\Muse Hub\lib;D:\Program Files D\flutter\flutter\bin;C:\Users\anawi\AppData\Local\Microsoft\WindowsApps;D:\Program Files D\Antigravity\bin;C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin
+Check launcher:	C:\Program Files\Java\jdk-22\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\VMware\VMware Workstation\bin\bin\javaw.exe (not found)
+Check launcher:	D:\OracleDB\dbhomeXE\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Common Files\Intel\Shared Libraries\redist\intel64\compiler\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Common Files\Oracle\Java\javapath\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe (OK)
+Warning:	formatJavaVersion() too many parts added.
+Version string: 1.011.000_016 / 64-Bit (Ignore)
+Check launcher:	C:\Windows\system32\bin\javaw.exe (not found)
+Check launcher:	C:\Windows\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\Windows\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\Windows\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\system32\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\Wbem\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\WindowsPowerShell\v1.0\bin\javaw.exe (not found)
+Check launcher:	C:\WINDOWS\System32\OpenSSH\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Microsoft SQL Server\150\Tools\Binn\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\Go\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\lua-5.4.2_Win64_bin\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\hugo_0.117.0\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\php-8.2.9\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Lua\5.1\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Roaming\npm\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Yarn\bin\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Roaming\npm\yarn\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\nodejs\yarn\bin\javaw.exe (not found)
+Check launcher:	C:\ProgramData\ComposerSetup\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\LuaWebGen\LuaWebGen\bin\javaw.exe (not found)
+Check launcher:	C:\Ruby32-x64\bin\ruby.exe\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\sqlite-win32\bin\javaw.exe (not found)
+Check launcher:	C:\Ruby32-x64\bin\gem\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Java\jdk-20\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\kotlin\kotlinc\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\v\bin\javaw.exe (not found)
+Check launcher:	C:\ProgramData\chocolatey\lib\elixir\tools\bin\javaw.exe (not found)
+Check launcher:	D:\Dev-Cpp\MinGW64\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Docker\Docker\resources\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\dotnet\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\armsdk\Kha\Tools\windows_x64\haxe.exe\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\HaxeToolkit\haxe\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\HaxeToolkit\neko\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\Castle Game Engine\tools\contrib\fpc\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\QuickTime\QTSystem\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\nodejs\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Programs\Julia-1.9.3\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\Git\cmd\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\PuTTY\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\STMicroelectronics\STM32Cube\STM32CubeProgrammer\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files (x86)\sbt\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\Elm\0.19.1\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Programs\Python\Launcher\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\.cargo\bin\javaw.exe (not found)
+Check launcher:	C:\Ruby32-x64\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\RailsInstaller\Git\cmd\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\RailsInstaller\Ruby2.3.3\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Programs\Microsoft VS Code\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\.dotnet\tools\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\go\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Yarn\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Roaming\Composer\vendor\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Coursier\data\bin\javaw.exe (not found)
+Check launcher:	C:\tools\neovim\nvim-win64\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\.dotnet\tools\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\GitHubDesktop\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Muse Hub\lib\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\flutter\flutter\bin\javaw.exe (not found)
+Check launcher:	C:\Users\anawi\AppData\Local\Microsoft\WindowsApps\bin\javaw.exe (not found)
+Check launcher:	D:\Program Files D\Antigravity\bin\javaw.exe (not found)
+Check launcher:	C:\Program Files\Microsoft\jdk-11.0.16.101-hotspot\bin\javaw.exe (OK)
+Warning:	formatJavaVersion() too many parts added.
+Version string: 1.011.000_016 / 64-Bit (Ignore)
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+32-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+32-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+64-bit search:	SOFTWARE\JavaSoft\JRE...
+32-bit search:	SOFTWARE\JavaSoft\JRE...
+64-bit search:	SOFTWARE\JavaSoft\JDK...
+Check:		SOFTWARE\JavaSoft\JDK\22.0.1
+Version string: 1.022.000_001 / 64-Bit (OK)
+Check launcher:	D:\Program Files D\java-idk\bin\javaw.exe (OK)
+Match:		1.022.000_001
+Runtime used:	1.022.000_001 (64-bit)
+Launcher:	D:\Program Files D\java-idk\bin\javaw.exe
+Launcher args:	-server -Xmx512m -Xms256m -jar "D:\Users D\Code Stuffs\NetBeansProjects\OOP-Project\Demo\game\Defense of the Dungeon.exe"
+Args length:	121/32768 chars
+Exit code:	0

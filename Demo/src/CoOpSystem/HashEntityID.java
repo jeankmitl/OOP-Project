@@ -20,23 +20,23 @@ import java.util.logging.Logger;
  * @param <T>
  */
 public class HashEntityID<T> {
-    private static final int hashSize = 100;
+    private static final int hashSize = 1000;
     private int counter = 0;
     private final HashMap<Integer, T> dataStore = new HashMap<>();
-    
+
     public int add(T entity) {
         int hash = generateHash();
         dataStore.put(hash, entity);
         return hash;
     }
-    
+
     public void insert(int id, T entity) {
         dataStore.put(id, entity);
     }
-    
+
     public void remove(T entity) {
         Integer keyToRemove = null;
-    
+
         for (Map.Entry<Integer, T> entry : dataStore.entrySet()) {
             if (entry.getValue().equals(entity)) {
                 keyToRemove = entry.getKey();
@@ -56,19 +56,19 @@ public class HashEntityID<T> {
     public T get(int hash) {
         return dataStore.get(hash);
     }
-    
+
     public void clear() {
         dataStore.clear();
     }
-    
+
     public Set<Integer> getAllID() {
         return dataStore.keySet();
     }
-    
+
     public Collection<T> values() {
         return dataStore.values();
     }
-    
+
     public boolean containID(int id) {
         return dataStore.containsKey(id);
     }

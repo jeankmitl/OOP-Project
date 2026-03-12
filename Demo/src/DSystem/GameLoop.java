@@ -39,20 +39,31 @@ public class GameLoop extends Thread {
 //                System.out.println("FPS: " + fps);
             }
 
-            // sleep to maintain fps 💤
-            long sleepTime = (long) ((lastTime - System.nanoTime() + OPTIMAL_TIME) / 1_000_000);
-            if (sleepTime > 0) {
+            // Sleep to maintain target FPS 💤
+            // Windows Thread.sleep() has ~15ms resolution; sleep 2ms early
+            // then spin-wait the remainder for precision.
+            long endTime = (long)(lastTime + OPTIMAL_TIME);
+            long sleepMs = (endTime - System.nanoTime()) / 1_000_000L - 2L;
+            if (sleepMs > 0) {
                 try {
-                    Thread.sleep(sleepTime);
+                    Thread.sleep(sleepMs);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+            // Spin-wait the last ~2ms for sub-millisecond precision
+            while (System.nanoTime() < endTime) {
+                Thread.yield();
             }
         }
     }
     
     public static GameLoop getInstance() {
-        if (gameLoop == null) gameLoop = new GameLoop();
+        if (gameLoop == null) {
+            gameLoop = new GameLoop();
+            gameLoop.setDaemon(true);          // don't block JVM exit
+            gameLoop.setPriority(Thread.MAX_PRIORITY); // ensure OS schedules us on time
+        }
         return gameLoop;
     }
 

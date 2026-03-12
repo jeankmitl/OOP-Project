@@ -203,7 +203,7 @@ public class GamePanel extends JPanel {
     
     private void save_Progress(int num){
         SaveGame data = null;
-        try (ObjectInputStream tempo = new ObjectInputStream(new FileInputStream("Save.bat"))){
+        try (ObjectInputStream tempo = new ObjectInputStream(new FileInputStream("Save.dat"))){
             data = (SaveGame) tempo.readObject();
         }
         catch (IOException ex) {
@@ -216,7 +216,7 @@ public class GamePanel extends JPanel {
         }
         data.set_Stage_Num(num-1);
         data.check_stage();
-        try (ObjectOutputStream temp = new ObjectOutputStream(new FileOutputStream("Save.bat"))){
+        try (ObjectOutputStream temp = new ObjectOutputStream(new FileOutputStream("Save.dat"))){
             temp.writeObject(data);
             System.out.println("Save Done");
         }

@@ -14,7 +14,7 @@ public class LoseScreen extends JFrame {
             add(pr);
 
             setIconImage(new ImageIcon(getClass().getResource("/Asset/Img/Icons/icon.png")).getImage());
-            ImageIcon win = new ImageIcon("src/Asset/Img/Icons/you_lose_img.png");
+            ImageIcon win = new ImageIcon(getClass().getResource("/Asset/Img/Icons/you_lose_img.png"));
             JLabel winScreen = new JLabel(win, SwingConstants.CENTER);
             winScreen.setHorizontalAlignment(SwingConstants.CENTER);
             winScreen.setVerticalAlignment(SwingConstants.CENTER);
